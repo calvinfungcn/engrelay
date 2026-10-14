@@ -1,0 +1,47 @@
+# Private execution and installation state
+.ai/
+.ai-collaboration-install/
+source-reference/
+
+# Workstation/tool settings, generated copies, and caches
+.agents/
+.agent/
+.claude/
+.codex/
+.cursor/
+.gemini/
+.iflow/
+.qwen/
+.opencode/
+.trae/
+.omo/
+.codebase-memory/
+.local/
+.playwright-mcp/
+.vscode/
+.idea/
+node_modules/
+
+# Credentials and local environment
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.pfx
+*.p12
+credentials.json
+
+# Generated distribution, logs, and operating-system files
+dist/
+*.log
+*.tmp
+*.bak
+Thumbs.db
+.DS_Store
+
+# OpenSpec runtime locks and temporary files
+.openspec/
+.openspec*.lock
+*.openspec-claim-*
+*.openspec-move-*

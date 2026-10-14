@@ -1,0 +1,59 @@
+{
+  "schemaVersion": 1,
+  "description": "Hash-only catalogue of one reviewed legacy collaboration profile. It contains no project business bytes.",
+  "profiles": [
+    {
+      "id": "wm-prototype-1.x",
+      "canonical": [
+        {"path":"docs/ai-collaboration/agent-prompts.md","hash":"e658d7493063158eeae3090f68f608be19869e97243ab634ff8b133d2cd31938"},
+        {"path":"docs/ai-collaboration/compound-engineering.md","hash":"630598119e4b9106f0128ae73d038d051eacb114c99faf51a53dbe20a52f3aae"},
+        {"path":"docs/ai-collaboration/compound-skills.manifest.json","hash":"15f090f200a38b22a71ebe202f738d741beab49876b7cd0ce95f7a7eafc849a8"},
+        {"path":"docs/ai-collaboration/handoff-schema.md","hash":"4c8647f9a81eabc911f595cde91d19d24005f5743fd2459d8d7a95807b235cb1"},
+        {"path":"docs/ai-collaboration/README.md","hash":"878610397a41380615ff748833a98842be8127fe841c554b197365b2b6cd18fd"},
+        {"path":"docs/ai-collaboration/review-compound-learning-optimization.md","hash":"e56cd65edd72fef713ba57f9a3242045645078cae21a3983f39f053cce4d26b4"},
+        {"path":"docs/ai-collaboration/review-handoff-optimization.md","hash":"a728748a206a34073ef27c00fddf8e6bc52d2daabb245475398eae110df42229"},
+        {"path":"docs/ai-collaboration/solution-exploration.md","hash":"819ac79be6c2821ca4d93bd43d3200ae0a0f2083613334954492e2f2b94e5021"},
+        {"path":"docs/ai-collaboration/workflows.md","hash":"caa1ca0af823b66ee25645421644220efcc9ac7a68b8f332bd4e58c55fe1168c"},
+        {"path":"docs/ai-collaboration/examples/mobile-points-expiry-reminder-zh.md","hash":"03b6b0e99244dd49a8b925dd8351ecdbf71856650ece37cb8b1b18d8c36528b1"},
+        {"path":"docs/ai-collaboration/examples/mobile-points-expiry-reminder.md","hash":"cef73d89a743103d78e4ed8bb395704d526736bed18f916d10170cae961db650"},
+        {"path":"docs/ai-collaboration/scripts/install-compound-skills.ps1","hash":"5aff9b6b65014dca80bf70dc1b34cf71407881be1fb0d429087755dce8a8b84b"},
+        {"path":"docs/ai-collaboration/scripts/test-install-compound-skills.ps1","hash":"724cc6a71e48cc5bb54f7f02839e45f34f9dc43062ccec779de5819c9b68e5b9"},
+        {"path":"docs/ai-collaboration/scripts/test-validate-runtime-state.ps1","hash":"ae27664fb4b168cad8ea5c3215e463af6f856ca0bc8a520215293da42b472ffe"},
+        {"path":"docs/ai-collaboration/scripts/validate-runtime-state.ps1","hash":"102bead027cae1285ccf3366b2953149b76ab619128cf01073f519506004b77f"},
+        {"path":"docs/ai-collaboration/skills/ce-code-review/SKILL.md","hash":"417f6117fd1f1197ac39a493d9cf8170e5a195a7b27586af4f7e4902239a29aa"},
+        {"path":"docs/ai-collaboration/skills/ce-compound/SKILL.md","hash":"187cf7873b8b6f2938195e1e3d4401ff820e3227d3847669b7faeee0b2d667cf"},
+        {"path":"docs/ai-collaboration/skills/ce-debug/SKILL.md","hash":"251d08c5253cf24a249ffed0a636c04a6ba14738cef82140f508686725914975"},
+        {"path":"docs/ai-collaboration/skills/ce-simplify-code/SKILL.md","hash":"ea2840da676f658d1d8bc4b0be921dbb12f418e8999d4d5c0f7a020aad148569"},
+        {"path":"docs/ai-collaboration/templates/current-task.template.md","hash":"d9d957e172541cc4ab1c93b27f021bc089eefae4aad7d9de9e5942af87b7cb15"},
+        {"path":"docs/ai-collaboration/templates/handoff.template.md","hash":"befc18ada9bcb7d0df9663ae61ccfe591dff8b0c493a286953f3916064a1067b"},
+        {"path":"docs/ai-collaboration/templates/implementation-result.template.md","hash":"71b6b321b6456d60ca611865252b955172ff27b23a35df3b4b5553c97a02274b"},
+        {"path":"docs/ai-collaboration/templates/requirement-baseline.template.md","hash":"21175d0373491227023e49580dea36e97dae03178552168d7806103d481180d0"},
+        {"path":"docs/ai-collaboration/templates/response-handoff.template.md","hash":"67c3ef2216d84d48b26b93d03f580f367feeb0427e8a678a9de66d4aeb4326c6"},
+        {"path":"docs/ai-collaboration/templates/review-request.template.md","hash":"42b9943636e33f3c6974a3313b02716f06f6aa58f90696520e35571d0bbb2389"},
+        {"path":"docs/ai-collaboration/templates/review-round.template.md","hash":"ea040a2b6d2437a9761ac69b5779ba9d45d7536d4a8bc20b9de0413d6e6713f5"},
+        {"path":"docs/ai-collaboration/templates/role-roster.template.md","hash":"0196879dc65f82f04ab03e35d579f29c4fcd144127da8527d3e28c945c03fcfe"},
+        {"path":"docs/solutions/solution.template.md","hash":"978f213667a87efa02a368c6e831080d34b8f4d3fe60139a22effd4fb6340533"}
+      ],
+      "legacyEntries": [
+        {"path":"AGENTS.md","hash":"b42cb575ba54d59f4ea44640017f3461c07f6da0bb0fe7064ecc4cc04a4ad269","marker":"## Multi-Agent Collaboration Standard","fragmentHash":"678d8db525afa709526d540a51e4d59e15f814f5355fa976c13b4e97482429d4"},
+        {"path":"QWEN.md","hash":"47b1514427d657fd0bb15c9a3abd8fe11795a1d30aab49e209da676c781342de","marker":"ai-collaboration"},
+        {"path":"IFLOW.md","hash":"46ac354e66deea57e9eddf1641b139cbd532bf5757466a9c502d00ab7c734d1b","marker":"ai-collaboration"}
+      ],
+      "projectDocuments": ["docs/reviews/README.md","docs/solutions/README.md"],
+      "legacyEntryChanges": [
+        {"path":"QWEN.md","marker":"- Multi-agent handoff:","fragment":"- Multi-agent handoff: read `docs/ai-collaboration/README.md` only when switching roles, handing work to another agent, or generating `.ai/handoff.md`.","fragmentHash":"f6a6e98ec3b396a5e4c7a4f5411eb43e4ad4b021e639e4aa3bcce9763bee61e9","replacement":""},
+        {"path":"IFLOW.md","marker":"- Multi-agent handoff:","fragment":"- Multi-agent handoff: read `docs/ai-collaboration/README.md` only when switching roles, handing work to another agent, or generating `.ai/handoff.md`.","fragmentHash":"f6a6e98ec3b396a5e4c7a4f5411eb43e4ad4b021e639e4aa3bcce9763bee61e9","replacement":""}
+      ]
+    },
+    {
+      "id": "retired-notice-2026-10",
+      "canonical": [
+        {"path":"docs/ai-collaboration/README.md","hash":"7ddfc83a28e8bc6db1d69e938ae389ef387147cde4303a78f6b8c9d66cf1aab5"},
+        {"path":"docs/solutions/solution.template.md","hash":"978f213667a87efa02a368c6e831080d34b8f4d3fe60139a22effd4fb6340533"}
+      ],
+      "legacyEntries": [],
+      "projectDocuments": ["docs/reviews/README.md","docs/solutions/README.md"],
+      "legacyEntryChanges": []
+    }
+  ]
+}

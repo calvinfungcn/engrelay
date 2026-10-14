@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "packageVersion": "1.0.0",
+  "skills": [
+    "ce-code-review",
+    "ce-simplify-code",
+    "ce-debug",
+    "ce-compound",
+    "ai-collab-requirements",
+    "ai-collab-start",
+    "ai-collab-continue"
+  ],
+  "overlappingLifecycleSkills": [
+    "using-superpowers",
+    "brainstorming",
+    "writing-plans",
+    "executing-plans",
+    "subagent-driven-development",
+    "finishing-a-development-branch",
+    "requesting-code-review",
+    "receiving-code-review"
+  ],
+  "targets": {
+    "agents": ".agents/skills",
+    "codex": ".codex/skills",
+    "claude": ".claude/skills",
+    "cursor": ".cursor/skills",
+    "opencode": ".opencode/skills",
+    "antigravity": ".agent/skills",
+    "gemini": ".gemini/skills",
+    "iflow": ".iflow/skills",
+    "qwen": ".qwen/skills"
+  }
+}

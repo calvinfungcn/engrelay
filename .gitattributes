@@ -1,0 +1,2 @@
+# snapshot.json records exact bytes; preserve them through checkout.
+* -text
