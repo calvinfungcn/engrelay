@@ -2,9 +2,8 @@
 
 The GitHub repository is the maintained public source. The initial public baseline
 is v1.7.0, commit `9c26c22266625aa04822637baf8f283763362677`, under MIT.
-The next package version is v1.7.1. The local bootstrap prepares maintenance; it
-adds no new product capability or
-active business batch and does not imply that a new release has been published.
+The current release is v1.7.1. Local maintenance setup does not create an active
+business batch or authorize publication.
 
 ## Start here
 
@@ -62,7 +61,9 @@ disposable roots, not real projects. Real deployments require their own task.
 ## Build and release flow
 
 1. Finish a coherent change and its relevant review; synchronize both README
-   editions when public behavior changes. Choose the intended package version.
+   editions when public behavior changes. Choose the intended package version
+   and update CHANGELOG.md with its date, changes, and verification limits before
+   exporting the release candidate.
 2. Export an explicitly reviewed commit into a new disposable staging directory
    using git archive. The committed .gitattributes excludes openspec/ and
    docs/reviews/ from this installation export. Ignored runtime/host directories
