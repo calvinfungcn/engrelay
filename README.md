@@ -9,7 +9,7 @@ working in existing repositories. It provides role prompts, task and handoff
 templates, independent reviews based on risk, and tools for checking the evidence
 used to call work complete.
 
-**Version 1.7.0** · [MIT License](LICENSE) · [Download the complete package](https://github.com/calvinfungcn/engrelay/releases/tag/v1.7.0)
+**Version 1.7.1** · [MIT License](LICENSE) · [Download the complete package](https://github.com/calvinfungcn/engrelay/releases/tag/v1.7.1)
 
 The package has focused Windows PowerShell 5.1 and PowerShell 7 fixture evidence.
 Real-project deployment, host loading, and business acceptance are separate checks.
@@ -36,18 +36,28 @@ See the [maintained role contracts](payload/docs/ai-collaboration/README.md).
 Use a trusted complete package in its own directory. Back up the target project's
 rules and read its existing agent instructions. For a new project:
 
-Download `engrelay-1.7.0.zip` from the release and extract it. Run commands from
-the extracted `engrelay-1.7.0` directory. Keep that complete package unchanged;
+Download `engrelay-1.7.1.zip` from the release and extract it. Run commands from
+the extracted `engrelay-1.7.1` directory. Keep that complete package unchanged;
 extra tool files or edited bytes make it differ from its inventory. The repository
 source can also be used when its file set and bytes exactly match `snapshot.json`.
 
 ```powershell
 $engrelayProject = 'E:\Projects\your-project'
 & .\scripts\manage.ps1 -Action CheckVersion -ProjectRoot $engrelayProject
+# Default SkillTarget is none: canonical Skills only (read under the target project).
 & .\scripts\manage.ps1 -Action Install -ProjectRoot $engrelayProject -WorkflowMode optional
+# For Codex host discovery on a new install, choose one target explicitly:
+# & .\scripts\manage.ps1 -Action Install -ProjectRoot $engrelayProject -SkillTarget agents -WorkflowMode optional
 & .\scripts\manage.ps1 -Action Status -ProjectRoot $engrelayProject
 & .\payload\docs\ai-collaboration\scripts\doctor.ps1 -WorkspaceRoot $engrelayProject -PackageRoot $PWD.Path
 ```
+
+On first successful Install, the manager keeps the original success line on the
+PowerShell success stream and adds short guidance on the information stream
+(selected target, canonical read path, and discovery path when applicable). Host
+loading remains unverified. To hide only that guidance, redirect stream 6:
+`6>$null` before or after the Install call. Merging streams or capturing native
+process screen text may include the extra lines.
 
 Use official `Upgrade` when the project already has a valid managed manifest.
 Use `Adopt -Preview`, then `Adopt`, only for a recognized unmanaged legacy layout.
@@ -98,12 +108,19 @@ installer. Warnings and unknown host-loading results remain relevant at exit0.
 & .\scripts\manage.ps1 -Action SetMode -ProjectRoot $engrelayProject -WorkflowMode optional
 ```
 
-Canonical Skills are installed without discovery copies by default (`none`). To
-select one discovery target during initial Install, add `-SkillTarget codex`.
-Other targets are `agents`, `claude`, `cursor`, `opencode`, `antigravity`, `gemini`,
-`iflow`, and `qwen`. Do not overwrite unrelated same-name Skills or run the
-inherited all-target installer. Changing target requires official uninstall/reinstall.
-Placement does not prove host loading.
+Canonical Skills are installed without package-managed discovery copies by default
+(`none`). Read them directly under the target project, for example
+`docs/ai-collaboration/skills/ai-collab-start/SKILL.md`. That is a valid install;
+you do not need to reinstall just to use the workflow.
+
+To add host discovery copies during the **first** Install, pass exactly one
+`-SkillTarget`. For new Codex setups, prefer `-SkillTarget agents` (`.agents/skills`).
+`-SkillTarget codex` remains supported for `.codex/skills` compatibility. Other
+targets are `claude`, `cursor`, `opencode`, `antigravity`, `gemini`, `iflow`, and
+`qwen`. Repeat Install and Upgrade do not add or switch targets. Changing target
+requires official uninstall/reinstall; the manager does not migrate or remove
+hand-maintained copies for you. Do not overwrite unrelated same-name Skills or run
+the inherited all-target installer. Placement does not prove host loading.
 
 ## Talk to an agent
 
@@ -180,6 +197,11 @@ SHA256 detects unexpected byte changes; it is not a publisher signature.
 Read [CONTRIBUTING.md](CONTRIBUTING.md). Include observable behavior, a small
 proposed change, and relevant evidence. Keep personal project data and runtime
 handoffs out of contributions.
+
+Development starts from a clone of this repository. Follow the
+[development guide](docs/development.md); maintain requirements in OpenSpec and
+export a clean package for installation checks. Keep the downloaded release
+package unchanged instead of installing from a tool-populated development checkout.
 
 EngRelay's original material is available under the [MIT License](LICENSE).
 Third-party notices remain applicable; see [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).

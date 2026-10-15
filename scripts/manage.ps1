@@ -148,6 +148,23 @@ function Get-Plan([string]$SelectedTarget) {
     return $items.ToArray()
 }
 
+function Write-InstallDiscoveryGuidance([string]$SelectedTarget) {
+    $canonicalRelative = 'docs/ai-collaboration/skills/ai-collab-start/SKILL.md'
+    $canonicalFull = [IO.Path]::GetFullPath((Join-Path $ProjectRoot ($canonicalRelative -replace '/', '\')))
+    Write-Information ("SkillTarget: " + $SelectedTarget) -InformationAction Continue
+    Write-Information ("ProjectRoot: " + $ProjectRoot) -InformationAction Continue
+    Write-Information ("Canonical Skills: " + $canonicalFull) -InformationAction Continue
+    if ($SelectedTarget -eq 'none') {
+        Write-Information 'This install did not deploy package-managed host discovery copies for this target.' -InformationAction Continue
+    }
+    else {
+        $discoveryRelative = ($targets[$SelectedTarget] + '/skills') -replace '/', '\'
+        $discoveryFull = [IO.Path]::GetFullPath((Join-Path $ProjectRoot $discoveryRelative))
+        Write-Information ("Package-managed discovery copies: " + $discoveryFull) -InformationAction Continue
+    }
+    Write-Information 'File placement does not prove host discovery or loading; confirm in an actual host session.' -InformationAction Continue
+}
+
 function Test-SafeRelative([string]$Relative) {
     return (-not [string]::IsNullOrWhiteSpace($Relative)) -and $Relative -notmatch '[:\\]' -and
         -not $Relative.StartsWith('/') -and $Relative -notmatch '(^|/)\.\.?(/|$)'
@@ -741,6 +758,7 @@ if ($Action -eq 'Install') {
     $state.phase = 'installed'
     Save-State $state
     Write-Output ('Installed: ' + $state.files.Count + ' tracked files; Skill target ' + $SkillTarget + '; WorkflowMode ' + $WorkflowMode)
+    Write-InstallDiscoveryGuidance $SkillTarget
     return
 }
 

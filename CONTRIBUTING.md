@@ -2,6 +2,9 @@
 
 EngRelay is maintained under the MIT License. Preserve applicable third-party notices.
 
+See [the development guide](docs/development.md) for the current baseline,
+OpenSpec maintenance flow, clean export, and verification scope.
+
 Describe the observable problem, expected behavior, affected paths, and a small
 proposed change. Use a fictional or disposable reproducer rather than uploading
 real project data, installation backups, credentials, chat transcripts, or `.ai/`.
@@ -14,8 +17,10 @@ suite for bookkeeping. Use one-time fixture directories for lifecycle checks.
 
 Modify canonical product Skills under `payload/`, not generated host copies.
 Update both README languages when behavior changes; shared role rules and
-machine fields remain one contract. Run `scripts/update-snapshot.ps1` after
-changing package bytes, and report actual checks and unverified limits.
+machine fields remain one contract. Run `scripts/update-snapshot.ps1` in a clean
+release staging directory after changing package bytes, and report actual checks
+and unverified limits. The development checkout may contain ignored tool/runtime
+files and source-only OpenSpec records; it is not itself an installation fixture.
 
 Contributions must have clear redistribution rights. Record third-party sources
 and preserve their required notices. Do not import restricted OmO prompt text

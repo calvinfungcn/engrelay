@@ -8,7 +8,7 @@ EngRelay 取自 Engineering + Relay，意为工程接力。它为已有代码库
 Agent 提供角色提示词、任务和交接模板、按风险引入的独立审查，以及检查交付
 证据的工具。
 
-**版本 1.7.0** · [MIT 许可证](LICENSE) · [下载完整包](https://github.com/calvinfungcn/engrelay/releases/tag/v1.7.0)
+**版本 1.7.1** · [MIT 许可证](LICENSE) · [下载完整包](https://github.com/calvinfungcn/engrelay/releases/tag/v1.7.1)
 
 包已进行 Windows PowerShell 5.1 和 PowerShell 7 聚焦夹具检查。
 真实项目部署、宿主加载与业务验收仍需分别验证。
@@ -30,17 +30,25 @@ Agent 提供角色提示词、任务和交接模板、按风险引入的独立�
 使用可信完整包，放在业务项目以外的独立目录。先备份目标项目规则，读取其
 现有 Agent 指令。新项目示例：
 
-从发行页面下载 `engrelay-1.7.0.zip`，解压后进入 `engrelay-1.7.0` 目录执行命令。
+从发行页面下载 `engrelay-1.7.1.zip`，解压后进入 `engrelay-1.7.1` 目录执行命令。
 保留完整包原样；额外工具文件或字节修改会使它与清单不匹配。仓库源码仅在
 实际文件集合和字节与 `snapshot.json` 完全一致时，也可作为安装源。
 
 ```powershell
 $engrelayProject = 'E:\Projects\your-project'
 & .\scripts\manage.ps1 -Action CheckVersion -ProjectRoot $engrelayProject
+# 默认 SkillTarget 为 none：只安装规范 Skill（在目标项目内直接读取）。
 & .\scripts\manage.ps1 -Action Install -ProjectRoot $engrelayProject -WorkflowMode optional
+# Codex 新安装需要宿主发现副本时，首次 Install 显式选择一个目标，例如：
+# & .\scripts\manage.ps1 -Action Install -ProjectRoot $engrelayProject -SkillTarget agents -WorkflowMode optional
 & .\scripts\manage.ps1 -Action Status -ProjectRoot $engrelayProject
 & .\payload\docs\ai-collaboration\scripts\doctor.ps1 -WorkspaceRoot $engrelayProject -PackageRoot $PWD.Path
 ```
+
+首次 Install 成功后，管理器仍在 PowerShell 成功流输出原有成功行，并在信息流
+追加简短指引（所选目标、规范读取路径，以及适用时的发现目录）。宿主是否加载
+仍须在实际会话中确认。若只需隐藏指引，可在 Install 调用中使用 `6>$null` 重定向
+第 6 路输出；合并流或捕获原生进程屏幕文本时可能包含附加行。
 
 已有有效受管清单时使用官方 `Upgrade`。只有无清单且匹配已知旧布局时，才先
 `Adopt -Preview`、再 `Adopt`。冲突会报告具体路径；保留本地修改，解决后再重试。
@@ -86,11 +94,16 @@ $engrelayProject = 'E:\Projects\your-project'
 & .\scripts\manage.ps1 -Action SetMode -ProjectRoot $engrelayProject -WorkflowMode optional
 ```
 
-默认安装规范 Skill，无发现副本（`none`）。首次 Install 需要宿主发现时，增加
-`-SkillTarget codex`，只选择一个目标。其他值：`agents`、`claude`、`cursor`、
-`opencode`、`antigravity`、`gemini`、`iflow`、`qwen`。
-不覆盖无关同名 Skill，不运行继承的全目标安装器。更换目标使用官方卸载/重装。
-文件放入发现目录不等于宿主已加载。
+默认安装规范 Skill，不部署本包管理的宿主发现副本（`none`）。直接在目标项目读取，
+例如 `docs/ai-collaboration/skills/ai-collab-start/SKILL.md`。这是成功安装，
+不必为使用流程而重装。
+
+仅在**首次** Install 需要发现副本时，显式传入一个 `-SkillTarget`。Codex 新安装
+优先使用 `-SkillTarget agents`（`.agents/skills`）；`-SkillTarget codex` 保留
+`.codex/skills` 兼容路径。其他值：`claude`、`cursor`、`opencode`、`antigravity`、
+`gemini`、`iflow`、`qwen`。重复 Install 与 Upgrade 不会追加或切换目标；确需调整
+须走官方卸载/重装，管理器不会自动迁移或删除你手工维护的副本。不覆盖无关同名
+Skill，不运行继承的全目标安装器。文件放入发现目录不等于宿主已加载。
 
 ## 对 Agent 说什么
 
@@ -159,6 +172,10 @@ EngRelay 是原 `ai-collaboration` 的公开品牌。为兼容升级，包保留
 
 阅读 [CONTRIBUTING.md](CONTRIBUTING.md)，说明可观察行为、最小修改和相关证据。
 贡献中保留公共示例，排除私人项目数据和运行中的 handoff。
+
+日常开发使用本仓库的独立克隆，先读[开发维护指南](docs/development.md)。需求和
+任务在 OpenSpec 中维护，安装检查使用干净导出的完整包。下载的发行包保留原样，
+不使用混有开发工具与运行态的工作目录作为安装源。
 
 EngRelay 自有内容采用 [MIT 许可证](LICENSE)。第三方通知仍然适用，详见
 [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md)。OmO 的借鉴记录是机制层面的

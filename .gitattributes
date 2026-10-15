@@ -1,2 +1,6 @@
 # snapshot.json records exact bytes; preserve them through checkout.
 * -text
+
+# Development requirements are retained in Git but omitted from installation exports.
+/openspec export-ignore
+/docs/reviews export-ignore
