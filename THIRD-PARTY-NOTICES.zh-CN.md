@@ -9,7 +9,7 @@ EngRelay 原创材料采用 MIT 许可证，由项目负责人于 2026-10-14 选
 - 项目：https://github.com/code-yeongyu/oh-my-openagent
 - 2026-10-14 核对的条款：
   https://github.com/code-yeongyu/oh-my-openagent/blob/dev/LICENSE.md
-- 所核对条款将 otherwise 未许可材料置于 Sustainable Use License 1.0 下，含外部分发限制与声明要求。
+- 所核对条款将未另行许可的材料置于 Sustainable Use License 1.0 下，含外部分发限制与声明要求。
 - 本地研究检查过标记为 5.1.29 且无 Git 元数据的树。这不能标识不可变的上游发布或提交。
 
 本地研究记录机制启发：范围化角色退出、可执行设计审查、连续性与完整派发上下文。实际本地实现提交为 f50fff8。其设计需要独立项目表述。对四个受影响本地文档及其引入行与 60 个相关上游提示文件的较宽比较，未发现精确规范化 12-token 表达匹配。这一有界结果不证明独立著作权、不排除其他改编，也不授予再许可权限。

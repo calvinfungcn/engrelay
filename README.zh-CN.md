@@ -2,7 +2,7 @@
 
 **小任务从简，交接可续，交付可查。**
 
-[English](README.md) · [角色规则](payload/docs/ai-collaboration/README.md) · [来源与许可](THIRD-PARTY-NOTICES.md)
+[English](README.md) · [角色规则](payload/docs/ai-collaboration/README.md) · [来源与许可](THIRD-PARTY-NOTICES.zh-CN.md)
 
 EngRelay 取自 Engineering + Relay，意为工程接力。它为已有代码库中的 AI 编程
 Agent 提供角色提示词、任务和交接模板、按风险引入的独立审查，以及检查交付
@@ -178,13 +178,13 @@ EngRelay 是原 `ai-collaboration` 的公开品牌。为兼容升级，包保留
 
 ## 贡献与许可
 
-阅读 [CONTRIBUTING.md](CONTRIBUTING.md)，说明可观察行为、最小修改和相关证据。
+阅读[贡献指南](CONTRIBUTING.zh-CN.md)，说明可观察行为、最小修改和相关证据。
 贡献中保留公共示例，排除私人项目数据和运行中的 handoff。
 
-日常开发使用本仓库的独立克隆，先读[开发维护指南](docs/development.md)。需求和
+日常开发使用本仓库的独立克隆，先读[开发维护指南](docs/development.zh-CN.md)。需求和
 任务在 OpenSpec 中维护，安装检查使用干净导出的完整包。下载的发行包保留原样，
 不使用混有开发工具与运行态的工作目录作为安装源。
 
 EngRelay 自有内容采用 [MIT 许可证](LICENSE)。第三方通知仍然适用，详见
-[THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md)。OmO 的借鉴记录是机制层面的
+[第三方声明](THIRD-PARTY-NOTICES.zh-CN.md)。OmO 的借鉴记录是机制层面的
 独立表述；本许可证不改变 OmO 自身受限文本或代码的授权。
