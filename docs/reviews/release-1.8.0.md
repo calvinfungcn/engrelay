@@ -4,9 +4,9 @@ Recorded on: 2026-10-16. Package version: 1.8.0.
 
 ## Inputs and scope
 
-- Candidate source commit: `ca297a7c735dcd13461402ae541cf65198f0396c`, exported with git archive into a disposable staging directory.
+- Tested candidate source commit: `ca297a7c735dcd13461402ae541cf65198f0396c`, exported with git archive into a disposable staging directory.
 - Candidate inventory: 63 entries plus snapshot.json; the staging snapshot was generated with `-Version 1.8.0 -ForRelease`.
-- Candidate snapshot SHA256: `0d66028d02a4e1f1df3d716b27ea04ec8f6479e93735c491a977bc7ca7a04af8`.
+- Tested candidate snapshot SHA256: `0d66028d02a4e1f1df3d716b27ea04ec8f6479e93735c491a977bc7ca7a04af8`.
 - Historical inputs were clean git archive exports of immutable public tags v1.7.0 and v1.7.1. Their complete inventories were checked without refreshing either old snapshot.
 - v1.7.0 snapshot SHA256: `f5c4085549cb2b983e98076021c6799419acf31ddf53d7ede472d721d2ff9612`.
 - v1.7.1 snapshot SHA256: `16929f2151186fa753166d0d476381764a55528b1c7ab53b24b26d18bef6b743`.
@@ -29,6 +29,14 @@ The optional frozen v1.6.1 case was skipped once per host because that separate 
 
 OpenSpec strict main-spec validation, delta synchronization comparison, whitespace checks and staged-path privacy checks passed. Prior independent Review evidence remains applicable to unchanged product contracts; live Agent/host behavior was not inferred from these fixtures.
 
+## Final documentation audit
+
+A separate read-only release audit found Chinese human navigation pointing at English pages with available Chinese editions, and one untranslated ordinary word in the Chinese third-party notice. Commit `41a51aa74d0f4a7b5206bbb53252d4af452d5256` corrects these in the two root human documents. The focused follow-up verified all 34 local Markdown links in the ten Chinese human documents; no broken links or unmarked English navigation to an available Chinese counterpart remained.
+
+The final candidate was exported from that commit and its staging snapshot regenerated. Its inventory still has 63 entries plus snapshot.json. Final snapshot SHA256: `e05e799a983a3e8388392157d43cf0ad82c8d706fbe43bf10a9aa893d08ab43d`.
+
+Complete byte comparison with the tested candidate identified exactly three changed paths: README.zh-CN.md, THIRD-PARTY-NOTICES.zh-CN.md, and snapshot.json. All other 61 package files, including every lifecycle implementation and test script, remain byte-identical. The focused link/content check covers the documentation corrections; the earlier lifecycle evidence is reused only for its unchanged behavior, with inventory integrity checked separately for the final package.
+
 ## Evidence hashes
 
 Raw logs remain local and outside Git and the package.
@@ -43,6 +51,6 @@ Raw logs remain local and outside Git and the package.
 
 ## Release boundary
 
-The final metadata commit records the tested staging snapshot and this source-only report. Its fresh export must match the tested candidate byte for byte before upload. OpenSpec and Review archives stay in Git but are excluded from the complete installation ZIP. Local runtime, credentials, host copies, caches and raw logs remain ignored.
+The final metadata commit records the final documentation candidate's staging snapshot and this source-only report. Its fresh export must match that final candidate byte for byte before upload. OpenSpec and Review archives stay in Git but are excluded from the complete installation ZIP. Local runtime, credentials, host copies, caches and raw logs remain ignored.
 
 The complete ZIP and SHA256SUMS are release assets. Historical tags and assets are preserved. File/inventory checks and pattern scans have a bounded scope; they do not establish live Agent behavior, host loading, real-project deployment, business acceptance, or the absence of every possible secret format. C1–C5 handoff capability guidance remains a separate requirement outside v1.8.0.
