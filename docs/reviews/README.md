@@ -1,10 +1,16 @@
 # Review archive
 
-已完成变更的正式审查索引。轮次文件保留原路径；归档不重置累计计数，也不新增审查结论。
+[Simplified Chinese](README.zh-CN.md)
+
+Formal review index for completed changes. Round files keep their original paths;
+archive does not reset cumulative counts or add new review conclusions.
 
 | Change | Final status | Review rounds | Archive |
 | --- | --- | --- | --- |
-| improve-skill-discovery-guidance | verified / accepted | 3 | [归档记录](improve-skill-discovery-guidance/index.md#archive-record) |
+| improve-skill-discovery-guidance | verified / accepted | 3 | [Archive record](improve-skill-discovery-guidance/index.md#archive-record) |
+| streamline-entry-and-human-docs | verified / accepted | 4 | [Archive record](streamline-entry-and-human-docs/index.md#archive-record) |
 
-仅公开脱敏后的审查摘要、发现与证据哈希。原始运行态、日志和本机工具配置不提交。
-本目录保留在源码仓库，通过 `.gitattributes` 排除安装包导出。
+Only redacted review summaries, findings, and evidence hashes are published.
+Raw runtime state, logs, and local tool configuration are not committed.
+This directory stays in the source repository and is excluded from installation
+exports via `.gitattributes`.

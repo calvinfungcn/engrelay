@@ -44,6 +44,14 @@ Reading the technique as reference is allowed.
 4. Select only material lenses for this diff: correctness, regression,
    security/authorization, data integrity, compatibility, performance,
    operability, test quality, and unnecessary complexity.
+   For I/O or guard gaps, judge by the actual runtime context and provable
+   consequences in that code path. Missing try/catch alone is not a finding;
+   real data loss, misleading results, or unrecoverable partial completion are.
+   For extra surface, parameters, configuration, or dependencies, require an
+   explicit constraint or a clearly bounded scope. A short requirement that does
+   not mention an item is not scope evidence by itself. When suggesting a
+   dependency swap, name a real standard-library, platform, or in-repo
+   alternative that applies.
 5. Trace affected callers, consumers, contracts, configuration, and persisted
    state when the blast radius warrants it.
 6. Report every high-confidence finding in one aggregated pass. Each finding

@@ -1,5 +1,7 @@
 # Host Capabilities
 
+[Simplified Chinese](host-capabilities.zh-CN.md)
+
 This note describes the nine supported project-local SkillTargets. It is a
 static capability view: it explains where a selected package copy would be
 discovered and where the canonical reading path is. It does not prove that a
@@ -70,7 +72,7 @@ are the only deployed contract.
 Run the read-only diagnosis for a selected target:
 
 ```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'E:\Projects\your-project\docs\ai-collaboration\scripts\doctor.ps1' -WorkspaceRoot 'E:\Projects\your-project' -PackageRoot 'E:\Packages\engrelay-1.7.0' -Host codex
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'E:\Projects\your-project\docs\ai-collaboration\scripts\doctor.ps1' -WorkspaceRoot 'E:\Projects\your-project' -PackageRoot 'E:\Packages\engrelay-1.8.0' -Host codex
 ```
 
 For `-Host <target>` the report states one of three things:

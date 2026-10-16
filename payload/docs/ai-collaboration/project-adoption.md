@@ -1,5 +1,7 @@
 # Project Adoption
 
+[Simplified Chinese](project-adoption.zh-CN.md)
+
 This note gives the bounded routes for bringing ai-collaboration into a real
 project. Each route names the project root, the authorization needed for real
 writes and the verification it supports. A fixture run or a package check is
@@ -26,7 +28,7 @@ should own the installed files and managed blocks.
 ```powershell
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\manage.ps1 -Action CheckVersion -ProjectRoot 'E:\Projects\your-project'
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\manage.ps1 -Action Install -ProjectRoot 'E:\Projects\your-project' -WorkflowMode optional
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'E:\Projects\your-project\docs\ai-collaboration\scripts\doctor.ps1' -WorkspaceRoot 'E:\Projects\your-project' -PackageRoot 'E:\Packages\engrelay-1.7.0'
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'E:\Projects\your-project\docs\ai-collaboration\scripts\doctor.ps1' -WorkspaceRoot 'E:\Projects\your-project' -PackageRoot 'E:\Packages\engrelay-1.8.0'
 ```
 
 `CheckVersion` is read-only. It reports the installed version, workflow mode and
@@ -44,7 +46,7 @@ upgrade before any write.
 
 ```powershell
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\manage.ps1 -Action Upgrade -ProjectRoot 'E:\Projects\your-project'
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'E:\Projects\your-project\docs\ai-collaboration\scripts\doctor.ps1' -WorkspaceRoot 'E:\Projects\your-project' -PackageRoot 'E:\Packages\engrelay-1.7.0' -Host codex
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'E:\Projects\your-project\docs\ai-collaboration\scripts\doctor.ps1' -WorkspaceRoot 'E:\Projects\your-project' -PackageRoot 'E:\Packages\engrelay-1.8.0' -Host codex
 ```
 
 If an upgrade is interrupted, the manifest phase becomes `upgrading`. Later
@@ -72,7 +74,7 @@ does not want the manager to own any file.
    entry facts show what is present:
 
 ```powershell
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'E:\Packages\engrelay-1.7.0\payload\docs\ai-collaboration\scripts\doctor.ps1' -WorkspaceRoot 'E:\Projects\your-project' -PackageRoot 'E:\Packages\engrelay-1.7.0'
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'E:\Packages\engrelay-1.8.0\payload\docs\ai-collaboration\scripts\doctor.ps1' -WorkspaceRoot 'E:\Projects\your-project' -PackageRoot 'E:\Packages\engrelay-1.8.0'
 ```
 
 This route gives no manager ownership, no automatic upgrade and no managed
@@ -82,15 +84,26 @@ uninstall. Later changes must be made by hand and reviewed as project content.
 
 For version 1.5.3, the catalogue also recognizes the reviewed retired notice profile. It requires the exact normalized hash of `docs/ai-collaboration/README.md`; the former core files and old entry controls may be absent. The known `docs/solutions/solution.template.md` remains optional and hash checked when present. All unknown existing payload paths and residual old activation or partial managed markers remain conflicts.
 
-如果项目已有本包 catalogue 中的完整旧 profile，按下面的包命令请求有界接管。`Preview` 只读；它会先验证完整 profile、旧入口的唯一精确已知片段、路径类型和冲突，然后才允许 Adopt。旧入口文件可以有换行、BOM 或片段外项目内容变化；未知、重复或部分片段仍拒绝。命中后，canonical 文件会保存原始字节并纳入管理；`docs/reviews/README.md` 与 `docs/solutions/README.md` 始终留在原位置并允许项目后续编辑。不要手写 manifest、标记或迁移脚本，也不要把项目索引搬到别处。
+When the project already matches a full legacy profile in this package catalogue,
+request a bounded takeover with the package commands below. `Preview` is read-only;
+it validates the full profile, the one exact known legacy-entry fragment, path types,
+and conflicts before Adopt is allowed. Legacy entry files may differ in line endings,
+BOM, or content outside the fragment; unknown, duplicate, or partial fragments still
+refuse. On success, canonical files keep their original bytes and enter management;
+`docs/reviews/README.md` and `docs/solutions/README.md` stay in place and remain
+editable as project content. Do not hand-write manifests, markers, or migration scripts,
+and do not relocate project indexes.
 
 ```powershell
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\manage.ps1 -Action Adopt -Preview -ProjectRoot 'E:\Projects\your-project' -WorkflowMode optional
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\manage.ps1 -Action Adopt -ProjectRoot 'E:\Projects\your-project' -WorkflowMode optional
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'E:\Projects\your-project\docs\ai-collaboration\scripts\doctor.ps1' -WorkspaceRoot 'E:\Projects\your-project' -PackageRoot 'E:\Packages\engrelay-1.7.0'
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'E:\Projects\your-project\docs\ai-collaboration\scripts\doctor.ps1' -WorkspaceRoot 'E:\Projects\your-project' -PackageRoot 'E:\Packages\engrelay-1.8.0'
 ```
 
-若已有 `.ai-collaboration-install/manifest.json`，使用 `Upgrade` 或先保留现场人工协调；Git 恢复留下的清单、未知入口、部分 profile 和任意不匹配文件都会拒绝接管。拒绝时只处理报告的具体冲突，不使用 Force。
+If `.ai-collaboration-install/manifest.json` already exists, use `Upgrade` or
+coordinate manually first; manifests left by Git restore, unknown entries, partial
+profiles, or any mismatched file refuse adoption. On refusal, resolve only the
+reported conflicts; there is no Force mode.
 
 ## Unmanaged Legacy Integration
 

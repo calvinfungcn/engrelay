@@ -1,5 +1,7 @@
 # Example - Risk-Based Action States
 
+[Simplified Chinese](mobile-points-expiry-reminder-zh.md)
+
 This fictional feature demonstrates the collaboration protocol:
 
 > Show a mobile reminder for employee incentive points expiring within 30 days.

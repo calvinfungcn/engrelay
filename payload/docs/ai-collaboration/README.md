@@ -29,7 +29,15 @@ When explicitly selected, the remainder of this handbook applies in full.
 Small tasks may instead choose another workflow; no new parallel S lifecycle
 or exemption from an active M/H independent-review requirement is introduced.
 Use the package README for prompt version checking, protected upgrades and
-project default selection; no network updater is added.
+project default selection; no network updater is added. Human-oriented guides
+(operator flow, adoption, hosts) live in
+[operator-guide.md](operator-guide.md) /
+[operator-guide.zh-CN.md](operator-guide.zh-CN.md),
+[project-adoption.md](project-adoption.md) /
+[project-adoption.zh-CN.md](project-adoption.zh-CN.md), and
+[host-capabilities.md](host-capabilities.md) /
+[host-capabilities.zh-CN.md](host-capabilities.zh-CN.md); they index this
+handbook rather than replacing role contracts.
 
 This directory defines the workspace standard for handing work between multiple
 AI coding agents without copying long chat transcripts.
@@ -234,9 +242,10 @@ When human action is actually required, add the conditional
 `Environment Preparation` section from [handoff-schema.md](handoff-schema.md#environment-preparation)
 and repeat its plain-language notice in chat **before** dispatch. Name the
 concrete action, why and when it is needed, how to confirm readiness, and work
-that can proceed. For example: "请在 Visual Studio 中启动 WebForms 调试，保持
-IIS Express 运行。后续页面验证需要 http://localhost:3000/ 可访问；启动后回复
-‘已启动’，我会检查页面是否可访问后继续。代码修改和离线测试可先进行。"
+that can proceed. For example: "Start WebForms debugging in Visual Studio and keep
+IIS Express running. Page verification needs http://localhost:3000/ reachable; reply
+'started' when ready and I will check reachability before page verification. Code
+changes and offline tests may continue meanwhile."
 Follow the module's runtime constraints; this example does not authorize an IIS
 deployment or a different launch method.
 

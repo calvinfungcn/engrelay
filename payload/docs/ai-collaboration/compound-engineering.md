@@ -45,6 +45,15 @@ Upstream's [advisory treatment of unrequested behavior rules](https://github.com
 does not override this workspace's `must-fix` rule for implemented unauthorized
 scope in `agent-prompts.md#code-reviewer`.
 
+A later selective sync checked compound-engineering-plugin commit
+`50532b00de523980010d97fe950965b35382a3b7` (v3.30.5 compare against the
+v3.29.0 baseline above), adopting only the rules from pull requests
+[1791](https://github.com/EveryInc/compound-engineering-plugin/pull/1791),
+[1792](https://github.com/EveryInc/compound-engineering-plugin/pull/1792), and
+[1852](https://github.com/EveryInc/compound-engineering-plugin/pull/1852). It
+does not import upstream transport, peer fallback, commit conventions, or plugin
+installation.
+
 These are capabilities, not roles or lifecycle stages. Invoking one does not
 create a handoff, review round, runtime artifact, or new status by itself.
 

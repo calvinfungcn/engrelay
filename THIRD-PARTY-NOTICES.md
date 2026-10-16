@@ -1,5 +1,7 @@
 # Sources and licensing
 
+[Simplified Chinese](THIRD-PARTY-NOTICES.zh-CN.md)
+
 EngRelay's original material uses the MIT License, selected by the project owner
 on 2026-10-14. Applicable third-party notices follow. Third-party rights are not
 changed by the EngRelay name or the root license.
@@ -40,6 +42,9 @@ expression requires removal, independent replacement, or applicable permission.
 - The local records cite that release and pull requests 1719,1772,1771.
   The notice conservatively covers the local CE-derived material below; it does
   not assert byte-for-byte equivalence with upstream Skills.
+- Selective sync checked compound-engineering-plugin commit
+  `50532b00de523980010d97fe950965b35382a3b7` (v3.30.5 compare against that
+  baseline), adopting PR 1791, 1792, and 1852 rules only.
 - Potentially adapted local paths:
   `payload/docs/ai-collaboration/compound-engineering.md` and the four canonical
   `ce-code-review`, `ce-debug`, `ce-simplify-code`, `ce-compound` Skills.
@@ -80,10 +85,3 @@ node_modules, personal tool settings, original project rules, raw backups,
 runtime handoffs, and old Git history are excluded. Installing this kit does not
 redistribute or install those tools. The maintained role workflow uses OpenSpec
 when explicitly selected; consumers obtain that tool separately under its terms.
-
-## 中文说明
-
-负责人已选择自有内容采用 MIT，第三方条款保持适用。OmO 当前采用 SUL；本地记录要求
-独立表述，实际变更与 60 个相关上游文件的比较未发现长连续原文，仍不证明所有
-表达的归属。Every 3.29.0 历史许可已核实为 MIT，完整通知保留在本文件和本地
-CE 改写文档/Skill 中，安装或生成副本时随同保留。

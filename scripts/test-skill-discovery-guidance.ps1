@@ -143,7 +143,7 @@ function Write-GuidanceSummary([int]$OuterExit, [string]$ErrorText = '') {
     $summary = [ordered]@{
         schemaVersion = 1
         focus = 'skill-discovery-guidance'
-        packageVersion = '1.7.1'
+        packageVersion = '1.8.0'
         snapshotSha256 = $snapshotHash
         managerSha256 = $managerHash
         baselineGitRef = $BaselineGitRef
@@ -439,7 +439,7 @@ try {
     Assert-True (Test-Path -LiteralPath $managerPath -PathType Leaf) 'Public manager missing'
     $managerHash = Get-FileHashText $managerPath
     Assert-Equal $snapshot.schemaVersion 1 'Public snapshot schema mismatch'
-    Assert-Equal ([string]$snapshot.packageVersion) '1.7.1' 'Public snapshot version mismatch'
+    Assert-Equal ([string]$snapshot.packageVersion) '1.8.0' 'Public snapshot version mismatch'
 
     $baselinePackage = Get-BaselinePackageRoot
     foreach ($baselineTarget in @(@{ name = 'baseline-none'; target = '' }, @{ name = 'baseline-agents'; target = 'agents' }, @{ name = 'baseline-codex'; target = 'codex' })) {

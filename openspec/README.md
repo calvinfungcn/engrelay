@@ -1,5 +1,7 @@
 # Maintenance specification baseline
 
+[Simplified Chinese](README.zh-CN.md)
+
 This directory manages future EngRelay maintenance, starting from public v1.7.0.
 `specs/collaboration-package/spec.md` consolidates the current contracts without
 copying private history or treating old review rounds as new acceptance.

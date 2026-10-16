@@ -148,7 +148,11 @@
         "docs/ai-collaboration/legacy-adoption.json",
         "docs/ai-collaboration/skills/ai-collab-requirements/SKILL.md",
         "docs/ai-collaboration/skills/ai-collab-start/SKILL.md",
-        "docs/ai-collaboration/skills/ai-collab-continue/SKILL.md"
+        "docs/ai-collaboration/skills/ai-collab-continue/SKILL.md",
+        "docs/ai-collaboration/operator-guide.md",
+        "docs/ai-collaboration/operator-guide.zh-CN.md",
+        "docs/ai-collaboration/project-adoption.zh-CN.md",
+        "docs/ai-collaboration/host-capabilities.zh-CN.md"
       ],
       "retirements": []
     },
@@ -306,7 +310,11 @@
         "docs/ai-collaboration/legacy-adoption.json",
         "docs/ai-collaboration/skills/ai-collab-requirements/SKILL.md",
         "docs/ai-collaboration/skills/ai-collab-start/SKILL.md",
-        "docs/ai-collaboration/skills/ai-collab-continue/SKILL.md"
+        "docs/ai-collaboration/skills/ai-collab-continue/SKILL.md",
+        "docs/ai-collaboration/operator-guide.md",
+        "docs/ai-collaboration/operator-guide.zh-CN.md",
+        "docs/ai-collaboration/project-adoption.zh-CN.md",
+        "docs/ai-collaboration/host-capabilities.zh-CN.md"
       ],
       "retirements": []
     },
@@ -467,174 +475,182 @@
         "docs/ai-collaboration/legacy-adoption.json",
         "docs/ai-collaboration/skills/ai-collab-requirements/SKILL.md",
         "docs/ai-collaboration/skills/ai-collab-start/SKILL.md",
-        "docs/ai-collaboration/skills/ai-collab-continue/SKILL.md"
+        "docs/ai-collaboration/skills/ai-collab-continue/SKILL.md",
+        "docs/ai-collaboration/operator-guide.md",
+        "docs/ai-collaboration/operator-guide.zh-CN.md",
+        "docs/ai-collaboration/project-adoption.zh-CN.md",
+        "docs/ai-collaboration/host-capabilities.zh-CN.md"
       ],
       "retirements": []
     },
-{
-  "packageVersion": "1.5.2",
-  "deploymentFingerprints": [
-    "987ad775a2b45cc67b8c7ca7773e9377384eb925c18050e3759dd062dca5b988"
-  ],
-  "fingerprintNote": "1.5.2 frozen verified managed layout; ordinal deployment fingerprint recorded by an actual frozen 1.5.2 Install on PowerShell 7.6.6 and Windows PowerShell 5.1.26100.9444 (identical).",
-  "verifiedSource": "Historical snapshot 1.5.2 (snapshot.json sha256 bd0ff7866e89e36379683950dc0c56547f453bd9a41f83ce457dcb09b530fa62)",
-  "paths": [
     {
-      "path": ".gitignore",
-      "kind": "gitignore"
+      "packageVersion": "1.5.2",
+      "deploymentFingerprints": [
+        "987ad775a2b45cc67b8c7ca7773e9377384eb925c18050e3759dd062dca5b988"
+      ],
+      "fingerprintNote": "1.5.2 frozen verified managed layout; ordinal deployment fingerprint recorded by an actual frozen 1.5.2 Install on PowerShell 7.6.6 and Windows PowerShell 5.1.26100.9444 (identical).",
+      "verifiedSource": "Historical snapshot 1.5.2 (snapshot.json sha256 bd0ff7866e89e36379683950dc0c56547f453bd9a41f83ce457dcb09b530fa62)",
+      "paths": [
+        {
+          "path": ".gitignore",
+          "kind": "gitignore"
+        },
+        {
+          "path": "AGENTS.md",
+          "kind": "agents"
+        },
+        {
+          "path": "docs/ai-collaboration/agent-prompts.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/compound-engineering.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/compound-skills.manifest.json",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/examples/mobile-points-expiry-reminder-zh.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/examples/mobile-points-expiry-reminder.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/handoff-schema.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/host-capabilities.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/legacy-adoption.json",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/project-adoption.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/README.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/review-compound-learning-optimization.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/review-handoff-optimization.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/scripts/doctor.ps1",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/scripts/find-solutions.ps1",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/scripts/install-compound-skills.ps1",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/scripts/test-install-compound-skills.ps1",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/scripts/test-validate-runtime-state.ps1",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/scripts/validate-runtime-state.ps1",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/skills/ce-code-review/SKILL.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/skills/ce-compound/SKILL.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/skills/ce-debug/SKILL.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/skills/ce-simplify-code/SKILL.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/solution-exploration.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/templates/current-task.template.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/templates/handoff.template.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/templates/implementation-result.template.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/templates/requirement-baseline.template.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/templates/response-handoff.template.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/templates/review-request.template.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/templates/review-round.template.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/templates/role-roster.template.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/workflows.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/reviews/README.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/solutions/README.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/solutions/solution.template.md",
+          "kind": "file"
+        }
+      ],
+      "additions": [
+        "docs/ai-collaboration/skills/ai-collab-requirements/SKILL.md",
+        "docs/ai-collaboration/skills/ai-collab-start/SKILL.md",
+        "docs/ai-collaboration/skills/ai-collab-continue/SKILL.md",
+        "docs/ai-collaboration/operator-guide.md",
+        "docs/ai-collaboration/operator-guide.zh-CN.md",
+        "docs/ai-collaboration/project-adoption.zh-CN.md",
+        "docs/ai-collaboration/host-capabilities.zh-CN.md"
+      ],
+      "retirements": []
     },
-    {
-      "path": "AGENTS.md",
-      "kind": "agents"
-    },
-    {
-      "path": "docs/ai-collaboration/agent-prompts.md",
-      "kind": "file"
-    },
-    {
-      "path": "docs/ai-collaboration/compound-engineering.md",
-      "kind": "file"
-    },
-    {
-      "path": "docs/ai-collaboration/compound-skills.manifest.json",
-      "kind": "file"
-    },
-    {
-      "path": "docs/ai-collaboration/examples/mobile-points-expiry-reminder-zh.md",
-      "kind": "file"
-    },
-    {
-      "path": "docs/ai-collaboration/examples/mobile-points-expiry-reminder.md",
-      "kind": "file"
-    },
-    {
-      "path": "docs/ai-collaboration/handoff-schema.md",
-      "kind": "file"
-    },
-    {
-      "path": "docs/ai-collaboration/host-capabilities.md",
-      "kind": "file"
-    },
-    {
-      "path": "docs/ai-collaboration/legacy-adoption.json",
-      "kind": "file"
-    },
-    {
-      "path": "docs/ai-collaboration/project-adoption.md",
-      "kind": "file"
-    },
-    {
-      "path": "docs/ai-collaboration/README.md",
-      "kind": "file"
-    },
-    {
-      "path": "docs/ai-collaboration/review-compound-learning-optimization.md",
-      "kind": "file"
-    },
-    {
-      "path": "docs/ai-collaboration/review-handoff-optimization.md",
-      "kind": "file"
-    },
-    {
-      "path": "docs/ai-collaboration/scripts/doctor.ps1",
-      "kind": "file"
-    },
-    {
-      "path": "docs/ai-collaboration/scripts/find-solutions.ps1",
-      "kind": "file"
-    },
-    {
-      "path": "docs/ai-collaboration/scripts/install-compound-skills.ps1",
-      "kind": "file"
-    },
-    {
-      "path": "docs/ai-collaboration/scripts/test-install-compound-skills.ps1",
-      "kind": "file"
-    },
-    {
-      "path": "docs/ai-collaboration/scripts/test-validate-runtime-state.ps1",
-      "kind": "file"
-    },
-    {
-      "path": "docs/ai-collaboration/scripts/validate-runtime-state.ps1",
-      "kind": "file"
-    },
-    {
-      "path": "docs/ai-collaboration/skills/ce-code-review/SKILL.md",
-      "kind": "file"
-    },
-    {
-      "path": "docs/ai-collaboration/skills/ce-compound/SKILL.md",
-      "kind": "file"
-    },
-    {
-      "path": "docs/ai-collaboration/skills/ce-debug/SKILL.md",
-      "kind": "file"
-    },
-    {
-      "path": "docs/ai-collaboration/skills/ce-simplify-code/SKILL.md",
-      "kind": "file"
-    },
-    {
-      "path": "docs/ai-collaboration/solution-exploration.md",
-      "kind": "file"
-    },
-    {
-      "path": "docs/ai-collaboration/templates/current-task.template.md",
-      "kind": "file"
-    },
-    {
-      "path": "docs/ai-collaboration/templates/handoff.template.md",
-      "kind": "file"
-    },
-    {
-      "path": "docs/ai-collaboration/templates/implementation-result.template.md",
-      "kind": "file"
-    },
-    {
-      "path": "docs/ai-collaboration/templates/requirement-baseline.template.md",
-      "kind": "file"
-    },
-    {
-      "path": "docs/ai-collaboration/templates/response-handoff.template.md",
-      "kind": "file"
-    },
-    {
-      "path": "docs/ai-collaboration/templates/review-request.template.md",
-      "kind": "file"
-    },
-    {
-      "path": "docs/ai-collaboration/templates/review-round.template.md",
-      "kind": "file"
-    },
-    {
-      "path": "docs/ai-collaboration/templates/role-roster.template.md",
-      "kind": "file"
-    },
-    {
-      "path": "docs/ai-collaboration/workflows.md",
-      "kind": "file"
-    },
-    {
-      "path": "docs/reviews/README.md",
-      "kind": "file"
-    },
-    {
-      "path": "docs/solutions/README.md",
-      "kind": "file"
-    },
-    {
-      "path": "docs/solutions/solution.template.md",
-      "kind": "file"
-    }
-  ],
-  "additions": [
-    "docs/ai-collaboration/skills/ai-collab-requirements/SKILL.md",
-    "docs/ai-collaboration/skills/ai-collab-start/SKILL.md",
-    "docs/ai-collaboration/skills/ai-collab-continue/SKILL.md"
-  ],
-  "retirements": []
-},
     {
       "packageVersion": "1.5.3",
       "deploymentFingerprints": [
@@ -795,7 +811,365 @@
       "additions": [
         "docs/ai-collaboration/skills/ai-collab-requirements/SKILL.md",
         "docs/ai-collaboration/skills/ai-collab-start/SKILL.md",
-        "docs/ai-collaboration/skills/ai-collab-continue/SKILL.md"
+        "docs/ai-collaboration/skills/ai-collab-continue/SKILL.md",
+        "docs/ai-collaboration/operator-guide.md",
+        "docs/ai-collaboration/operator-guide.zh-CN.md",
+        "docs/ai-collaboration/project-adoption.zh-CN.md",
+        "docs/ai-collaboration/host-capabilities.zh-CN.md"
+      ],
+      "retirements": []
+    },
+    {
+      "packageVersion": "1.7.0",
+      "deploymentFingerprints": [
+        "794ee5dcbf019c5e981b1a5ee1472edfad1e392e39bc560630985c35e73279c6"
+      ],
+      "fingerprintNote": "Recorded from immutable tag v1.7.0 snapshot; ordinal deployment fingerprint.",
+      "verifiedSource": "Public release v1.7.0 (snapshot.json sha256 f5c4085549cb2b983e98076021c6799419acf31ddf53d7ede472d721d2ff9612)",
+      "paths": [
+        {
+          "path": ".gitignore",
+          "kind": "gitignore"
+        },
+        {
+          "path": "AGENTS.md",
+          "kind": "agents"
+        },
+        {
+          "path": "docs/ai-collaboration/README.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/agent-prompts.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/compound-engineering.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/compound-skills.manifest.json",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/examples/mobile-points-expiry-reminder-zh.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/examples/mobile-points-expiry-reminder.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/handoff-schema.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/host-capabilities.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/legacy-adoption.json",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/project-adoption.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/review-compound-learning-optimization.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/review-handoff-optimization.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/scripts/doctor.ps1",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/scripts/find-solutions.ps1",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/scripts/install-compound-skills.ps1",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/scripts/test-install-compound-skills.ps1",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/scripts/test-validate-runtime-state.ps1",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/scripts/validate-runtime-state.ps1",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/skills/ai-collab-continue/SKILL.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/skills/ai-collab-requirements/SKILL.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/skills/ai-collab-start/SKILL.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/skills/ce-code-review/SKILL.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/skills/ce-compound/SKILL.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/skills/ce-debug/SKILL.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/skills/ce-simplify-code/SKILL.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/solution-exploration.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/templates/current-task.template.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/templates/handoff.template.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/templates/implementation-result.template.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/templates/requirement-baseline.template.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/templates/response-handoff.template.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/templates/review-request.template.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/templates/review-round.template.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/templates/role-roster.template.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/workflows.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/reviews/README.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/solutions/README.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/solutions/solution.template.md",
+          "kind": "file"
+        }
+      ],
+      "additions": [
+        "docs/ai-collaboration/operator-guide.md",
+        "docs/ai-collaboration/operator-guide.zh-CN.md",
+        "docs/ai-collaboration/project-adoption.zh-CN.md",
+        "docs/ai-collaboration/host-capabilities.zh-CN.md"
+      ],
+      "retirements": []
+    },
+    {
+      "packageVersion": "1.7.1",
+      "deploymentFingerprints": [
+        "04c21e9565c1f455bf4555248f3708aa7737ca6aeb69fe1b83771d3c7354c681"
+      ],
+      "fingerprintNote": "Recorded from immutable tag v1.7.1 snapshot; ordinal deployment fingerprint.",
+      "verifiedSource": "Public release v1.7.1 (snapshot.json sha256 16929f2151186fa753166d0d476381764a55528b1c7ab53b24b26d18bef6b743)",
+      "paths": [
+        {
+          "path": ".gitignore",
+          "kind": "gitignore"
+        },
+        {
+          "path": "AGENTS.md",
+          "kind": "agents"
+        },
+        {
+          "path": "docs/ai-collaboration/README.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/agent-prompts.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/compound-engineering.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/compound-skills.manifest.json",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/examples/mobile-points-expiry-reminder-zh.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/examples/mobile-points-expiry-reminder.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/handoff-schema.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/host-capabilities.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/legacy-adoption.json",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/project-adoption.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/review-compound-learning-optimization.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/review-handoff-optimization.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/scripts/doctor.ps1",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/scripts/find-solutions.ps1",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/scripts/install-compound-skills.ps1",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/scripts/test-install-compound-skills.ps1",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/scripts/test-validate-runtime-state.ps1",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/scripts/validate-runtime-state.ps1",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/skills/ai-collab-continue/SKILL.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/skills/ai-collab-requirements/SKILL.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/skills/ai-collab-start/SKILL.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/skills/ce-code-review/SKILL.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/skills/ce-compound/SKILL.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/skills/ce-debug/SKILL.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/skills/ce-simplify-code/SKILL.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/solution-exploration.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/templates/current-task.template.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/templates/handoff.template.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/templates/implementation-result.template.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/templates/requirement-baseline.template.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/templates/response-handoff.template.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/templates/review-request.template.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/templates/review-round.template.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/templates/role-roster.template.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/workflows.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/reviews/README.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/solutions/README.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/solutions/solution.template.md",
+          "kind": "file"
+        }
+      ],
+      "additions": [
+        "docs/ai-collaboration/operator-guide.md",
+        "docs/ai-collaboration/operator-guide.zh-CN.md",
+        "docs/ai-collaboration/project-adoption.zh-CN.md",
+        "docs/ai-collaboration/host-capabilities.zh-CN.md"
       ],
       "retirements": []
     }

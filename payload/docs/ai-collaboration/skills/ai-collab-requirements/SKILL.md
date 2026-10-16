@@ -38,7 +38,10 @@ Do not read a full clarification transcript or unrelated batches by default.
 1. Task Intake: check whether the requested work already has an active batch or
    change. Reuse that identity. If an unfinished, unrelated batch is live, do not
    overwrite it; explain the conflict and ask for the smallest owner choice, or
-   discuss in the reply only.
+   discuss in the reply only. This explicit entry uses the same conditional
+   Requirements Analyst contract as `ai-collab-start`; prefer `ai-collab-start`
+   for a general new task unless the owner explicitly wants a requirements-only
+   dialogue.
    When no current task exists for this work, Task Intake first writes the minimum
    coherent `.ai/current-task.md` and `.ai/handoff.md` before any draft wait. The
    current task carries the task ID, change ID if any, Execution Batch ID, a

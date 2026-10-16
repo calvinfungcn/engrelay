@@ -8,7 +8,7 @@ EngRelay 取自 Engineering + Relay，意为工程接力。它为已有代码库
 Agent 提供角色提示词、任务和交接模板、按风险引入的独立审查，以及检查交付
 证据的工具。
 
-**版本 1.7.1** · [MIT 许可证](LICENSE) · [下载完整包](https://github.com/calvinfungcn/engrelay/releases/tag/v1.7.1)
+**版本 1.8.0** · [MIT 许可证](LICENSE) · [下载完整包](https://github.com/calvinfungcn/engrelay/releases/tag/v1.8.0)
 
 包已进行 Windows PowerShell 5.1 和 PowerShell 7 聚焦夹具检查。
 真实项目部署、宿主加载与业务验收仍需分别验证。
@@ -30,7 +30,7 @@ Agent 提供角色提示词、任务和交接模板、按风险引入的独立�
 使用可信完整包，放在业务项目以外的独立目录。先备份目标项目规则，读取其
 现有 Agent 指令。新项目示例：
 
-从发行页面下载 `engrelay-1.7.1.zip`，解压后进入 `engrelay-1.7.1` 目录执行命令。
+从发行页面下载 `engrelay-1.8.0.zip`，解压后进入 `engrelay-1.8.0` 目录执行命令。
 保留完整包原样；额外工具文件或字节修改会使它与清单不匹配。仓库源码仅在
 实际文件集合和字节与 `snapshot.json` 完全一致时，也可作为安装源。
 
@@ -107,21 +107,29 @@ Skill，不运行继承的全目标安装器。文件放入发现目录不等于
 
 ## 对 Agent 说什么
 
-开始需求讨论：
+人类指南：[操作指南](payload/docs/ai-collaboration/operator-guide.zh-CN.md)
+（[English](payload/docs/ai-collaboration/operator-guide.md)）、
+[项目采用](payload/docs/ai-collaboration/project-adoption.zh-CN.md)、
+[宿主能力](payload/docs/ai-collaboration/host-capabilities.zh-CN.md)。
+贡献、开发、变更、许可与 OpenSpec 导航在仓库根目录及 `docs/`、`openspec/` 下有配对中文版。Agent 契约仍为英文-only。
 
-```text
-使用 ai-collab-requirements：我想增加订单导出功能。
-先和我确定需求，使用中文交流。
-```
-
-开始明确的任务：
+**推荐 — 开始任务**（`ai-collab-start`）：
 
 ```text
 使用 ai-collab-start：实施已确认的订单导出需求。
 本任务采用 EngRelay，使用中文交流。
 ```
 
-接续已有任务：
+目标明确时按风险分流，不插入固定需求阶段。重要业务歧义在同一会话执行与 requirements 相同的条件分析师契约，无需再单独调用 `ai-collab-requirements`。业务已明确的技术问题交给首席设计师。
+
+**可选 — 先谈需求**（`ai-collab-requirements`）：
+
+```text
+使用 ai-collab-requirements：我想增加订单导出功能。
+先和我确定需求，使用中文交流。
+```
+
+**接续已有任务**（`ai-collab-continue`）：
 
 ```text
 使用 ai-collab-continue：接续最新、已获授权的 handoff。
@@ -133,7 +141,7 @@ Skill，不运行继承的全目标安装器。文件放入发现目录不等于
 
 七个规范名称保留：上述三个入口，以及 `ce-code-review`、`ce-debug`、
 `ce-simplify-code`、`ce-compound`。CE Skill 是角色内的具体方法，不增加另一套
-生命周期。首版双语范围仅 README；其他规则共用，`payload/` 已有双语流程示例。
+生命周期。
 
 ## 审查额度与成本
 

@@ -1,8 +1,10 @@
 # EngRelay development and maintenance
 
+[Simplified Chinese](development.zh-CN.md)
+
 The GitHub repository is the maintained public source. The initial public baseline
 is v1.7.0, commit `9c26c22266625aa04822637baf8f283763362677`, under MIT.
-The current release is v1.7.1. Local maintenance setup does not create an active
+The current release is v1.8.0. Local maintenance setup does not create an active
 business batch or authorize publication.
 
 ## Start here
@@ -28,6 +30,13 @@ Generated OpenSpec Skills are local tool entry points. Keep them generated;
 change product Skills only under payload/. If a workstation has the ignored
 `.codex/bin/apply_patch.ps1`, use it for patch edits. It is a local helper, not a
 portable package dependency. Do not copy workstation config or credentials.
+
+## Local Superpowers copies
+
+The public package does not bundle Superpowers. If ignored host copies show
+outdated env-var examples in systematic-debugging, refresh from the original
+install source as a separate machine maintenance task; do not edit generated
+copies in this repository.
 
 ## Requirements and work
 
@@ -74,7 +83,7 @@ disposable roots, not real projects. Real deployments require their own task.
 4. Check the exact file set and hashes, and run only checks justified by changed
    behavior. Run lifecycle fixtures on the staging package, keeping logs outside
    it. Test version expectations must be updated when the release version changes;
-   the current smoke script contains v1.7.1 expectations; its optional frozen
+   the current smoke script contains v1.8.0 expectations; its optional frozen
    v1.6.1 fixture remains a separate historical check.
 5. After the release candidate is stable, copy its snapshot.json back to the
    source as release metadata and ensure a fresh export matches. Keep immutable

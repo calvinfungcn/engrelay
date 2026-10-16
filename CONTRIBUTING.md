@@ -1,5 +1,7 @@
 # Contributing to EngRelay
 
+[Simplified Chinese](CONTRIBUTING.zh-CN.md)
+
 EngRelay is maintained under the MIT License. Preserve applicable third-party notices.
 
 See [the development guide](docs/development.md) for the current baseline,

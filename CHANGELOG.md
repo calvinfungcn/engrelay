@@ -1,5 +1,28 @@
 # Changelog
 
+[Simplified Chinese](CHANGELOG.zh-CN.md)
+
+## 1.8.0 — 2026-10-16
+
+- Makes `ai-collab-start` the recommended entry while keeping
+  `ai-collab-requirements`; start reuses the conditional Requirements Analyst
+  contract in the same session when business ambiguity requires it.
+- Selectively adopts applicable Compound Engineering review and debug rules
+  (PR 1791/1792/1852) without importing upstream lifecycle, taxonomy, or
+  transport features.
+- Adds paired human documentation for operators, adoption, hosts, contributing,
+  development, changelog, licensing, OpenSpec navigation, and review index;
+  deploys four new managed human guides under `docs/ai-collaboration/`.
+- Registers exact layout transitions for public v1.7.0/v1.7.1 packages and adds
+  a focused protected lifecycle fixture for the new human guides.
+
+The reviewed 63-file candidate passed the focused lifecycle scenarios on Windows
+PowerShell 5.1 and PowerShell 7, including upgrade, preservation, refusal, and
+uninstall cases. OpenSpec strict validation and whitespace checks passed. These
+checks do not establish live Agent behavior, host loading, real-project
+deployment, or business acceptance. C1–C5 handoff capability guidance remains
+outside this release.
+
 ## 1.7.1 — 2026-10-15
 
 - Adds first-install guidance showing the selected SkillTarget, the target project's

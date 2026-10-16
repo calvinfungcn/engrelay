@@ -41,6 +41,12 @@ Reading the technique as reference is allowed.
    reached.
 7. Implement the smallest root-cause fix, add a focused regression test when
    practical, and run directly affected checks.
+   When the minimal fix already passes focused checks and evidence shows the same
+   root cause repeating across multiple authorized locations, you may add a
+   bounded local guard or shared helper that touches only authorized affected
+   sites and does not change public interfaces. If the prevention would expand
+   scope, change a public contract, or cost disproportionately, record a follow-up
+   recommendation instead of structural churn for a single defect.
 8. Record symptom, root cause, fix, and fresh evidence in the existing result
    artifact. Use the normal review route for the batch risk.
 

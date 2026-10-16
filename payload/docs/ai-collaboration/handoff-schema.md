@@ -372,9 +372,9 @@ conceal another pending prerequisite. Each item has these five fields:
 
 - Readiness: `pending`
 - Needed before next action: `no`
-- Human action: 请在页面验证前，在 Visual Studio 中启动 WebForms 调试并保持 IIS Express 运行；页面验证需要 http://localhost:3000/ 可访问。
-- Confirmation and check: 启动后回复“已启动”；当前 Agent 检查目标地址是否可访问，再继续页面验证。记录实际结果，登录页可访问不等同于业务页面验收。
-- Work that can proceed: 可以先修改代码、编译和执行离线测试；页面验证完成前不声称批次已验收。
+- Human action: Before page verification, start WebForms debugging in Visual Studio and keep IIS Express running; page verification needs http://localhost:3000/ reachable.
+- Confirmation and check: Reply `started` when ready; the current agent checks reachability before page verification. Record the actual result; a login page alone is not business acceptance.
+- Work that can proceed: Code edits, build, and offline tests may continue; do not claim batch acceptance before page verification completes.
 ```
 
 `Readiness` is an environment fact, exactly `ready`, `pending`, or `unknown`;
@@ -432,20 +432,19 @@ pretend to prove that an instruction or snippet is safe or useful.
 Environment Preparation, Resume condition, owner authorization and the three
 actions retain their existing rules. A human notice is not the AI Operator Command.
 
-Example, needing no extra guide/code: 请在 Visual Studio 中启动 WebForms 调试并
-保持 IIS Express 运行；页面检查需要 http://localhost:3000/ 可访问。启动后回复
-“已启动”，我会检查地址再继续；离线修改可先进行。This illustrates the known
-local WebForms runtime, not authorization to change an API configuration.
+Example, needing no extra guide/code: Start WebForms debugging in Visual Studio and
+keep IIS Express running; page checks need http://localhost:3000/ reachable. Reply
+`started` when ready and the agent checks the address before continuing; offline
+edits may proceed meanwhile. This illustrates the known local WebForms runtime,
+not authorization to change an API configuration.
 
 Further examples (illustrative; verify the real path, screen or output first):
 
 - File/CLI, merge-only: in `E:/Projects/your-project` run
   `powershell -NoProfile -ExecutionPolicy Bypass -File docs/ai-collaboration/scripts/validate-runtime-state.ps1 -WorkspaceRoot 'E:/Projects/your-project'`
-  and reply with the first error line, or "通过" if it passes. Nothing else changes.
-- Blocked wait: the handoff records `- Resume condition: 用户回复“已启动”后，当前 Agent
-  检查 http://localhost:3000/ 可访问再继续`. Offline edits and unit tests may continue
-  meanwhile; the same agent resumes after the check.
-- Late notice: a message "请开始 Code Review" arrives after the handoff already shows a
+  and reply with the first error line, or `pass` if it passes. Nothing else changes.
+- Blocked wait: the handoff records `- Resume condition: After the owner replies started, the current agent checks http://localhost:3000/ reachability before continuing`. Offline edits and unit tests may continue meanwhile; the same agent resumes after the check.
+- Late notice: a message "start Code Review" arrives after the handoff already shows a
   later `State revision` with that review closed. The agent records it as stale and
   does not dispatch again; a new defect it reports is still evaluated normally.
 

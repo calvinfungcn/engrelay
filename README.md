@@ -9,7 +9,7 @@ working in existing repositories. It provides role prompts, task and handoff
 templates, independent reviews based on risk, and tools for checking the evidence
 used to call work complete.
 
-**Version 1.7.1** · [MIT License](LICENSE) · [Download the complete package](https://github.com/calvinfungcn/engrelay/releases/tag/v1.7.1)
+**Version 1.8.0** · [MIT License](LICENSE) · [Download the complete package](https://github.com/calvinfungcn/engrelay/releases/tag/v1.8.0)
 
 The package has focused Windows PowerShell 5.1 and PowerShell 7 fixture evidence.
 Real-project deployment, host loading, and business acceptance are separate checks.
@@ -36,8 +36,8 @@ See the [maintained role contracts](payload/docs/ai-collaboration/README.md).
 Use a trusted complete package in its own directory. Back up the target project's
 rules and read its existing agent instructions. For a new project:
 
-Download `engrelay-1.7.1.zip` from the release and extract it. Run commands from
-the extracted `engrelay-1.7.1` directory. Keep that complete package unchanged;
+Download `engrelay-1.8.0.zip` from the release and extract it. Run commands from
+the extracted `engrelay-1.8.0` directory. Keep that complete package unchanged;
 extra tool files or edited bytes make it differ from its inventory. The repository
 source can also be used when its file set and bytes exactly match `snapshot.json`.
 
@@ -124,21 +124,34 @@ the inherited all-target installer. Placement does not prove host loading.
 
 ## Talk to an agent
 
-Start a requirements dialogue:
+Human guides: [operator guide](payload/docs/ai-collaboration/operator-guide.md)
+( [简体中文](payload/docs/ai-collaboration/operator-guide.zh-CN.md) ),
+[project adoption](payload/docs/ai-collaboration/project-adoption.md),
+[host capabilities](payload/docs/ai-collaboration/host-capabilities.md).
+Contributing, development, changelog, licensing, and OpenSpec navigation also
+have paired language editions at the repository root and under `docs/` /
+`openspec/`. Agent contracts stay English-only.
 
-```text
-Use ai-collab-requirements: I want an order-export feature.
-Discuss the requirements with me first. Communicate in English.
-```
-
-Start a defined task:
+**Recommended — start a task** (`ai-collab-start`):
 
 ```text
 Use ai-collab-start: implement the confirmed order-export requirement.
 Use EngRelay for this task. Communicate in English.
 ```
 
-Resume recorded work:
+Clear goals route by risk without a fixed requirements stage. Material business
+ambiguity runs the same conditional Requirements Analyst contract in the same
+session; you do not need a separate `ai-collab-requirements` call. Technical
+questions with a clear business goal go to Chief Designer.
+
+**Optional — requirements-first dialogue** (`ai-collab-requirements`):
+
+```text
+Use ai-collab-requirements: I want an order-export feature.
+Discuss the requirements with me first. Communicate in English.
+```
+
+**Resume recorded work** (`ai-collab-continue`):
 
 ```text
 Use ai-collab-continue: continue the latest authorized handoff.
@@ -151,8 +164,6 @@ Reading a Skill or discovering `.ai/` alone never activates the workflow.
 The seven canonical names are retained: the three entries above plus
 `ce-code-review`, `ce-debug`, `ce-simplify-code`, and `ce-compound`. The CE Skills
 provide techniques within the assigned role; they add no second lifecycle.
-The first bilingual scope is this README only. Other maintained contracts are
-shared; English/Chinese worked examples already exist under `payload/`.
 
 ## Review limits and cost
 

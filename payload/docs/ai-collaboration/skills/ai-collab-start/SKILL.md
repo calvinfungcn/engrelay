@@ -2,10 +2,10 @@
 name: ai-collab-start
 description: >
   Use only when the user explicitly invokes this entry to start a clearly stated
-  task under ai-collaboration in this project. Reuses the existing Task Intake
-  shortcuts, prepares the minimum coherent task input, and routes by risk to
-  Chief Designer, Implementation Engineer or Code Reviewer. It forces no
-  requirements stage. Discovery alone does not select the workflow.
+  task under ai-collaboration in this project. Recommended general entry: reuses
+  existing Task Intake shortcuts, the same conditional Requirements Analyst
+  contract as ai-collab-requirements when needed, prepares the minimum coherent
+  task input, and routes by risk. Discovery alone does not select the workflow.
 ---
 
 # AI Collab Start
@@ -26,6 +26,8 @@ under `docs/ai-collaboration/README.md#optional-activation-and-coexistence`.
 Use project-relative paths only:
 
 - `docs/ai-collaboration/workflows.md#1-task-intake`
+- `docs/ai-collaboration/workflows.md#requirements-analyst-conditional-role-action`
+- `docs/ai-collaboration/agent-prompts.md#requirements-analyst`
 - `docs/ai-collaboration/templates/current-task.template.md`
 - `docs/ai-collaboration/templates/handoff.template.md`
 - `.ai/current-task.md` and `.ai/handoff.md`, when they exist
@@ -49,12 +51,18 @@ Use project-relative paths only:
    checks and the first role. Keep `openspec/changes/<change-id>/tasks.md` as the
    only implementation checklist; do not create a second task list.
 5. Route by the existing rules:
+   - material business ambiguity that Task Intake cannot safely summarize: set
+     Initial role to Requirements Analyst and run the conditional role action in
+     this same responsible session per
+     `workflows.md#requirements-analyst-conditional-role-action`. Do not ask the
+     owner to invoke `ai-collab-requirements` separately; technical ambiguity
+     stays with Chief Designer;
    - a new contract, a complexity exception, risk `H` or missing design basis goes to
      Chief Designer with a complete Operator Command;
    - a clear, bounded `S` or `M` scope goes to Implementation Engineer;
    - an existing implementation that needs review goes to Code Reviewer.
-   No requirements stage is inserted unless the goal is materially ambiguous in
-   business terms. In that case, use `ai-collab-requirements` instead of guessing.
+   Reuse an already confirmed requirement baseline; do not add a repeated final
+   confirmation.
 6. If the first executable action needs an owner decision, keep this role with
    same-session `continue` and `awaiting-owner-decision` plus an Owner Decision
    Brief. Do not dispatch an implementer.

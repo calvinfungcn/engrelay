@@ -1,5 +1,7 @@
 # 示例 - 基于风险的 Action State
 
+[English](mobile-points-expiry-reminder.md)
+
 以下虚构功能用于演示协作协议：
 
 > 在移动端显示员工积分将在 30 天内过期的提醒。
