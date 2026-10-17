@@ -31,6 +31,26 @@ those findings and limits. No upstream OmO source tree is bundled here. The MIT
 license does not relicense OmO expression; any subsequently identified restricted
 expression requires removal, independent replacement, or applicable permission.
 
+## Superpowers
+
+- Project: https://github.com/obra/superpowers
+- Reference checked: v7.0.0, commit
+  `bb92a77741419a4ab5f06e711a283343f1ada0c3`.
+- License checked on 2026-10-17:
+  https://github.com/obra/superpowers/blob/bb92a77741419a4ab5f06e711a283343f1ada0c3/LICENSE
+  — MIT, Copyright (c) 2025 Jesse Vincent.
+
+The public package does not bundle Superpowers Skills or its source tree and
+does not install or require that tool. Local development may use separately
+installed, ignored host copies. Package references discuss methods and coexistence
+with overlapping lifecycle Skills; they do not identify a bundled upstream
+release. EngRelay is independent and claims no affiliation or endorsement.
+
+This reference does not relicense Superpowers material. Any future distribution
+of its source or adapted material must preserve the applicable upstream copyright
+and full MIT notice with that material. EngRelay's original material keeps its
+own MIT license.
+
 ## Every's Compound Engineering
 
 - Project: https://github.com/EveryInc/compound-engineering-plugin

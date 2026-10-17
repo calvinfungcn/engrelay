@@ -2,6 +2,12 @@
 
 [English](CHANGELOG.md)
 
+## 未发布
+
+- 为中英文 README 增加功能概览和简短任务流程示例。
+- 区分选择性改编的 Compound Engineering Skill 与未捆绑的 Superpowers 引用，
+  补充固定提交的 Superpowers 许可来源及再分发声明保留要求。
+
 ## 1.8.0 — 2026-10-16
 
 - 将 `ai-collab-start` 作为推荐通用入口，在重要业务歧义时复用既有需求分析职责；保留 `ai-collab-requirements` 的名称、路径与显式需求讨论能力。

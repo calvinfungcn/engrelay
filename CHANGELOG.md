@@ -2,6 +2,13 @@
 
 [Simplified Chinese](CHANGELOG.zh-CN.md)
 
+## Unreleased
+
+- Adds a capability overview and a short task-flow example to both README editions.
+- Clarifies the distinction between selectively adapted Compound Engineering
+  Skills and unbundled Superpowers references, with a pinned Superpowers license
+  reference and redistribution notice guidance.
+
 ## 1.8.0 — 2026-10-16
 
 - Makes `ai-collab-start` the recommended entry while keeping

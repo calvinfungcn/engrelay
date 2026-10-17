@@ -13,6 +13,28 @@ Agent 提供角色提示词、任务和交接模板、按风险引入的独立�
 包已进行 Windows PowerShell 5.1 和 PowerShell 7 聚焦夹具检查。
 真实项目部署、宿主加载与业务验收仍需分别验证。
 
+## 提供哪些功能
+
+| 功能 | 帮助你完成什么 |
+| --- | --- |
+| 需求澄清与任务分流 | 从明确目标开始；有重要业务歧义时先澄清，再进入设计 |
+| 按风险协作 | 按任务需要安排设计、实现、独立审查和验证 |
+| 可接续的交接 | 通过已记录的范围、下一动作和证据，在另一 Agent 会话继续工作 |
+| 四个 CE 方法 Skill | 代码审查（`ce-code-review`）、根因调试（`ce-debug`）、范围内简化（`ce-simplify-code`）及可复用经验沉淀（`ce-compound`） |
+| 只读检查与经验检索 | 诊断安装状态、校验交接结构、搜索已记录的解决经验 |
+| 受保护的包管理 | 安装、升级和卸载时检查文件归属，保护项目内容并报告冲突 |
+
+例如，一项功能需求可以按下面的路径推进：
+
+```text
+提出需求 → 必要时澄清需求 → 必要时设计
+        → 实现并检查 → 按要求独立审查
+        → 交接剩余工作或附证据关闭
+```
+
+风险允许时，小任务由一个负责 Agent 连续处理。角色表示职责，示例中的每一步
+无需单独开启会话。入口选择和交接方式详见[操作指南](payload/docs/ai-collaboration/operator-guide.zh-CN.md)。
+
 ## 如何协作
 
 - 普通小任务由一个负责 Agent 连续处理。角色表示职责，不要求每个步骤新开对话。
@@ -186,5 +208,9 @@ EngRelay 是原 `ai-collaboration` 的公开品牌。为兼容升级，包保留
 不使用混有开发工具与运行态的工作目录作为安装源。
 
 EngRelay 自有内容采用 [MIT 许可证](LICENSE)。第三方通知仍然适用，详见
-[第三方声明](THIRD-PARTY-NOTICES.zh-CN.md)。OmO 的借鉴记录是机制层面的
+[第三方声明](THIRD-PARTY-NOTICES.zh-CN.md)。四个 CE 方法 Skill 选择性改编自
+[Compound Engineering](https://github.com/EveryInc/compound-engineering-plugin)，保留 Every 的版权与 MIT 声明。
+对 [Superpowers](https://github.com/obra/superpowers) 的引用涉及方法及与单独安装的本机工具共存；
+公开包未捆绑它，也不要求预先安装。EngRelay 是独立项目，不声称与这两个上游项目存在隶属或背书关系。
+OmO 的借鉴记录是机制层面的
 独立表述；本许可证不改变 OmO 自身受限文本或代码的授权。

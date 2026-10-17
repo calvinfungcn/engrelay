@@ -14,6 +14,30 @@ used to call work complete.
 The package has focused Windows PowerShell 5.1 and PowerShell 7 fixture evidence.
 Real-project deployment, host loading, and business acceptance are separate checks.
 
+## What you get
+
+| Capability | What it helps you do |
+| --- | --- |
+| Requirements clarification and task routing | Start with a clear goal; clarify material business ambiguity before design |
+| Collaboration based on risk | Assign design, implementation, independent review and verification as the task requires |
+| Resumable handoffs | Continue in another agent session using recorded scope, next action and evidence |
+| Four CE method Skills | Review code (`ce-code-review`), diagnose root causes (`ce-debug`), simplify scoped changes (`ce-simplify-code`) and capture reusable lessons (`ce-compound`) |
+| Read-only checks and knowledge lookup | Diagnose installation state, validate handoff structure and search recorded solutions |
+| Protected package management | Install, upgrade and uninstall with ownership checks that protect project content and report conflicts |
+
+For example, a feature request can follow this path:
+
+```text
+Request -> clarify requirements when needed -> design when needed
+        -> implement and check -> independent review when required
+        -> hand off remaining work or close with evidence
+```
+
+Small tasks stay with one responsible agent when their risk permits it. The
+roles define responsibilities; this example does not require a separate session
+for every step. See the [operator guide](payload/docs/ai-collaboration/operator-guide.md)
+for entry selection and handoffs.
+
 ## How it works
 
 - Keep ordinary small tasks with one responsible agent. Roles describe
@@ -216,5 +240,12 @@ package unchanged instead of installing from a tool-populated development checko
 
 EngRelay's original material is available under the [MIT License](LICENSE).
 Third-party notices remain applicable; see [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
+The four CE method Skills selectively adapt
+[Compound Engineering](https://github.com/EveryInc/compound-engineering-plugin)
+and retain Every's copyright and MIT notice. References to
+[Superpowers](https://github.com/obra/superpowers) concern methods and coexistence
+with separately installed local tools; the public package does not bundle it
+or require it to be installed. EngRelay is an independent project and claims
+no affiliation with or endorsement by either upstream project.
 The recorded OmO influence is mechanism-level inspiration expressed in local
 rules. OmO's own restricted text and code are not granted new rights by this license.

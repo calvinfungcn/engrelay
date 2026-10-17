@@ -16,6 +16,21 @@ EngRelay 原创材料采用 MIT 许可证，由项目负责人于 2026-10-14 选
 
 负责人澄清 Agent 实现了 OmO 启发的工作。经审计的实现提供机制级启发证据，在所选语料中未识别逐字导入。负责人在审阅上述发现与限制后选择 MIT。此处不捆绑任何上游 OmO 源码树。MIT 许可证不再许可 OmO 表达；后续识别的受限表达须移除、独立替换或取得适用许可。
 
+## Superpowers
+
+- 项目：https://github.com/obra/superpowers
+- 核对参考版本：v7.0.0，提交 `bb92a77741419a4ab5f06e711a283343f1ada0c3`。
+- 2026-10-17 核对的许可证：
+  https://github.com/obra/superpowers/blob/bb92a77741419a4ab5f06e711a283343f1ada0c3/LICENSE
+  — MIT，Copyright (c) 2025 Jesse Vincent。
+
+公开包未捆绑 Superpowers Skill 或源码树，也不会安装或要求使用该工具。本地开发可能使用
+单独安装、被 Git 忽略的宿主副本。包内引用讨论方法及与重叠生命周期 Skill 的共存，
+不表示捆绑了某个上游版本。EngRelay 是独立项目，不声称隶属或获得背书。
+
+此处引用不改变 Superpowers 材料的许可。将来若分发其源码或改编材料，须随相关材料
+保留适用的上游版权与完整 MIT 声明。EngRelay 原创材料继续采用自身的 MIT 许可证。
+
 ## Every 的 Compound Engineering
 
 - 项目：https://github.com/EveryInc/compound-engineering-plugin
