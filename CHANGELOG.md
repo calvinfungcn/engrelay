@@ -4,6 +4,14 @@
 
 ## Unreleased
 
+- Clarifies dotted OpenSpec task references and file-only handoff evidence in
+  canonical templates and the handoff schema; check commands, outputs and exit
+  codes belong in result files.
+- Adds paired first-trial Quickstarts and README links covering a Git baseline,
+  PowerShell 7, explicit activation, A/B handoffs, two Windows troubleshooting
+  cases, and trusted offline package checks. Host troubleshooting and the
+  complete-package inventory/hash walkthrough remain untested; these documents
+  do not establish host loading or business acceptance.
 - Adds a capability overview and a short task-flow example to both README editions.
 - Clarifies the distinction between selectively adapted Compound Engineering
   Skills and unbundled Superpowers references, with a pinned Superpowers license

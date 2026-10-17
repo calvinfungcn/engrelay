@@ -6,6 +6,7 @@
 
 | 变更 | 最终状态 | 审查轮次 | 归档 |
 | --- | --- | --- | --- |
+| improve-phase0-first-trial | 可以提交（Cursor 复查） | 2 | [归档记录](improve-phase0-first-trial/index.md#archive-record) |
 | improve-skill-discovery-guidance | verified / accepted | 3 | [归档记录](improve-skill-discovery-guidance/index.md#archive-record) |
 | streamline-entry-and-human-docs | verified / accepted | 4 | [归档记录](streamline-entry-and-human-docs/index.md#archive-record) |
 

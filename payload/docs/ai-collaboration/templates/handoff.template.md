@@ -61,9 +61,14 @@
 
 ## Authoritative Evidence
 
-- Implementation or fix result: `<path or none>`
-- Formal review or verification round: `<path or none>`
-- OpenSpec checklist: `<path and items>`
+- Implementation or fix result: `<workspace file path or none>`
+- Formal review or verification round: `<workspace file path or none>`
+- OpenSpec checklist: `<tasks.md path>` items `<dotted ids such as 1.1>`
+<!-- File evidence only: backtick values must be real paths (or none), not commands.
+     Put exact commands, observed output, and exit codes in the linked result file
+     Checks Run section; cite that result path above instead of pasting the command. -->
+<!-- OpenSpec checklist: keep the path inside backticks and list mapped item IDs
+     outside the path (see handoff-schema.md). -->
 <!-- If human evidence is needed, ask briefly in existing fields/chat;
      no extra evidence-request field or guide is required. -->
 <!-- Link inspection evidence, test output, review rounds, or baselines rather than copying long content. -->

@@ -4,6 +4,11 @@
 
 ## 未发布
 
+- 在规范模板与 handoff schema 中明确 OpenSpec 点号任务映射和仅引用文件的交接证据；
+  检查命令、输出与退出码记录在结果文件中。
+- 新增双语首次试用 Quickstart 与 README 入口，涵盖 Git 基线、PowerShell 7、显式激活、
+  A/B 交接、两种 Windows 最小排错及可信离线包检查。宿主排错和完整包集合/哈希演练
+  仍未实测；这些文档不证明宿主加载或业务验收。
 - 为中英文 README 增加功能概览和简短任务流程示例。
 - 区分选择性改编的 Compound Engineering Skill 与未捆绑的 Superpowers 引用，
   补充固定提交的 Superpowers 许可来源及再分发声明保留要求。

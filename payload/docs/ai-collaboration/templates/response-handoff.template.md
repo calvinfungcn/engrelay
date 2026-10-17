@@ -11,8 +11,8 @@ another batch's live state. Report review findings before this section.>
 - Review round: `<cumulative completed review verdicts; preserve current count>`
 - Next role: `<role or none>`
 - Recommended next agent: `<agent or tool, or none>`
-- Next input files: `<authoritative paths or none>`
-- Next output files: `<required paths or response artifacts, or none>`
+- Next input files: `<workspace file path or none>`
+- Next output files: `<workspace file path or none>`
 - Next prompt template: `docs/ai-collaboration/agent-prompts.md#<section or none>`
 - Handoff persistence: `.ai/handoff.md was not updated because <constraint>. Persist this Action State before relying on the file.`
 <!-- Explicit limited acceptance by Chief Designer may use Acceptance basis:
@@ -34,6 +34,11 @@ another batch's live state. Report review findings before this section.>
      inputs, focused or reused evidence, child exit/diagnostics/elapsed for
      filtered checks, and the smaller option plus Owner Decision Brief before
      any substantial low-benefit or unexpected-cost expansion. -->
+<!-- When this response replaces a stale handoff, mirror the same evidence rules:
+     file paths only in evidence-style lists (Next input files are paths; do not
+     substitute a shell command for a missing result path). Record commands and
+     exit codes in the result file Checks Run and cite that path when the live
+     handoff is persisted. -->
 
 ## Environment Preparation
 

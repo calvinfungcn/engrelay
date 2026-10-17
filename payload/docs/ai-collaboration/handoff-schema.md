@@ -189,6 +189,35 @@ Rules:
 - Include risk level `S`, `M`, or `H` and the reason.
 - List every mapped OpenSpec checklist item or sub-item exactly as it appears in
   the authoritative task file.
+- OpenSpec task mapping uses exactly one authoritative checklist file:
+  `openspec/changes/<change-id>/tasks.md`. That file groups work under `## 1.`,
+  `## 2.`, and so on, and lists actionable items with dotted IDs such as
+  `- [ ] 1.1` and `- [ ] 1.2`. In `Batch Classification`, list each mapped ID
+  on its own bullet (for example `` `1.1` ``) so the runtime validator can match
+  the same ID in tasks.md. Do not treat a flat `- [ ] 1.` line or a bare section
+  number as a substitute for a dotted sub-item, and do not maintain a parallel
+  checklist outside tasks.md.
+
+  Example tasks.md excerpt:
+
+  ```markdown
+  ## 1. First group
+
+  - [ ] 1.1 First mapped item.
+  - [ ] 1.2 Second mapped item.
+
+  ## 2. Second group
+
+  - [ ] 2.1 Item in the next group.
+  ```
+
+  Example `OpenSpec checklist items` mapping for batch `1.1` and `1.2`:
+
+  ```markdown
+  - OpenSpec checklist items:
+    - `1.1`
+    - `1.2`
+  ```
 - Include the OpenSpec change ID when one exists.
 - Limit default required reading to `AGENTS.md`, applicable module instruction
   files, the assigned role sections in `workflows.md` and `agent-prompts.md`,
@@ -253,6 +282,15 @@ Rules:
 - `Next action` must be exactly one of `dispatch`, `continue`, or `close`.
 - Keep change details and command output in their authoritative result or
   review artifact; link those files under `Authoritative Evidence`.
+- In `Authoritative Evidence`, backtick values that contain path separators must
+  be real files that exist in the workspace. Do not put shell commands in any
+  evidence backtick. Record the exact command, observed
+  output (or summary), exit code, and any log path in `.ai/round-XX-result.md`
+  under `Checks Run`, then link that result file here.
+- For `OpenSpec checklist`, put the tasks file path in backticks and state the
+  mapped item IDs outside the path (for example
+  ``openspec/changes/<change-id>/tasks.md`` items `1.1`, `1.2`). Do not embed
+  the whole command line inside the path backtick.
 - Existing handoff sections may record recommendations, assumptions, and
   blockers, but they do not authorize product scope. For a material scope
   surprise or unsupported necessity, stop only the affected work, record
@@ -472,7 +510,9 @@ Required sections:
 
 Rules:
 
-- Record exact commands and observed results once.
+- Record exact commands, observed results, and exit codes once in `Checks Run`
+  (use the `Result` column for output summary and exit code). Handoff
+  `Authoritative Evidence` links this file instead of repeating command text.
 - Link any durable review round created or updated.
 - State whether OpenSpec `tasks.md` changed.
 - If code files changed, record graph update action when required by
@@ -764,6 +804,10 @@ deferred
   status into OpenSpec.
 - Naming runtime sub-items that are absent from the authoritative OpenSpec
   checklist.
+- Mapping flat OpenSpec labels (for example bare `1` or section-only `1.`) when
+  tasks.md only defines dotted items such as `1.1`.
+- Putting validation or shell commands in `Authoritative Evidence` backticks
+  instead of linking an existing result or log file.
 - Using agent `dispatch` without a copy-ready Operator Command, or using human decision `dispatch` with an Operator Command.
 - Treating review-only as permission to omit the Action State or next-role
   prompt.

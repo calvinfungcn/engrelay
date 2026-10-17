@@ -14,7 +14,11 @@
 - Risk level: `<S|M|H>`
 - Risk reason: `<why this level applies>`
 - OpenSpec checklist items:
-  - `<task or sub-item>`
+  - `<dotted task id, e.g. 1.1>`
+<!-- Map only IDs that exist as `- [ ] 1.1` lines in the single authoritative
+     openspec/changes/change-id/tasks.md. Use dotted OpenSpec numbering such as
+     1.1, not a flat section-only label like 1. Group headings in tasks.md use
+     ## 1.; checklist lines use `- [ ] 1.1`. Do not create a second task list. -->
 - Existing capability to reuse: `<current component, API, pattern, or none>`
 - First demonstrable outcome: `<observable vertical result or bounded spike conclusion>`
 - Justified complexity exceptions: `<none, or element -> acceptance criterion/evidenced risk>`

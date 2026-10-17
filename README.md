@@ -2,7 +2,7 @@
 
 **Keep small tasks simple. Clear handoffs. Evidence-backed delivery.**
 
-[简体中文](README.zh-CN.md) · [Role contracts](payload/docs/ai-collaboration/README.md) · [Sources and licensing](THIRD-PARTY-NOTICES.md)
+[简体中文](README.zh-CN.md) · [Quickstart](docs/quickstart.md) · [Role contracts](payload/docs/ai-collaboration/README.md) · [Sources and licensing](THIRD-PARTY-NOTICES.md)
 
 EngRelay (Engineering + Relay) is a practical workflow kit for AI coding agents
 working in existing repositories. It provides role prompts, task and handoff
@@ -148,7 +148,9 @@ the inherited all-target installer. Placement does not prove host loading.
 
 ## Talk to an agent
 
-Human guides: [operator guide](payload/docs/ai-collaboration/operator-guide.md)
+Human guides: [quickstart](docs/quickstart.md)
+( [简体中文](docs/quickstart.zh-CN.md) ),
+[operator guide](payload/docs/ai-collaboration/operator-guide.md)
 ( [简体中文](payload/docs/ai-collaboration/operator-guide.zh-CN.md) ),
 [project adoption](payload/docs/ai-collaboration/project-adoption.md),
 [host capabilities](payload/docs/ai-collaboration/host-capabilities.md).

@@ -2,7 +2,7 @@
 
 **小任务从简，交接可续，交付可查。**
 
-[English](README.md) · [角色规则](payload/docs/ai-collaboration/README.md) · [来源与许可](THIRD-PARTY-NOTICES.zh-CN.md)
+[English](README.md) · [快速上手](docs/quickstart.zh-CN.md) · [角色规则](payload/docs/ai-collaboration/README.md) · [来源与许可](THIRD-PARTY-NOTICES.zh-CN.md)
 
 EngRelay 取自 Engineering + Relay，意为工程接力。它为已有代码库中的 AI 编程
 Agent 提供角色提示词、任务和交接模板、按风险引入的独立审查，以及检查交付
@@ -129,7 +129,9 @@ Skill，不运行继承的全目标安装器。文件放入发现目录不等于
 
 ## 对 Agent 说什么
 
-人类指南：[操作指南](payload/docs/ai-collaboration/operator-guide.zh-CN.md)
+人类指南：[快速上手](docs/quickstart.zh-CN.md)
+（[English](docs/quickstart.md)）、
+[操作指南](payload/docs/ai-collaboration/operator-guide.zh-CN.md)
 （[English](payload/docs/ai-collaboration/operator-guide.md)）、
 [项目采用](payload/docs/ai-collaboration/project-adoption.zh-CN.md)、
 [宿主能力](payload/docs/ai-collaboration/host-capabilities.zh-CN.md)。
