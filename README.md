@@ -9,7 +9,7 @@ working in existing repositories. It provides role prompts, task and handoff
 templates, independent reviews based on risk, and tools for checking the evidence
 used to call work complete.
 
-**Version 1.8.0** · [MIT License](LICENSE) · [Download the complete package](https://github.com/calvinfungcn/engrelay/releases/tag/v1.8.0)
+**Version 1.9.0** · [MIT License](LICENSE) · [Download the complete package](https://github.com/calvinfungcn/engrelay/releases/tag/v1.9.0)
 
 The package has focused Windows PowerShell 5.1 and PowerShell 7 fixture evidence.
 Real-project deployment, host loading, and business acceptance are separate checks.
@@ -48,6 +48,11 @@ for entry selection and handoffs.
   verification where high-risk work requires it.
 - Record one next action: `continue`, `dispatch`, or `close`. A dispatch includes
   a complete command the next agent can use without the preceding chat.
+- Agent dispatch may add one advisory capability line (`Recommended capability
+  tier: C1`–`C5`) under handoff `Current Status` to hint at model strength for
+  the next work item; see
+  [capability tier guidance](payload/docs/ai-collaboration/handoff-schema.md#capability-tier-guidance).
+  It is not a blocker or model certification.
 - Match verification to the affected behavior. A successful structure check
   does not prove correct business behavior or a working host integration.
 
@@ -60,8 +65,8 @@ See the [maintained role contracts](payload/docs/ai-collaboration/README.md).
 Use a trusted complete package in its own directory. Back up the target project's
 rules and read its existing agent instructions. For a new project:
 
-Download `engrelay-1.8.0.zip` from the release and extract it. Run commands from
-the extracted `engrelay-1.8.0` directory. Keep that complete package unchanged;
+Download `engrelay-1.9.0.zip` from the release and extract it. Run commands from
+the extracted `engrelay-1.9.0` directory. Keep that complete package unchanged;
 extra tool files or edited bytes make it differ from its inventory. The repository
 source can also be used when its file set and bytes exactly match `snapshot.json`.
 

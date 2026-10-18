@@ -87,12 +87,15 @@ Every role action ends with exactly one decision:
 
 - `dispatch`: another role or human decision recipient must act. For agent
   dispatch, update `.ai/handoff.md` with complete Routing and a copy-ready
-  Operator Command. For human decision dispatch (`Task Owner`, `User`, or
+  Operator Command, and add the advisory capability tier line under
+  `Current Status` per
+  [handoff-schema.md#capability-tier-guidance](handoff-schema.md#capability-tier-guidance).
+  For human decision dispatch (`Task Owner`, `User`, or
   `Data Owner`), set Current status to `awaiting-owner-decision`, set
   Recommended next agent and next files/prompt fields to `none`, strictly omit
-  Operator Command, and provide a complete plain-language Owner Decision Brief
-  in `.ai/handoff.md` and chat; the current AI retains artifact and execution
-  responsibility.
+  Operator Command and the capability tier line, and provide a complete
+  plain-language Owner Decision Brief in `.ai/handoff.md` and chat; the current
+  AI retains artifact and execution responsibility.
 - `continue`: the same responsible agent continues, including adjacent
   non-independent duties. Record the active responsibility and next local step in
   `.ai/handoff.md`; omit Operator Command. When waiting for a same-session

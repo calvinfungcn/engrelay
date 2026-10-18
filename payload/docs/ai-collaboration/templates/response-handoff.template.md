@@ -15,6 +15,7 @@ another batch's live state. Report review findings before this section.>
 - Next output files: `<workspace file path or none>`
 - Next prompt template: `docs/ai-collaboration/agent-prompts.md#<section or none>`
 - Handoff persistence: `.ai/handoff.md was not updated because <constraint>. Persist this Action State before relying on the file.`
+<!-- For agent `dispatch`, add `## Current Status` below (capability line first); omit for human decision dispatch, continue, or close (handoff-schema.md#capability-tier-guidance). -->
 <!-- Explicit limited acceptance by Chief Designer may use Acceptance basis:
      owner-decision plus Task Owner decision, retaining unmet mapping/tasks and
      disclosing uncompleted acceptance. Not technical verification or merge permission. -->
@@ -39,6 +40,12 @@ another batch's live state. Report review findings before this section.>
      substitute a shell command for a missing result path). Record commands and
      exit codes in the result file Checks Run and cite that path when the live
      handoff is persisted. -->
+
+## Current Status
+
+Recommended capability tier: C3
+
+<Status prose for agent dispatch only; omit this section for human decision dispatch, continue, or close.>
 
 ## Environment Preparation
 

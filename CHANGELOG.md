@@ -2,8 +2,12 @@
 
 [Simplified Chinese](CHANGELOG.zh-CN.md)
 
-## Unreleased
+## 1.9.0 — 2026-10-18
 
+- Adds advisory C1–C5 capability tier guidance on agent dispatch: one line under
+  handoff `Current Status`, fixed next-role defaults, and concise bilingual
+  operator/README entry points. Tiers are manual model-selection hints only; they
+  do not add machine fields, qualification gates, or host loading proof.
 - Clarifies dotted OpenSpec task references and file-only handoff evidence in
   canonical templates and the handoff schema; check commands, outputs and exit
   codes belong in result files.

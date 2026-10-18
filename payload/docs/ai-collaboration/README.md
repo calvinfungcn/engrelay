@@ -796,6 +796,14 @@ state the specific objective and constraints, name required outputs, and link
 the role contract. Keep it concise; do not copy the entire role contract or
 evidence.
 
+Agent `dispatch` also adds one advisory line under `Current Status`:
+`Recommended capability tier: C1` through `C5`, using the fixed next-role
+defaults and existing-task overrides in
+[handoff-schema.md#capability-tier-guidance](handoff-schema.md#capability-tier-guidance).
+Briefly echo the same tier in the final response. Omit the line for human
+decision dispatch, `continue`, and `close`. The tier is a manual model-selection
+hint only; it is not a machine field, qualification gate, or blocker.
+
 Read-only means no file writes unless the assignment explicitly authorizes
 named review or handoff outputs. Response-only consultation preserves the live
 business batch state and reports findings in chat. For an actual role handoff,

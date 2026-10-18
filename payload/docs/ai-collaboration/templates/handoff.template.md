@@ -49,6 +49,7 @@
 
 ## Current Status
 
+<!-- For agent `dispatch` only: first line `Recommended capability tier: C1`–`C5` per handoff-schema.md#capability-tier-guidance; echo the same tier in the final response. Omit for human decision dispatch, continue, and close. -->
 <!-- Recommendations and assumptions are evidence or context only; they do not
      authorize new product scope without the applicable evidence or owner
      decision. -->

@@ -62,6 +62,10 @@ affects the choice (README.md#review-round-circuit-breaker).
 Read-only and prohibited-.ai fallbacks follow handoff-schema.md#response-handoff-fallback.
 In the final response, always state the selected Next Action; for close, state that
 no next role or Operator Command exists.
+For agent `dispatch`, add one advisory line `Recommended capability tier: C1`
+through `C5` as the first line under handoff `Current Status` and briefly echo
+the same tier in the final response; see handoff-schema.md#capability-tier-guidance.
+Omit the line for human decision dispatch, `continue`, and `close`.
 Validate a changed handoff at a real boundary with
 docs/ai-collaboration/scripts/validate-runtime-state.ps1; do not rerun an unchanged
 check for each micro-step. These duties apply only to a task using ai-collaboration.

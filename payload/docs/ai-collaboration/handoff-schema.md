@@ -383,6 +383,10 @@ Rules:
   technical acceptance is complete. Without it, all mapped tasks must be complete.
   Other roles cannot use this override. It does not bypass environment routing
   or review independence and grants no deployment/merge authority.
+- For agent `dispatch`, put one advisory capability line as the first line under
+  `Current Status` and briefly echo the same tier in the final response. Omit it
+  for human decision `dispatch`, `continue`, and `close`. See
+  [Capability tier guidance](#capability-tier-guidance).
 - If formal review is next, route to Code Reviewer and point to
   `docs/ai-collaboration/agent-prompts.md#code-reviewer`.
 - If a workspace review round was created, link it.
@@ -585,6 +589,81 @@ nice-to-have
 
 Priority controls routing and fix scope. Status controls durable review state.
 
+## Capability tier guidance
+
+Advisory only: helps operators choose model and reasoning strength for the
+**next** dispatched work item. It is not a qualification gate, approval step,
+machine field, or blocker. It does not change role duties, S/M/H, tool
+permissions, independent review, cumulative `Review round`, or closure rules. It
+does not select models, change host configuration, or start orchestration.
+
+### Tier definitions
+
+| Tier | Meaning |
+| --- | --- |
+| C1 | Basic execution: follow given steps for mechanical, explicit work |
+| C2 | Routine implementation: bounded local tasks with clear edges |
+| C3 | Integrated engineering: coordinate implementation, checks, and routine review |
+| C4 | Deep analysis: design trade-offs or complex cross-module reasoning |
+| C5 | High-difficulty reasoning: exceptional reasoning explicitly required by the task |
+
+Maintain this table only in this section. Human guides may provide translated
+short glosses that link here; do not maintain a second role-default table
+elsewhere.
+
+### Default mapping by next role
+
+Look up the **next role** in `Routing` (the role receiving the Operator
+Command). Use exactly one line as the first content under `## Current Status`:
+
+`Recommended capability tier: Cn`
+
+| Default tier | Next roles |
+| --- | --- |
+| C1 | Documentation Steward |
+| C2 | Task Intake, Requirements Analyst, UI Designer, Test Engineer |
+| C3 | Implementation Engineer, Fix Engineer, Code Reviewer, Verification Reviewer |
+| C4 | Chief Designer, Design Reviewer, Architect |
+| C5 | *(no default role)* |
+
+Task Intake follows the same table when it is the next role.
+
+### Overrides using existing task information only
+
+When the current authorized task already states difficulty for **this** next
+handoff, prefer that over the role default:
+
+- Explicit mechanical step-following work → C1
+- Explicit routine local bounded work → C2
+- Explicit deep cross-module analysis → C4
+- Explicit requirement for exceptional high-difficulty reasoning → C5
+
+When no explicit override exists, use the role default. Do not investigate,
+score models, write tier justification in the handoff, paste this table, or add
+per-dispatch reasoning reports. Do not derive tier from S/M/H labels, review
+round count, or a single failed attempt. Never default any role to C5 without
+explicit task basis for this handoff.
+
+The tier describes the suggested capability for **this** next item of work, not
+a permanent rating of the role, agent, or model.
+
+### When to show or omit the line
+
+| Situation | Capability line |
+| --- | --- |
+| Agent `dispatch` | Required as the first line under `Current Status`; briefly echo the same `Cn` in the final response |
+| Human decision `dispatch` | Omit |
+| `continue` (including `awaiting-owner-decision` and `blocked`) | Omit |
+| `close` | Omit |
+
+Do not add the line to `Routing`, Operator Command, or validator-checked machine
+fields. File handoffs and the [response handoff fallback](#response-handoff-fallback)
+use the same rule: for agent `dispatch`, include the line in `Current Status`
+before other status prose.
+
+Older handoffs without the line remain valid; continuation must not require
+backfill or migration.
+
 ## Routing Section Schema
 
 Use this required core shape in `.ai/handoff.md`:
@@ -712,6 +791,12 @@ copyable structure for `dispatch`:
 - Next output files: `<required paths or response artifacts>`
 - Next prompt template: `docs/ai-collaboration/agent-prompts.md#<section>`
 - Handoff persistence: `.ai/handoff.md was not updated because <constraint>. Persist this Action State before relying on the file.`
+
+## Current Status
+
+Recommended capability tier: C3
+
+<One paragraph of status prose for agent dispatch; omit this entire section and the capability line for human decision dispatch, continue, or close.>
 
 ## Operator Command
 

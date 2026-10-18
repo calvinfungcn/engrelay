@@ -2,8 +2,9 @@
 
 [English](CHANGELOG.md)
 
-## 未发布
+## 1.9.0 — 2026-10-18
 
+- Agent 派发增加 C1–C5 能力档位建议：在交接 `Current Status` 下显示一行、固定下一角色默认表，并在双语操作指南与 README 提供简短入口；仅供人工选模参考，不新增机器字段、资格门槛或宿主加载证明。
 - 在规范模板与 handoff schema 中明确 OpenSpec 点号任务映射和仅引用文件的交接证据；
   检查命令、输出与退出码记录在结果文件中。
 - 新增双语首次试用 Quickstart 与 README 入口，涵盖 Git 基线、PowerShell 7、显式激活、
