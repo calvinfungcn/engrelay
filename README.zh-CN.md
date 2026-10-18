@@ -8,10 +8,10 @@ EngRelay 取自 Engineering + Relay，意为工程接力。它为已有代码库
 Agent 提供角色提示词、任务和交接模板、按风险引入的独立审查，以及检查交付
 证据的工具。
 
-**版本 1.9.0** · [MIT 许可证](LICENSE) · [下载完整包](https://github.com/calvinfungcn/engrelay/releases/tag/v1.9.0)
+**版本 1.9.1** · [MIT 许可证](LICENSE) · [下载完整包](https://github.com/calvinfungcn/engrelay/releases/tag/v1.9.1)
 
-包已进行 Windows PowerShell 5.1 和 PowerShell 7 聚焦夹具检查。
-真实项目部署、宿主加载与业务验收仍需分别验证。
+上一发行版已进行 Windows PowerShell 5.1 和 PowerShell 7 聚焦夹具检查。
+当前包的检查范围见发行说明。真实项目部署、宿主加载与业务验收仍需分别验证。
 
 ## 提供哪些功能
 
@@ -47,6 +47,12 @@ Agent 提供角色提示词、任务和交接模板、按风险引入的独立�
   [能力档位说明](payload/docs/ai-collaboration/handoff-schema.md#capability-tier-guidance)。
   它不是阻塞条件，也不代表模型资格认证。
 - 检查覆盖实际受影响的行为。结构检查成功不代表业务正确或宿主接入有效。
+- 普通 `accepted` 关闭须对**最终**交接输入完成结构校验，并将命令、退出码、
+  诊断与输入对应关系记录在被检交接之外；详见
+  [关闭校验依据](payload/docs/ai-collaboration/handoff-schema.md#accepted-closure-validation)。
+  源码仓库的后续事项（例如延后的演示样例、试用与路线图）在 GitHub 的
+  [OpenSpec 导航](https://github.com/calvinfungcn/engrelay/blob/main/openspec/README.zh-CN.md)
+  维护，安装导出包内不含该导航。
 
 角色流程以 OpenSpec 为需求和任务权威。安装包不会安装或初始化 OpenSpec，
 也不会串联另一套编排器。详见[完整角色规则](payload/docs/ai-collaboration/README.md)。
@@ -56,7 +62,7 @@ Agent 提供角色提示词、任务和交接模板、按风险引入的独立�
 使用可信完整包，放在业务项目以外的独立目录。先备份目标项目规则，读取其
 现有 Agent 指令。新项目示例：
 
-从发行页面下载 `engrelay-1.9.0.zip`，解压后进入 `engrelay-1.9.0` 目录执行命令。
+从发行页面下载 `engrelay-1.9.1.zip`，解压后进入 `engrelay-1.9.1` 目录执行命令。
 保留完整包原样；额外工具文件或字节修改会使它与清单不匹配。仓库源码仅在
 实际文件集合和字节与 `snapshot.json` 完全一致时，也可作为安装源。
 

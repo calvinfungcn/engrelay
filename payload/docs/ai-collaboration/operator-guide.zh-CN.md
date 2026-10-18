@@ -60,6 +60,25 @@
 
 正式审查轮次与结果索引见 `docs/reviews/`（若已记录）。
 
+## 关闭与校验
+
+普通 `accepted` 关闭表示本批映射范围在记录验收下完成，不代表父级 OpenSpec
+全部完成或业务已验收。在把批次视为“已验证”之前：
+
+- 责任 Agent 先定稿 `.ai/current-task.md`、映射的 `tasks.md` 与 `close` 交接，
+  再对这些**最终**输入运行项目的 `validate-runtime-state.ps1`。
+- 命令、退出码、诊断及被检输入对应关系写在链接的结果或审查文件中，不要
+  把命令字符串放进交接证据的反引号路径里。
+- 校验输出记录在被检交接**之外**，避免循环修改被检内容。
+- 校验失败或环境不足时保持 `continue` 或 `dispatch`；用 `blocked` 与恢复条件，
+  不要关闭。Chief Designer 仍可按原规则记录**负责人限定接受**
+  （`Acceptance basis: owner-decision`）；这不等于技术校验通过。
+
+完整规则见
+[handoff-schema.md#accepted-closure-validation](handoff-schema.md#accepted-closure-validation)。
+源码仓库的后续事项导航在 GitHub 公开 OpenSpec 说明中维护，安装导出包内
+不包含该导航。
+
 ## 成本与授权
 
 聚焦检查应匹配受影响行为。在收益不足或成本明显的工作前，责任 Agent 应说明选项并等待负责人选择。负责人验收、Git 操作与部署不在入口 Skill 范围内。

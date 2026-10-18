@@ -383,6 +383,10 @@ Rules:
   technical acceptance is complete. Without it, all mapped tasks must be complete.
   Other roles cannot use this override. It does not bypass environment routing
   or review independence and grants no deployment/merge authority.
+- Ordinary `accepted` closure also follows
+  [Accepted closure validation](#accepted-closure-validation). A structural
+  validator exit 0 alone is not sufficient to report ordinary verification
+  success.
 - For agent `dispatch`, put one advisory capability line as the first line under
   `Current Status` and briefly echo the same tier in the final response. Omit it
   for human decision `dispatch`, `continue`, and `close`. See
@@ -588,6 +592,83 @@ nice-to-have
 ```
 
 Priority controls routing and fix scope. Status controls durable review state.
+
+## Accepted closure validation
+
+Ordinary `close` with `Closure outcome: accepted` states mapped-batch
+acceptance, not completion of every parent OpenSpec item, log authenticity,
+host Skill loading, or business verification. These rules apply to new or
+normally updated closures; they do not rewrite historical archives or reopen
+closed batches.
+
+This section is the single authoritative explanation. README Routing Contract,
+workflows Role Exit Contract, and Common Preflight cite it instead of restating
+the full sequence.
+
+### Ordinary accepted sequence
+
+Before reporting ordinary acceptance to the Task Owner or persisting a final
+`accepted` close, the responsible role:
+
+1. Confirms mapped acceptance, required independent review, cumulative
+   `Review round`, and OpenSpec task state. Do not check off unfinished mapped
+   tasks to pass structure validation.
+2. Chooses an existing result file, formal review record, or boundary log as
+   the evidence container. Pre-create real sections; mark not-yet-run work
+   honestly instead of empty success placeholders.
+3. Finalizes `.ai/current-task.md`, mapped `tasks.md`, and `.ai/handoff.md`
+   for `close` with `Closure outcome: accepted` and links the evidence
+   container from `Authoritative Evidence`. Do not report closure as verified
+   yet; record version or hash identifiers for structural inputs used.
+4. Runs `docs/ai-collaboration/scripts/validate-runtime-state.ps1` against the
+   final inputs. Record the full launch command, observed exit code,
+   diagnostics or warnings, and input correspondence in the evidence
+   container outside the validated handoff. Appending log output must not
+   change validated handoff bytes.
+5. Confirms inputs are unchanged. Report ordinary acceptance only when
+   validation actually succeeded and other acceptance requirements are met.
+   Do not write exit codes, timestamps, or hashes back into the handoff after
+   validation; any input that affects the conclusion requires re-validation.
+
+Minimum input correspondence covers `.ai/current-task.md`, `.ai/handoff.md`,
+and whichever tasks, scripts, role cards, and templates actually participated
+in the structural decision for this closure.
+
+### Failures, blocked environments, and limited owner acceptance
+
+Non-zero exit codes stay recorded; do not publish ordinary `accepted`
+conclusions. Fix within role authority, update final inputs, and re-validate.
+When repair or environment is unavailable in this action, revert to a truthful
+`continue` or `dispatch`. Environment waits use `continue` with status
+`blocked` and `- Resume condition: ...`; blocked work cannot `close`.
+Use `awaiting-owner-decision` only for substantive owner decisions, not as a
+substitute for validation failure.
+
+Chief Designer's explicit limited acceptance still uses `Acceptance basis:
+owner-decision` and `Task Owner decision`. Unchecked mapped tasks and unmet
+technical acceptance stay visible in Known Risks. Structure validation success
+does not mean those technical items are verified. This path does not bypass
+invalid Routing, blocked-to-close, independence, or cumulative review limits.
+
+### Response handoff and legacy records
+
+File and response closures follow the same evidence rules. When read-only or
+tool limits prevent updating `.ai/handoff.md`, state the actual objects checked,
+that the live file may remain stale, and do not claim a new ordinary `accepted`
+closure from an old file's exit 0 alone. When a permitted independent snapshot
+is used, name the snapshot scope and that persistence of `.ai/` is not proven.
+
+Legacy closed handoffs without the newer evidence narration remain readable;
+do not reopen closed batches or reset review counts to add narration
+retroactively.
+
+### Validator boundary
+
+`validate-runtime-state.ps1` checks structural shape and declared paths; it
+does not certify exit-code logs, command transcripts, input freshness, agent
+compliance, host loading, or business acceptance. Missing matching evidence may
+still yield exit 0 on structure; the responsible role must not treat that as
+ordinary verification success.
 
 ## Capability tier guidance
 
@@ -814,9 +895,12 @@ Follow: docs/ai-collaboration/agent-prompts.md#<role-section>.
 For `continue` or `close`, use the same `Response Handoff` fields with
 next-role values set to `none` and omit `Operator Command`. A `close` response
 must explicitly say that no next role or command exists and include
-`Closure outcome: accepted|stopped|superseded` when closing. The next write-capable
-role must persist the response handoff before treating `.ai/handoff.md` as the
-live Action State.
+`Closure outcome: accepted|stopped|superseded` when closing. Ordinary `accepted`
+responses follow [Accepted closure validation](#accepted-closure-validation):
+record matching validation evidence outside any validated snapshot and do not
+claim a new ordinary acceptance from stale file checks alone. The next
+write-capable role must persist the response handoff before treating
+`.ai/handoff.md` as the live Action State.
 
 When strict read-only also prohibits a formal or local review artifact, the
 findings in the final response are the only review evidence. Report the full
@@ -907,5 +991,8 @@ deferred
   batch.
 - Using `close` for a blocked operational handoff; record the resume condition
   and use `continue` instead.
+- Reporting ordinary `accepted` closure without matching final-input validation
+  evidence recorded outside the validated handoff (see
+  [Accepted closure validation](#accepted-closure-validation)).
 - Writing live routing into `.ai/current-task.md`.
 - Closing with an unresolved assigned `should-fix`.

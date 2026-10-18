@@ -760,7 +760,7 @@ Every role action must end with exactly one **Next Action**:
 | --- | --- | --- |
 | `dispatch` | Another role or human decision recipient must act | For agent dispatch: update `.ai/handoff.md` with complete Routing and a copy-ready Operator Command. For human decision dispatch (`Task Owner`, `User`, `Data Owner`): set status `awaiting-owner-decision`, next agent/files/prompt `none`, omit Operator Command, and provide a complete plain-language Owner Decision Brief in `.ai/handoff.md` and chat |
 | `continue` | The same responsible agent continues without operator dispatch | Record the active responsibility and next local step at meaningful boundaries; omit Operator Command. Adjacent non-independent duties can stay in this session. For owner decisions, use `awaiting-owner-decision` and Owner Decision Brief |
-| `close` | This batch route ends and no role remains | Reconcile review/OpenSpec state, update `.ai/handoff.md` with no next role, record the closure outcome (`accepted`, `stopped`, or `superseded`) ; metrics are optional |
+| `close` | This batch route ends and no role remains | Reconcile review/OpenSpec state, update `.ai/handoff.md` with no next role, record the closure outcome (`accepted`, `stopped`, or `superseded`) ; metrics are optional. Ordinary `accepted` closure also needs matching final-input validation evidence recorded outside the validated handoff per [Accepted closure validation](handoff-schema.md#accepted-closure-validation) |
 
 `dispatch` has two strictly discriminated forms:
 

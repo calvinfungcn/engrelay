@@ -20,7 +20,9 @@ another batch's live state. Report review findings before this section.>
      owner-decision plus Task Owner decision, retaining unmet mapping/tasks and
      disclosing uncompleted acceptance. Not technical verification or merge permission. -->
 <!-- For close include Closure outcome accepted|stopped|superseded;
-     Process Metrics is optional. For blocked continue, include Resume condition.
+     ordinary accepted follows handoff-schema.md#accepted-closure-validation
+     (external evidence, no post-validation handoff write-back). Process Metrics
+     is optional. For blocked continue, include Resume condition.
      Human decision dispatch: status awaiting-owner-decision, next agent/files/
      prompt none, Owner Decision Brief instead of Operator Command.
      stopped/superseded additionally require an explicit applicable Task Owner

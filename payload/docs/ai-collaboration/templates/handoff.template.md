@@ -120,6 +120,9 @@
 - Formal review status impact: `<none/open/fixed-not-verified/verified/deferred>`
 - OpenSpec task impact: `<none or task reference>`
 <!-- For close only, add: - Closure outcome: `accepted|stopped|superseded`.
+     Ordinary accepted also follows handoff-schema.md#accepted-closure-validation:
+     validate final inputs, record command/exit/diagnostics outside the handoff,
+     and do not report verified closure before matching evidence exists.
      accepted covers mapped batch acceptance only, not all parent proposal work.
      stopped/superseded require Chief Designer disposition AND explicit applicable
      Task Owner authorization, not acceptance. Also add in this section:

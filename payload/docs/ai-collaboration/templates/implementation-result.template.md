@@ -26,8 +26,10 @@
 | `<exact command>` | `<observed output; include exit code>` |
 
 <!-- This table is the authoritative place for commands, transcripts, and exit
-     codes. Link this file from handoff Authoritative Evidence; do not put the
-     command string in handoff evidence backticks. -->
+     codes, including ordinary accepted closure checks per
+     handoff-schema.md#accepted-closure-validation. Link this file from handoff
+     Authoritative Evidence; do not put the command string in handoff evidence
+     backticks. Appending rows here must not change validated handoff bytes. -->
 
 ## Review Impact
 

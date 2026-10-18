@@ -2,6 +2,19 @@
 
 [Simplified Chinese](CHANGELOG.zh-CN.md)
 
+## 1.9.1 — 2026-10-18
+
+- Documents evidence-backed ordinary `accepted` closure: finalize handoff inputs,
+  run the existing structure validator on those inputs, and record command,
+  exit code, diagnostics, and input correspondence in external evidence without
+  writing validation output back into the validated handoff. Adds paired
+  English/Chinese follow-up navigation under source OpenSpec READMEs. These
+  rules are agent duties only; they do not change validator algorithms or add
+  machine fields. The independent round-three review verified the technical
+  fixes, and the batch converged to ordinary `accepted` closure with matching
+  external evidence and a successful final structure check. These checks do not
+  certify log authenticity, agent or host adherence, or business acceptance.
+
 ## 1.9.0 — 2026-10-18
 
 - Adds advisory C1–C5 capability tier guidance on agent dispatch: one line under

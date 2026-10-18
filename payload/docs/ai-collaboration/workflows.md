@@ -104,6 +104,8 @@ Every role action ends with exactly one decision:
 - `close`: this batch route ends. Reconcile review and OpenSpec state in the
   same role action, update `.ai/handoff.md` with no next role, record a
   `Closure outcome: accepted|stopped|superseded`; Process Metrics is optional.
+  Ordinary `accepted` closure also follows
+  [handoff-schema.md#accepted-closure-validation](handoff-schema.md#accepted-closure-validation).
 
 Read-only prohibits file writes unless named review or handoff outputs are
 explicitly authorized. Response-only consultation preserves live business

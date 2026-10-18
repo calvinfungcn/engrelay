@@ -9,9 +9,10 @@ working in existing repositories. It provides role prompts, task and handoff
 templates, independent reviews based on risk, and tools for checking the evidence
 used to call work complete.
 
-**Version 1.9.0** · [MIT License](LICENSE) · [Download the complete package](https://github.com/calvinfungcn/engrelay/releases/tag/v1.9.0)
+**Version 1.9.1** · [MIT License](LICENSE) · [Download the complete package](https://github.com/calvinfungcn/engrelay/releases/tag/v1.9.1)
 
-The package has focused Windows PowerShell 5.1 and PowerShell 7 fixture evidence.
+The previous release has focused Windows PowerShell 5.1 and PowerShell 7 fixture
+evidence. Check the release notes for the current package's verification scope.
 Real-project deployment, host loading, and business acceptance are separate checks.
 
 ## What you get
@@ -55,6 +56,14 @@ for entry selection and handoffs.
   It is not a blocker or model certification.
 - Match verification to the affected behavior. A successful structure check
   does not prove correct business behavior or a working host integration.
+- Ordinary `accepted` closure requires a successful structure check on the
+  **final** handoff inputs with command, exit code, and input correspondence
+  and diagnostics recorded outside the validated handoff; see
+  [accepted closure validation](payload/docs/ai-collaboration/handoff-schema.md#accepted-closure-validation).
+  Source-repo follow-up status (deferred demo work, trials, and roadmap items)
+  is tracked in the
+  [OpenSpec navigation](https://github.com/calvinfungcn/engrelay/blob/main/openspec/README.md)
+  on GitHub, not in installation exports.
 
 The role workflow uses OpenSpec as its requirement and task authority. Installing
 the kit does not install or initialize OpenSpec, or chain another orchestrator.
@@ -65,8 +74,8 @@ See the [maintained role contracts](payload/docs/ai-collaboration/README.md).
 Use a trusted complete package in its own directory. Back up the target project's
 rules and read its existing agent instructions. For a new project:
 
-Download `engrelay-1.9.0.zip` from the release and extract it. Run commands from
-the extracted `engrelay-1.9.0` directory. Keep that complete package unchanged;
+Download `engrelay-1.9.1.zip` from the release and extract it. Run commands from
+the extracted `engrelay-1.9.1` directory. Keep that complete package unchanged;
 extra tool files or edited bytes make it differ from its inventory. The repository
 source can also be used when its file set and bytes exactly match `snapshot.json`.
 

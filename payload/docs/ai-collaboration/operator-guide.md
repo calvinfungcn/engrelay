@@ -72,6 +72,31 @@ action only; do not reset review counts or replay closed batches.
 
 Results and formal review rounds are indexed under `docs/reviews/` when recorded.
 
+## Closing and verification
+
+Ordinary `accepted` closure means the mapped batch is complete under the
+recorded acceptance criteria, not that every parent OpenSpec item or business
+check passed. Before you treat a batch as verified:
+
+- The responsible agent finalizes `.ai/current-task.md`, mapped `tasks.md`,
+  and a `close` handoff, then runs the project's
+  `validate-runtime-state.ps1` on those **final** inputs.
+- Command, exit code, diagnostics, and which inputs were checked belong in a
+  linked result or review file, not pasted into handoff evidence backticks.
+- Validation output is recorded **outside** the validated handoff so the check
+  does not circularly modify what it inspects.
+- If validation fails or the environment is unavailable, the batch stays on
+  `continue` or `dispatch`; use `blocked` with a resume condition instead of
+  closing. Chief Designer may still record explicit **limited owner acceptance**
+  with `Acceptance basis: owner-decision`; that is not the same as a technical
+  pass.
+
+Full rules:
+[handoff-schema.md#accepted-closure-validation](handoff-schema.md#accepted-closure-validation).
+Source-repository follow-up items (for example deferred demo work) live in the
+public EngRelay OpenSpec navigation on GitHub, not in the installed package
+export.
+
 ## Cost and authority
 
 Focused checks match affected behavior. Before substantial low-benefit or
