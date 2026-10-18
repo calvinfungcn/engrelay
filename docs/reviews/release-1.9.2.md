@@ -22,8 +22,9 @@ Date: 2026-10-18
 The product source commit contains the contract, template, validator and
 package-smoke changes; both README and CHANGELOG language editions; development
 baseline updates; OpenSpec main-spec and archived-change records; and the
-autonomous-continuation review record. This release-evidence record and the
-final `snapshot.json` are source-only release metadata. Ignored `.ai` staging,
+autonomous-continuation review record. This release-evidence record is
+source-only; the final `snapshot.json` is included in both the source repository
+and the complete installation package. Ignored `.ai` staging,
 logs, fixtures, downloaded archives, `.agents` and `.codex` tooling/configuration
 and caches remain outside Git and the package; no `.gitignore` change was needed.
 
