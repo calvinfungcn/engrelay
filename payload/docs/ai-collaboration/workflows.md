@@ -83,6 +83,17 @@ continue.
 
 ## Role Exit Contract
 
+Apply [autonomous continuation](handoff-schema.md#autonomous-continuation) at
+session boundaries: an active capable agent checks latest authority, review
+allowance and execution ownership, then immediately performs executable continue
+within the authorized scope. A replacement session keeps the responsible role,
+batch and review count and records its actual agent. It cannot replace an
+independent review or an actual role/synthesis transfer, which still uses dispatch.
+Choosing a local CLI terminal or IDE conversation for authorized offline work
+must not become a Task Owner decision. A single-turn runner exiting is not an
+environment blocker; do not start competing writers or promise automatic wake-up.
+Actual owner decisions, unmet immediate prerequisites and permissions still govern.
+
 Every role action ends with exactly one decision:
 
 - `dispatch`: another role or human decision recipient must act. For agent
@@ -101,6 +112,8 @@ Every role action ends with exactly one decision:
   `.ai/handoff.md`; omit Operator Command. When waiting for a same-session
   owner decision, set status `awaiting-owner-decision` and include the Owner
   Decision Brief.
+  New/updated executable continue handoffs include ### Continuation Command
+  under Current Status; actual blocked/owner waits omit this block.
 - `close`: this batch route ends. Reconcile review and OpenSpec state in the
   same role action, update `.ai/handoff.md` with no next role, record a
   `Closure outcome: accepted|stopped|superseded`; Process Metrics is optional.
@@ -146,6 +159,11 @@ chat before dispatch, and keep the current responsible agent waiting when the
 next action depends on it. Notify early but allow safe offline work if only a
 later check needs it. Every dispatching role checks prerequisites for its next
 assignment; operational setup does not require a return to Chief Designer.
+For later-only prerequisites, keep a neutral forward notice with no imperative
+human setup or reply request; explicitly state that no current action is needed.
+Include Human Action Required in new/updated Routing: awaiting-decision for
+owner decisions, awaiting-environment for unmet immediate human-only setup,
+otherwise none. It summarizes existing facts and grants no authority.
 For human action, use the short plain-language guidance in
 [Actionable Human Instructions](handoff-schema.md#actionable-human-instructions).
 Write the guidance in the handoff and chat: state the exact verified path or

@@ -54,6 +54,22 @@ only to Chief Designer.
 Read `.ai/current-task.md` and `.ai/handoff.md`. Follow the recorded Next
 action only; do not reset review counts or replay closed batches.
 
+Check `Human Action Required` first: `none` means no human intervention now,
+`awaiting-decision` means answer the decision brief, and `awaiting-environment`
+means the next step needs the recorded human preparation. A later-only
+environment notice must state that no action or reply is needed now. Recheck
+the actual status and prerequisites if an older handoff omits this summary.
+
+Executable `continue` includes a `### Continuation Command` under Current
+Status. An active capable agent follows it directly after checking latest
+authority and execution ownership. If a single-turn CLI has exited, the operator
+or an existing runner can copy the block into a replacement session. Ending a
+turn is not an environment blocker. The agent chooses a local CLI/IDE host
+within authorized offline work without asking the owner; actual permissions,
+decisions, review limits and independent review still apply. EngRelay itself
+does not wake stopped processes. See
+[autonomous continuation](handoff-schema.md#autonomous-continuation).
+
 ## Handoffs and reviews
 
 - One next action: `continue`, `dispatch`, or `close`.

@@ -59,6 +59,19 @@ Before stopping, choose exactly one Next Action under README.md#routing-contract
 Use `continue` for same-owner local steps; write handoff only at an actual transfer,
 wait, interruption or close. State the remaining Review round capacity when it
 affects the choice (README.md#review-round-circuit-breaker).
+For new/updated handoffs include the Routing summary Human Action Required;
+executable continue includes a compact ### Continuation Command under Current
+Status per handoff-schema.md#autonomous-continuation. After checking latest state,
+allowance, capability, permissions and execution ownership, an active eligible
+agent must execute the authorized next step immediately. A replacement session
+can take over the same responsibility, recording its actual Current agent while
+retaining role, batch and review count. Required independent review and formal
+role transfers still use dispatch; never self-review via continue.
+Within authorized offline work, local CLI/IDE host selection is an agent detail:
+never ask the Task Owner where to run, or seek a repeated continue approval.
+A prior single-turn CLI exit is not a blocked environment. Check other same-batch
+writers before takeover; do not launch competing execution or kill processes.
+This rule neither wakes a stopped process nor bypasses a real wait or tool limit.
 Read-only and prohibited-.ai fallbacks follow handoff-schema.md#response-handoff-fallback.
 In the final response, always state the selected Next Action; for close, state that
 no next role or Operator Command exists.
@@ -84,6 +97,11 @@ with that limit recorded. Routine environment setup is not a return to Chief Des
 Human notices follow handoff-schema.md#actionable-human-instructions: verified path
 or screen, action, purpose and smallest reply, with a copy-ready snippet only for
 file/CLI work. Never invent a fix.
+When Needed before next action is no, the environment section is a neutral
+forward notice: name the later dependency and agent check, say no human action
+or reply is needed now, and omit imperative setup or confirmation requests.
+Only an unmet immediate human-only prerequisite needs awaiting-environment;
+owner decisions need awaiting-decision, otherwise the summary is none.
 For `stopped` or `superseded`, Chief Designer needs explicit, applicable Task
 Owner authorization, recorded as `Task Owner decision` under Review Or Task
 State Impact (scoped reply or stable evidence, identity, date, batch, outcome).

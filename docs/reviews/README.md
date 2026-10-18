@@ -11,6 +11,7 @@ archive does not reset cumulative counts or add new review conclusions.
 | improve-skill-discovery-guidance | verified / accepted | 3 | [Archive record](improve-skill-discovery-guidance/index.md#archive-record) |
 | streamline-entry-and-human-docs | verified / accepted | 4 | [Archive record](streamline-entry-and-human-docs/index.md#archive-record) |
 | add-handoff-capability-guidance | verified / accepted | 1 | [Archive record](add-handoff-capability-guidance/index.md#archive-record) |
+| fix-autonomous-continuation | verified / accepted | 3 | [Archive record](fix-autonomous-continuation/index.md#archive-record) |
 
 Only redacted review summaries, findings, and evidence hashes are published.
 Raw runtime state, logs, and local tool configuration are not committed.

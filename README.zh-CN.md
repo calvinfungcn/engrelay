@@ -8,10 +8,10 @@ EngRelay 取自 Engineering + Relay，意为工程接力。它为已有代码库
 Agent 提供角色提示词、任务和交接模板、按风险引入的独立审查，以及检查交付
 证据的工具。
 
-**版本 1.9.1** · [MIT 许可证](LICENSE) · [下载完整包](https://github.com/calvinfungcn/engrelay/releases/tag/v1.9.1)
+**版本 1.9.2** · [MIT 许可证](LICENSE) · [下载完整包](https://github.com/calvinfungcn/engrelay/releases/tag/v1.9.2)
 
-上一发行版已进行 Windows PowerShell 5.1 和 PowerShell 7 聚焦夹具检查。
-当前包的检查范围见发行说明。真实项目部署、宿主加载与业务验收仍需分别验证。
+本版本的自主接续协议在 Windows PowerShell 5.1 和 PowerShell 7 上通过各 229 项
+结构回归检查。检查覆盖协议结构与兼容性；真实项目部署、宿主加载与业务验收仍需分别验证。
 
 ## 提供哪些功能
 
@@ -42,6 +42,11 @@ Agent 提供角色提示词、任务和交接模板、按风险引入的独立�
 - 中风险工作需要独立代码审查；高风险工作按规则增加所需独立验证。
 - 下一步只选 `continue`、`dispatch` 或 `close`。派发提供完整指令，下一位 Agent
   无需读取之前的聊天即可接续。
+- 交接中的 `Human Action Required` 直观显示当前是否需要人类操作；远期环境预告
+  无需当前行动或回复。可执行的 `continue` 附自包含接续指令；有能力的活跃 Agent
+  应在已有授权内直接继续，自行选择本地 CLI 或 IDE 宿主。执行器结束单次运行
+  不代表环境阻塞。工具包提供接续规范，不会自动唤醒进程；详见
+  [自主接续规则](payload/docs/ai-collaboration/handoff-schema.md#autonomous-continuation)。
 - Agent 派发可在交接 `Current Status` 下增加一行能力建议（`Recommended capability
   tier: C1`–`C5`），仅供为下一项工作选择模型与推理强度时参考；详见
   [能力档位说明](payload/docs/ai-collaboration/handoff-schema.md#capability-tier-guidance)。
@@ -62,7 +67,7 @@ Agent 提供角色提示词、任务和交接模板、按风险引入的独立�
 使用可信完整包，放在业务项目以外的独立目录。先备份目标项目规则，读取其
 现有 Agent 指令。新项目示例：
 
-从发行页面下载 `engrelay-1.9.1.zip`，解压后进入 `engrelay-1.9.1` 目录执行命令。
+从发行页面下载 `engrelay-1.9.2.zip`，解压后进入 `engrelay-1.9.2` 目录执行命令。
 保留完整包原样；额外工具文件或字节修改会使它与清单不匹配。仓库源码仅在
 实际文件集合和字节与 `snapshot.json` 完全一致时，也可作为安装源。
 

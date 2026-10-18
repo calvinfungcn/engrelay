@@ -9,11 +9,12 @@ working in existing repositories. It provides role prompts, task and handoff
 templates, independent reviews based on risk, and tools for checking the evidence
 used to call work complete.
 
-**Version 1.9.1** · [MIT License](LICENSE) · [Download the complete package](https://github.com/calvinfungcn/engrelay/releases/tag/v1.9.1)
+**Version 1.9.2** · [MIT License](LICENSE) · [Download the complete package](https://github.com/calvinfungcn/engrelay/releases/tag/v1.9.2)
 
-The previous release has focused Windows PowerShell 5.1 and PowerShell 7 fixture
-evidence. Check the release notes for the current package's verification scope.
-Real-project deployment, host loading, and business acceptance are separate checks.
+This release's autonomous continuation protocol passed 229 structural regression
+cases on Windows PowerShell 5.1 and PowerShell 7. The checks cover protocol
+structure and compatibility; real-project deployment, host loading, and business
+acceptance are separate checks.
 
 ## What you get
 
@@ -49,6 +50,13 @@ for entry selection and handoffs.
   verification where high-risk work requires it.
 - Record one next action: `continue`, `dispatch`, or `close`. A dispatch includes
   a complete command the next agent can use without the preceding chat.
+- Handoff `Human Action Required` shows whether a person needs to act now.
+  Later environment notices require no current action or reply. Executable
+  `continue` includes a self-contained Continuation Command; an active capable
+  agent proceeds within existing authorization and chooses its local CLI/IDE host.
+  A runner ending its turn does not mean work is environment-blocked. This kit
+  provides resumption instructions, not automatic process wake-up; see
+  [autonomous continuation](payload/docs/ai-collaboration/handoff-schema.md#autonomous-continuation).
 - Agent dispatch may add one advisory capability line (`Recommended capability
   tier: C1`–`C5`) under handoff `Current Status` to hint at model strength for
   the next work item; see
@@ -74,8 +82,8 @@ See the [maintained role contracts](payload/docs/ai-collaboration/README.md).
 Use a trusted complete package in its own directory. Back up the target project's
 rules and read its existing agent instructions. For a new project:
 
-Download `engrelay-1.9.1.zip` from the release and extract it. Run commands from
-the extracted `engrelay-1.9.1` directory. Keep that complete package unchanged;
+Download `engrelay-1.9.2.zip` from the release and extract it. Run commands from
+the extracted `engrelay-1.9.2` directory. Keep that complete package unchanged;
 extra tool files or edited bytes make it differ from its inventory. The repository
 source can also be used when its file set and bytes exactly match `snapshot.json`.
 

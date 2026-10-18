@@ -45,6 +45,18 @@
 
 阅读 `.ai/current-task.md` 与 `.ai/handoff.md`，仅按记录的下一步动作继续；不重置审查计数、不重放已关闭批次。
 
+先看 `Human Action Required`：`none` 表示当前无需人工介入，`awaiting-decision`
+表示需回答决定简报，`awaiting-environment` 表示下一步需要交接中说明的人工准备。
+远期环境预告必须明确当前无需操作或回复。旧交接没有该摘要时，按实际状态和
+前置条件判断。
+
+可执行的 `continue` 在 `Current Status` 下附 `### Continuation Command`。
+有能力的活跃 Agent 核对最新授权及执行归属后直接继续。若单次 CLI 已退出，
+操作者或已有外部运行器可以把该块复制到接替会话；单次运行结束不代表环境阻塞。
+已有授权内的离线工作由 Agent 自行选择本地 CLI 或 IDE 宿主，无需请示负责人；
+实际权限、负责人决定、审查上限及独立审查要求仍然有效。EngRelay 本身不会
+唤醒已退出的进程。详见[自主接续规则](handoff-schema.md#autonomous-continuation)。
+
 ## 交接与审查
 
 - 下一步动作仅一种：`continue`、`dispatch` 或 `close`。

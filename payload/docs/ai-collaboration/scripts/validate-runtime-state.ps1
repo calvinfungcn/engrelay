@@ -311,6 +311,7 @@ function Get-MarkdownStructure {
     param([string]$Text)
 
     $headings = [Collections.Generic.List[object]]::new()
+    $unfencedLines = [Collections.Generic.List[string]]::new()
     $openFence = $null
     foreach ($line in [regex]::Matches($Text, '[^\r\n]+(?:\r?\n|\z)|\r?\n')) {
         $lineText = $line.Value.TrimEnd("`r", "`n")
@@ -329,6 +330,7 @@ function Get-MarkdownStructure {
             }
             continue
         }
+        $unfencedLines.Add($lineText)
         $heading = [regex]::Match($lineText, '^ {0,3}(?<level>#{1,6})[ \t]+(?<title>.*)$')
         if ($heading.Success) {
             $headings.Add([pscustomobject]@{
@@ -339,7 +341,10 @@ function Get-MarkdownStructure {
             })
         }
     }
-    return [pscustomobject]@{ Headings = $headings.ToArray() }
+    return [pscustomobject]@{
+        Headings = $headings.ToArray()
+        UnfencedText = $unfencedLines -join "`n"
+    }
 }
 
 function Get-MarkdownHeadingBody {
@@ -688,6 +693,68 @@ if ($errors.Count -eq 0) {
     $operatorCommand = Get-Section $handoff "Operator Command"
     $processMetrics = Get-Section $handoff "Process Metrics"
     $routing = Get-Section $handoff "Routing"
+    # New summary is optional on legacy records. Never infer authority from it.
+    $routingText = (Get-MarkdownStructure $routing).UnfencedText
+    $humanActionFields = [regex]::Matches($routingText, '(?m)^- Human Action Required:')
+    $hasHumanAction = $humanActionFields.Count -gt 0
+    $humanActionRequired = Get-FieldValue $routingText "Human Action Required"
+    if ($humanActionFields.Count -gt 1) {
+        Add-ValidationError "Routing must contain at most one Human Action Required"
+    }
+    if ($hasHumanAction -and $humanActionRequired -notin @("none", "awaiting-decision", "awaiting-environment")) {
+        Add-ValidationError "Human Action Required must be none, awaiting-decision, or awaiting-environment"
+    }
+    if ($hasHumanAction -and $currentStatus -eq "awaiting-owner-decision" -and $humanActionRequired -ne "awaiting-decision") {
+        Add-ValidationError "awaiting-owner-decision requires Human Action Required: awaiting-decision"
+    }
+    if ($humanActionRequired -eq "awaiting-decision" -and $currentStatus -ne "awaiting-owner-decision") {
+        Add-ValidationError "awaiting-decision requires awaiting-owner-decision"
+    }
+
+    $executableContinue = $action -eq "continue" -and $currentStatus -notin @("blocked", "awaiting-owner-decision")
+    $handoffStructure = Get-MarkdownStructure $handoff
+    # ATX headings may have closing hashes; they must not hide a reserved block.
+    $continuationHeadings = @($handoffStructure.Headings | Where-Object { $_.Title -match '^Continuation Command(?:[ \t]+#+)?$' })
+    $statusHeading = $handoffStructure.Headings | Where-Object { $_.Level -eq 2 -and $_.Title -eq "Current Status" } | Select-Object -First 1
+    $statusBody = if ($statusHeading) { Get-MarkdownHeadingBody $handoff $handoffStructure.Headings $statusHeading 2 } else { $null }
+    if ($continuationHeadings.Count -gt 1) {
+        Add-ValidationError "Handoff must contain at most one Continuation Command"
+    }
+    if ($hasHumanAction -and $executableContinue -and $continuationHeadings.Count -eq 0) {
+        Add-ValidationError "Executable continue with Human Action Required requires ### Continuation Command under Current Status"
+    }
+    foreach ($heading in $continuationHeadings) {
+        if (-not $executableContinue) {
+            Add-ValidationError "Continuation Command is permitted only for executable continue"
+        }
+        if ($heading.Level -ne 3 -or -not $statusBody -or $heading.Start -lt $statusBody.Start -or $heading.Start -ge $statusBody.End) {
+            Add-ValidationError "Continuation Command must be under Current Status"
+        }
+        $command = (Get-MarkdownHeadingBody $handoff $handoffStructure.Headings $heading 3).Text.Trim()
+        $commandMatch = [regex]::Match($command, '\A```text[ \t]*\r?\n(?<body>(?:(?!```)[\s\S])+)\r?\n```[ \t]*\z')
+        if (-not $commandMatch.Success) {
+            Add-ValidationError "Continuation Command requires one text code block"
+            continue
+        }
+        $commandBody = $commandMatch.Groups['body'].Value
+        foreach ($field in @("Read", "Objective", "Constraints", "Output", "Follow")) {
+            if ($commandBody -notmatch ("(?m)^" + $field + ":[ \t]*\S")) {
+                Add-ValidationError "Continuation Command is missing: ${field}:"
+            }
+        }
+        $batchId = Get-FieldValue $batchClassification "Execution Batch ID"
+        $identity = ($commandBody -split '\r?\n')[0]
+        if ($batchId -and $identity -notmatch ([regex]::Escape("Execution Batch $batchId") + '[.]?[ \t]*$')) {
+            Add-ValidationError "Continuation Command must name Execution Batch: $batchId"
+        }
+        if ($currentRole -and $identity -notmatch ([regex]::Escape("continuing as $currentRole") + ' for Execution Batch ')) {
+            Add-ValidationError "Continuation Command must name Current role: $currentRole"
+        }
+        $roleAnchor = Convert-ToMarkdownAnchor $currentRole
+        if ($commandBody -notmatch ("(?m)^Follow:[ \t]*" + [regex]::Escape("docs/ai-collaboration/agent-prompts.md#$roleAnchor") + '[.]?[ \t]*$')) {
+            Add-ValidationError "Continuation Command Follow must match Current role prompt"
+        }
+    }
     $handoffRisk = Get-FieldValue $routing "Risk level"
     if ($handoffRisk -and $handoffRisk -ne $riskLevel) {
         Add-ValidationError "Handoff Risk level must match current task Risk level"
@@ -1103,6 +1170,7 @@ if ($errors.Count -eq 0) {
         }
     }
 
+    $unmetImmediateEnvironment = $false
     $envPrepSection = Get-Section $handoff "Environment Preparation"
     if ($null -ne $envPrepSection) {
         $envPrepStructure = Get-MarkdownStructure $envPrepSection
@@ -1131,7 +1199,9 @@ if ($errors.Count -eq 0) {
             $humanAction = Get-ItemFieldContent $prereqBody "Human action"
             if (-not $humanAction) {
                 Add-ValidationError "Environment Preparation '$prereqTitle' is missing: Human action"
-            } elseif ($humanAction.Trim() -in @("none", "pending", "unknown")) {
+            } elseif ($humanAction.Trim().Trim([char]96) -in @("pending", "unknown") -or (
+                $needed -eq "yes" -and $humanAction.Trim().Trim([char]96) -eq "none"
+            )) {
                 Add-ValidationError "Environment Preparation '$prereqTitle' requires actionable Human action, not $humanAction"
             }
 
@@ -1152,7 +1222,23 @@ if ($errors.Count -eq 0) {
                     Add-ValidationError "Agent dispatch is not permitted when environment prerequisite is $readiness and needed before next action: $prereqTitle"
                 }
             }
+            if ($readiness -in @("pending", "unknown") -and $needed -eq "yes") {
+                $unmetImmediateEnvironment = $true
+            }
         }
+    }
+    if ($unmetImmediateEnvironment) {
+        if ($action -ne "continue" -or $currentStatus -ne "blocked") {
+            Add-ValidationError "Unmet immediate environment prerequisite requires continue/blocked"
+        }
+        if ($hasHumanAction -and $humanActionRequired -ne "awaiting-environment") {
+            Add-ValidationError "Unmet immediate environment prerequisite requires Human Action Required: awaiting-environment"
+        }
+    }
+    if ($humanActionRequired -eq "awaiting-environment" -and (
+        $action -ne "continue" -or $currentStatus -ne "blocked" -or -not $unmetImmediateEnvironment
+    )) {
+        Add-ValidationError "awaiting-environment requires continue/blocked and an unmet immediate environment prerequisite"
     }
 
     $reviewImpact = Get-Section $handoff "Review Or Task State Impact"

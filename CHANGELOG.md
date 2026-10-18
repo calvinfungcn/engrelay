@@ -2,6 +2,24 @@
 
 [Simplified Chinese](CHANGELOG.zh-CN.md)
 
+## 1.9.2 — 2026-10-18
+
+- Fixes autonomous continuation handoffs: later environment notices are neutral
+  previews without a current human-action requirement; `Human Action Required`
+  summarizes immediate action; executable `continue` includes a self-contained
+  Continuation Command; and an active capable agent chooses its local CLI/IDE host
+  within existing authorization. Real waits, independent review, and review limits
+  remain enforced.
+- Updates canonical entry guidance, templates, validators, and structural
+  regression coverage. The affected validator suite passed 229 cases on both
+  Windows PowerShell 5.1 and PowerShell 7 (39 new scenarios and 190 existing
+  cases); OpenSpec strict validation, whitespace checks, and the scoped local-link
+  check also passed. Independent follow-up review verified the identified
+  must-fix findings and the response-handoff template consistency correction.
+- These checks cover protocol structure and compatibility. They do not certify
+  natural-language authorization, real CLI/IDE adherence, automatic process
+  wake-up, real-project deployment, or business acceptance.
+
 ## 1.9.1 — 2026-10-18
 
 - Documents evidence-backed ordinary `accepted` closure: finalize handoff inputs,

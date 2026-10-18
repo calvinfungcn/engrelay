@@ -57,7 +57,8 @@ Use the current project root, not a source example's WM path.
   Command; real human decisions use Owner Decision Brief.
 - Foreseeable human-only prerequisites must be explained before dependent
   dispatch. Environment waits use continue/blocked and a resume condition.
-  State where to act, what to do and the smallest useful reply in plain language;
+  For immediate human intervention, state where to act, what to do and the
+  smallest useful reply in plain language;
   provide verified paths/snippets only when relevant, not invented filler.
 - Validate real handoff boundaries with
   docs/ai-collaboration/scripts/validate-runtime-state.ps1. This is structure
@@ -76,6 +77,16 @@ Use the current project root, not a source example's WM path.
   record the step. Escalate to Chief Designer only for a material change in
   scope, acceptance, risk or authority; H escalation keeps independent
   verification.
+- Apply handoff-schema.md#autonomous-continuation: after checking latest authority,
+  allowance and execution ownership, a capable active agent executes authorized
+  continue immediately. A replacement session retains role/batch/review count and
+  records its actual agent. Local CLI/IDE host choice for offline work is not an
+  owner decision; a runner turn exit is not an environment blocker. Actual waits,
+  permissions, independent reviews and formal dispatch still govern.
+- New/updated handoffs show Human Action Required; executable continue adds its
+  Continuation Command under Current Status. Later-only environment notices are
+  neutral, with no current action or reply request. Only immediate unmet human
+  setup uses awaiting-environment. This does not add process wake-up or scheduling.
 - Code review reports every high-confidence actual defect in one aggregated
   round, without a fixed count cap. Preferences, style and mock strictness are
   advisory; passing tests do not erase a concrete behavior or evidence defect.

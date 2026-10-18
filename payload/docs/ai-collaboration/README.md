@@ -242,10 +242,15 @@ When human action is actually required, add the conditional
 `Environment Preparation` section from [handoff-schema.md](handoff-schema.md#environment-preparation)
 and repeat its plain-language notice in chat **before** dispatch. Name the
 concrete action, why and when it is needed, how to confirm readiness, and work
-that can proceed. For example: "Start WebForms debugging in Visual Studio and keep
+that can proceed. For an unmet immediate prerequisite only, for example:
+"Start WebForms debugging in Visual Studio and keep
 IIS Express running. Page verification needs http://localhost:3000/ reachable; reply
-'started' when ready and I will check reachability before page verification. Code
-changes and offline tests may continue meanwhile."
+'started' when ready and I will check reachability before page verification."
+For a later-only prerequisite, use neutral information instead: "Later page
+verification depends on a running WebForms debug session. No action or reply
+is needed now; offline implementation continues. The agent will check readiness
+before that verification step." Never attach a current setup/reply request to
+`Needed before next action: no`.
 Follow the module's runtime constraints; this example does not authorize an IIS
 deployment or a different launch method.
 
@@ -754,6 +759,24 @@ replaceable roster data, not a role definition.
 
 ## Routing Contract
 
+New/updated handoffs include `Human Action Required` in Routing: `none`,
+`awaiting-decision`, or `awaiting-environment`. This summarizes current human
+intervention, not permission or a new status; legacy handoffs may omit it.
+Forward environment notices (`Needed before next action: no`) use neutral later
+dependency/check information and explicitly require no action or reply now.
+Only unmet immediate preparation blocks the dependent step.
+
+An active capable agent must execute an authorized `continue` after checking
+latest task/evidence, review allowance, permissions and execution ownership.
+Choosing a local CLI or IDE host for offline work must not become a Task Owner
+decision. A single-turn runner exiting does not imply an environment blocker.
+New/updated executable continue has a self-contained `### Continuation Command`
+inside Current Status; actual waits omit it. A replacement session retains the
+responsible role, batch and review count and records its actual agent; formal
+role transfers and independent review still use dispatch. This is a resumption
+contract, not a process scheduler or automatic wake-up mechanism. See
+[autonomous continuation](handoff-schema.md#autonomous-continuation).
+
 Every role action must end with exactly one **Next Action**:
 
 | Action | Meaning | Required output |
@@ -878,8 +901,8 @@ explicitly that no next role or Operator Command exists.
   blocked batch is never closed.
 - Record the last valid progress, remaining mapped work, evidence links and the
   resume condition in the existing `Current Status`, `Delta Since Last Handoff`,
-  `Authoritative Evidence` and `Blockers` sections. No state field, database or
-  scheduler is added.
+  `Authoritative Evidence` and `Blockers` sections. The human intervention
+  summary adds no database or scheduler.
 - A pending human decision keeps the batch open with `awaiting-owner-decision`.
   Pausing unsafe work is not termination and does not authorize `stopped`.
 - A delayed or duplicate message is checked against the latest handoff (batch ID,

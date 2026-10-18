@@ -3,6 +3,7 @@
 ## Routing
 
 - Next action: `<dispatch|continue|close>`
+- Human Action Required: `<none|awaiting-decision|awaiting-environment>`
 - Current role: `<role>`
 - Current agent: `<agent/tool>`
 - Current status: `<operational status>`
@@ -33,6 +34,9 @@
   `awaiting-owner-decision`, keep the current role and agent, and include `## Owner Decision Brief`.
 - For bounded local evaluation or fix step with stable batch scope, acceptance, and risk:
   use `continue` with the same role and agent, omit Operator Command, and record next local step below.
+- Set Human Action Required to none unless currently waiting for a human decision
+  (awaiting-decision) or unmet immediate human-only setup (awaiting-environment).
+  Later-only notices require no current human action or reply.
 - For unavailable environment: use continue + blocked, omit Owner Decision Brief,
   and put - Resume condition: ... under Blockers. Do not close blocked work.
   Before dispatch, notify foreseeable human-only setup in Environment Preparation
@@ -55,6 +59,24 @@
      decision. -->
 
 <One paragraph describing where the task stands now. At coherent batch completion, summarize observable outcome and inspection evidence.>
+
+### Continuation Command
+
+<!-- Keep only for executable continue, including a session interruption. Omit for
+     blocked/awaiting-owner-decision, dispatch and close. An active eligible agent
+     executes directly; local CLI/IDE host choice needs no owner decision.
+     On replacement-session takeover check latest state and execution ownership,
+     retain role/batch/review count, and record the actual Current agent. -->
+
+```text
+You are continuing as <current role> for Execution Batch <batch id>.
+Use EngRelay for this task; resume only the latest authorized continue.
+Read: AGENTS.md, .ai/current-task.md, .ai/handoff.md, <authoritative tasks and evidence>.
+Objective: <specific authorized next step>.
+Constraints: Check latest state and execution ownership; preserve scope, risk, review allowance and independence; <task limits>.
+Output: <result evidence and next boundary handoff>.
+Follow: docs/ai-collaboration/agent-prompts.md#<current-role-section>.
+```
 
 ## Delta Since Last Handoff
 
@@ -100,17 +122,21 @@
      Use one ### heading per prerequisite; retain outstanding items across handoffs.
      Facts are not new Routing statuses. Repeat the plain-language notice in chat.
      pending/unknown + yes prevents agent dispatch: continue + blocked + Resume condition.
-     pending/unknown + no permits safe work; recheck before the dependent step. -->
+     pending/unknown + no permits safe work; recheck before the dependent step.
+     needed=no: use neutral future dependency/check information, say no current
+     human action/reply is needed, and forbid imperative actions or reply requests.
+     needed=yes and unmet: give actionable human instructions and minimal reply.
+     ready: record evidence; do not request another confirmation. -->
 
 ### <human-only environment prerequisite>
 
 - Readiness: `<ready|pending|unknown>`
 - Needed before next action: `<yes|no>`
-- Human action: <who should do what, why, and when, in ordinary language>
-- Confirmation and check: <short human confirmation and agent check; include observed evidence if ready>
+- Human action: <none or neutral later dependency for no; concrete human setup for unmet yes>
+- Confirmation and check: <future agent check and no current reply for no; smallest confirmation and check for unmet yes; observed evidence if ready>
 - Work that can proceed: <safe unaffected work or none>
 
-<!-- Blocked/environment instructions must appear here: where/what/why and the
+<!-- When current human intervention is needed, instructions appear here: where/what/why and the
      smallest reply. File/CLI actions require exact verified paths and copy-ready
      snippets; UI-only actions name application/screen/steps, no invented code.
      Separate recommended recovery from optional deeper diagnostics. -->

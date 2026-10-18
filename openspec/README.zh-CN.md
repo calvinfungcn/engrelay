@@ -22,6 +22,7 @@
 | --- | --- | --- | --- |
 | 交接能力档位 C1–C5 | 负责人选定的 M 级批次 | 已完成 | [已归档变更](changes/archive/2026-10-18-add-handoff-capability-guidance/tasks.md)；[审查索引](../docs/reviews/add-handoff-capability-guidance/index.md) |
 | 关闭依据与本导航 | 负责人选定的 M 级批次 | 已完成 | [已归档任务](changes/archive/2026-10-18-clarify-closure-and-follow-up-tracking/tasks.md)；[审查索引](../docs/reviews/clarify-closure-and-follow-up-tracking/index.md) |
+| 自主接续与人类介入摘要 | 负责人选定的 M 级批次 | 已完成 | [已归档任务](changes/archive/2026-10-18-fix-autonomous-continuation/tasks.md)；[审查索引](../docs/reviews/fix-autonomous-continuation/index.md) |
 | 自包含演示样例 | 路线讨论；[Phase 0 非目标](changes/archive/2026-10-17-improve-phase0-first-trial/proposal.md#non-goals) | 待决定 | 链接仅说明曾排除，不代表完整路线图 |
 | Phase 0 / G0 外部试用 | 负责人阶段目标（讨论） | 待验证 | 尚未开展；包检查不等于外部试用 |
 | Quickstart 排错与全链路演练 | [1.9.0 发行审查](../docs/reviews/release-1.9.0.md) | 待验证 | 该记录中的明确未测范围 |

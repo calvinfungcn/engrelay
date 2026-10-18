@@ -1733,6 +1733,119 @@ Remaining acceptance stays unchecked.
     Set-Content -LiteralPath $handoffCopy -Value ($originalHandoff + $envSectionPendingNotNeeded) -NoNewline
     Invoke-ValidatorCase "safe offline dispatch allowed when prerequisite not needed before next action" $currentTaskRelativePath $handoffRelativePath 0 -ExpectNoWarnings
 
+    # Autonomous continuation uses synthetic state only; no host process is started.
+    $continuationBlock = @'
+
+### Continuation Command
+
+```text
+You are continuing as Implementation Engineer for Execution Batch validator-mapped-items.
+Read: .ai/current-task.md, .ai/handoff.md and the mapped OpenSpec tasks.
+Objective: finish the authorized offline implementation step.
+Constraints: preserve scope, review independence and cumulative Review round; check latest state first.
+Output: .ai/round-02-result.md and the next boundary handoff.
+Follow: docs/ai-collaboration/agent-prompts.md#implementation-engineer.
+```
+
+'@
+    $modernContinue = $validContinue.Replace(
+        '- Next action: `continue`',
+        "- Next action: ``continue```n- Human Action Required: ``none``"
+    ).Replace('## Delta Since Last Handoff', ($continuationBlock + '## Delta Since Last Handoff'))
+    $neutralNotice = $envSectionPendingNotNeeded.Replace(
+        'Launch WebForms debugging in Visual Studio and keep IIS Express running before page checks.',
+        'none'
+    ).Replace(
+        'Reply started once ready, then verify http://localhost:3000/ is reachable.',
+        'The agent checks reachability before later page verification; no action or reply is needed now.'
+    )
+    $modernBlocked = $validContinue.Replace(
+        '- Next action: `continue`',
+        "- Next action: ``continue```n- Human Action Required: ``awaiting-environment``"
+    ).Replace('`ready-for-review`', '`blocked`').Replace(
+        '- None.', '- Resume condition: Visual Studio debugging is running and the agent checks reachability.'
+    ) + $envSectionPendingNeeded
+    $modernOwnerWait = $validAwaitingOwner.Replace(
+        '- Next action: `continue`',
+        "- Next action: ``continue```n- Human Action Required: ``awaiting-decision``"
+    )
+    $modernDispatch = $originalHandoff.Replace(
+        '- Next action: `dispatch`',
+        "- Next action: ``dispatch```n- Human Action Required: ``none``"
+    )
+
+    $continuationCases = @(
+        @{ Name = 'neutral forward notice permits no human action'; Text = $modernContinue + $neutralNotice; Exit = 0 },
+        @{ Name = 'legacy forward notice remains structurally readable'; Text = $validContinue + $envSectionPendingNotNeeded; Exit = 0 },
+        @{ Name = 'legacy continue without new fields passes'; Text = $validContinue; Exit = 0 },
+        @{ Name = 'current continue with self-contained command passes'; Text = $modernContinue; Exit = 0 },
+        @{ Name = 'agent dispatch with no human action passes'; Text = $modernDispatch + $neutralNotice; Exit = 0 },
+        @{ Name = 'owner wait with matching summary passes'; Text = $modernOwnerWait; Exit = 0 },
+        @{ Name = 'owner wait cannot report none'; Text = $modernOwnerWait.Replace('Required: `awaiting-decision`', 'Required: `none`'); Exit = 1; Error = 'awaiting-owner-decision requires Human Action Required: awaiting-decision' },
+        @{ Name = 'owner wait cannot auto-execute continuation'; Text = $modernOwnerWait.Replace('## Delta Since Last Handoff', ($continuationBlock + '## Delta Since Last Handoff')); Exit = 1; Error = 'Continuation Command is permitted only for executable continue' },
+        @{ Name = 'continue command cannot override review limit'; Text = $modernContinue.Replace('Review round: `0`', 'Review round: `3`'); Exit = 1; Error = 'Review round circuit breaker reached at 3' },
+        @{ Name = 'invalid human action enum fails'; Text = $modernContinue.Replace('Required: `none`', 'Required: `maybe`'); Exit = 1; Error = 'Human Action Required must be none, awaiting-decision, or awaiting-environment' },
+        @{ Name = 'empty human action fails'; Text = $modernContinue.Replace('Required: `none`', 'Required:'); Exit = 1; Error = 'Human Action Required must be none, awaiting-decision, or awaiting-environment' },
+        @{ Name = 'duplicate human action fails'; Text = $modernContinue.Replace('Required: `none`', "Required: ``none```n- Human Action Required: ``none``"); Exit = 1; Error = 'Routing must contain at most one Human Action Required' },
+        @{ Name = 'false decision wait fails'; Text = $modernContinue.Replace('Required: `none`', 'Required: `awaiting-decision`'); Exit = 1; Error = 'awaiting-decision requires awaiting-owner-decision' },
+        @{ Name = 'forward notice cannot claim environment wait'; Text = ($modernContinue + $neutralNotice).Replace('Required: `none`', 'Required: `awaiting-environment`'); Exit = 1; Error = 'awaiting-environment requires continue/blocked and an unmet immediate environment prerequisite' },
+        @{ Name = 'missing current continuation command fails'; Text = $modernContinue.Replace($continuationBlock, ''); Exit = 1; Error = 'Executable continue with Human Action Required requires ### Continuation Command under Current Status' },
+        @{ Name = 'empty continuation heading fails'; Text = $modernContinue.Replace($continuationBlock, "`n### Continuation Command`n`n"); Exit = 1; Error = 'Continuation Command requires one text code block' },
+        @{ Name = 'wrong continuation location fails'; Text = $modernContinue.Replace($continuationBlock, '') + $continuationBlock; Exit = 1; Error = 'Continuation Command must be under Current Status' },
+        @{ Name = 'duplicate continuation command fails'; Text = $modernContinue.Replace($continuationBlock, ($continuationBlock + $continuationBlock)); Exit = 1; Error = 'Handoff must contain at most one Continuation Command' },
+        @{ Name = 'missing continuation objective fails'; Text = $modernContinue.Replace('Objective:', 'Missing:'); Exit = 1; Error = 'Continuation Command is missing: Objective:' },
+        @{ Name = 'empty continuation objective fails'; Text = $modernContinue.Replace('Objective: finish the authorized offline implementation step.', 'Objective:'); Exit = 1; Error = 'Continuation Command is missing: Objective:' },
+        @{ Name = 'wrong continuation follow role fails'; Text = $modernContinue.Replace('agent-prompts.md#implementation-engineer', 'agent-prompts.md#chief-designer'); Exit = 1; Error = 'Continuation Command Follow must match Current role prompt' },
+        @{ Name = 'multiple continuation text blocks fail'; Text = $modernContinue.Replace('Objective: finish', ('```' + "`n" + '```text' + "`nObjective: finish")); Exit = 1; Error = 'Continuation Command requires one text code block' },
+        @{ Name = 'wrong continuation batch fails'; Text = $modernContinue.Replace('Execution Batch validator-mapped-items', 'Execution Batch unrelated-batch'); Exit = 1; Error = 'Continuation Command must name Execution Batch: validator-mapped-items' },
+        @{ Name = 'batch suffix cannot match current batch'; Text = $modernContinue.Replace('Execution Batch validator-mapped-items.', 'Execution Batch validator-mapped-items.stale.'); Exit = 1; Error = 'Continuation Command must name Execution Batch: validator-mapped-items' },
+        @{ Name = 'wrong continuation role fails'; Text = $modernContinue.Replace('continuing as Implementation Engineer', 'continuing as Chief Designer'); Exit = 1; Error = 'Continuation Command must name Current role: Implementation Engineer' },
+        @{ Name = 'environment wait with immediate prerequisite passes'; Text = $modernBlocked; Exit = 0 },
+        @{ Name = 'environment wait cannot report no human action'; Text = $modernBlocked.Replace('Required: `awaiting-environment`', 'Required: `none`'); Exit = 1; Error = 'Unmet immediate environment prerequisite requires Human Action Required: awaiting-environment' },
+        @{ Name = 'environment wait cannot auto-execute continuation'; Text = $modernBlocked.Replace('## Delta Since Last Handoff', ($continuationBlock + '## Delta Since Last Handoff')); Exit = 1; Error = 'Continuation Command is permitted only for executable continue' },
+        @{ Name = 'immediate environment prerequisite cannot remain executable'; Text = $validContinue + $envSectionPendingNeeded; Exit = 1; Error = 'Unmet immediate environment prerequisite requires continue/blocked' },
+        @{ Name = 'ready environment cannot claim wait'; Text = $modernBlocked.Replace('Readiness: `pending`', 'Readiness: `ready`'); Exit = 1; Error = 'awaiting-environment requires continue/blocked and an unmet immediate environment prerequisite' },
+        @{ Name = 'dispatch forbids continuation command'; Text = $originalHandoff.Replace('## Delta Since Last Handoff', ($continuationBlock + '## Delta Since Last Handoff')); Exit = 1; Error = 'Continuation Command is permitted only for executable continue' },
+        @{ Name = 'close forbids continuation command'; Text = $validClose.Replace('## Delta Since Last Handoff', ($continuationBlock + '## Delta Since Last Handoff')); Exit = 1; Error = 'Continuation Command is permitted only for executable continue' }
+    )
+    $closingHashBlock = $continuationBlock.Replace('### Continuation Command', '### Continuation Command ###')
+    foreach ($waitShape in @(
+        @{ Name = 'blocked'; Text = $modernBlocked },
+        @{ Name = 'owner wait'; Text = $modernOwnerWait },
+        @{ Name = 'dispatch'; Text = $originalHandoff },
+        @{ Name = 'close'; Text = $validClose }
+    )) {
+        $continuationCases += @{
+            Name = "closing hashes cannot bypass $($waitShape.Name) prohibition"
+            Text = $waitShape.Text.Replace('## Delta Since Last Handoff', ($closingHashBlock + '## Delta Since Last Handoff'))
+            Exit = 1
+            Error = 'Continuation Command is permitted only for executable continue'
+        }
+    }
+    $continuationCases += @{
+        Name = 'closing hashes cannot hide duplicate continuation'
+        Text = $modernContinue.Replace($continuationBlock, ($continuationBlock + $closingHashBlock))
+        Exit = 1
+        Error = 'Handoff must contain at most one Continuation Command'
+    }
+    $fence = [string][char]96 * 3
+    $continuationCases += @{
+        Name = 'fenced command example does not satisfy continuation'
+        Text = $modernContinue.Replace($continuationBlock, '') + "`n## Notes`n$($fence)markdown`n### Continuation Command`n$($fence)"
+        Exit = 1
+        Error = 'Executable continue with Human Action Required requires ### Continuation Command under Current Status'
+    }
+    $continuationCases += @{
+        Name = 'fenced human action example is not a live field'
+        Text = $validContinue.Replace('## Current Status', "$($fence)markdown`n- Human Action Required: ``invalid```n$fence`n`n## Current Status")
+        Exit = 0
+    }
+    foreach ($case in $continuationCases) {
+        Set-Content -Encoding UTF8 -LiteralPath $handoffCopy -Value $case.Text -NoNewline
+        $expected = if ($case.ContainsKey('Error')) { @($case.Error) } else { @() }
+        Invoke-ValidatorCase ('autonomous continuation ' + $case.Name) $currentTaskRelativePath $handoffRelativePath $case.Exit -ExpectedErrors $expected -ExpectNoWarnings:($case.Exit -eq 0)
+    }
+
     Set-Content -LiteralPath $handoffCopy -Value ($originalHandoff + $envSectionReadyNeeded) -NoNewline
     Invoke-ValidatorCase "agent dispatch allowed when prerequisite is ready" $currentTaskRelativePath $handoffRelativePath 0 -ExpectNoWarnings
 

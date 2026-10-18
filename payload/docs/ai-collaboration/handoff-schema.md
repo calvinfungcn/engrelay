@@ -318,7 +318,10 @@ Rules:
     Requires `## Owner Decision Brief` adhering to the 5-field schema and plain-language rules.
     The current AI role retains responsibility for all workflow and runtime artifacts.
 - For `continue`, omit Operator Command, keep the same responsible owner and
-  agent, and name the next local step under `Current Status`. Adjacent
+  role, and name the next local step under `Current Status`. An eligible
+  replacement session may assume the same responsibility after checking latest
+  authority and exclusive execution ownership; record the actual Current agent.
+  This does not replace a role dispatch or required independent review. Adjacent
   non-independent role work may remain in the same session. When waiting for a decision in the active
   session, use status `awaiting-owner-decision`; add `## Owner Decision Brief`
   with one recommendation (with reason), alternatives and consequences, the smallest exact
@@ -418,8 +421,8 @@ conceal another pending prerequisite. Each item has these five fields:
 
 - Readiness: `pending`
 - Needed before next action: `no`
-- Human action: Before page verification, start WebForms debugging in Visual Studio and keep IIS Express running; page verification needs http://localhost:3000/ reachable.
-- Confirmation and check: Reply `started` when ready; the current agent checks reachability before page verification. Record the actual result; a login page alone is not business acceptance.
+- Human action: None now. Later page verification depends on a running Visual Studio WebForms debug session with IIS Express.
+- Confirmation and check: Before page verification, the agent will check http://localhost:3000/ reachability and request preparation only if still needed. No action or reply is needed during offline implementation.
 - Work that can proceed: Code edits, build, and offline tests may continue; do not claim batch acceptance before page verification completes.
 ```
 
@@ -428,9 +431,16 @@ it never replaces Routing `Current status`. `Needed before next action` is
 exactly `yes` or `no`, relative to the first executable step of the proposed
 assignment or resumption. A prerequisite for a later required check is `no`
 until that check is next; do not use `no` to omit or conceal required checks.
-`Human action` names who should do what, why, and at what point in ordinary
-language. `Confirmation and check` gives the smallest human confirmation and
-the agent's readiness check; for `ready` it includes observed evidence.
+For an **Immediate Blocker** (`yes` with `pending`/`unknown`), `Human action`
+names who should do what, why, and where in ordinary language; `Confirmation
+and check` gives the smallest human confirmation and the agent's check.
+For a **Forward Notice** (`no`), both fields are neutral information only:
+describe the later dependency and the agent's future check point, explicitly
+state that no current human action or reply is needed, and never include an
+imperative instruction, copy-ready human action, or request such as "reply
+ready" (including translated equivalents). `Human action: none` is valid here.
+Do not append current human instructions elsewhere to defeat this distinction.
+For `ready`, record observed readiness evidence rather than a new reply request.
 `Work that can proceed` names safe unaffected work, or states that none can
 proceed. Repeat the notice in chat before dispatch so the Task Owner sees it.
 
@@ -443,7 +453,11 @@ An engineer who discovers this situation follows the same wait instead of
 routing routine setup back to Chief Designer. If resolution changes a business
 or design boundary, use the existing escalation or owner-decision route.
 Pure preparation does not use an Owner Decision Brief. Pending later-step
-preparation (`no`) allows safe offline dispatch and remains visible.
+preparation (`no`) allows safe offline continue/dispatch and remains visible as
+a neutral notice. Change it to `yes` and recheck when its dependent step is next;
+do not silently drop it or close before required checks have evidence.
+The human intervention summary is `none` for a forward notice and
+`awaiting-environment` for an unmet human-only immediate prerequisite.
 
 The runtime validator can check declared fields and routing consistency. It
 cannot prove that prerequisites were exhaustively identified, a notification
@@ -453,8 +467,10 @@ the responsible role and independent review must check the actual evidence.
 ## Actionable Human Instructions
 
 This is a required human communication rule, not a prose-parsing validation gate.
-Every blocked handoff or Environment Preparation notice must contain actionable
-instructions in the handoff itself; chat alone does not suffice.
+Every blocked handoff requiring human intervention must contain actionable
+instructions in the handoff itself; chat alone does not suffice. A Forward
+Notice is informational: the no-action rule above takes precedence, and no
+current instructions or reply request are attached to it.
 When asking the Task Owner/Operator to act, give a short notice in their language:
 where to act, what to do and why, and what small reply/result lets the agent
 continue. Use existing Human action, Confirmation and check, Blockers or chat;
@@ -753,6 +769,7 @@ Use this required core shape in `.ai/handoff.md`:
 ## Routing
 
 - Next action: `<dispatch|continue|close>`
+- Human Action Required: `<none|awaiting-decision|awaiting-environment>`
 - Current role: `<role>`
 - Current agent: `<agent or tool>`
 - Current status: `<operational status>`
@@ -791,6 +808,21 @@ omit it for compatibility; new records include it. This is a structural guard,
 not an authenticated audit log: the responsible role must reconcile the count
 against actual verdicts; the script cannot detect a fabricated lower count.
 
+`Human Action Required` is a summary of current human intervention, not a new
+action, status, authorization, or proof of readiness. New and normally updated
+file/response handoffs include it once in Routing:
+
+| Value | Meaning and consistency |
+| --- | --- |
+| `none` | No current human intervention; includes executable continue, agent dispatch, close, and operational waits requiring no human preparation |
+| `awaiting-decision` | Current status is `awaiting-owner-decision`; retain the Owner Decision Brief |
+| `awaiting-environment` | `continue` + `blocked`, with an unmet human-only prerequisite needed before the next action and a Resume condition |
+
+A later-only notice or a ready prerequisite cannot require environment action
+now. Old handoffs may omit this field without warning, migration or backfill;
+read their actual status, decisions and prerequisites instead. Never use
+`none` to override a real wait or the review circuit breaker.
+
 `Risk level` and `Design review round` are optional Routing metadata. Other
 state belongs in the sections below Routing rather than new routing fields.
 Optional manual-handoff metadata may also include:
@@ -809,6 +841,51 @@ warning. New close records must include the closure outcome;
 
 For `continue` or `close`, use `none` for fields that do not apply. For `continue`
 with status `awaiting-owner-decision`, the handoff must include `## Owner Decision Brief`.
+
+## Autonomous Continuation
+
+An active, capable agent must immediately carry out an authorized executable
+`continue` after checking latest task, batch, revision, evidence, review allowance
+and execution ownership. Choosing a local CLI terminal or IDE conversation is an
+agent execution detail within already authorized offline work, not a Task Owner
+decision. Do not ask which host to use, request another "continue" confirmation,
+or stop solely because a prior single-turn runner exited. Use available safe
+tools; a missing permission or actual capability is a concrete limit to report.
+Check an existing same-batch writer before taking over; do not duplicate writes,
+launch competing agents, or kill another process to manufacture ownership.
+
+At an executable `continue` boundary, new/updated handoffs include one compact
+subsection **inside Current Status** (not in Routing):
+
+````markdown
+### Continuation Command
+
+```text
+You are continuing as <current role> for Execution Batch <batch id>.
+Use EngRelay for this task; resume only the latest authorized continue.
+Read: AGENTS.md, .ai/current-task.md, .ai/handoff.md, <authoritative tasks and evidence>.
+Objective: <specific authorized next step>.
+Constraints: Check latest state and execution ownership; retain scope, risk, review count and independence; <task limits>.
+Output: <result evidence and handoff at the next real boundary>.
+Follow: docs/ai-collaboration/agent-prompts.md#<current-role-section>.
+```
+````
+
+It is an agent prompt, not a shell command or human preparation request. An
+already active agent executes the step directly; an operator or existing runner
+can use the block to start a replacement session without the preceding chat.
+Record actual Current agent on takeover; keep the responsible role, batch and
+cumulative Review round. A change of formal role, synthesis-agent transfer, or
+independent review still uses `dispatch` with its Operator Command.
+
+Omit the continuation block for `blocked`, `awaiting-owner-decision`, `dispatch`
+and `close`. Those conditions, exhausted review allowance and conflicting inputs
+take precedence over any stale command. Legacy executable continue without the
+block resumes from Current Status and authoritative task inputs when sufficient;
+missing new fields alone never requires owner approval. This protocol does not
+wake processes, schedule background work, or promise unattended cross-turn execution.
+
+## Dispatch Commands
 
 For `dispatch` to an AI role:
 Every next-role field is mandatory (non-`none`), status cannot be `awaiting-owner-decision`,
@@ -862,6 +939,7 @@ copyable structure for `dispatch`:
 ## Response Handoff
 
 - Next action: `dispatch`
+- Human Action Required: `<none|awaiting-decision>`
 - Current role: `<role>`
 - Current agent: `<agent or tool>`
 - Current status: `<operational status>`
@@ -877,7 +955,7 @@ copyable structure for `dispatch`:
 
 Recommended capability tier: C3
 
-<One paragraph of status prose for agent dispatch; omit this entire section and the capability line for human decision dispatch, continue, or close.>
+<Status prose. Keep the capability line only for agent dispatch. For executable continue use the Current Status / Continuation Command form above; omit the capability line for human decision dispatch, continue and close.>
 
 ## Operator Command
 
@@ -894,6 +972,9 @@ Follow: docs/ai-collaboration/agent-prompts.md#<role-section>.
 
 For `continue` or `close`, use the same `Response Handoff` fields with
 next-role values set to `none` and omit `Operator Command`. A `close` response
+sets Human Action Required to `none`; executable `continue` responses include
+the same Current Status / Continuation Command as file handoffs, while actual
+waits show the matching human-intervention summary and omit that block. A close response
 must explicitly say that no next role or command exists and include
 `Closure outcome: accepted|stopped|superseded` when closing. Ordinary `accepted`
 responses follow [Accepted closure validation](#accepted-closure-validation):
@@ -991,6 +1072,11 @@ deferred
   batch.
 - Using `close` for a blocked operational handoff; record the resume condition
   and use `continue` instead.
+- Turning a later-only environment notice into a current human reply request.
+- Asking the owner to choose a local execution host within authorized offline work,
+  or treating a runner's turn exit as an environment blocker.
+- Obeying a stale Continuation Command over the latest wait, closure, review
+  allowance, permission, or execution ownership; using continue for self-review.
 - Reporting ordinary `accepted` closure without matching final-input validation
   evidence recorded outside the validated handoff (see
   [Accepted closure validation](#accepted-closure-validation)).
