@@ -120,9 +120,17 @@ Every role action ends with exactly one decision:
   Ordinary `accepted` closure also follows
   [handoff-schema.md#accepted-closure-validation](handoff-schema.md#accepted-closure-validation).
 
+At each real boundary (dispatch, wait, planned interruption or close), the role
+permitted to write saves `.ai/handoff.md`, reads back its Routing and validates
+it with the expected state it decided
+([expected state validation](handoff-schema.md#expected-state-validation)). The
+final response reports whether it was persisted. Same-owner micro-steps do not.
+
 Read-only prohibits file writes unless named review or handoff outputs are
-explicitly authorized. Response-only consultation preserves live business
-state and reports findings in chat. For an actual handoff, if the task
+explicitly authorized. A formal dispatch lists those outputs and adds no `.ai/`
+write ban that is not sourced from a user, a higher-priority instruction or a
+tool limit ([General Rules](handoff-schema.md#general-rules)). Response-only
+consultation preserves live business state and reports findings in chat. For an actual handoff, if the task
 explicitly prohibits `.ai/` writes, a higher-priority instruction prohibits
 every file write, or tool permissions prevent the update, return complete
 Routing in the final response and include the copy-ready Operator Command for

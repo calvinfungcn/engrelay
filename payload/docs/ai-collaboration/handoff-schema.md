@@ -26,9 +26,24 @@ inventing accepted closure. No new routing action/status is introduced.
   owner-decision wait, operational interruption, or batch closure. Same-owner
   local steps do not require a manual dispatch or a new handoff for every
   micro-step; record a materially changed next step or evidence when needed.
+- At each such boundary, the role permitted to write saves the complete Action
+  State, reads back the saved Routing (batch, action, next role, cumulative
+  Review round, and State revision when present), and runs the structure
+  validator with the expected state it decided; see
+  [expected state validation](#expected-state-validation). The final response
+  states in one sentence whether the file was updated or why it was not.
+  Same-owner micro-steps need neither write-back nor a new check.
 - Read-only prohibits file writes unless the assignment explicitly authorizes
   named review or handoff outputs. Response-only consultation reports in chat
   without changing live business batch state.
+- A formal dispatch lists each writable output in its Operator Command and
+  Next output files: the review record, the review index, `.ai/handoff.md`, and
+  any other named artifact. Business code, tests and unrelated files stay
+  read-only unless they are named. A dispatcher must not add a `.ai/` write ban
+  only because a review is independent, generically read-only, or preferred that
+  way. Such a ban requires an explicit user or higher-priority instruction, or an
+  actual tool permission limit, and the command names that source. Under such a
+  limit use the response handoff fallback; it never overrides the limit.
 - Do not use `.ai/` as the final home for workspace-level review findings.
 - Do not invent alternate formal status values.
 - Apply README.md#minimal-authority-rule: OpenSpec and
@@ -402,7 +417,19 @@ Rules:
   update, do not silently omit the handoff. Put complete Routing in the final
   response, include Operator Command for `dispatch`, and state that the file
   handoff remains stale. This response handoff is a degraded fallback, not a
-  replacement for `.ai/handoff.md` when file writes are allowed.
+  replacement for `.ai/handoff.md` when file writes are allowed. Its
+  [source-matched narration](#source-matched-recovery) names the batch, the
+  source role and Agent, the prior `State revision` when one exists, the SHA256
+  of the live handoff bytes it was based on and the target `State revision`, or
+  states that the fingerprint is unavailable.
+- When a read-only subagent returns a valid same-batch result and the parent or
+  responsible Agent is still active and permitted to write the handoff, that
+  Agent checks the source, execution ownership and actual verdict, then saves,
+  reads back and validates the transfer before its own boundary ends. The
+  subagent remains read-only, the verdict is counted once, and the saved
+  attribution keeps the originating role. If no permitted writer is active, or
+  a higher-priority prohibition binds that writer too, keep the complete response
+  handoff and state that it is not persisted.
 
 ## Environment Preparation
 
@@ -684,7 +711,10 @@ retroactively.
 does not certify exit-code logs, command transcripts, input freshness, agent
 compliance, host loading, or business acceptance. Missing matching evidence may
 still yield exit 0 on structure; the responsible role must not treat that as
-ordinary verification success.
+ordinary verification success. Its optional expected-state parameters compare
+only the values the role supplies with the saved Routing; they add no
+authenticity or freshness proof. A structure-only exit 0 is not the expected-state
+check for an updated boundary.
 
 ## Capability tier guidance
 
@@ -842,6 +872,36 @@ warning. New close records must include the closure outcome;
 For `continue` or `close`, use `none` for fields that do not apply. For `continue`
 with status `awaiting-owner-decision`, the handoff must include `## Owner Decision Brief`.
 
+### Expected state validation
+
+`validate-runtime-state.ps1` accepts optional expectations: `-ExpectedBatchId`,
+`-ExpectedNextAction`, `-ExpectedNextRole`, `-ExpectedReviewRound` and
+`-ExpectedStateRevision`. They are compared only with the one real `## Routing`
+section, fence-aware. A missing or duplicate field never borrows a value from an
+example or another section.
+
+- Supply `-ExpectedBatchId` whenever any other expectation is supplied. An empty
+  value, an action other than `continue`, `dispatch` or `close`, a negative or
+  non-numeric review count, or a zero revision returns exit 1. An explicit
+  `0` for `-ExpectedReviewRound` is a valid expectation.
+- A mismatch names the field, the expected value and the saved value. Structural
+  errors are reported together with mismatches; a matching expectation never
+  excuses a structural violation.
+- Take expected values from the transfer the role has decided, never from the
+  file being checked. A new transfer increments `State revision` and records the
+  cumulative `Review round` after its verdict.
+- An updated boundary passes the decided batch, action, next role and cumulative
+  count, plus `-ExpectedStateRevision` when the handoff has a revision. A bare
+  structural exit 0 does not prove that these expectations were checked. Calls
+  without expectations keep their legacy meaning for existing callers and older
+  records.
+- The check is read-only and does not prove freshness, authenticity, reviewer
+  independence or acceptance. Report it as a structure and stated-value check only.
+
+```text
+powershell -NoProfile -ExecutionPolicy Bypass -File docs/ai-collaboration/scripts/validate-runtime-state.ps1 -ExpectedBatchId <batch-id> -ExpectedNextAction dispatch -ExpectedNextRole "Fix Engineer" -ExpectedReviewRound 2 -ExpectedStateRevision 5
+```
+
 ## Autonomous Continuation
 
 An active, capable agent must immediately carry out an authorized executable
@@ -889,7 +949,9 @@ wake processes, schedule background work, or promise unattended cross-turn execu
 
 For `dispatch` to an AI role:
 Every next-role field is mandatory (non-`none`), status cannot be `awaiting-owner-decision`,
-and the handoff must contain `## Operator Command`:
+and the handoff must contain `## Operator Command`. The command lists each writable
+handoff output by name (see General Rules). If it prohibits `.ai/` writes for a named
+source, it also states the response handoff fallback for that role:
 
 ````markdown
 ## Operator Command
@@ -983,6 +1045,18 @@ claim a new ordinary acceptance from stale file checks alone. The next
 write-capable role must persist the response handoff before treating
 `.ai/handoff.md` as the live Action State.
 
+When the same role may write a formal review record and index but not
+`.ai/handoff.md`, keep one complete copy of the response handoff inside that
+review record's existing `Next Actions` section. Wrap it in an outer fence longer
+than any fence inside it, so the copy can be extracted without rewriting. Add the
+source batch, source role, source Agent, work producer Agent, the actual verdict,
+the cumulative Review round, the prior `State revision` (if any), the SHA256 of
+the live handoff bytes it was based on, and the target `State revision`; these
+fields are the matching evidence for [source-matched recovery](#source-matched-recovery). The index only
+links the record. Do not add a new section, a pending file or a template field.
+A role without a change ID or without write permission for those outputs stays
+with the response-only fallback.
+
 When strict read-only also prohibits a formal or local review artifact, the
 findings in the final response are the only review evidence. Report the full
 finding set before `Response Handoff`. For `dispatch`, embed every assigned
@@ -1023,6 +1097,94 @@ fixed-not-verified
 verified
 deferred
 ```
+
+## Source-matched recovery
+
+Use this when the live `.ai/handoff.md` still routes to a superseded step, while
+a completed review record, response handoff or subagent result for the same
+batch carries a newer transfer. This is a targeted check of the artifacts named
+by the review index and the current task. It does not scan the full history and
+does not choose the newest file by time or number.
+
+A matching Next action, Next role and Review round is not evidence that a
+transfer was applied: a transfer may change only the revision, the command or
+the required inputs. Decide with the fingerprint and `State revision`
+correspondence below, in this order.
+
+Each candidate keeps its narration beside the container: source batch, source
+role, source Agent, work producer Agent, verdict (or `none`), cumulative Review
+round, prior `State revision`, prior live SHA256, and target `State revision`.
+This is narration in the existing record, not a runtime field.
+
+1. **Candidate.** The current task names the batch and the review index links
+   one or more records with a recovery container. A candidate whose source batch
+   differs from the current task's Execution Batch ID is rejected and reported,
+   and it never receives a write. Two or more same-batch candidates are a
+   conflict.
+2. **Attribution.** Keep the originating role, Agent, verdict, cumulative Review
+   round, scope and commands unchanged. Record the source role separately from
+   the restoring role. A candidate missing any attribution item stops here and
+   names the missing item.
+3. **Protections first.** A candidate never overrides a closed live batch (it is
+   not reopened) or a real wait (`blocked` or `awaiting-owner-decision`). A
+   candidate whose cumulative Review round is 3 or more and that routes to
+   another agent dispatch is protected unless its own complete handoff carries
+   one valid, same-batch `review-budget-extension` line in the Task Owner
+   decision field with `from <= N < through`, where N is that candidate's Review
+   round (README.md#review-round-circuit-breaker). A missing, malformed,
+   duplicate-key, unknown-key, cross-batch, below-`from` or at-`through`
+   authorization grants no capacity. The live file's older authorization does
+   not authorize a candidate that omits it. Each protected case keeps the live
+   state and names the existing route: close, resume condition or Task Owner
+   decision. A candidate protected by none of these continues to step 4.
+4. **Compare fingerprint and revision.**
+   - Live SHA256 equals the candidate's prior SHA256 and live `State revision`
+     equals its prior revision: **pending**. The candidate is the unapplied
+     transfer, even when Next action, Next role and Review round are unchanged.
+   - Live `State revision` is above the target: **advanced**. A newer state
+     exists; do not publish the candidate.
+   - Live `State revision` equals the target and the live **Routing section**
+     and **Operator Command section** equal the candidate's, after line-ending
+     normalization: **applied**. The Routing section carries the Next action,
+     Next role, Review round, Current role, Current agent, Current status and
+     Next input files; the Operator Command section carries the command text.
+     Do not republish, recount or rerun its command. Matching Next action, Next
+     role and Review round alone never proves applied.
+   - Live `State revision` equals the target but either section differs (a
+     different route, attribution, required input or command): **conflict**.
+     Keep the live state and name the differing section; never call it applied
+     or overwrite it.
+   - Any other combination is a **conflict**: the live bytes differ from the
+     recorded prior while the revision has not reached the target. Keep the
+     valid live state and name the conflicting artifacts.
+   - Legacy records without a fingerprint are accepted only when they name the
+     same batch, the same prior Review round and the routing that the live file
+     still shows, and they state that the original handoff was not updated.
+     Otherwise report the missing evidence and do not treat the old file as
+     updated. A byte change, newline conversion or unavailable fingerprint is
+     never forced.
+5. **Authority.** Only a **pending** candidate may be written, and only by a
+   restoring Agent permitted to write the handoff. Without that permission, keep
+   the complete candidate as a response handoff and state that it was not
+   persisted. Persisting copies the source decision; it is not a new verdict.
+6. **Independence.** A restoring Agent that produced the work under review may
+   publish a reviewer dispatch, but it must not execute that reviewer role. It
+   presents the Operator Command for the correct recipient instead. Restoring
+   never makes the restoring Agent the reviewer of its own work.
+7. **Re-check and write.** Re-read the live bytes immediately before writing. A
+   changed hash is a conflict, and nothing is overwritten. Write the candidate's
+   complete handoff, read back the saved bytes and compare them with the
+   candidate. A failed write is reported as not persisted. There is no atomic
+   compare-and-swap.
+8. **Then apply the existing gates.** Closed batches, real waits, the review
+   allowance, role permissions and reviewer independence still decide the next
+   step. After a successful read-back, run
+   [expected state validation](#expected-state-validation) with the decided
+   values from the candidate's route: batch, Next action, Next role, Review round
+   and target `State revision`. Never take those values from the stale file.
+
+Older records that lack the new narration are not backfilled. Closed batches and
+exhausted review allowances are not reopened by a candidate.
 
 ## Source Of Truth Rules
 

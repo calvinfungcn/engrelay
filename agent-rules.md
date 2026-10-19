@@ -128,8 +128,10 @@ not the capability methods or the active workflow's requirement/review contracts
 - Formal root OpenSpec reviews use docs/reviews/README.md, fresh round files and
   index.md. Preserve old artifacts; findings are open, fixed-not-verified,
   verified or deferred. Verified requires fresh evidence.
-- Read-only means no writes unless specific artifacts were authorized.
-  Response-only consultation stays in chat and does not create runtime state.
+- Read-only means no writes unless specific artifacts were authorized. A formal
+  dispatch names its writable handoff outputs and does not add an unsourced
+  `.ai/` write ban. Response-only consultation stays in chat and does not create
+  runtime state.
 - Selected local CE capabilities follow docs/ai-collaboration/compound-engineering.md:
   ce-code-review, ce-debug, ce-simplify-code and ce-compound. Read canonical
   SKILL.md directly if no host discovery copy is installed.

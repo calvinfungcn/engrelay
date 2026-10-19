@@ -83,6 +83,23 @@ does not wake stopped processes. See
   Human decision dispatch, `continue`, and `close` omit the line.
 - Owner decisions use `awaiting-owner-decision` and an Owner Decision Brief;
   silence is not approval.
+- Each dispatch names its writable handoff outputs. A read-only code review does
+  not by itself forbid `.ai/` updates; a real user, higher-priority instruction
+  or tool limit does, and then the final response carries the complete handoff.
+- At each real boundary the writing agent saves `.ai/handoff.md`, reads it back,
+  and runs `validate-runtime-state.ps1` with the batch, action, next role and
+  Review round it decided (`-ExpectedBatchId`, `-ExpectedNextAction`,
+  `-ExpectedNextRole`, `-ExpectedReviewRound`, and `-ExpectedStateRevision` when a
+  revision exists). A pass confirms the stated values and structure only.
+- A read-only subagent's result is saved by the still-active, permitted agent that
+  delegated it, at the same boundary. With no permitted agent, the response
+  handoff says it is not persisted.
+- When a completed same-batch review record is newer than the live handoff,
+  `ai-collab-continue` first restores that transfer after matching its fingerprint
+  and revision; see [source-matched recovery](handoff-schema.md#source-matched-recovery).
+  It never recounts a verdict or replays a command.
+- These checks do not wake processes, authenticate the saved log, or certify
+  acceptance.
 - Medium-risk batches need independent code review; see
   [review limits](README.md#review-round-circuit-breaker).
 

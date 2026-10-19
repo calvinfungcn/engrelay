@@ -2,6 +2,22 @@
 
 [English](CHANGELOG.md)
 
+## 1.9.3 — 2026-10-19
+
+- 明确交接落盘：正式派发列出可写交接产物，不擅自增加无来源的 `.ai/` 写入禁令；
+  真实边界会保存、回读并校验；只读子代理结果由仍活跃且获准写入的 Agent 落盘，
+  若无此类 Agent，则保留完整响应交接。
+- 对同批次审查或响应交接比 live 文件更新的情况，新增按来源匹配的恢复：依据指纹与
+  修订号恢复，不重新计数或重放审查结论。
+- `validate-runtime-state.ps1` 新增可选预期参数（`ExpectedBatchId`、`ExpectedNextAction`、
+  `ExpectedNextRole`、`ExpectedReviewRound`、`ExpectedStateRevision`）。不传这些参数的
+  既有调用保持原行为；新版边界须核对已决定的值。
+- 这些变化只增加结构与所给值的检查及文档化流程，不唤醒进程、不认证日志、不证明宿主
+  遵从，也不构成业务验收。
+- Windows PowerShell 5.1 与 PowerShell 7 均通过完整校验套件 262 项、预期状态检查
+  33 项和恢复协议演练 43 项。旧无指纹恢复分支仅作静态审查；这些检查不证明真实
+  Agent 或宿主遵从。
+
 ## 1.9.2 — 2026-10-18
 
 - 修复自主接续交接：远期环境预告保持中性，不要求当前人工操作；`Human Action Required`

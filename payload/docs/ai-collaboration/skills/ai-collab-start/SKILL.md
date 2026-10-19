@@ -38,7 +38,9 @@ Use project-relative paths only:
 1. Same-work check: if the goal belongs to an existing active change or unfinished
    batch, reuse its identity, acceptance and cumulative review count. Do not reset
    the count and do not create a duplicate batch. Continue it through
-   `ai-collab-continue`.
+   `ai-collab-continue`, which first applies its source-matched recovery to a
+   same-batch completed review or response handoff that the live file predates
+   (`docs/ai-collaboration/handoff-schema.md#source-matched-recovery`).
 2. Unrelated unfinished batch: keep its live `.ai` inputs untouched. Explain the
    conflict and request the smallest owner choice. Replacement needs explicit owner
    authorization. Response-only discussion may proceed without writes.

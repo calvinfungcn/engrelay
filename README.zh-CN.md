@@ -8,10 +8,11 @@ EngRelay 取自 Engineering + Relay，意为工程接力。它为已有代码库
 Agent 提供角色提示词、任务和交接模板、按风险引入的独立审查，以及检查交付
 证据的工具。
 
-**版本 1.9.2** · [MIT 许可证](LICENSE) · [下载完整包](https://github.com/calvinfungcn/engrelay/releases/tag/v1.9.2)
+**版本 1.9.3** · [MIT 许可证](LICENSE) · [下载完整包](https://github.com/calvinfungcn/engrelay/releases/tag/v1.9.3)
 
-本版本的自主接续协议在 Windows PowerShell 5.1 和 PowerShell 7 上通过各 229 项
-结构回归检查。检查覆盖协议结构与兼容性；真实项目部署、宿主加载与业务验收仍需分别验证。
+本版本在 Windows PowerShell 5.1 和 PowerShell 7 上均通过完整校验套件 262 项、预期状态
+检查 33 项和恢复协议演练 43 项。旧无指纹恢复分支仅作静态审查；这些检查不证明真实
+Agent 或宿主遵从。
 
 ## 提供哪些功能
 
@@ -52,6 +53,10 @@ Agent 提供角色提示词、任务和交接模板、按风险引入的独立�
   [能力档位说明](payload/docs/ai-collaboration/handoff-schema.md#capability-tier-guidance)。
   它不是阻塞条件，也不代表模型资格认证。
 - 检查覆盖实际受影响的行为。结构检查成功不代表业务正确或宿主接入有效。
+- 真实交接边界会落盘、回读，并按已决定的批次、动作、下一角色和审查计数做预期核对。
+  只读审查结果由仍活跃的可写 Agent 落盘；若没有获准写入者，则保留完整响应交接。
+  恢复时按指纹匹配，不重新计数审查结论。这些检查不唤醒进程，也不证明真实性；
+  详见[预期状态校验](payload/docs/ai-collaboration/handoff-schema.md#expected-state-validation)。
 - 普通 `accepted` 关闭须对**最终**交接输入完成结构校验，并将命令、退出码、
   诊断与输入对应关系记录在被检交接之外；详见
   [关闭校验依据](payload/docs/ai-collaboration/handoff-schema.md#accepted-closure-validation)。
@@ -67,7 +72,7 @@ Agent 提供角色提示词、任务和交接模板、按风险引入的独立�
 使用可信完整包，放在业务项目以外的独立目录。先备份目标项目规则，读取其
 现有 Agent 指令。新项目示例：
 
-从发行页面下载 `engrelay-1.9.2.zip`，解压后进入 `engrelay-1.9.2` 目录执行命令。
+从发行页面下载 `engrelay-1.9.3.zip`，解压后进入 `engrelay-1.9.3` 目录执行命令。
 保留完整包原样；额外工具文件或字节修改会使它与清单不匹配。仓库源码仅在
 实际文件集合和字节与 `snapshot.json` 完全一致时，也可作为安装源。
 

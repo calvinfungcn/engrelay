@@ -73,6 +73,15 @@ A prior single-turn CLI exit is not a blocked environment. Check other same-batc
 writers before takeover; do not launch competing execution or kill processes.
 This rule neither wakes a stopped process nor bypasses a real wait or tool limit.
 Read-only and prohibited-.ai fallbacks follow handoff-schema.md#response-handoff-fallback.
+A formal dispatch names each writable handoff output and never adds an unsourced
+`.ai/` write ban for independence or generic read-only wording. A subagent result
+that is read-only is saved by the active, permitted writing Agent at the same
+boundary, with its source attribution, read back and checked with the expected
+state; with no permitted writer, the complete response handoff is delivered and
+its unpersisted status is stated. Expected values come from the decided transfer,
+never from the stale file. Source-matched recovery and the new-version boundary
+rule are in handoff-schema.md#source-matched-recovery and
+handoff-schema.md#expected-state-validation.
 In the final response, always state the selected Next Action; for close, state that
 no next role or Operator Command exists.
 For agent `dispatch`, add one advisory line `Recommended capability tier: C1`
@@ -737,9 +746,11 @@ Output:
   `Closure outcome: accepted` after self-verification.
 - For risk M/H review, use Next action `dispatch` and create `.ai/handoff.md`
   with a copy-ready Operator Command for Code Reviewer.
-- In that Code Reviewer command, either define read-only as no implementation
-  code or test edits while allowing required artifacts, or explicitly select
-  strict read-only mode and require complete Routing plus the Operator Command
+- In that Code Reviewer command, keep business code and tests read-only and
+  list each writable handoff output by name (the review record, the review index
+  and `.ai/handoff.md`). Do not add a `.ai/` write ban unless a user or
+  higher-priority instruction or an actual tool permission requires it; when it
+  does, name that source and require complete Routing plus the Operator Command
   in the final response.
 - If a blocker requires business outcome, priority, scope change, production
   or real-user approval, or explicit risk acceptance, use `continue` (for a
@@ -786,6 +797,9 @@ Required reading:
 Rules:
 - Read-only prohibits file writes unless the assignment explicitly authorizes
   named review or handoff outputs. Response-only reviews preserve live .ai state.
+  Your review record, the review index and `.ai/handoff.md` are the named outputs
+  unless a higher-priority instruction or tool permission limit prohibits them;
+  do not invent a `.ai/` ban from the independence of the review.
 - Review only the current task scope.
 - Judge against authorized current-task/OpenSpec acceptance and evidenced
   necessary constraints. Treat implemented unauthorized scope or an unsupported

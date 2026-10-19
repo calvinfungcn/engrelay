@@ -2,6 +2,27 @@
 
 [Simplified Chinese](CHANGELOG.zh-CN.md)
 
+## 1.9.3 — 2026-10-19
+
+- Makes handoff persistence explicit: formal dispatches name writable handoff
+  outputs and add no unsourced `.ai/` write ban; real boundaries are saved, read
+  back and validated; a read-only subagent result is persisted by the active
+  permitted writer, or kept as a complete response handoff when none remains.
+- Adds source-matched recovery for a same-batch review or response handoff that
+  the live file predates, by fingerprint and revision, without recounting or
+  replaying a verdict.
+- Adds optional `validate-runtime-state.ps1` expectation parameters
+  (`ExpectedBatchId`, `ExpectedNextAction`, `ExpectedNextRole`,
+  `ExpectedReviewRound`, `ExpectedStateRevision`). Existing calls without them keep
+  their behavior; updated boundaries must pass the decided values.
+- These changes add structure and stated-value checks and documented procedures.
+  They do not wake processes, authenticate logs, prove host compliance, or certify
+  business acceptance.
+- On each of Windows PowerShell 5.1 and PowerShell 7, the full validator suite
+  passed 262 cases, expected-state checks passed 33 cases, and recovery protocol
+  rehearsals passed 43 cases. The legacy no-fingerprint recovery branch received
+  static review only; these checks do not establish real-agent or host adherence.
+
 ## 1.9.2 — 2026-10-18
 
 - Fixes autonomous continuation handoffs: later environment notices are neutral

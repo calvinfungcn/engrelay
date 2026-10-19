@@ -9,12 +9,12 @@ working in existing repositories. It provides role prompts, task and handoff
 templates, independent reviews based on risk, and tools for checking the evidence
 used to call work complete.
 
-**Version 1.9.2** · [MIT License](LICENSE) · [Download the complete package](https://github.com/calvinfungcn/engrelay/releases/tag/v1.9.2)
+**Version 1.9.3** · [MIT License](LICENSE) · [Download the complete package](https://github.com/calvinfungcn/engrelay/releases/tag/v1.9.3)
 
-This release's autonomous continuation protocol passed 229 structural regression
-cases on Windows PowerShell 5.1 and PowerShell 7. The checks cover protocol
-structure and compatibility; real-project deployment, host loading, and business
-acceptance are separate checks.
+On both Windows PowerShell 5.1 and PowerShell 7, this release passed 262 full
+validator cases, 33 expected-state cases, and 43 recovery protocol rehearsals.
+The legacy no-fingerprint recovery branch received static review only; these
+checks do not establish real-agent or host adherence.
 
 ## What you get
 
@@ -62,6 +62,12 @@ for entry selection and handoffs.
   the next work item; see
   [capability tier guidance](payload/docs/ai-collaboration/handoff-schema.md#capability-tier-guidance).
   It is not a blocker or model certification.
+- A real handoff boundary is saved, read back and checked against the expected
+  batch, action, next role and Review round decided for it. A read-only review
+  result is saved by the active writing agent, or kept as a complete response
+  handoff when no permitted writer remains. Recovery matches fingerprints and
+  never recounts a verdict. These checks do not wake processes or prove
+  authenticity; see [expected state validation](payload/docs/ai-collaboration/handoff-schema.md#expected-state-validation).
 - Match verification to the affected behavior. A successful structure check
   does not prove correct business behavior or a working host integration.
 - Ordinary `accepted` closure requires a successful structure check on the
@@ -82,8 +88,8 @@ See the [maintained role contracts](payload/docs/ai-collaboration/README.md).
 Use a trusted complete package in its own directory. Back up the target project's
 rules and read its existing agent instructions. For a new project:
 
-Download `engrelay-1.9.2.zip` from the release and extract it. Run commands from
-the extracted `engrelay-1.9.2` directory. Keep that complete package unchanged;
+Download `engrelay-1.9.3.zip` from the release and extract it. Run commands from
+the extracted `engrelay-1.9.3` directory. Keep that complete package unchanged;
 extra tool files or edited bytes make it differ from its inventory. The repository
 source can also be used when its file set and bytes exactly match `snapshot.json`.
 

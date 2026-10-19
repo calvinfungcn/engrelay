@@ -828,13 +828,18 @@ decision dispatch, `continue`, and `close`. The tier is a manual model-selection
 hint only; it is not a machine field, qualification gate, or blocker.
 
 Read-only means no file writes unless the assignment explicitly authorizes
-named review or handoff outputs. Response-only consultation preserves the live
-business batch state and reports findings in chat. For an actual role handoff,
-any generated prompt that
-prohibits `.ai/handoff.md` or every file write must require the response
-handoff fallback: state complete Routing and, for `dispatch`, include the
-copy-ready Operator Command in the final response. The response must also say
-that `.ai/handoff.md` remains stale and must be persisted before relying on it.
+named review or handoff outputs. A formal dispatch lists its writable outputs
+(review record, review index and `.ai/handoff.md`) and does not add an unsourced
+`.ai/` write ban. Response-only consultation preserves the live business batch
+state and reports findings in chat. For an actual role handoff, any generated
+prompt that prohibits `.ai/handoff.md` or every file write must require the
+response handoff fallback: state complete Routing and, for `dispatch`, include
+the copy-ready Operator Command in the final response. The response must also
+say that `.ai/handoff.md` remains stale and must be persisted before relying on
+it. At each real boundary the permitted writer saves, reads back and validates
+the handoff with the expected state it decided; see
+[expected state validation](handoff-schema.md#expected-state-validation) and
+[source-matched recovery](handoff-schema.md#source-matched-recovery).
 When review artifacts are also forbidden, keep the complete findings in the
 final response and embed every assigned finding's ID, evidence location, and
 required outcome in the Operator Command so it remains self-contained after

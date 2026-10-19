@@ -92,8 +92,11 @@ The assigned agent must produce:
 - a copy-ready Operator Command in `.ai/handoff.md` for agent `dispatch`;
   for human decision `dispatch`, omit Operator Command and include `## Owner Decision Brief`
 - a final response stating the selected Next Action (for `close`, state that no next role or command exists)
-- when read-only prohibits `.ai/` writes, response Routing and an Operator Command
-  only for agent dispatch; human dispatch uses Owner Decision Brief instead
+- list each writable handoff output by name (review record, review index and
+  `.ai/handoff.md`); add no `.ai/` write ban unless a user, higher-priority
+  instruction or tool limit requires it. Where such a limit prohibits `.ai/` writes,
+  response Routing and an Operator Command only for agent dispatch; human dispatch
+  uses Owner Decision Brief instead
   (see docs/ai-collaboration/handoff-schema.md#response-handoff-fallback)
 - `.ai/round-XX-result.md`, only if implementation or fix work changes code, tests, or runtime configuration
 - `docs/reviews/<change-id>/YYYY-MM-DD-round-##.md` and updated `index.md`, only if this is workspace-level review

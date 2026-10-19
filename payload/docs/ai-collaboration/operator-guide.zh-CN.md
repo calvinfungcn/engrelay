@@ -68,6 +68,19 @@
   [handoff-schema.md#capability-tier-guidance](handoff-schema.md#capability-tier-guidance)。
   人工决定派发、`continue` 与 `close` 省略该行。
 - 负责人决定使用 `awaiting-owner-decision` 与 Owner Decision Brief；沉默不构成批准。
+- 每次派发都明确列出可写的交接产物。仅因审查独立或只读代码，不会自动禁止 `.ai/`
+  更新；真实的用户、上位指令或工具限制才会禁止，此时回复须附完整交接。
+- 真实边界上，写入的 Agent 保存 `.ai/handoff.md`、回读，并用
+  `validate-runtime-state.ps1` 按其已决定的批次、动作、下一角色和审查计数核对
+  （`-ExpectedBatchId`、`-ExpectedNextAction`、`-ExpectedNextRole`、
+  `-ExpectedReviewRound`；存在修订号时加 `-ExpectedStateRevision`）。通过只说明
+  所给值与结构一致。
+- 只读子代理的结果，由仍活跃且获准写入的委派 Agent 在同一边界落盘。没有可写者时，
+  回复中的完整交接须说明尚未落盘。
+- 若同批次审查记录比 live 交接更新，`ai-collab-continue` 先按指纹与修订号恢复该
+  转移（见[来源匹配恢复](handoff-schema.md#source-matched-recovery)），不重新计数
+  审查结论，也不重放命令。
+- 这些检查不会唤醒进程、不认证已保存的日志，也不构成验收。
 - 中风险批次需独立代码审查；见 [审查上限](README.md#review-round-circuit-breaker)。
 
 正式审查轮次与结果索引见 `docs/reviews/`（若已记录）。

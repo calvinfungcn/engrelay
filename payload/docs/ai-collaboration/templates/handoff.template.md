@@ -163,7 +163,10 @@ Follow: docs/ai-collaboration/agent-prompts.md#<current-role-section>.
 ## Operator Command
 
 <!-- Required for agent `dispatch`; omit this section for `continue`, `close`, or human decision `dispatch`. -->
-<!-- Read-only permits artifact writes only when explicitly authorized. -->
+<!-- Read-only permits artifact writes only when explicitly authorized. The command names
+     each writable output; a .ai/ write ban needs a user, higher-priority or tool-limit source.
+     Validate the saved file with the expected batch, action, next role and Review round
+     decided for this transfer (and State revision when present), not values copied from it. -->
 
 ```text
 You are the <next role> for Execution Batch <batch id>.

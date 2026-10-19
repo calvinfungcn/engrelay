@@ -38,7 +38,10 @@ Do not read a full clarification transcript or unrelated batches by default.
 1. Task Intake: check whether the requested work already has an active batch or
    change. Reuse that identity. If an unfinished, unrelated batch is live, do not
    overwrite it; explain the conflict and ask for the smallest owner choice, or
-   discuss in the reply only. This explicit entry uses the same conditional
+   discuss in the reply only. A same-batch superseded route is restored only through
+   `ai-collab-continue`'s source-matched recovery
+   (`docs/ai-collaboration/handoff-schema.md#source-matched-recovery`), never by
+   this entry's own dialogue. This explicit entry uses the same conditional
    Requirements Analyst contract as `ai-collab-start`; prefer `ai-collab-start`
    for a general new task unless the owner explicitly wants a requirements-only
    dialogue.

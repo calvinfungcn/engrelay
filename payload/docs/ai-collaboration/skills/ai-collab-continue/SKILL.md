@@ -38,6 +38,14 @@ Use project-relative paths only:
 1. Compare the request with the latest state: change ID, Execution Batch ID, State
    revision, Review round, current role, current agent and status. A delayed or
    duplicate message is checked against that state before any action.
+   If the live handoff routes to a step already superseded by a completed
+   same-batch review record or response handoff named by the review index (for
+   example, a verdict is counted while the live file still dispatches that review),
+   first apply `handoff-schema.md#source-matched-recovery`: match the candidate's
+   prior fingerprint and revision, stop on any conflict, persist only if this Agent
+   may write the handoff, read back, and then follow the restored route. An equal
+   Next action, Next role and Review round alone do not show the transfer was
+   applied. Never recount, replay or reopen a batch from a candidate alone.
 2. Resolve actual waits and limits before executing any command:
    - `close`: report the actual closure outcome and unfinished scope; never reopen
      the batch or replay its dispatch. Necessary new repair uses ai-collab-start.
@@ -81,7 +89,9 @@ Use project-relative paths only:
 
 - Keep full Operator Commands and Owner Decision Briefs intact when you copy or
   update them.
-- Update `.ai/handoff.md` only at a real boundary using the canonical schema.
+- Update `.ai/handoff.md` only at a real boundary using the canonical schema, then
+  read back its Routing and validate it with the expected batch, action, next role
+  and Review round decided for that boundary (`handoff-schema.md#expected-state-validation`).
   Include Human Action Required in new/updated handoffs; for executable continue
   include its Continuation Command, and omit it on actual waits/dispatch/close.
   A forward notice needs no current human action/reply. This entry does not

@@ -19,17 +19,32 @@ function Invoke-ValidatorCase {
         [int]$ExpectedExitCode,
         [string[]]$ExpectedWarnings = @(),
         [string[]]$ExpectedErrors = @(),
-        [switch]$ExpectNoWarnings
+        [switch]$ExpectNoWarnings,
+        [string[]]$ExpectedOutputs = @(),
+        [string[]]$UnexpectedOutputs = @(),
+        [string[]]$ValidatorArguments = @()
     )
 
     if ($CaseFilter.Count -gt 0 -and -not @($CaseFilter | Where-Object { $Name -like $_ }).Count) {
         return
     }
 
+    # Windows PowerShell 5.1 drops an empty-string element of a splatted native
+    # argument list, so an explicit '' expectation would arrive unbound. The
+    # quoted token '""' is the 5.1 spelling of an empty argument; PowerShell 7
+    # keeps '' intact and would see '""' literally, so the mapping is 5.1-only.
+    $nativeValidatorArguments = @(foreach ($validatorArgument in $ValidatorArguments) {
+        if ($validatorArgument -eq '' -and $PSVersionTable.PSVersion.Major -lt 6) {
+            '""'
+        } else {
+            $validatorArgument
+        }
+    })
     $output = & $powershell `
         -NoProfile `
         -ExecutionPolicy Bypass `
         -File $validator `
+        @nativeValidatorArguments `
         -WorkspaceRoot $tempRoot `
         -CurrentTaskPath $CurrentTaskRelativePath `
         -HandoffPath $HandoffRelativePath 2>&1
@@ -62,6 +77,24 @@ function Invoke-ValidatorCase {
         if (-not ($outputText -match [regex]::Escape($expectedError))) {
             throw (
                 "Case '$Name' expected error matching '$expectedError' but got:`n" +
+                $outputText
+            )
+        }
+    }
+
+    foreach ($expectedOutput in $ExpectedOutputs) {
+        if (-not ($outputText -match [regex]::Escape($expectedOutput))) {
+            throw (
+                "Case '$Name' expected output matching '$expectedOutput' but got:`n" +
+                $outputText
+            )
+        }
+    }
+
+    foreach ($unexpectedOutput in $UnexpectedOutputs) {
+        if ($outputText -match [regex]::Escape($unexpectedOutput)) {
+            throw (
+                "Case '$Name' expected no output matching '$unexpectedOutput' but got:`n" +
                 $outputText
             )
         }
@@ -2113,6 +2146,126 @@ Follow: docs/ai-collaboration/agent-prompts.md#implementation-engineer.
         -CurrentTaskRelativePath $currentTaskRelativePath `
         -HandoffRelativePath $handoffRelativePath `
         -ExpectedExitCode 1
+    # Expected-state cases (task 3.1). Failing cases must match their specific
+    # expectation diagnostic; an unknown-parameter exit 1 never satisfies them.
+    Set-Content -LiteralPath $currentTaskCopy -Value $originalCurrentTask -NoNewline
+    $stateRevisionLine = '- State revision: `4`'
+    $batchLine = '- Execution Batch ID: `validator-mapped-items`'
+    $routingRound0 = '- Review round: `0`'
+    $expectedRouting = $routingRound0 + "`n" + $batchLine + "`n" + $stateRevisionLine
+    $expectedBaseHandoff = $originalHandoff.Replace($routingRound0, $expectedRouting)
+    $expectedContinueHandoff = Convert-ToNonDispatchHandoff -Handoff $expectedBaseHandoff -Action 'continue'
+    $fenceMarker = [string][char]96 * 3
+    $expectedFullMatch = @(
+        '-ExpectedBatchId', 'validator-mapped-items',
+        '-ExpectedNextAction', 'dispatch',
+        '-ExpectedNextRole', 'Code Reviewer',
+        '-ExpectedReviewRound', '0',
+        '-ExpectedStateRevision', '4'
+    )
+    $expectedMatchOutput = 'Supplied expectations match Routing'
+    $missingRoundHandoff = $expectedBaseHandoff.Replace($routingRound0 + "`n", '').Replace(
+        '## Delta Since Last Handoff',
+        ($fenceMarker + "markdown`n" + $routingRound0 + "`n" + $fenceMarker + "`n`n## Delta Since Last Handoff")
+    )
+    $missingRevisionHandoff = $expectedBaseHandoff.Replace("`n" + $stateRevisionLine, '').Replace(
+        '## Delta Since Last Handoff',
+        ($fenceMarker + "markdown`n## Routing`n" + $stateRevisionLine + "`n" + $fenceMarker + "`n`n## Delta Since Last Handoff")
+    )
+
+    $expectedStateCases = @(
+        @{ Name = 'full dispatch match passes'; Text = $expectedBaseHandoff; Arguments = $expectedFullMatch; Exit = 0; Outputs = @($expectedMatchOutput) },
+        @{ Name = 'batch-only match passes'; Text = $expectedBaseHandoff; Arguments = @('-ExpectedBatchId', 'validator-mapped-items'); Exit = 0; Outputs = @($expectedMatchOutput) },
+        @{ Name = 'explicit zero review round matches'; Text = $expectedBaseHandoff; Arguments = @('-ExpectedBatchId', 'validator-mapped-items', '-ExpectedReviewRound', '0'); Exit = 0; Outputs = @($expectedMatchOutput) },
+        @{ Name = 'leading zero review round normalizes'; Text = $expectedBaseHandoff; Arguments = @('-ExpectedBatchId', 'validator-mapped-items', '-ExpectedReviewRound', '00'); Exit = 0; Outputs = @($expectedMatchOutput) },
+        @{ Name = 'continue with none next role matches'; Text = $expectedContinueHandoff; Arguments = @('-ExpectedBatchId', 'validator-mapped-items', '-ExpectedNextAction', 'continue', '-ExpectedNextRole', 'none', '-ExpectedReviewRound', '0', '-ExpectedStateRevision', '4'); Exit = 0; Outputs = @($expectedMatchOutput) },
+        @{ Name = 'legacy invocation without expectations stays exit zero'; Text = $expectedBaseHandoff; Arguments = @(); Exit = 0; Unexpected = @('Supplied expectations') },
+        @{ Name = 'stale state revision fails'; Text = $expectedBaseHandoff; Arguments = @('-ExpectedBatchId', 'validator-mapped-items', '-ExpectedStateRevision', '5'); Exit = 1; Errors = @("Expected State revision mismatch: expected '5' but Routing has '4'") },
+        @{ Name = 'stale review round fails'; Text = $expectedBaseHandoff; Arguments = @('-ExpectedBatchId', 'validator-mapped-items', '-ExpectedReviewRound', '1'); Exit = 1; Errors = @("Expected Review round mismatch: expected '1' but Routing has '0'") },
+        @{ Name = 'explicit zero rejects advanced count'; Text = $expectedBaseHandoff.Replace($routingRound0, '- Review round: `1`'); Arguments = @('-ExpectedBatchId', 'validator-mapped-items', '-ExpectedReviewRound', '0'); Exit = 1; Errors = @("Expected Review round mismatch: expected '0' but Routing has '1'") },
+        @{ Name = 'next action mismatch fails'; Text = $expectedBaseHandoff; Arguments = @('-ExpectedBatchId', 'validator-mapped-items', '-ExpectedNextAction', 'close'); Exit = 1; Errors = @("Expected Next action mismatch: expected 'close' but Routing has 'dispatch'") },
+        @{ Name = 'next role mismatch fails'; Text = $expectedBaseHandoff; Arguments = @('-ExpectedBatchId', 'validator-mapped-items', '-ExpectedNextRole', 'Fix Engineer'); Exit = 1; Errors = @("Expected Next role mismatch: expected 'Fix Engineer' but Routing has 'Code Reviewer'") },
+        @{ Name = 'batch prefix fails'; Text = $expectedBaseHandoff; Arguments = @('-ExpectedBatchId', 'validator-mapped'); Exit = 1; Errors = @("Expected Execution Batch ID mismatch: expected 'validator-mapped' but Routing has 'validator-mapped-items'") },
+        @{ Name = 'batch suffix fails'; Text = $expectedBaseHandoff; Arguments = @('-ExpectedBatchId', 'validator-mapped-items-x'); Exit = 1; Errors = @("Expected Execution Batch ID mismatch: expected 'validator-mapped-items-x' but Routing has 'validator-mapped-items'") },
+        @{ Name = 'batch case mismatch fails'; Text = $expectedBaseHandoff; Arguments = @('-ExpectedBatchId', 'Validator-Mapped-Items'); Exit = 1; Errors = @("Expected Execution Batch ID mismatch: expected 'Validator-Mapped-Items' but Routing has 'validator-mapped-items'") },
+        @{ Name = 'cross-batch routing fails'; Text = $expectedBaseHandoff.Replace($batchLine, '- Execution Batch ID: `other-batch`'); Arguments = @('-ExpectedBatchId', 'validator-mapped-items'); Exit = 1; Errors = @("Expected Execution Batch ID mismatch: expected 'validator-mapped-items' but Routing has 'other-batch'", 'Handoff Execution Batch ID must match current task') },
+        @{ Name = 'legacy routing without batch fails'; Text = $originalHandoff; Arguments = @('-ExpectedBatchId', 'validator-mapped-items'); Exit = 1; Errors = @('Routing is missing expected field: Execution Batch ID') },
+        @{ Name = 'empty batch fails'; Text = $expectedBaseHandoff; Arguments = @('-ExpectedBatchId', ''); Exit = 1; Errors = @('ExpectedBatchId must be a non-empty batch ID') },
+        @{ Name = 'whitespace batch fails'; Text = $expectedBaseHandoff; Arguments = @('-ExpectedBatchId', ' '); Exit = 1; Errors = @('ExpectedBatchId must be a non-empty batch ID') },
+        @{ Name = 'invalid next action fails'; Text = $expectedBaseHandoff; Arguments = @('-ExpectedBatchId', 'validator-mapped-items', '-ExpectedNextAction', 'merge'); Exit = 1; Errors = @('ExpectedNextAction must be continue, dispatch, or close') },
+        @{ Name = 'uppercase next action fails'; Text = $expectedBaseHandoff; Arguments = @('-ExpectedBatchId', 'validator-mapped-items', '-ExpectedNextAction', 'Dispatch'); Exit = 1; Errors = @('ExpectedNextAction must be continue, dispatch, or close') },
+        @{ Name = 'negative review round fails'; Text = $expectedBaseHandoff; Arguments = @('-ExpectedBatchId', 'validator-mapped-items', '-ExpectedReviewRound', '-1'); Exit = 1; Errors = @('ExpectedReviewRound must be a nonnegative integer') },
+        @{ Name = 'nonnumeric review round fails'; Text = $expectedBaseHandoff; Arguments = @('-ExpectedBatchId', 'validator-mapped-items', '-ExpectedReviewRound', 'two'); Exit = 1; Errors = @('ExpectedReviewRound must be a nonnegative integer') },
+        @{ Name = 'zero state revision fails'; Text = $expectedBaseHandoff; Arguments = @('-ExpectedBatchId', 'validator-mapped-items', '-ExpectedStateRevision', '0'); Exit = 1; Errors = @('ExpectedStateRevision must be a positive integer') },
+        @{ Name = 'empty next role fails'; Text = $expectedBaseHandoff; Arguments = @('-ExpectedBatchId', 'validator-mapped-items', '-ExpectedNextRole', ''); Exit = 1; Errors = @('ExpectedNextRole must be a non-empty role or none') },
+        @{ Name = 'expectation without batch fails'; Text = $expectedBaseHandoff; Arguments = @('-ExpectedNextAction', 'dispatch'); Exit = 1; Errors = @('ExpectedBatchId is required when expectation parameters are supplied') },
+        @{ Name = 'fenced review round does not fill missing routing field'; Text = $missingRoundHandoff; Arguments = $expectedFullMatch; Exit = 1; Errors = @('Routing is missing expected field: Review round') },
+        @{ Name = 'fenced routing example does not fill missing state revision'; Text = $missingRevisionHandoff; Arguments = $expectedFullMatch; Exit = 1; Errors = @('Routing is missing expected field: State revision') },
+        @{ Name = 'duplicate routing field fails'; Text = $expectedBaseHandoff.Replace($expectedRouting, $expectedRouting + "`n" + $stateRevisionLine); Arguments = $expectedFullMatch; Exit = 1; Errors = @('Routing has duplicate field: State revision') },
+        @{ Name = 'duplicate routing section fails'; Text = $expectedBaseHandoff + "`n## Routing`n`nNo routing fields here.`n"; Arguments = $expectedFullMatch; Exit = 1; Errors = @('Expectation requires exactly one real ## Routing section') },
+        @{ Name = 'structural violation is not excused by matching expectations'; Text = $expectedBaseHandoff.Replace('## Operator Command', '## Operator Notes'); Arguments = $expectedFullMatch; Exit = 1; Errors = @('dispatch requires ## Operator Command'); Unexpected = @($expectedMatchOutput) }
+    )
+    foreach ($expectedCase in $expectedStateCases) {
+        Set-Content -Encoding UTF8 -LiteralPath $handoffCopy -Value $expectedCase.Text -NoNewline
+        $caseErrors = if ($expectedCase.ContainsKey('Errors')) { @($expectedCase.Errors) } else { @() }
+        $caseOutputs = if ($expectedCase.ContainsKey('Outputs')) { @($expectedCase.Outputs) } else { @() }
+        $caseUnexpected = if ($expectedCase.ContainsKey('Unexpected')) { @($expectedCase.Unexpected) } else { @() }
+        Invoke-ValidatorCase `
+            -Name ('expected state ' + $expectedCase.Name) `
+            -CurrentTaskRelativePath $currentTaskRelativePath `
+            -HandoffRelativePath $handoffRelativePath `
+            -ExpectedExitCode $expectedCase.Exit `
+            -ExpectedErrors $caseErrors `
+            -ExpectedOutputs $caseOutputs `
+            -UnexpectedOutputs $caseUnexpected `
+            -ValidatorArguments $expectedCase.Arguments
+    }
+
+    # CR-01: a legal closing ATX marker must not hide a second real Routing.
+    $duplicateClosedRoutingHandoff = $expectedBaseHandoff + "`n## Routing ##`n`n- Next role: ``Fix Engineer```n"
+    Set-Content -Encoding UTF8 -LiteralPath $handoffCopy -Value $duplicateClosedRoutingHandoff -NoNewline
+    Invoke-ValidatorCase `
+        -Name 'expected state duplicate closed-ATX routing fails' `
+        -CurrentTaskRelativePath $currentTaskRelativePath `
+        -HandoffRelativePath $handoffRelativePath `
+        -ExpectedExitCode 1 `
+        -ExpectedErrors @('Expectation requires exactly one real ## Routing section') `
+        -UnexpectedOutputs @($expectedMatchOutput) `
+        -ValidatorArguments $expectedFullMatch
+
+    # CR-02: canonically different Unicode batch identities are not equal.
+    # Composed U+00E9 and decomposed e + U+0301 both render as the same text.
+    $composedBatch = 'validator-caf' + [char]0x00E9
+    $decomposedBatch = 'validator-cafe' + [char]0x0301
+    $composedRoutingHandoff = $expectedBaseHandoff.Replace('validator-mapped-items', $composedBatch)
+    $composedCurrentTask = $originalCurrentTask.Replace('validator-mapped-items', $composedBatch)
+    $composedFullMatch = @($expectedFullMatch | ForEach-Object {
+        if ($_ -eq 'validator-mapped-items') { $composedBatch } else { $_ }
+    })
+    $decomposedFullMatch = @($expectedFullMatch | ForEach-Object {
+        if ($_ -eq 'validator-mapped-items') { $decomposedBatch } else { $_ }
+    })
+    Set-Content -Encoding UTF8 -LiteralPath $handoffCopy -Value $composedRoutingHandoff -NoNewline
+    Set-Content -Encoding UTF8 -LiteralPath $currentTaskCopy -Value $composedCurrentTask -NoNewline
+    Invoke-ValidatorCase `
+        -Name 'expected state identical composed batch matches' `
+        -CurrentTaskRelativePath $currentTaskRelativePath `
+        -HandoffRelativePath $handoffRelativePath `
+        -ExpectedExitCode 0 `
+        -ExpectedOutputs @($expectedMatchOutput) `
+        -ValidatorArguments $composedFullMatch
+    Invoke-ValidatorCase `
+        -Name 'expected state canonically different batch fails ordinal match' `
+        -CurrentTaskRelativePath $currentTaskRelativePath `
+        -HandoffRelativePath $handoffRelativePath `
+        -ExpectedExitCode 1 `
+        -ExpectedErrors @(
+            # ASCII prefix only: captured console output cannot faithfully show U+0301.
+            "Expected Execution Batch ID mismatch: expected 'validator-cafe"
+        ) `
+        -UnexpectedOutputs @($expectedMatchOutput) `
+        -ValidatorArguments $decomposedFullMatch
+    Set-Content -Encoding UTF8 -LiteralPath $currentTaskCopy -Value $originalCurrentTask -NoNewline
 } finally {
     if (Test-Path -LiteralPath $tempRoot) {
         $resolvedTempRoot = [IO.Path]::GetFullPath($tempRoot)

@@ -16,6 +16,11 @@ another batch's live state. Report review findings before this section.>
 - Next output files: `<workspace file path or none>`
 - Next prompt template: `docs/ai-collaboration/agent-prompts.md#<section or none>`
 - Handoff persistence: `.ai/handoff.md was not updated because <constraint>. Persist this Action State before relying on the file.`
+<!-- Source-linked narration when this replaces or restores a live handoff: state the
+     source role and Agent, the batch, the verdict, the cumulative Review round, the prior
+     State revision if one exists, and the SHA256 of the live handoff bytes this response
+     was based on (or that the fingerprint is unavailable). A read-only subagent result
+     is persisted by the active permitted writer at the same boundary, not left here. -->
 <!-- For agent dispatch keep Current Status with the capability line first.
      For executable continue keep Current Status with Continuation Command;
      omit the capability line for human decision dispatch, continue and close.

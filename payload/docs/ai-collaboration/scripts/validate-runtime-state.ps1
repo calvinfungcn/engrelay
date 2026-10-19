@@ -2,7 +2,15 @@
 param(
     [string]$WorkspaceRoot,
     [string]$CurrentTaskPath = ".ai/current-task.md",
-    [string]$HandoffPath = ".ai/handoff.md"
+    [string]$HandoffPath = ".ai/handoff.md",
+    # Optional expected-state values, decided by the responsible role at a real
+    # boundary. Binding is tested with $PSBoundParameters so an omitted value
+    # is distinguishable from an explicit empty string or numeric 0.
+    [string]$ExpectedBatchId,
+    [string]$ExpectedNextAction,
+    [string]$ExpectedNextRole,
+    [string]$ExpectedReviewRound,
+    [string]$ExpectedStateRevision
 )
 
 Set-StrictMode -Version Latest
@@ -26,6 +34,54 @@ function Add-ValidationWarning {
     if (-not $script:warnings.Contains($Message)) {
         $script:warnings.Add($Message)
     }
+}
+
+$expectationRequested = $false
+foreach ($expectationParameter in @(
+    'ExpectedBatchId', 'ExpectedNextAction', 'ExpectedNextRole',
+    'ExpectedReviewRound', 'ExpectedStateRevision'
+)) {
+    if ($PSBoundParameters.ContainsKey($expectationParameter)) {
+        $expectationRequested = $true
+    }
+}
+$matchedExpectationFields = [Collections.Generic.List[string]]::new()
+
+function Get-NormalizedDecimal {
+    param([string]$Value)
+
+    $trimmed = $Value.TrimStart("0")
+    if ($trimmed -eq "") {
+        return "0"
+    }
+    return $trimmed
+}
+
+# Expectation values are identity text, so comparisons use ordinal code units.
+# Culture-sensitive operators can treat different Unicode sequences as equal.
+function Test-OrdinalEqual {
+    param([AllowNull()][string]$Left, [AllowNull()][string]$Right)
+
+    return [string]::Equals($Left, $Right, [StringComparison]::Ordinal)
+}
+
+function Test-OrdinalMember {
+    param([AllowNull()][string]$Value, [string[]]$Candidates)
+
+    foreach ($candidate in $Candidates) {
+        if (Test-OrdinalEqual $Value $candidate) {
+            return $true
+        }
+    }
+    return $false
+}
+
+# Local to the expectation reader: drop a legal closing ATX sequence such as
+# "## Routing ##" so that the same real heading is counted once.
+function Get-ExpectationHeadingTitle {
+    param([string]$Title)
+
+    return ([regex]::Replace($Title, '[ \t]+#+[ \t]*\z', '')).Trim()
 }
 
 function Resolve-WorkspacePath {
@@ -488,7 +544,35 @@ if (-not $handoffFullPath -or -not (Test-Path -LiteralPath $handoffFullPath)) {
     Add-ValidationError "Handoff file does not exist: $HandoffPath"
 }
 
-if ($errors.Count -eq 0) {
+# Missing files stop structural reads, but an invalid expectation value is
+# reported alongside them rather than replacing their diagnostics.
+$filesReady = ($errors.Count -eq 0)
+
+if ($expectationRequested) {
+    if (-not $PSBoundParameters.ContainsKey('ExpectedBatchId')) {
+        Add-ValidationError 'ExpectedBatchId is required when expectation parameters are supplied'
+    } elseif ([string]::IsNullOrWhiteSpace($ExpectedBatchId)) {
+        Add-ValidationError 'ExpectedBatchId must be a non-empty batch ID'
+    }
+    if ($PSBoundParameters.ContainsKey('ExpectedNextAction') -and
+        -not (Test-OrdinalMember $ExpectedNextAction @('continue', 'dispatch', 'close'))) {
+        Add-ValidationError 'ExpectedNextAction must be continue, dispatch, or close'
+    }
+    if ($PSBoundParameters.ContainsKey('ExpectedNextRole') -and
+        [string]::IsNullOrWhiteSpace($ExpectedNextRole)) {
+        Add-ValidationError 'ExpectedNextRole must be a non-empty role or none'
+    }
+    if ($PSBoundParameters.ContainsKey('ExpectedReviewRound') -and
+        $ExpectedReviewRound -notmatch '^[0-9]+\z') {
+        Add-ValidationError 'ExpectedReviewRound must be a nonnegative integer'
+    }
+    if ($PSBoundParameters.ContainsKey('ExpectedStateRevision') -and
+        $ExpectedStateRevision -notmatch '^[1-9][0-9]*\z') {
+        Add-ValidationError 'ExpectedStateRevision must be a positive integer'
+    }
+}
+
+if ($filesReady) {
     $currentTaskBytes = (Get-Item -LiteralPath $currentTaskFullPath).Length
     if ($currentTaskBytes -gt 12288) {
         Add-ValidationWarning (
@@ -1342,6 +1426,82 @@ if ($errors.Count -eq 0) {
             Add-ValidationWarning "Multiple broad regression runs; record which relevant inputs changed"
         }
     }
+
+    if ($expectationRequested) {
+        # Compare only the one real level-2 Routing section, fence-aware and
+        # without filling a missing field from examples or other sections.
+        # Closing ATX markers are normalized here only, so "## Routing ##" is
+        # counted as the same real heading and a duplicate is rejected.
+        $expectationRoutingHeadings = @(
+            $handoffStructure.Headings | Where-Object {
+                $_.Level -eq 2 -and (Test-OrdinalEqual (Get-ExpectationHeadingTitle $_.Title) "Routing")
+            }
+        )
+        if ($expectationRoutingHeadings.Count -ne 1) {
+            Add-ValidationError "Expectation requires exactly one real ## Routing section"
+        } else {
+            $expectationRoutingText = (Get-MarkdownStructure (
+                (Get-MarkdownHeadingBody $handoff $handoffStructure.Headings $expectationRoutingHeadings[0] 2).Text.Trim()
+            )).UnfencedText
+            $expectationChecks = [Collections.Generic.List[object]]::new()
+            if ($PSBoundParameters.ContainsKey("ExpectedBatchId") -and -not [string]::IsNullOrWhiteSpace($ExpectedBatchId)) {
+                $expectationChecks.Add(@{ Field = "Execution Batch ID"; Expected = $ExpectedBatchId; Kind = "text" })
+            }
+            if ($PSBoundParameters.ContainsKey("ExpectedNextAction") -and (Test-OrdinalMember $ExpectedNextAction @("continue", "dispatch", "close"))) {
+                $expectationChecks.Add(@{ Field = "Next action"; Expected = $ExpectedNextAction; Kind = "text" })
+            }
+            if ($PSBoundParameters.ContainsKey("ExpectedNextRole") -and -not [string]::IsNullOrWhiteSpace($ExpectedNextRole)) {
+                $expectationChecks.Add(@{ Field = "Next role"; Expected = $ExpectedNextRole; Kind = "text" })
+            }
+            if ($PSBoundParameters.ContainsKey("ExpectedReviewRound") -and $ExpectedReviewRound -match '^[0-9]+\z') {
+                $expectationChecks.Add(@{ Field = "Review round"; Expected = $ExpectedReviewRound; Kind = "count" })
+            }
+            if ($PSBoundParameters.ContainsKey("ExpectedStateRevision") -and $ExpectedStateRevision -match '^[1-9][0-9]*\z') {
+                $expectationChecks.Add(@{ Field = "State revision"; Expected = $ExpectedStateRevision; Kind = "text" })
+            }
+
+            foreach ($check in $expectationChecks) {
+                $fieldOccurrences = [regex]::Matches(
+                    $expectationRoutingText,
+                    "(?m)^- " + [regex]::Escape($check.Field) + ":"
+                ).Count
+                if ($fieldOccurrences -eq 0) {
+                    Add-ValidationError "Routing is missing expected field: $($check.Field)"
+                    continue
+                }
+                if ($fieldOccurrences -gt 1) {
+                    Add-ValidationError "Routing has duplicate field: $($check.Field)"
+                    continue
+                }
+                $actualValue = Get-FieldValue $expectationRoutingText $check.Field
+                $isMatch = if ($check.Kind -eq "count") {
+                    # Decimal text comparison: leading zeros normalize, and no
+                    # narrow integer conversion can overflow.
+                    ($null -ne $actualValue) -and
+                        ($actualValue -match '^[0-9]+\z') -and
+                        (Test-OrdinalEqual (Get-NormalizedDecimal $actualValue) (Get-NormalizedDecimal $check.Expected))
+                } else {
+                    ($null -ne $actualValue) -and (Test-OrdinalEqual $actualValue $check.Expected)
+                }
+                if (-not $isMatch) {
+                    Add-ValidationError (
+                        "Expected $($check.Field) mismatch: expected '$($check.Expected)' but Routing has '$actualValue'"
+                    )
+                } else {
+                    $matchedExpectationFields.Add($check.Field)
+                }
+            }
+
+            if ($PSBoundParameters.ContainsKey("ExpectedBatchId") -and -not [string]::IsNullOrWhiteSpace($ExpectedBatchId)) {
+                $currentTaskBatch = Get-FieldValue $batchClassification "Execution Batch ID"
+                if (-not (Test-OrdinalEqual $currentTaskBatch $ExpectedBatchId)) {
+                    Add-ValidationError (
+                        "Expected Execution Batch ID mismatch: expected '$ExpectedBatchId' but current task has '$currentTaskBatch'"
+                    )
+                }
+            }
+        }
+    }
 }
 
 if ($warnings.Count -gt 0) {
@@ -1362,4 +1522,10 @@ if ($errors.Count -gt 0) {
 Write-Host "Runtime collaboration structure is valid (not acceptance, evidence freshness, or reviewer independence verification)." -ForegroundColor Green
 Write-Host " Current task: $CurrentTaskPath"
 Write-Host " Handoff: $HandoffPath"
+if ($expectationRequested) {
+    Write-Host (
+        " Supplied expectations match Routing: " + ($matchedExpectationFields -join ", ") +
+        ". This compares the stated values only; it does not prove freshness, authenticity, or acceptance."
+    ) -ForegroundColor Green
+}
 exit 0
