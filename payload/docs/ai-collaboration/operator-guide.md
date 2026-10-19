@@ -91,13 +91,19 @@ does not wake stopped processes. See
   Review round it decided (`-ExpectedBatchId`, `-ExpectedNextAction`,
   `-ExpectedNextRole`, `-ExpectedReviewRound`, and `-ExpectedStateRevision` when a
   revision exists). A pass confirms the stated values and structure only.
-- A read-only subagent's result is saved by the still-active, permitted agent that
-  delegated it, at the same boundary. With no permitted agent, the response
+- A read-only subagent's result is published or saved by the still-active, permitted agent that
+  delegated it, at the same boundary, and states its findings in that reply. With no permitted agent, the response
   handoff says it is not persisted.
-- When a completed same-batch review record is newer than the live handoff,
-  `ai-collab-continue` first restores that transfer after matching its fingerprint
-  and revision; see [source-matched recovery](handoff-schema.md#source-matched-recovery).
+- When a completed same-batch review record, or a result or response file named by
+  the live handoff (including its Next output files) or the current task, is newer than
+  the live handoff, `ai-collab-continue` first restores that transfer after matching its
+  real SHA256 fingerprint and revision; see
+  [source-matched recovery](handoff-schema.md#source-matched-recovery). A new container
+  must carry a real SHA256; only legacy index-linked review records and legacy response
+  handoffs may omit it. A batch restores at most one pending transfer.
   It never recounts a verdict or replays a command.
+- A planned end of the active session is a handoff boundary even for the same role.
+  A long check may leave one checkpoint with its external log, stated as not yet passed.
 - These checks do not wake processes, authenticate the saved log, or certify
   acceptance.
 - Medium-risk batches need independent code review; see

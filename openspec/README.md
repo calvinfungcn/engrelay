@@ -31,6 +31,7 @@ authority.
 | Closure evidence rules and this navigation | Owner-selected M batch | Completed | [Archived tasks](changes/archive/2026-10-18-clarify-closure-and-follow-up-tracking/tasks.md); [review index](../docs/reviews/clarify-closure-and-follow-up-tracking/index.md) |
 | Autonomous continuation and human-action summary | Owner-selected M batch | Completed | [Archived tasks](changes/archive/2026-10-18-fix-autonomous-continuation/tasks.md); [review index](../docs/reviews/fix-autonomous-continuation/index.md) |
 | Handoff persistence at authorized boundaries | Owner-selected M batch | Completed | [Archived tasks](changes/archive/2026-10-19-fix-handoff-persistence/tasks.md); [review index](../docs/reviews/fix-handoff-persistence/index.md) |
+| Handoff recovery hardening | Owner-selected M batch | Completed | [Archived tasks](changes/archive/2026-10-19-harden-handoff-recovery/tasks.md); [review index](../docs/reviews/harden-handoff-recovery/index.md) |
 | OBS-01: ordinal batch comparison in owner-extension parsing | Round 03 observation | Pending decision | [Review index](../docs/reviews/fix-handoff-persistence/index.md#deferred-follow-up); Task Intake must decide scope before implementation |
 | Self-contained demo sample | Route-planning discussion; [Phase 0 non-goals](changes/archive/2026-10-17-improve-phase0-first-trial/proposal.md#non-goals) | Pending decision | Link documents deferral only, not a full roadmap |
 | Phase 0 / G0 external trial | Owner phase goals (discussion) | Pending validation | Not started; package checks are not external trial |

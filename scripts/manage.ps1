@@ -607,7 +607,7 @@ function Get-ManagedInsertion([string]$Kind, [string]$Text, [string]$Mode, [stri
     }
     if ($Kind -eq 'agents') {
         $canonical = (Read-FileInfo (Join-Path $packageRoot 'agent-rules.md')).Text.TrimEnd([char]13, [char]10) -replace '\r?\n', $newline
-        $body = '## Legacy ai-collaboration Workflow policy' + $newline +
+        $body = '## ai-collaboration Workflow policy' + $newline +
             '- WorkflowMode: ' + $Mode + $newline +
             '- Package version: ' + [string]((Get-Snapshot).packageVersion) + $newline +
             '- This declaration controls the project default; an explicit task choice takes precedence.' + $newline + $newline + $canonical

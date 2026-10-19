@@ -24,6 +24,7 @@
 | 关闭依据与本导航 | 负责人选定的 M 级批次 | 已完成 | [已归档任务](changes/archive/2026-10-18-clarify-closure-and-follow-up-tracking/tasks.md)；[审查索引](../docs/reviews/clarify-closure-and-follow-up-tracking/index.md) |
 | 自主接续与人类介入摘要 | 负责人选定的 M 级批次 | 已完成 | [已归档任务](changes/archive/2026-10-18-fix-autonomous-continuation/tasks.md)；[审查索引](../docs/reviews/fix-autonomous-continuation/index.md) |
 | 获准边界的 handoff 持久化 | 负责人选定的 M 级批次 | 已完成 | [已归档任务](changes/archive/2026-10-19-fix-handoff-persistence/tasks.md)；[审查索引](../docs/reviews/fix-handoff-persistence/index.md) |
+| 交接恢复加固 | 负责人选定的 M 级批次 | 已完成 | [已归档任务](changes/archive/2026-10-19-harden-handoff-recovery/tasks.md)；[审查索引](../docs/reviews/harden-handoff-recovery/index.md) |
 | OBS-01：负责人扩展解析中的批次序数比较 | 第 03 轮观察项 | 待决定 | [审查索引](../docs/reviews/fix-handoff-persistence/index.md#deferred-follow-up)；实施前须由 Task Intake 决定范围 |
 | 自包含演示样例 | 路线讨论；[Phase 0 非目标](changes/archive/2026-10-17-improve-phase0-first-trial/proposal.md#non-goals) | 待决定 | 链接仅说明曾排除，不代表完整路线图 |
 | Phase 0 / G0 外部试用 | 负责人阶段目标（讨论） | 待验证 | 尚未开展；包检查不等于外部试用 |

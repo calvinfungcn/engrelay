@@ -23,8 +23,10 @@ inventing accepted closure. No new routing action/status is introduced.
 - Every role action must choose exactly one Next Action: `dispatch`,
   `continue`, or `close`.
 - Update `.ai/handoff.md` at an actual routing boundary: agent handoff,
-  owner-decision wait, operational interruption, or batch closure. Same-owner
-  local steps do not require a manual dispatch or a new handoff for every
+  owner-decision wait, operational interruption, planned session end, or batch
+  closure. A planned session end is a boundary even when the role does not change;
+  it keeps the same responsibility and counts. Same-owner local steps inside one
+  active session do not require a manual dispatch or a new handoff for every
   micro-step; record a materially changed next step or evidence when needed.
 - At each such boundary, the role permitted to write saves the complete Action
   State, reads back the saved Routing (batch, action, next role, cumulative
@@ -32,7 +34,8 @@ inventing accepted closure. No new routing action/status is introduced.
   validator with the expected state it decided; see
   [expected state validation](#expected-state-validation). The final response
   states in one sentence whether the file was updated or why it was not.
-  Same-owner micro-steps need neither write-back nor a new check.
+  Same-owner micro-steps inside the active session need neither write-back nor a
+  new check; a planned session end does not count as a micro-step.
 - Read-only prohibits file writes unless the assignment explicitly authorizes
   named review or handoff outputs. Response-only consultation reports in chat
   without changing live business batch state.
@@ -160,6 +163,12 @@ Use the same round number as the associated formal review round when possible.
 For example, if the next review round is
 `docs/reviews/add-mobile-vat-invoicing/2026-06-08-round-29.md`, the
 implementation result can be `.ai/round-29-result.md`.
+
+A result file must not collide with an older file under `.ai/`. When the
+round-numbered name is already in use (for example by an earlier batch), write the
+result to a batch-scoped path such as a per-batch folder under `.ai/`. Never
+overwrite an existing result file, and never reuse a round number already used by
+the same batch.
 
 ## `.ai/current-task.md`
 
@@ -421,15 +430,19 @@ Rules:
   [source-matched narration](#source-matched-recovery) names the batch, the
   source role and Agent, the prior `State revision` when one exists, the SHA256
   of the live handoff bytes it was based on and the target `State revision`, or
-  states that the fingerprint is unavailable.
+  states that the fingerprint is unavailable only for a legacy record; a new container carries a real 64-hexadecimal SHA256.
 - When a read-only subagent returns a valid same-batch result and the parent or
   responsible Agent is still active and permitted to write the handoff, that
-  Agent checks the source, execution ownership and actual verdict, then saves,
-  reads back and validates the transfer before its own boundary ends. The
+  Agent checks the source, execution ownership and actual verdict. It then either
+  publishes the transfer directly to `.ai/handoff.md`, or first saves a complete
+  recovery container in the batch's own result file when a durable copy is needed.
+  Either way it reads back the saved bytes, runs expected-state validation before
+  its boundary ends, and states the subagent's findings in its own reply. The
   subagent remains read-only, the verdict is counted once, and the saved
-  attribution keeps the originating role. If no permitted writer is active, or
-  a higher-priority prohibition binds that writer too, keep the complete response
-  handoff and state that it is not persisted.
+  attribution keeps the originating role. An existing result file is never
+  overwritten to save it. If no permitted writer is active, or a higher-priority
+  prohibition binds that writer too, keep the complete response handoff and state
+  that it is not persisted.
 
 ## Environment Preparation
 
@@ -934,8 +947,8 @@ Follow: docs/ai-collaboration/agent-prompts.md#<current-role-section>.
 It is an agent prompt, not a shell command or human preparation request. An
 already active agent executes the step directly; an operator or existing runner
 can use the block to start a replacement session without the preceding chat.
-Record actual Current agent on takeover; keep the responsible role, batch and
-cumulative Review round. A change of formal role, synthesis-agent transfer, or
+On takeover, record the actual Current agent in Routing and increment `State revision` in the same write; keep the responsible role, batch and
+cumulative Review round. A transfer superseded by that takeover compares as advanced and is never replayed. A change of formal role, synthesis-agent transfer, or
 independent review still uses `dispatch` with its Operator Command.
 
 Omit the continuation block for `blocked`, `awaiting-owner-decision`, `dispatch`
@@ -944,6 +957,24 @@ take precedence over any stale command. Legacy executable continue without the
 block resumes from Current Status and authoritative task inputs when sufficient;
 missing new fields alone never requires owner approval. This protocol does not
 wake processes, schedule background work, or promise unattended cross-turn execution.
+
+### Planned session end and long-check checkpoint
+
+Ending the active session on purpose, or handing unfinished work of the same role to
+another session, is a real boundary even when the role does not change. Before ending,
+save the current facts, the remaining work and the evidence in `.ai/handoff.md` with an
+executable `continue` and its Continuation Command. The successor session checks latest
+state and execution ownership first, records its actual Current agent, and increments
+`State revision` in the same write; it does not start a second writer for work another
+session may still be running.
+
+A foreseeable long check, one that may exceed the session budget after material progress
+has been made, may use this same `continue` as a checkpoint. Its Current Status records
+the completed steps, the check that has not finished, the external log path, how to see
+whether the process is still running, and that the check is not yet passed. Write the
+checkpoint once per interruption, not before each step, and never report the check as
+successful before its log shows completion. Logs stay in the external file. A checkpoint
+does not promise that progress lost in a sudden termination was saved.
 
 ## Dispatch Commands
 
@@ -1048,10 +1079,10 @@ write-capable role must persist the response handoff before treating
 When the same role may write a formal review record and index but not
 `.ai/handoff.md`, keep one complete copy of the response handoff inside that
 review record's existing `Next Actions` section. Wrap it in an outer fence longer
-than any fence inside it, so the copy can be extracted without rewriting. Add the
+than the longest backtick run inside it (at least four), so the copy can be extracted without rewriting. Add the
 source batch, source role, source Agent, work producer Agent, the actual verdict,
 the cumulative Review round, the prior `State revision` (if any), the SHA256 of
-the live handoff bytes it was based on, and the target `State revision`; these
+the live handoff bytes it was based on (64 hexadecimal characters), and the target `State revision`; these
 fields are the matching evidence for [source-matched recovery](#source-matched-recovery). The index only
 links the record. Do not add a new section, a pending file or a template field.
 A role without a change ID or without write permission for those outputs stays
@@ -1100,27 +1131,38 @@ deferred
 
 ## Source-matched recovery
 
-Use this when the live `.ai/handoff.md` still routes to a superseded step, while
-a completed review record, response handoff or subagent result for the same
-batch carries a newer transfer. This is a targeted check of the artifacts named
-by the review index and the current task. It does not scan the full history and
-does not choose the newest file by time or number.
+Use this when the live `.ai/handoff.md` still routes to a superseded step, while a
+newer transfer for the same batch is available in a named place: an index-linked
+review record, or a result or response file whose path the live handoff (including
+its Next output files) or the current task explicitly names. This is a targeted check of those named paths. It
+does not scan directories, recurse into folders, or choose the newest file by
+time or number.
 
-A matching Next action, Next role and Review round is not evidence that a
-transfer was applied: a transfer may change only the revision, the command or
-the required inputs. Decide with the fingerprint and `State revision`
-correspondence below, in this order.
+A matching Next action, Next role and Review round is not evidence that a transfer
+was applied: a transfer may change only the revision, the command or the required
+inputs. Decide with the fingerprint and `State revision` correspondence below, in
+this order.
 
-Each candidate keeps its narration beside the container: source batch, source
-role, source Agent, work producer Agent, verdict (or `none`), cumulative Review
-round, prior `State revision`, prior live SHA256, and target `State revision`.
-This is narration in the existing record, not a runtime field.
+Each candidate keeps its narration beside the container: source batch, source role,
+source Agent, work producer Agent, verdict (or `none`), cumulative Review round,
+prior `State revision`, prior live SHA256, and target `State revision`. This is
+narration in the existing record, not a runtime field.
 
-1. **Candidate.** The current task names the batch and the review index links
-   one or more records with a recovery container. A candidate whose source batch
-   differs from the current task's Execution Batch ID is rejected and reported,
-   and it never receives a write. Two or more same-batch candidates are a
-   conflict.
+1. **Candidate.** Candidates are only:
+   - records linked by the review index,
+   - files whose path appears in backticks under the live handoff's
+     `Authoritative Evidence` or `Next input files`, or in `.ai/current-task.md`, and
+   - an implementation or fix result file, or a response file, that the live handoff's
+     `Next output files` names by path (for example `.ai/handoff-recovery/round-01-result.md`).
+     Other entries there, such as a review record, the index, `.ai/handoff.md`, source
+     files, logs or configuration, are not candidates through this route.
+
+   Each path is read once. Excluded: `.ai/current-task.md`, `.ai/handoff.md`,
+   `tasks.md`, and any backticked path with a `#` anchor. A named path that does
+   not exist is reported as missing and is not restored. A named file without a
+   recovery container is not a candidate. A candidate whose source batch differs
+   from the current task's Execution Batch ID is rejected and reported, and it
+   never receives a write.
 2. **Attribution.** Keep the originating role, Agent, verdict, cumulative Review
    round, scope and commands unchanged. Record the source role separately from
    the restoring role. A candidate missing any attribution item stops here and
@@ -1137,32 +1179,54 @@ This is narration in the existing record, not a runtime field.
    not authorize a candidate that omits it. Each protected case keeps the live
    state and names the existing route: close, resume condition or Task Owner
    decision. A candidate protected by none of these continues to step 4.
-4. **Compare fingerprint and revision.**
+   Human-decision and `close` candidates pass through the same protections; they
+   have no Operator Command and are compared as described in step 4.
+4. **Compare fingerprint and revision.** A new container must carry a real prior
+   SHA256 (64 hexadecimal characters of the live bytes it was based on).
    - Live SHA256 equals the candidate's prior SHA256 and live `State revision`
      equals its prior revision: **pending**. The candidate is the unapplied
      transfer, even when Next action, Next role and Review round are unchanged.
    - Live `State revision` is above the target: **advanced**. A newer state
      exists; do not publish the candidate.
-   - Live `State revision` equals the target and the live **Routing section**
-     and **Operator Command section** equal the candidate's, after line-ending
-     normalization: **applied**. The Routing section carries the Next action,
-     Next role, Review round, Current role, Current agent, Current status and
-     Next input files; the Operator Command section carries the command text.
-     Do not republish, recount or rerun its command. Matching Next action, Next
-     role and Review round alone never proves applied.
-   - Live `State revision` equals the target but either section differs (a
-     different route, attribution, required input or command): **conflict**.
-     Keep the live state and name the differing section; never call it applied
-     or overwrite it.
+   - Live `State revision` equals the target: compare the **Routing section** and
+     the **action section** named by the candidate's Next action, after
+     line-ending normalization and trimming of blank lines at the section edges.
+     Equal sections are **applied**. Any difference is **conflict**: keep the live
+     state and name the differing section; never call it applied or overwrite it.
+     Extract sections fence-aware, so a `##` line inside a fenced block is not a
+     section boundary.
+
+     | Candidate Next action | Action section compared after Routing |
+     | --- | --- |
+     | `dispatch` to an agent | `## Operator Command` |
+     | `continue` | `## Current Status`, including any Continuation Command block; a prose difference, or a block present on one side only, is a difference |
+     | `dispatch` to a human (`awaiting-owner-decision`) | `## Owner Decision Brief` |
+     | `close` | `## Review Or Task State Impact` |
+
+     Matching Next action, Next role and Review round alone never proves applied.
+     Modification times and file names never decide applied or advanced.
    - Any other combination is a **conflict**: the live bytes differ from the
-     recorded prior while the revision has not reached the target. Keep the
-     valid live state and name the conflicting artifacts.
-   - Legacy records without a fingerprint are accepted only when they name the
-     same batch, the same prior Review round and the routing that the live file
-     still shows, and they state that the original handoff was not updated.
-     Otherwise report the missing evidence and do not treat the old file as
-     updated. A byte change, newline conversion or unavailable fingerprint is
-     never forced.
+     recorded prior while the revision has not reached the target. Keep the valid
+     live state and name the conflicting artifacts.
+   - **Legacy compatibility.** Only a legacy index-linked review record or a legacy
+     response handoff written before this rule may omit a real SHA256 and state that
+     its fingerprint is unavailable. It is accepted only when it names the same batch,
+     the same prior Review round and the routing that the live file still shows, and
+     it states that the original handoff was not updated. Once the live revision
+     already equals the target and the routing matches, the same Routing and
+     action-section comparison above decides applied or conflict. A legacy record is
+     still never forced across a byte change or a newline conversion.
+   - **New containers.** Every named implementation or fix result, and every container
+     written under this rule, must carry a real SHA256. Without one it is missing
+     evidence (`missing-evidence:fingerprint`), is never treated as pending, and the
+     legacy branch does not apply to it.
+   - **Batch fail-closed.** Restore at most one pending transfer per batch, and only
+     when every other same-batch candidate is advanced or applied. If two candidates
+     are pending, or any same-batch candidate is conflict or missing evidence
+     (including a transfer chained behind an unpublished predecessor, whose prior
+     `State revision` is above the live revision), restore none, write nothing, and
+     name each candidate with its reason. A candidate from another batch is rejected
+     on its own and does not block.
 5. **Authority.** Only a **pending** candidate may be written, and only by a
    restoring Agent permitted to write the handoff. Without that permission, keep
    the complete candidate as a response handoff and state that it was not
@@ -1243,4 +1307,5 @@ exhausted review allowances are not reopened by a candidate.
   evidence recorded outside the validated handoff (see
   [Accepted closure validation](#accepted-closure-validation)).
 - Writing live routing into `.ai/current-task.md`.
+- Restoring a named result without a real SHA256, or choosing a transfer from an unnamed file found by a directory scan.
 - Closing with an unresolved assigned `should-fix`.

@@ -50,3 +50,13 @@
 - Decision: `<dispatch|continue|close>`
 - Reason: `<why this action applies>`
 - Action State: `.ai/handoff.md`
+
+<!-- Add only when this result is the durable carrier of a transfer that the live
+     handoff (Next output files or Authoritative Evidence) or current task names by
+     path (not for ordinary evidence). The dispatching handoff should name this result
+     path in Next output files before the work starts. Put the
+     narration outside the fence: source batch, source role, source Agent, work
+     producer Agent, Verdict (or none), cumulative Review round, prior State revision,
+     prior live SHA256 (64 hexadecimal characters of the live handoff bytes), and
+     target State revision. Then one outer fence at least one backtick longer than
+     any fence inside it, holding one complete copy of the handoff. Otherwise omit. -->

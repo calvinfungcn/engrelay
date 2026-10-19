@@ -66,7 +66,10 @@
      blocked/awaiting-owner-decision, dispatch and close. An active eligible agent
      executes directly; local CLI/IDE host choice needs no owner decision.
      On replacement-session takeover check latest state and execution ownership,
-     retain role/batch/review count, and record the actual Current agent. -->
+     retain role/batch/review count, record the actual Current agent, and increment
+     State revision in the same write. A planned same-role session end is a boundary
+     too; a long-check checkpoint names its external log and says the check is not yet
+     passed (handoff-schema.md#planned-session-end-and-long-check-checkpoint). -->
 
 ```text
 You are continuing as <current role> for Execution Batch <batch id>.

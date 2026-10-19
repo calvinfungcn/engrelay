@@ -19,8 +19,13 @@ another batch's live state. Report review findings before this section.>
 <!-- Source-linked narration when this replaces or restores a live handoff: state the
      source role and Agent, the batch, the verdict, the cumulative Review round, the prior
      State revision if one exists, and the SHA256 of the live handoff bytes this response
-     was based on (or that the fingerprint is unavailable). A read-only subagent result
-     is persisted by the active permitted writer at the same boundary, not left here. -->
+     was based on (64 hexadecimal characters for a new container; `unavailable` only for a
+     legacy record). A read-only subagent result
+     is persisted by the active permitted writer at the same boundary, not left here.
+     A planned same-role session end is a boundary; save the Continuation Command first.
+     Name the result or response path in Next output files or the current task before
+     the transfer so a later session can match it. -->
+
 <!-- For agent dispatch keep Current Status with the capability line first.
      For executable continue keep Current Status with Continuation Command;
      omit the capability line for human decision dispatch, continue and close.
@@ -62,7 +67,7 @@ Recommended capability tier: C3
 ### Continuation Command
 
 <!-- Executable continue only. Read latest authority and execution ownership;
-     preserve role, batch and review count, and record actual Current agent on
+     preserve role, batch and review count, record actual Current agent, and increment State revision on
      session takeover. Local CLI/IDE choice is not an owner decision. -->
 
 ```text

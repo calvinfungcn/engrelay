@@ -9,12 +9,12 @@ working in existing repositories. It provides role prompts, task and handoff
 templates, independent reviews based on risk, and tools for checking the evidence
 used to call work complete.
 
-**Version 1.9.3** · [MIT License](LICENSE) · [Download the complete package](https://github.com/calvinfungcn/engrelay/releases/tag/v1.9.3)
+**Version 1.9.4** · [MIT License](LICENSE) · [Download the complete package](https://github.com/calvinfungcn/engrelay/releases/tag/v1.9.4)
 
-On both Windows PowerShell 5.1 and PowerShell 7, this release passed 262 full
-validator cases, 33 expected-state cases, and 43 recovery protocol rehearsals.
-The legacy no-fingerprint recovery branch received static review only; these
-checks do not establish real-agent or host adherence.
+Recovery changes passed 47 fixture rehearsals on each of Windows PowerShell 5.1
+and PowerShell 7; the final independent follow-up passed 17 focused cases on each.
+The runtime validator is unchanged from v1.9.3. These checks do not establish
+real-agent or host adherence.
 
 ## What you get
 
@@ -57,6 +57,16 @@ for entry selection and handoffs.
   A runner ending its turn does not mean work is environment-blocked. This kit
   provides resumption instructions, not automatic process wake-up; see
   [autonomous continuation](payload/docs/ai-collaboration/handoff-schema.md#autonomous-continuation).
+- Recovering a superseded handoff reads only the review record linked by the index or
+  a result or response path that the live handoff (including Next output files) or the
+  current task names. A new container requires a real SHA256 fingerprint; only legacy
+  index-linked review records and legacy response handoffs may omit it. A batch restores
+  at most one pending transfer, and any conflict blocks it. The action section is
+  compared before a transfer counts as applied. A session that takes over a continue
+  increments `State revision`. A planned same-role session end is a handoff boundary;
+  a long check may keep one checkpoint with its external log, stated as not yet passed.
+- Project-owned historical statements outside the managed block are coordinated inside
+  the project; installing or upgrading the package does not rewrite them.
 - Agent dispatch may add one advisory capability line (`Recommended capability
   tier: C1`–`C5`) under handoff `Current Status` to hint at model strength for
   the next work item; see
@@ -88,8 +98,8 @@ See the [maintained role contracts](payload/docs/ai-collaboration/README.md).
 Use a trusted complete package in its own directory. Back up the target project's
 rules and read its existing agent instructions. For a new project:
 
-Download `engrelay-1.9.3.zip` from the release and extract it. Run commands from
-the extracted `engrelay-1.9.3` directory. Keep that complete package unchanged;
+Download `engrelay-1.9.4.zip` from the release and extract it. Run commands from
+the extracted `engrelay-1.9.4` directory. Keep that complete package unchanged;
 extra tool files or edited bytes make it differ from its inventory. The repository
 source can also be used when its file set and bytes exactly match `snapshot.json`.
 

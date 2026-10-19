@@ -39,13 +39,18 @@ Use project-relative paths only:
    revision, Review round, current role, current agent and status. A delayed or
    duplicate message is checked against that state before any action.
    If the live handoff routes to a step already superseded by a completed
-   same-batch review record or response handoff named by the review index (for
-   example, a verdict is counted while the live file still dispatches that review),
-   first apply `handoff-schema.md#source-matched-recovery`: match the candidate's
-   prior fingerprint and revision, stop on any conflict, persist only if this Agent
-   may write the handoff, read back, and then follow the restored route. An equal
-   Next action, Next role and Review round alone do not show the transfer was
-   applied. Never recount, replay or reopen a batch from a candidate alone.
+   same-batch transfer: a review record linked by the review index, or a result or
+   response file whose path the live handoff (including Next output files) or the
+   current task explicitly names (for example, a verdict is counted while the live
+   file still dispatches that review).
+   First apply `handoff-schema.md#source-matched-recovery`. Read each named path
+   once; never scan a directory. A new container must carry a real prior SHA256 and
+   matching revision; only legacy index-linked records and legacy response handoffs
+   follow the schema's legacy compatibility rule. Restore only the single pending
+   transfer of the batch, stop on any conflict or missing evidence, persist only if
+   this Agent may write the handoff, read back, and then follow the restored route.
+   An equal Next action, Next role and Review round alone do not show the transfer
+   was applied. Never recount, replay or reopen a batch from a candidate alone.
 2. Resolve actual waits and limits before executing any command:
    - `close`: report the actual closure outcome and unfinished scope; never reopen
      the batch or replay its dispatch. Necessary new repair uses ai-collab-start.
@@ -66,14 +71,18 @@ Use project-relative paths only:
      present; on legacy records recover the step from Current Status and linked
      authority, without requiring new fields or owner approval. A replacement
      session may assume the same responsibility after checking latest state and
-     other same-batch execution ownership; record actual Current agent, keep the
+     other same-batch execution ownership; record actual Current agent in Routing and increment State revision, keep the
      responsible role, batch, scope, risk and Review round. Formal role transfers,
      synthesis-agent dispatch and independent reviews still use dispatch.
      Local CLI/IDE host choice within authorized offline work is your execution
      detail: never ask the owner where to run or to approve continue again.
      A prior runner exiting is not environment blockage; do not launch competing
      writers or kill another agent's process. Report a concrete capability or
-     permission limit through the existing recovery route when needed.
+     permission limit through the existing recovery route when needed. Ending the
+     active session on purpose is a boundary even for the same role: save the
+     Continuation Command first. A foreseeable long check may leave one short
+     checkpoint with its external log, stated as not yet passed
+     (`handoff-schema.md#planned-session-end-and-long-check-checkpoint`).
    - `dispatch` to an agent: follow the complete Operator Command only if the current
      agent is the named role and is independent of the producer of the work under
      review. A reviewer never reviews its own design or implementation. If not

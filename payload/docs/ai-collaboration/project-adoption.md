@@ -23,7 +23,8 @@ the actual project root and run the package manager from the package directory.
 ## Route A: Full Package, Managed Ownership
 
 Use this when the project should receive the whole package and the manager
-should own the installed files and managed blocks.
+should own the installed files and managed blocks. Existing managed blocks keep their current
+text until an official upgrade replaces them; ownership and replacement rules are unchanged.
 
 ```powershell
 powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\manage.ps1 -Action CheckVersion -ProjectRoot 'E:\Projects\your-project'
@@ -79,6 +80,25 @@ powershell.exe -NoProfile -ExecutionPolicy Bypass -File 'E:\Packages\engrelay-1.
 
 This route gives no manager ownership, no automatic upgrade and no managed
 uninstall. Later changes must be made by hand and reviewed as project content.
+
+## Project-Owned Historical Statements
+
+Under Route A, project text outside the managed block is project content. Under
+Route B there is no managed block at all. Installing or upgrading the package never
+rewrites that outside text, so an old note that still describes a retired or
+conflicting collaboration path can remain after the package is current. The package
+text fix does not correct such a statement in the project. Coordinate it inside the
+project:
+
+1. Open the entries that the project's agents actually load and list each
+   conflicting statement with its path and line.
+2. Decide with the project maintainer whether the statement still applies to the
+   current workflow selection. Edit it only under the project's own instructions and
+   file permissions, as one bounded change set with a summary.
+3. Leave the managed block as installed. Do not hand-edit it, move the statement
+   into it, or remove project-owned content to bypass ownership.
+4. Record the coordination result in the project's own change record. Until that
+   edit exists, the project statement is still open, whatever the package version.
 
 ## Known Legacy Adoption
 

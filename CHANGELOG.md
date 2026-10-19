@@ -2,6 +2,41 @@
 
 [Simplified Chinese](CHANGELOG.zh-CN.md)
 
+## 1.9.4 — 2026-10-19
+
+- Narrows source-matched recovery. Candidates are only review records named by the
+  review index and result or response files that the live handoff (including Next
+  output files) or current task names by path; directories are never scanned. A new
+  container without a real prior SHA256 is reported as missing evidence, never restored
+  as pending. Only legacy index-linked review records and legacy response handoffs keep
+  the no-fingerprint branch. A batch restores at most one pending transfer and restores
+  none when any same-batch candidate is in conflict or lacks evidence.
+- Adds a planned session end and long-check checkpoint rule to the canonical role
+  rules: a same-role session end is a handoff boundary, and a long check may keep one
+  checkpoint with its external log, stated as not yet passed.
+- The project adoption guides explain project-owned historical statements outside the
+  managed block: the project coordinates them, and package changes do not rewrite them.
+- The applied check compares the Routing section and the action section of the
+  transfer's Next action (Operator Command, Current Status including any
+  Continuation Command, Owner Decision Brief, or Review Or Task State Impact), after
+  line-ending normalization and with fence-aware section reading. Same-revision
+  differences are conflicts, and two or more pending candidates are a conflict.
+- Taking over an executable continue records the actual Current agent and increments
+  `State revision`, so a superseded transfer compares as advanced and is not replayed.
+- A read-only subagent result is published directly by the active permitted writer,
+  or saved first as a recovery container in a batch-scoped result path. Existing
+  result files are never overwritten, and the writer's reply states the findings.
+- Recovery containers use an outer fence longer than any backtick run inside them.
+- `agent-rules.md` and the generated managed heading now describe the selected
+  ai-collaboration workflow instead of legacy execution. The managed-block
+  replacement algorithm is unchanged; existing managed blocks keep their current
+  heading until an official upgrade regenerates them.
+- On each of Windows PowerShell 5.1 and PowerShell 7, recovery fixture rehearsals
+  passed 47 cases and the final independent follow-up passed 17 focused cases.
+  The runtime validator is unchanged from v1.9.3; its historical full suite was
+  not repeated for these protocol changes. Fixture checks do not establish
+  real-agent or host adherence.
+
 ## 1.9.3 — 2026-10-19
 
 - Makes handoff persistence explicit: formal dispatches name writable handoff

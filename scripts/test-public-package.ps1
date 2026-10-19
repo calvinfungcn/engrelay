@@ -137,7 +137,7 @@ function Write-PublicSummary([int]$OuterExit, [string]$ErrorText = '') {
     $started.Stop()
     $summary = [ordered]@{
         schemaVersion = 1
-        packageVersion = '1.9.3'
+        packageVersion = '1.9.4'
         snapshotSha256 = $snapshotHash
         host = [IO.Path]::GetFileName($hostExe)
         previousPackageVersion = if ($null -eq $previous) { $null } else { '1.6.1' }
@@ -249,7 +249,7 @@ try {
     $snapshot = Read-Json (Join-Path $package 'snapshot.json')
     $snapshotHash = Get-FileHashText (Join-Path $package 'snapshot.json')
     Assert-Equal $snapshot.schemaVersion 1 'Public snapshot schema mismatch'
-    Assert-Equal ([string]$snapshot.packageVersion) '1.9.3' 'Public snapshot version mismatch'
+    Assert-Equal ([string]$snapshot.packageVersion) '1.9.4' 'Public snapshot version mismatch'
     Assert-True (-not ($snapshot.PSObject.Properties.Name -contains 'sourceRoot')) 'Public snapshot contains a sourceRoot proof path'
     Assert-True (-not ($snapshot.PSObject.Properties.Name -contains 'archiveRoot')) 'Public snapshot contains an archive proof path'
     Assert-True (Test-Path -LiteralPath (Join-Path $package 'scripts/manage.ps1') -PathType Leaf) 'Public manager missing'
@@ -307,7 +307,7 @@ try {
             $version = Invoke-Manager $package $fixture 'CheckVersion'; Require-Exit $version
             $upgrade = Invoke-Manager $package $fixture 'Upgrade'; Require-Exit $upgrade
             $manifest = Read-Json (Join-Path $fixture '.ai-collaboration-install/manifest.json')
-            Assert-Equal ([string]$manifest.packageVersion) '1.9.3' 'Upgrade did not record package version'
+            Assert-Equal ([string]$manifest.packageVersion) '1.9.4' 'Upgrade did not record package version'
             Assert-Equal ([string]$manifest.skillTarget) 'codex' 'Upgrade did not preserve codex SkillTarget'
             Assert-Equal ([string]$manifest.workflowMode) 'optional' 'Upgrade did not preserve WorkflowMode'
             $agentsText = [IO.File]::ReadAllText($agentsPath)

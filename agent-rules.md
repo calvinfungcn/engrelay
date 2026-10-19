@@ -49,7 +49,8 @@ Use the current project root, not a source example's WM path.
 
 ### Runtime and exit rules
 
-- Use .ai/current-task.md and .ai/handoff.md only for real legacy execution;
+- Use .ai/current-task.md and .ai/handoff.md only for a task that explicitly selects
+  the ai-collaboration workflow;
   templates live in docs/ai-collaboration/templates. Do not copy another
   project's live state. Keep runtime state out of Git.
 - At transfer, wait, interruption or completion declare dispatch, continue or

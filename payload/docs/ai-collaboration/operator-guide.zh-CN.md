@@ -75,11 +75,13 @@
   （`-ExpectedBatchId`、`-ExpectedNextAction`、`-ExpectedNextRole`、
   `-ExpectedReviewRound`；存在修订号时加 `-ExpectedStateRevision`）。通过只说明
   所给值与结构一致。
-- 只读子代理的结果，由仍活跃且获准写入的委派 Agent 在同一边界落盘。没有可写者时，
+- 只读子代理的结果，由仍活跃且获准写入的委派 Agent 在同一边界发布或落盘，并在其回复中说明发现的问题。没有可写者时，
   回复中的完整交接须说明尚未落盘。
-- 若同批次审查记录比 live 交接更新，`ai-collab-continue` 先按指纹与修订号恢复该
-  转移（见[来源匹配恢复](handoff-schema.md#source-matched-recovery)），不重新计数
-  审查结论，也不重放命令。
+- 若同批次审查记录，或 live 交接（含其 Next output files）与当前任务点名的结果或响应文件比 live 交接更新，`ai-collab-continue` 先按真实 SHA256
+  指纹与修订号恢复该转移（见[来源匹配恢复](handoff-schema.md#source-matched-recovery)），
+  不重新计数审查结论，也不重放命令。新容器必须带真实 SHA256；只有旧版索引链接审查记录与
+  旧版响应交接可以省略。一个批次最多恢复一个待应用转移。
+- 计划结束当前会话即使角色不变，也是交接边界；长检查可保留一个外置日志检查点，并说明检查尚未通过。
 - 这些检查不会唤醒进程、不认证已保存的日志，也不构成验收。
 - 中风险批次需独立代码审查；见 [审查上限](README.md#review-round-circuit-breaker)。
 

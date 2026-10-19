@@ -57,14 +57,18 @@ Before stopping, choose exactly one Next Action under README.md#routing-contract
 - close: no next role; `Closure outcome: accepted|stopped|superseded` under Review
   Or Task State Impact, and no Operator Command.
 Use `continue` for same-owner local steps; write handoff only at an actual transfer,
-wait, interruption or close. State the remaining Review round capacity when it
+wait, planned session end, interruption or close. A planned session end with the same
+role is such a boundary: save the Continuation Command before ending. Adjacent steps
+inside one active session need no write-back. Before a foreseeable long check that may
+cross the session budget, save at most one short continue checkpoint with its external
+log, stated as not yet passed (handoff-schema.md#planned-session-end-and-long-check-checkpoint). State the remaining Review round capacity when it
 affects the choice (README.md#review-round-circuit-breaker).
 For new/updated handoffs include the Routing summary Human Action Required;
 executable continue includes a compact ### Continuation Command under Current
 Status per handoff-schema.md#autonomous-continuation. After checking latest state,
 allowance, capability, permissions and execution ownership, an active eligible
 agent must execute the authorized next step immediately. A replacement session
-can take over the same responsibility, recording its actual Current agent while
+can take over the same responsibility, recording its actual Current agent and incrementing State revision while
 retaining role, batch and review count. Required independent review and formal
 role transfers still use dispatch; never self-review via continue.
 Within authorized offline work, local CLI/IDE host selection is an agent detail:
@@ -75,10 +79,12 @@ This rule neither wakes a stopped process nor bypasses a real wait or tool limit
 Read-only and prohibited-.ai fallbacks follow handoff-schema.md#response-handoff-fallback.
 A formal dispatch names each writable handoff output and never adds an unsourced
 `.ai/` write ban for independence or generic read-only wording. A subagent result
-that is read-only is saved by the active, permitted writing Agent at the same
-boundary, with its source attribution, read back and checked with the expected
-state; with no permitted writer, the complete response handoff is delivered and
-its unpersisted status is stated. Expected values come from the decided transfer,
+that is read-only is taken by the active, permitted writing Agent at the same
+boundary: it publishes the transfer directly to `.ai/handoff.md`, or first saves a
+recovery container in the batch's own result path. It then reads back, checks the
+expected state, and states the subagent findings in its own reply. An existing
+result file is never overwritten. With no permitted writer, the complete response
+handoff is delivered and its unpersisted status is stated. Expected values come from the decided transfer,
 never from the stale file. Source-matched recovery and the new-version boundary
 rule are in handoff-schema.md#source-matched-recovery and
 handoff-schema.md#expected-state-validation.

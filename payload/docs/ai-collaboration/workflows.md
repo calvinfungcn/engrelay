@@ -87,8 +87,12 @@ Apply [autonomous continuation](handoff-schema.md#autonomous-continuation) at
 session boundaries: an active capable agent checks latest authority, review
 allowance and execution ownership, then immediately performs executable continue
 within the authorized scope. A replacement session keeps the responsible role,
-batch and review count and records its actual agent. It cannot replace an
-independent review or an actual role/synthesis transfer, which still uses dispatch.
+batch and review count, records its actual agent, and increments State revision. It cannot replace an
+independent review or an actual role/synthesis transfer, which still uses dispatch. Ending the
+active session on purpose is a real boundary even when the role stays the same; save the
+Continuation Command before ending. A foreseeable long check may leave one checkpoint with its
+external log, stated as not yet passed
+([planned session end and long-check checkpoint](handoff-schema.md#planned-session-end-and-long-check-checkpoint)).
 Choosing a local CLI terminal or IDE conversation for authorized offline work
 must not become a Task Owner decision. A single-turn runner exiting is not an
 environment blocker; do not start competing writers or promise automatic wake-up.
@@ -124,7 +128,8 @@ At each real boundary (dispatch, wait, planned interruption or close), the role
 permitted to write saves `.ai/handoff.md`, reads back its Routing and validates
 it with the expected state it decided
 ([expected state validation](handoff-schema.md#expected-state-validation)). The
-final response reports whether it was persisted. Same-owner micro-steps do not.
+final response reports whether it was persisted. Same-owner micro-steps inside one
+active session do not.
 
 Read-only prohibits file writes unless named review or handoff outputs are
 explicitly authorized. A formal dispatch lists those outputs and adds no `.ai/`
