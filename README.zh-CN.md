@@ -8,11 +8,11 @@ EngRelay 取自 Engineering + Relay，意为工程接力。它为已有代码库
 Agent 提供角色提示词、任务和交接模板、按风险引入的独立审查，以及检查交付
 证据的工具。
 
-**版本 1.9.4** · [MIT 许可证](LICENSE) · [下载完整包](https://github.com/calvinfungcn/engrelay/releases/tag/v1.9.4)
+**版本 1.9.5** · [MIT 许可证](LICENSE) · [下载完整包](https://github.com/calvinfungcn/engrelay/releases/tag/v1.9.5)
 
-恢复改动在 Windows PowerShell 5.1 和 PowerShell 7 上各通过 47 项夹具演练，最终独立
-复核在两种宿主上各通过 17 项定向检查。运行态校验器与 v1.9.3 相同。这些检查不证明
-真实 Agent 或宿主遵从。
+本版本让可选规模与基于证据的进展更清晰，并在派发时提醒给出能力档位。
+有限的虚构 Agent 抽查和独立审查已完成；这些检查不保证模型输出零遗漏、宿主遵从，
+也不构成业务验收。
 
 ## 提供哪些功能
 
@@ -50,10 +50,12 @@ Agent 提供角色提示词、任务和交接模板、按风险引入的独立�
   [自主接续规则](payload/docs/ai-collaboration/handoff-schema.md#autonomous-continuation)。
 - 恢复过期交接时只读取索引链接的审查记录，或 live 交接（含 Next output files）与当前任务点名的结果或响应路径；新容器须有真实 SHA256 指纹，只有旧版索引链接审查记录与旧版响应交接可省略。一个批次最多恢复一个待应用转移，任何冲突都会阻止恢复。比较动作段落后才判定为已应用。接管可执行 continue 时会递增 `State revision`。计划结束同一角色的会话也是交接边界；长检查可保留一个外置日志检查点，并说明检查尚未通过。
 - 块外的项目自有历史声明在项目内协调；安装或升级包不会改写这些内容。
-- Agent 派发可在交接 `Current Status` 下增加一行能力建议（`Recommended capability
+- Agent 派发须在交接 `Current Status` 下给出一行能力建议（`Recommended capability
   tier: C1`–`C5`），仅供为下一项工作选择模型与推理强度时参考；详见
   [能力档位说明](payload/docs/ai-collaboration/handoff-schema.md#capability-tier-guidance)。
-  它不是阻塞条件，也不代表模型资格认证。
+  它不是阻塞条件，也不代表模型资格认证；旧交接缺少该行仍有效。
+- 进展以既有交接区块中的可观察成果、证据与剩余工作表示。粗略规模与人工投入均为可选，
+  不作为路由门槛，也不是完成百分比。
 - 检查覆盖实际受影响的行为。结构检查成功不代表业务正确或宿主接入有效。
 - 真实交接边界会落盘、回读，并按已决定的批次、动作、下一角色和审查计数做预期核对。
   只读子代理结果由仍活跃的可写 Agent 直接发布或先落盘，并在回复中说明发现；若没有获准写入者，则保留完整响应交接。
@@ -74,7 +76,7 @@ Agent 提供角色提示词、任务和交接模板、按风险引入的独立�
 使用可信完整包，放在业务项目以外的独立目录。先备份目标项目规则，读取其
 现有 Agent 指令。新项目示例：
 
-从发行页面下载 `engrelay-1.9.4.zip`，解压后进入 `engrelay-1.9.4` 目录执行命令。
+从发行页面下载 `engrelay-1.9.5.zip`，解压后进入 `engrelay-1.9.5` 目录执行命令。
 保留完整包原样；额外工具文件或字节修改会使它与清单不匹配。仓库源码仅在
 实际文件集合和字节与 `snapshot.json` 完全一致时，也可作为安装源。
 

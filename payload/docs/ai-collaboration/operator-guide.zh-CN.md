@@ -61,12 +61,13 @@
 
 - 下一步动作仅一种：`continue`、`dispatch` 或 `close`。
 - 向 Agent 派发时附带完整 Operator Command。
-- Agent 派发可在 `Current Status` 下增加一行建议，例如
+- Agent 派发须在 `Current Status` 下给出一行建议，例如
   `Recommended capability tier: C3`。档位 C1–C5 仅提示为**下一项**工作选择模型与
   推理强度：C1 机械执行、C2 常规局部、C3 综合工程、C4 深度分析、C5 高难度推理；
   不批准模型、不阻塞流程、不替代独立审查。固定默认表与规则见
   [handoff-schema.md#capability-tier-guidance](handoff-schema.md#capability-tier-guidance)。
-  人工决定派发、`continue` 与 `close` 省略该行。
+  人工决定派发、`continue` 与 `close` 省略该行。该行是建议而非门槛；旧交接缺少该行仍有效，
+  结构校验也不核对该行。
 - 负责人决定使用 `awaiting-owner-decision` 与 Owner Decision Brief；沉默不构成批准。
 - 每次派发都明确列出可写的交接产物。仅因审查独立或只读代码，不会自动禁止 `.ai/`
   更新；真实的用户、上位指令或工具限制才会禁止，此时回复须附完整交接。

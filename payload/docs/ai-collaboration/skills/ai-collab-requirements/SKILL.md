@@ -93,6 +93,11 @@ real boundary with complete Routing, the Operator Command (after confirmation) o
 Owner Decision Brief (while waiting), as defined by
 `docs/ai-collaboration/handoff-schema.md`.
 
+The confirmed dispatch to Chief Designer is an agent `dispatch`: its first
+`Current Status` line is the advisory `Recommended capability tier: Cn`, confirmed at
+the same readback and echoed in the final reply. The line is omitted while waiting
+for the owner.
+
 EngRelay material and modifications: Copyright (c) 2026 calvinfungcn and EngRelay
 contributors, MIT. The full notice accompanies the installed kit at the project-root
 path `docs/ai-collaboration/README.md#engrelay-license`. Preserve it and any upstream

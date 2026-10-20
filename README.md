@@ -9,12 +9,12 @@ working in existing repositories. It provides role prompts, task and handoff
 templates, independent reviews based on risk, and tools for checking the evidence
 used to call work complete.
 
-**Version 1.9.4** · [MIT License](LICENSE) · [Download the complete package](https://github.com/calvinfungcn/engrelay/releases/tag/v1.9.4)
+**Version 1.9.5** · [MIT License](LICENSE) · [Download the complete package](https://github.com/calvinfungcn/engrelay/releases/tag/v1.9.5)
 
-Recovery changes passed 47 fixture rehearsals on each of Windows PowerShell 5.1
-and PowerShell 7; the final independent follow-up passed 17 focused cases on each.
-The runtime validator is unchanged from v1.9.3. These checks do not establish
-real-agent or host adherence.
+This release makes optional sizing and evidence-backed progress more visible, and
+adds a capability-tier reminder to dispatches. A limited fictional-agent sample
+and independent review are complete; they do not guarantee error-free model
+output, host adherence, or business acceptance.
 
 ## What you get
 
@@ -67,11 +67,14 @@ for entry selection and handoffs.
   a long check may keep one checkpoint with its external log, stated as not yet passed.
 - Project-owned historical statements outside the managed block are coordinated inside
   the project; installing or upgrading the package does not rewrite them.
-- Agent dispatch may add one advisory capability line (`Recommended capability
+- Agent dispatch must include one advisory capability line (`Recommended capability
   tier: C1`–`C5`) under handoff `Current Status` to hint at model strength for
   the next work item; see
   [capability tier guidance](payload/docs/ai-collaboration/handoff-schema.md#capability-tier-guidance).
-  It is not a blocker or model certification.
+  It is not a blocker or model certification. Older handoffs without it stay valid.
+- Progress is shown as an observable outcome, its evidence, and remaining work in the
+  existing handoff sections. Rough sizing and human effort are optional, never gate
+  routing, and are not a completion percentage.
 - A real handoff boundary is saved, read back and checked against the expected
   batch, action, next role and Review round decided for it. A read-only review
   result is saved by the active writing agent, or kept as a complete response
@@ -98,8 +101,8 @@ See the [maintained role contracts](payload/docs/ai-collaboration/README.md).
 Use a trusted complete package in its own directory. Back up the target project's
 rules and read its existing agent instructions. For a new project:
 
-Download `engrelay-1.9.4.zip` from the release and extract it. Run commands from
-the extracted `engrelay-1.9.4` directory. Keep that complete package unchanged;
+Download `engrelay-1.9.5.zip` from the release and extract it. Run commands from
+the extracted `engrelay-1.9.5` directory. Keep that complete package unchanged;
 extra tool files or edited bytes make it differ from its inventory. The repository
 source can also be used when its file set and bytes exactly match `snapshot.json`.
 

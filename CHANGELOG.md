@@ -2,6 +2,23 @@
 
 [Simplified Chinese](CHANGELOG.zh-CN.md)
 
+## 1.9.5 — 2026-10-20
+
+- Makes the advisory capability line a required output for a new agent dispatch: the
+  first `Current Status` line states the `Cn` tier and the final reply echoes it. The
+  value is a suggestion, not a gate; older handoffs without the line stay valid and are
+  not backfilled. Entry skills, Common Preflight, operator guides and both README
+  editions now say so.
+- Adds optional rough sizing (L1–L5 for product source) and human-effort guidance to
+  Process Metrics, and states that progress is judged by new evidence rather than by a
+  handoff count. Sizing never gates routing.
+- Removes the optional-line ambiguity from the README and operator-guide capability
+  wording.
+- Confirms the `improve-lean-progress-and-capability-handoff` change in OpenSpec
+  navigation. Automatic process statistics remain deferred.
+- Independent review passed; CR-01 was verified. The runtime validator and manager
+  bytes are unchanged, and historical suites were not rerun for this change.
+
 ## 1.9.4 — 2026-10-19
 
 - Narrows source-matched recovery. Candidates are only review records named by the

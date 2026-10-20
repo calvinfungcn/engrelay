@@ -74,13 +74,15 @@ does not wake stopped processes. See
 
 - One next action: `continue`, `dispatch`, or `close`.
 - Agent dispatch includes a complete Operator Command for the next role.
-- Agent dispatch may also show one advisory line under `Current Status`:
+- Agent dispatch must show one advisory line under `Current Status`:
   `Recommended capability tier: C3` (example). Tiers C1–C5 are short hints for
   choosing model and reasoning strength for the **next** work item only; they do
   not approve models, block work, or replace independent review. Definitions and
   the fixed next-role defaults live in
   [handoff-schema.md#capability-tier-guidance](handoff-schema.md#capability-tier-guidance).
-  Human decision dispatch, `continue`, and `close` omit the line.
+  Human decision dispatch, `continue`, and `close` omit the line. The line is a
+  suggestion, not a gate; an older handoff without it stays valid, and a structure
+  check does not confirm the line.
 - Owner decisions use `awaiting-owner-decision` and an Owner Decision Brief;
   silence is not approval.
 - Each dispatch names its writable handoff outputs. A read-only code review does

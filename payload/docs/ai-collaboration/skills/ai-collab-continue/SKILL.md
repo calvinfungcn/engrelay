@@ -112,8 +112,10 @@ Use project-relative paths only:
 ## Output
 
 State the Next action you followed, the evidence you checked, and any unfinished
-mapped work. For an agent dispatch, confirm where the Operator Command is written. For
-a human decision, present the brief. For `close`, state that no next role exists.
+mapped work. For an agent dispatch, confirm where the Operator Command is written and
+that its first `Current Status` line carries the advisory capability tier, echoed in
+the final reply; a response-only fallback carries the same line. For a human decision,
+present the brief and omit the line. For `close`, state that no next role exists.
 
 EngRelay material and modifications: Copyright (c) 2026 calvinfungcn and EngRelay
 contributors, MIT. The full notice accompanies the installed kit at the project-root

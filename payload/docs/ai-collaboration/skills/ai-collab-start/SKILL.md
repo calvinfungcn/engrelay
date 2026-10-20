@@ -82,6 +82,11 @@ must carry complete Routing and a copy-ready Operator Command for an agent dispa
 or an Owner Decision Brief for a wait, as defined by
 `docs/ai-collaboration/handoff-schema.md`.
 
+For an agent `dispatch`, the first `Current Status` line is the advisory
+`Recommended capability tier: Cn` (`docs/ai-collaboration/handoff-schema.md#capability-tier-guidance`).
+Confirm it at the same readback and echo the same tier in the final reply; a
+response-only fallback carries the same line.
+
 EngRelay material and modifications: Copyright (c) 2026 calvinfungcn and EngRelay
 contributors, MIT. The full notice accompanies the installed kit at the project-root
 path `docs/ai-collaboration/README.md#engrelay-license`. Preserve it and any upstream

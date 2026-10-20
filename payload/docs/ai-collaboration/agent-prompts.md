@@ -93,7 +93,11 @@ no next role or Operator Command exists.
 For agent `dispatch`, add one advisory line `Recommended capability tier: C1`
 through `C5` as the first line under handoff `Current Status` and briefly echo
 the same tier in the final response; see handoff-schema.md#capability-tier-guidance.
-Omit the line for human decision dispatch, `continue`, and `close`.
+The value is a suggestion and not a qualification gate, but the line is required
+output for a new agent dispatch. In the same save-and-readback, confirm its
+position, the default or explicit override, and the tier you will echo; a
+structure check does not verify this line. Older handoffs without it remain valid
+and are not backfilled. Omit the line for human decision dispatch, `continue`, and `close`.
 Ordinary `accepted` closure follows handoff-schema.md#accepted-closure-validation:
 finalize close inputs, run validate-runtime-state.ps1 on those inputs, record
 command/exit/diagnostics and input correspondence in an external evidence container,

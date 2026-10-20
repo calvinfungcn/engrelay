@@ -27,6 +27,8 @@ authority.
 
 | Item | Source | Status | Change or evidence |
 | --- | --- | --- | --- |
+| Lean progress summaries and handoff capability output | Owner-selected M batch | Completed | [Archived tasks](changes/archive/2026-10-20-improve-lean-progress-and-capability-handoff/tasks.md); [review index](../docs/reviews/improve-lean-progress-and-capability-handoff/index.md) |
+| Automatic process statistics (P2) | Owner follow-up discussion | Pending decision | Not part of the lean-progress change and not an implementation commitment; see [archived change design](changes/archive/2026-10-20-improve-lean-progress-and-capability-handoff/design.md) |
 | Handoff capability tiers C1–C5 | Owner-selected M batch | Completed | [Archived change](changes/archive/2026-10-18-add-handoff-capability-guidance/tasks.md); [review index](../docs/reviews/add-handoff-capability-guidance/index.md) |
 | Closure evidence rules and this navigation | Owner-selected M batch | Completed | [Archived tasks](changes/archive/2026-10-18-clarify-closure-and-follow-up-tracking/tasks.md); [review index](../docs/reviews/clarify-closure-and-follow-up-tracking/index.md) |
 | Autonomous continuation and human-action summary | Owner-selected M batch | Completed | [Archived tasks](changes/archive/2026-10-18-fix-autonomous-continuation/tasks.md); [review index](../docs/reviews/fix-autonomous-continuation/index.md) |

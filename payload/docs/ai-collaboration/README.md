@@ -339,6 +339,16 @@ an exact reproducible inspection step. A completion report may identify
 remaining OpenSpec work, but a later batch still begins through separate Task
 Intake; the closing role does not create or dispatch it.
 
+Mid-batch progress uses the same sections and only at a real handoff boundary.
+Judge progress by new evidence, resolved unknowns, or review findings, not by a
+fixed count of handoffs without a newly passed item. Research that excludes a
+wrong direction, or a review that produces evidence, is effective progress and
+names its next step. Keep implementation, self-test, independent review, and
+`accepted` distinct. When acceptance items map clearly, a handoff may state the
+verified count with evidence; that count is not hours or an overall percentage.
+Material effort without explainable progress gets one short checkpoint and the
+smallest corrective action. This adds no counter, alert, or approval.
+
 ## Requirements Analyst (conditional role)
 
 Requirements Analyst is a conditional role action inside the existing
@@ -1140,6 +1150,30 @@ acceptance, verification and risk-required review remain mandatory.
 An escaped defect found after `close` starts a new Execution Batch and, when
 formal review applies, a new review round. Do not rewrite the closed handoff or
 historical review artifact.
+
+### Optional Sizing And Effort
+
+Sizing and effort are optional descriptions for planning and owner choice. Give
+them only when they help the decision and have a stated basis; omit them for a
+clear small task.
+
+- Rough change size uses L1–L5 for product source only, measured as reviewed
+  `Added + Deleted` lines: L1 0–99, L2 100–499, L3 500–1999, L4 2000–9999, and L5
+  10000 or more. State the scope, assumptions, and confidence; do not present an
+  exact line count as an estimate.
+- Tests, documentation, configuration, generated, binary, and mechanical changes
+  are described by their file or behavior scope. Such a change may use no L level,
+  and a large line count does not raise risk or skip review.
+- Human effort, when requested and supported by comparable evidence, is an effort
+  range with assumptions. Do not derive it from AI runtime, Expected implementation
+  sessions, lines of code, or tool cost.
+- Use the current batch's real baseline and separated scope. Without a trustworthy
+  baseline, give no number: do not use the whole repository, a single unstaged
+  diff, or mixed unrelated work, and do not scan history, install tools, or create
+  a cache.
+- L levels never map to `S/M/H`, `C1–C5`, review counts, acceptance, or approval.
+  A material difference from an earlier rough size is a short evidence note; it is
+  not a stop by itself and follows the existing scope or cost paths.
 
 ## Related Documents
 

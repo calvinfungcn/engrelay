@@ -20,6 +20,8 @@
 
 | 事项 | 来源 | 状态 | 变更或证据 |
 | --- | --- | --- | --- |
+| 精简进度说明与交接能力输出 | 负责人选定的 M 级批次 | 已完成 | [已归档任务](changes/archive/2026-10-20-improve-lean-progress-and-capability-handoff/tasks.md)；[审查索引](../docs/reviews/improve-lean-progress-and-capability-handoff/index.md) |
+| 自动过程统计（P2） | 负责人讨论的后续事项 | 待决定 | 不属于精简进度变更，也不作为实施承诺；见[已归档变更设计](changes/archive/2026-10-20-improve-lean-progress-and-capability-handoff/design.md) |
 | 交接能力档位 C1–C5 | 负责人选定的 M 级批次 | 已完成 | [已归档变更](changes/archive/2026-10-18-add-handoff-capability-guidance/tasks.md)；[审查索引](../docs/reviews/add-handoff-capability-guidance/index.md) |
 | 关闭依据与本导航 | 负责人选定的 M 级批次 | 已完成 | [已归档任务](changes/archive/2026-10-18-clarify-closure-and-follow-up-tracking/tasks.md)；[审查索引](../docs/reviews/clarify-closure-and-follow-up-tracking/index.md) |
 | 自主接续与人类介入摘要 | 负责人选定的 M 级批次 | 已完成 | [已归档任务](changes/archive/2026-10-18-fix-autonomous-continuation/tasks.md)；[审查索引](../docs/reviews/fix-autonomous-continuation/index.md) |

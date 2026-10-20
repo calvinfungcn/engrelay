@@ -59,6 +59,8 @@
      decision. -->
 
 <One paragraph describing where the task stands now. At coherent batch completion, summarize observable outcome and inspection evidence.>
+<!-- Progress example, when useful: "Implemented and self-tested the change; evidence: <evidence path>; independent review not yet run." Keep it short; omit sizing unless it has a stated basis. -->
+
 
 ### Continuation Command
 
