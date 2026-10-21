@@ -316,7 +316,7 @@ Quickstart SHALL 为不能访问 GitHub 的用户提供离线取得方式：由�
 
 ### Requirement: Optional task sizing without routing gates
 
-任务规模或投入估算 SHALL 仅在有助于决策且有合理依据时提供，并说明范围、假设及不确定性；无依据时 SHALL 允许省略，不强制填写未知值。L1–L5 SHALL 只描述粗略修改规模，SHALL NOT 推导 S/M/H、C1–C5、审查次数、验收或审批。人工投入 SHALL 与 AI 时长、会话数及 LOC 区分，SHALL NOT 由其自动换算。统计 SHALL 按需限定相关范围，不要求安装工具或常驻状态。
+任务规模或投入估算 SHALL 仅在有助于决策且有合理依据时提供，并说明范围、假设及不确定性；无依据时 SHALL 允许省略，不强制填写未知值。L1–L5 SHALL 只描述粗略修改规模，SHALL NOT 推导 S/M/H、C1–C5、审查次数、验收或审批。人工投入 SHALL 与 AI 时长、会话数及 LOC 区分，SHALL NOT 由其自动换算。统计 SHALL 按需限定相关范围，不要求安装工具或常驻状态。可能给出或更新估算的角色入口 SHALL 以锚点短引用唯一共享定义，SHALL NOT 复制区间或扩大必读范围。
 
 #### Scenario: Clear small task has no estimate
 - **WHEN** 明确的小任务没有可靠规模或人工投入估算，且原授权与执行前提已满足
@@ -341,6 +341,10 @@ Quickstart SHALL 为不能访问 GitHub 的用户提供离线取得方式：由�
 #### Scenario: An estimate changes materially
 - **WHEN** 实际范围或规模与已有粗估明显不同
 - **THEN** 当前角色简短说明证据和原因，先核对获授权范围及最小方案；数字偏差本身不停止工作，实际复杂度例外、范围或重大成本变化仍走已有负责人及设计处理路径
+
+#### Scenario: A role entry reaches the shared definition
+- **WHEN** Chief Designer 仅按其角色入口工作且负责人请求规模或投入参考，或实施角色记录投入是否实质变化
+- **THEN** 角色入口的短引用可直接到达唯一共享定义中的区间、省略条件与风险独立规则；入口不复制区间表、不把完整手册列为必读，也不因此要求明确的小任务给出估算
 
 ### Requirement: Evidence-based progress within existing handoffs
 

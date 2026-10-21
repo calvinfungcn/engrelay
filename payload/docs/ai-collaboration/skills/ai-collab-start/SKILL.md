@@ -50,7 +50,7 @@ Use project-relative paths only:
 4. Prepare the minimum coherent `.ai/current-task.md`: task ID, change ID if any,
    Execution Batch ID mapped to OpenSpec checklist items, risk `S`, `M` or `H` with a
    reason, the observable outcome, must-have acceptance, out-of-scope work, required
-   checks and the first role. Keep `openspec/changes/<change-id>/tasks.md` as the
+   checks and the Initial role. Keep `openspec/changes/<change-id>/tasks.md` as the
    only implementation checklist; do not create a second task list.
 5. Route by the existing rules:
    - material business ambiguity that Task Intake cannot safely summarize: set

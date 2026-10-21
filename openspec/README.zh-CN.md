@@ -20,8 +20,10 @@
 
 | 事项 | 来源 | 状态 | 变更或证据 |
 | --- | --- | --- | --- |
+| 估算定义可达性与精益规则试点 | 负责人选定的 M 级批次 | 已完成 | [已归档任务](changes/archive/2026-10-21-link-sizing-guidance-and-pilot-lean-rules/tasks.md)；[审查索引](../docs/reviews/link-sizing-guidance-and-pilot-lean-rules/index.md) |
 | 精简进度说明与交接能力输出 | 负责人选定的 M 级批次 | 已完成 | [已归档任务](changes/archive/2026-10-20-improve-lean-progress-and-capability-handoff/tasks.md)；[审查索引](../docs/reviews/improve-lean-progress-and-capability-handoff/index.md) |
-| 自动过程统计（P2） | 负责人讨论的后续事项 | 待决定 | 不属于精简进度变更，也不作为实施承诺；见[已归档变更设计](changes/archive/2026-10-20-improve-lean-progress-and-capability-handoff/design.md) |
+| 自动过程统计（P2） | 负责人讨论的后续事项 | 待决定 | 不作为实施承诺；试点证据支持推迟准入（见[试点证据](../docs/reviews/link-sizing-guidance-and-pilot-lean-rules/pilot-evidence.md#decision-1-p2-entry-criteria-automatic-sizing--statistics)） |
+| 上下文精简与冗余提示词缩减 | 试点发现（决策 2） | 待决定 | 不作为实施承诺；见[试点证据](../docs/reviews/link-sizing-guidance-and-pilot-lean-rules/pilot-evidence.md#decision-2-context-consolidation-prompt--schema-lean-guidance) |
 | 交接能力档位 C1–C5 | 负责人选定的 M 级批次 | 已完成 | [已归档变更](changes/archive/2026-10-18-add-handoff-capability-guidance/tasks.md)；[审查索引](../docs/reviews/add-handoff-capability-guidance/index.md) |
 | 关闭依据与本导航 | 负责人选定的 M 级批次 | 已完成 | [已归档任务](changes/archive/2026-10-18-clarify-closure-and-follow-up-tracking/tasks.md)；[审查索引](../docs/reviews/clarify-closure-and-follow-up-tracking/index.md) |
 | 自主接续与人类介入摘要 | 负责人选定的 M 级批次 | 已完成 | [已归档任务](changes/archive/2026-10-18-fix-autonomous-continuation/tasks.md)；[审查索引](../docs/reviews/fix-autonomous-continuation/index.md) |

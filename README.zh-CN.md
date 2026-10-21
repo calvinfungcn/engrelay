@@ -8,11 +8,11 @@ EngRelay 取自 Engineering + Relay，意为工程接力。它为已有代码库
 Agent 提供角色提示词、任务和交接模板、按风险引入的独立审查，以及检查交付
 证据的工具。
 
-**版本 1.9.5** · [MIT 许可证](LICENSE) · [下载完整包](https://github.com/calvinfungcn/engrelay/releases/tag/v1.9.5)
+**版本 1.9.6** · [MIT 许可证](LICENSE) · [下载完整包](https://github.com/calvinfungcn/engrelay/releases/tag/v1.9.6)
 
-本版本让可选规模与基于证据的进展更清晰，并在派发时提醒给出能力档位。
-有限的虚构 Agent 抽查和独立审查已完成；这些检查不保证模型输出零遗漏、宿主遵从，
-也不构成业务验收。
+本版本让 Chief Designer 与 Implementation Engineer 在相关时可直接到达既有的可选规模与人工投入指引；不新增必填估算或路由门槛。
+有限的虚构 Agent 试点与独立审查已完成；主宿主 S5–S7 样本未能成功运行，改用 Codex 替代样本。
+试点不证明性能提升、因果改善、模型零遗漏、宿主遵从或业务验收。
 
 ## 提供哪些功能
 
@@ -76,7 +76,7 @@ Agent 提供角色提示词、任务和交接模板、按风险引入的独立�
 使用可信完整包，放在业务项目以外的独立目录。先备份目标项目规则，读取其
 现有 Agent 指令。新项目示例：
 
-从发行页面下载 `engrelay-1.9.5.zip`，解压后进入 `engrelay-1.9.5` 目录执行命令。
+从发行页面下载 `engrelay-1.9.6.zip`，解压后进入 `engrelay-1.9.6` 目录执行命令。
 保留完整包原样；额外工具文件或字节修改会使它与清单不匹配。仓库源码仅在
 实际文件集合和字节与 `snapshot.json` 完全一致时，也可作为安装源。
 

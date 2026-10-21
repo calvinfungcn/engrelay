@@ -248,6 +248,9 @@ Focus:
 - first demonstrable vertical slice, or a bounded spike that names the critical
   unknown it will close and requires an explicit, evidence-based conclusion
 - stop conditions, batch sizing, and explicit OpenSpec sub-items
+- optional change size or human effort reference only when requested by the Task
+  Owner or needed for decisions (README.md#optional-sizing-and-effort); omit for
+  clear small tasks
 - handoff to Design Reviewer, Architect, UI Designer, Test Engineer, or Implementation Engineer
 - phrase the first demonstrable slice in owner-observable terms and identify
   its inspection evidence or steps; keep this as informational progress,
@@ -705,8 +708,8 @@ Rules:
 - For the first implementation batch, produce the planned demonstrable result
   or bounded spike conclusion before expanding the task list.
 - Before starting a later batch, record whether the approved scope or expected
-  effort changed materially. If it did, stop automatic expansion and recommend
-  `GO`, `REVISE`, `STOP`, or `SPLIT`.
+  effort changed materially (README.md#optional-sizing-and-effort). If it did,
+  stop automatic expansion and recommend `GO`, `REVISE`, `STOP`, or `SPLIT`.
 - Before routing completion, use the existing handoff sections to state the
   owner-observable outcome, inspection evidence or steps, satisfied
   acceptance/OpenSpec work, deviations or risks, and remaining mapped work.

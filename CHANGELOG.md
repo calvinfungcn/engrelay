@@ -2,6 +2,22 @@
 
 [Simplified Chinese](CHANGELOG.zh-CN.md)
 
+## 1.9.6 — 2026-10-21
+
+- Adds single-line anchor references to the shared `README.md#optional-sizing-and-effort`
+  definition from Chief Designer Focus and Implementation Engineer's material effort
+  change sentence, enabling estimation-aware roles to reach the shared guidance without
+  expanding required reading or copying interval tables.
+- Aligns `ai-collab-start` step 4 wording to use `Initial role` instead of `the first role`.
+- Conducts an empirical pilot across lean-rule and sizing reachability scenarios (S1–S7)
+  to record agent observations, required-reading context, and tool invocations for P2 and
+  context-consolidation decision inputs.
+- The independent review passed at round 7; the cumulative review history remains
+  7/7 and was not reset. P2 process statistics and context consolidation remain pending
+  decisions. Primary-host S5–S7 samples were unavailable and Codex substitutes were
+  used; both baseline and candidate located the existing sizing guidance. The limited
+  sample does not establish performance improvement or causal effect.
+
 ## 1.9.5 — 2026-10-20
 
 - Makes the advisory capability line a required output for a new agent dispatch: the

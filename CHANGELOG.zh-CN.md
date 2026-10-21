@@ -2,6 +2,13 @@
 
 [English](CHANGELOG.md)
 
+## 1.9.6 — 2026-10-21
+
+- 在 Chief Designer Focus 与 Implementation Engineer 的投入实质变化说明中，增加对唯一共享定义 `README.md#optional-sizing-and-effort` 的单行锚点引用，让需要估算的角色无需扩大必读清单或复制区间表即可到达共享指引。
+- 将 `ai-collab-start` 第 4 步措辞统一为 `Initial role`（替代 `the first role`）。
+- 开展精益规则与估算可达性场景（S1–S7）的有界试点取证，记录实际 Agent 观察、必读上下文体量与工具调用，为 P2 和上下文精简提供决策输入。
+- 第 7 轮独立审查通过；累计审查历史仍为 7/7，未重置。P2 过程统计与上下文精简仍待决定。主宿主 S5–S7 样本无法运行，使用了 Codex 替代样本；候选版本与基线均能找到既有估算指引。有限样本不证明性能提升或因果效果。
+
 ## 1.9.5 — 2026-10-20
 
 - 将能力建议行设为新 Agent 派发的必需输出：交接 `Current Status` 首行给出 `Cn` 档位，最终回复复述同一档位。该值仍是建议而非门槛；旧交接缺少该行仍有效，不回填。入口 Skill、Common Preflight、操作指南及两版 README 已同步说明。

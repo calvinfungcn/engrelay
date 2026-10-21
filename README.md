@@ -9,12 +9,14 @@ working in existing repositories. It provides role prompts, task and handoff
 templates, independent reviews based on risk, and tools for checking the evidence
 used to call work complete.
 
-**Version 1.9.5** · [MIT License](LICENSE) · [Download the complete package](https://github.com/calvinfungcn/engrelay/releases/tag/v1.9.5)
+**Version 1.9.6** · [MIT License](LICENSE) · [Download the complete package](https://github.com/calvinfungcn/engrelay/releases/tag/v1.9.6)
 
-This release makes optional sizing and evidence-backed progress more visible, and
-adds a capability-tier reminder to dispatches. A limited fictional-agent sample
-and independent review are complete; they do not guarantee error-free model
-output, host adherence, or business acceptance.
+This release links Chief Designer and Implementation Engineer to the existing
+optional sizing and human-effort guidance when relevant. It adds no required
+sizing or routing gate. A limited fictional-agent pilot and independent review
+are complete; primary-host samples S5–S7 were unavailable and Codex substitutes
+were used. The pilot does not establish performance improvement, causal effect,
+zero model omissions, host adherence, or business acceptance.
 
 ## What you get
 
@@ -101,8 +103,8 @@ See the [maintained role contracts](payload/docs/ai-collaboration/README.md).
 Use a trusted complete package in its own directory. Back up the target project's
 rules and read its existing agent instructions. For a new project:
 
-Download `engrelay-1.9.5.zip` from the release and extract it. Run commands from
-the extracted `engrelay-1.9.5` directory. Keep that complete package unchanged;
+Download `engrelay-1.9.6.zip` from the release and extract it. Run commands from
+the extracted `engrelay-1.9.6` directory. Keep that complete package unchanged;
 extra tool files or edited bytes make it differ from its inventory. The repository
 source can also be used when its file set and bytes exactly match `snapshot.json`.
 
