@@ -10,6 +10,28 @@ and offline package handling.
 EngRelay does not bundle sample product applications or mock fixtures. This guide
 assumes you already have a prepared task input with clear objectives.
 
+## Profile selection (1.10.0 local candidate)
+
+Version 1.10.0 is a local candidate, not pushed or published; the latest published
+release is 1.9.6 and does not contain Lite/Full selection. The steps below use the
+default Full profile and its seven Skills. Lite in the 1.10.0 candidate
+uses the same complete package and `-WorkflowProfile lite -SkillTarget none` on
+Install. Read its [self-contained guide](../payload/docs/ai-collaboration/lite/README.md)
+for explicit reading prompts, isolated runtime, checks and protected maintenance.
+Omit the profile on subsequent actions to retain it. To switch, preserve project
+configuration/task evidence and coordinate old entry text before protected
+Uninstall/Install; no private Lite adoption or automatic task migration is provided.
+Do not use the v1.9.6 manager on v2 state. Keep matching managers and backups.
+The existing entry-file baseline shows 86.3% fewer static AGENTS.md bytes in Lite;
+this is not a reduction in total context, tokens or latency. Single-artifact task/review
+records are a protocol design, not proof of runtime adherence. The bounded Phase 3
+S/M/H and queue pilot now has invocation evidence; its results and independent review
+status are recorded in the source review history. Evidence covers fictional samples
+on observed hosts; broader host adherence is unverified. Independent candidate
+review is complete. A complete candidate package requires an actual committed
+export and matching inventory under the documented build flow; its export evidence
+is recorded separately. Publication requires a separate request.
+
 ## 1. Directory boundaries
 
 Keep these three directories separate during your trial:

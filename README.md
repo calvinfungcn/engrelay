@@ -9,14 +9,43 @@ working in existing repositories. It provides role prompts, task and handoff
 templates, independent reviews based on risk, and tools for checking the evidence
 used to call work complete.
 
-**Version 1.9.6** · [MIT License](LICENSE) · [Download the complete package](https://github.com/calvinfungcn/engrelay/releases/tag/v1.9.6)
+**Local release candidate 1.10.0 — not pushed or published** · [MIT License](LICENSE)
 
-This release links Chief Designer and Implementation Engineer to the existing
-optional sizing and human-effort guidance when relevant. It adds no required
-sizing or routing gate. A limited fictional-agent pilot and independent review
-are complete; primary-host samples S5–S7 were unavailable and Codex substitutes
-were used. The pilot does not establish performance improvement, causal effect,
-zero model omissions, host adherence, or business acceptance.
+Latest published version: **1.9.6** · [Download its complete package](https://github.com/calvinfungcn/engrelay/releases/tag/v1.9.6).
+The Lite/Full features below belong to the 1.10.0 candidate, not that download.
+
+## Workflow profiles (1.10.0 candidate)
+
+The candidate adds `-WorkflowProfile full|lite` to the shared manager.
+New installs default to Full; existing installations retain their recorded profile
+when the parameter is omitted. WorkflowMode still controls activation independently.
+Full owns the seven Skills and existing role chain. Lite installs only its
+[short rules, templates and read-only tools](payload/docs/ai-collaboration/lite/README.md),
+uses `.ai/engrelay-lite/` and supports only SkillTarget none. It requires explicit
+canonical reading, including on hosts that do not auto-read AGENTS.md.
+
+```powershell
+& ./scripts/manage.ps1 -Action Install -ProjectRoot $engrelayProject -WorkflowProfile lite -SkillTarget none
+```
+
+These changes are not included in the v1.9.6 download above. Tests use isolated
+complete working-tree packages; the source checkout is not an installation source.
+New installations use manifest v2; trusted v1 Full converts only through Upgrade.
+The original v1.9.6 manager refuses v2. Keep the matching complete package, manager
+and original recovery material. Upgrade, repeated Install and SetMode never switch
+profiles: preserve evidence, coordinate project entries, then use protected
+Uninstall/Install for an explicitly requested switch. Project-owned Lite config
+and runtime survive upgrade/uninstall; ordinary package drift still refuses.
+Private Lite is not automatically adopted, and unfinished tasks are not migrated.
+The existing entry-file baseline shows 86.3% fewer static AGENTS.md bytes in Lite;
+this is not a reduction in total context, tokens or latency. Single-artifact task/review
+records are a protocol design, not proof of runtime adherence. The bounded Phase 3
+S/M/H and queue pilot now has invocation evidence; its results and independent review
+status are recorded in the source review history. Evidence covers fictional samples
+on observed hosts; broader host adherence is unverified. Independent candidate
+review is complete. A complete candidate package requires an actual committed
+export and matching inventory under the documented build flow; its export evidence
+is recorded separately. Publication requires a separate request.
 
 ## What you get
 

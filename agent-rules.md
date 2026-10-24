@@ -3,6 +3,9 @@
 EngRelay is the public package alias for ai-collaboration. Selecting EngRelay
 explicitly selects the same ai-collaboration workflow; role, field, and
 WorkflowMode semantics remain unchanged.
+This managed block applies to WorkflowProfile full. EngRelay-Lite selects only an
+installed Lite profile; explain a profile mismatch and use the selected profile's
+entry instead of silently installing, converting or creating its runtime state.
 
 ## ai-collaboration Workflow (conditional)
 
@@ -148,4 +151,5 @@ not the capability methods or the active workflow's requirement/review contracts
   existing Owner Decision Brief with benefit, effort/unknowns, evidence,
   smaller option and recommendation; silence is not approval.
 - Do not commit, branch, create worktrees, merge, push or deploy unless explicitly
-  authorized. Package lifecycle operations do not require legacy handoff routing.
+  authorized. Package lifecycle operations do not launch a business batch; runtime
+  handoff rules apply to the current explicitly selected collaboration task.

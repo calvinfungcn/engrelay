@@ -164,6 +164,7 @@ function Get-ExpectedLayout([object]$Snapshot, [string]$Target, [string]$TargetD
     foreach ($entry in @(Get-Prop $Snapshot 'files' @())) {
         $relative = [string]$entry.path
         if ($relative -eq 'agent-rules.md') { $layout['AGENTS.md'] = 'agents' }
+        elseif ($relative -like 'payload/docs/ai-collaboration/lite/*') { continue }
         elseif ($relative -like 'payload/*') { $layout[$relative.Substring(8)] = 'file' }
     }
     if ($Target -ne 'none') {
@@ -193,6 +194,22 @@ if ($script:requiredInputFailed) {
     Add-Row 'summary' 'fail' 'stopped before inspection because the requested workspace is unusable'
 }
 else {
+    # Profile dispatch precedes Full-only file/Skill checks. Read only the known
+    # manifest path, and run this package's canonical Lite doctor, never an
+    # arbitrary installed path named by the manifest.
+    $profileManifest = Join-Path $workspace '.ai-collaboration-install/manifest.json'
+    if (-not (Test-ReparseChain $profileManifest) -and (Test-Path -LiteralPath $profileManifest -PathType Leaf)) {
+        try { $profileState = (Read-Utf8 $profileManifest) | ConvertFrom-Json } catch { $profileState = $null }
+        if ($null -ne $profileState -and [string](Get-Prop $profileState 'workflowProfile' '') -ceq 'lite') {
+            $liteDoctor = Join-Path $PSScriptRoot '../lite/scripts/doctor.ps1'
+            if ((Test-ReparseChain $liteDoctor) -or -not (Test-Path -LiteralPath $liteDoctor -PathType Leaf)) {
+                Write-Output 'WorkflowProfile=lite; use its canonical docs/engrelay-lite/scripts/doctor.ps1 from the matching package; Full-only checks skipped.'
+                exit 1
+            }
+            & $liteDoctor -WorkspaceRoot $workspace -PackageRoot $PackageRoot -HostTarget $HostTarget
+            exit $LASTEXITCODE
+        }
+    }
     # 1. Source integrity: only when a local package is named. Each category is isolated so one
     #    failure does not hide the facts from the other categories.
     if ([string]::IsNullOrWhiteSpace($PackageRoot)) {
@@ -313,7 +330,8 @@ else {
                     $problems = New-Object 'Collections.Generic.List[string]'
                     $verified = 0
                     $seen = @{}
-                    if ([string](Get-Prop $state 'version' '') -ne '1') { $problems.Add('manifest version is not 1') }
+                    if ([string](Get-Prop $state 'version' '') -notin @('1','2')) { $problems.Add('manifest version is unsupported') }
+                    if ([string](Get-Prop $state 'version' '') -eq '2' -and [string](Get-Prop $state 'workflowProfile' '') -cne 'full') { $problems.Add('manifest workflowProfile must be full') }
                     if ([string](Get-Prop $state 'projectRoot' '') -ne $workspace) {
                         $problems.Add('manifest projectRoot differs from this workspace (moved or copied installation)')
                     }

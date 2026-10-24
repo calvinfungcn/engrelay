@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param(
     [string]$PackageRoot = '',
-    [ValidatePattern('^\d+\.\d+\.\d+$')][string]$Version = '1.9.6',
+    [ValidatePattern('^\d+\.\d+\.\d+$')][string]$Version = '1.10.0',
     [switch]$ForRelease
 )
 
@@ -101,6 +101,15 @@ $rootItem = Get-Item -LiteralPath $root -Force
 if (($rootItem.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0) { throw "Package root is a reparse point: $root" }
 
 $inventory = @(Get-Inventory $root)
+# A package carrying Lite must carry its entire fixed source projection. This is
+# separate from the selected deployment: both profiles remain in one inventory.
+$litePrefix = 'payload/docs/ai-collaboration/lite/'
+$liteFiles = @($inventory | Where-Object { $_.path.StartsWith($litePrefix,[StringComparison]::Ordinal) })
+if ($liteFiles.Count) {
+    $requiredLite = @('RULES.md','README.md','README.zh-CN.md','LICENSE','agent-rules.md','templates/project-config.md','templates/queue.md','templates/task.md','templates/handoff.md','scripts/validate-state.ps1','scripts/doctor.ps1')
+    $actualLite = @($liteFiles | ForEach-Object { $_.path.Substring($litePrefix.Length) })
+    if ($actualLite.Count -ne $requiredLite.Count -or @($requiredLite | Where-Object { $actualLite -cnotcontains $_ }).Count) { throw 'Incomplete or unknown Lite source projection; retain both complete profiles before generating inventory' }
+}
 $snapshot = [ordered]@{
     schemaVersion = 1
     packageVersion = $Version

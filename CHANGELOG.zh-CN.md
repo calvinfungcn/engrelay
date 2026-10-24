@@ -2,6 +2,28 @@
 
 [English](CHANGELOG.md)
 
+## 1.10.0 — 2026-10-24（本地发行候选）
+
+尚未推送或发布。GitHub 最近已发布版本仍为 1.9.6。
+
+- 共用受保护管理器增加固定 Lite／Full 配置、v2 清单、可信 v1.9.6 Full 升级转换
+  及 Lite 项目配置保留。
+- 增加 Lite 短规则、模板和只读状态／诊断工具，保持运行态隔离、独立审查、累计
+  上限及明确来源核对。
+- 新安装仍默认 Full，已有安装保持配置；拒绝隐式切换、私人 Lite 自动 Adopt
+  及不支持的发现目标。
+- 原 v1.9.6 管理器拒绝 v2 清单。保留对应管理器及恢复材料；Upgrade、重复
+  Install 和 SetMode 不切换配置。Lite 仅支持 SkillTarget none，不提供进程
+  自动唤醒或未完成任务自动迁移。
+- 增加聚焦 PowerShell 5.1／7 子进程夹具，完成实际 Agent 的有界 S/M/H、交接
+  与队列演练。独立实施验证及最终候选审查通过。16 次候选生命周期进程覆盖两个
+  PowerShell 宿主下 Full／Lite 的 Install、CheckVersion、Status 和 Uninstall；
+  诊断零写入，卸载保留项目自有内容。
+- 仅对匹配输入复用先前的升级／拒绝和保护证据。已观察宿主上的虚构样本不证明
+  全宿主／模型遵从、业务验收、零遗漏、token／延迟节省或因果改善；86.3% 比较
+  仅涉及 AGENTS.md 静态字节。实际提交的干净导出与匹配快照须另有证据；本条目
+  不证明导出、提案归档或发布已完成。
+
 ## 1.9.6 — 2026-10-21
 
 - 在 Chief Designer Focus 与 Implementation Engineer 的投入实质变化说明中，增加对唯一共享定义 `README.md#optional-sizing-and-effort` 的单行锚点引用，让需要估算的角色无需扩大必读清单或复制区间表即可到达共享指引。

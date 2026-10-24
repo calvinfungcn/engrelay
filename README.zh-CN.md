@@ -8,11 +8,34 @@ EngRelay 取自 Engineering + Relay，意为工程接力。它为已有代码库
 Agent 提供角色提示词、任务和交接模板、按风险引入的独立审查，以及检查交付
 证据的工具。
 
-**版本 1.9.6** · [MIT 许可证](LICENSE) · [下载完整包](https://github.com/calvinfungcn/engrelay/releases/tag/v1.9.6)
+**本地发行候选 1.10.0 — 尚未推送或发布** · [MIT 许可证](LICENSE)
 
-本版本让 Chief Designer 与 Implementation Engineer 在相关时可直接到达既有的可选规模与人工投入指引；不新增必填估算或路由门槛。
-有限的虚构 Agent 试点与独立审查已完成；主宿主 S5–S7 样本未能成功运行，改用 Codex 替代样本。
-试点不证明性能提升、因果改善、模型零遗漏、宿主遵从或业务验收。
+最近已发布版本：**1.9.6** · [下载该版本完整包](https://github.com/calvinfungcn/engrelay/releases/tag/v1.9.6)。
+下述 Lite／Full 功能属于 1.10.0 候选，不包含在该下载中。
+
+## 工作流配置（1.10.0 候选）
+
+候选为共用管理器增加 `-WorkflowProfile full|lite`。新安装默认 Full；已有安装
+省略参数时保持清单中的配置。WorkflowMode 独立控制启用。Full 拥有七个 Skill
+和现有角色链；Lite 只安装[短规则、模板和只读工具](payload/docs/ai-collaboration/lite/README.zh-CN.md)，
+使用 `.ai/engrelay-lite/`，初版仅支持 SkillTarget none。Lite 使用明确规范读取，
+不自动读取 AGENTS.md 的宿主也须收到明确读取提示。
+
+```powershell
+& ./scripts/manage.ps1 -Action Install -ProjectRoot $engrelayProject -WorkflowProfile lite -SkillTarget none
+```
+
+上方 v1.9.6 下载不含这些改动。检查使用隔离的完整工作树测试包；开发检出不是
+安装源。新安装采用 v2 清单，可信 v1 Full 只在 Upgrade 转换。原 v1.9.6 管理器
+拒绝 v2；保留对应完整包、管理器和原恢复材料。Upgrade、重复 Install、SetMode
+不切换配置：明确要求切换时先保存证据、协调项目入口，再受保护卸载／安装。
+Lite 项目配置和运行态在升级／卸载后仍保留；普通包文件继续拒绝漂移。私人 Lite
+不自动 Adopt，未完成任务不自动迁移。既有入口文件基准显示 Lite 的 AGENTS.md
+静态字节少 86.3%，不代表总上下文、token 或延迟减少。单工件任务／审查记录是协议设计，
+不证明运行时遵从。第三期有界 S/M/H 与队列演练已有调用证据，结果和独立审查状态
+记录在源码审查历史中。证据限于虚构样本及已观察宿主，更广泛的宿主遵从性未验证；
+独立候选审查已完成。完整候选包须按文档中的构建流程，以实际提交导出和匹配清单
+为依据；导出证据另行记录。发布须单独请求。
 
 ## 提供哪些功能
 

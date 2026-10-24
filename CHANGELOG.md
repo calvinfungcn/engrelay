@@ -2,6 +2,32 @@
 
 [Simplified Chinese](CHANGELOG.zh-CN.md)
 
+## 1.10.0 — 2026-10-24 (local release candidate)
+
+Not pushed or published. The latest published GitHub release remains 1.9.6.
+
+- Adds fixed Lite/Full profiles in the shared protected manager, manifest v2,
+  trusted v1.9.6 Full Upgrade conversion and retained Lite project configuration.
+- Adds Lite short rules, templates and read-only state/diagnostic tools with
+  isolated runtime, independent reviews, cumulative limits and explicit sources.
+- Keeps Full as the new-install default, preserves existing profiles and rejects
+  implicit switches, private Lite adoption and unsupported discovery targets.
+- Manifest v2 is refused by the original v1.9.6 manager. Keep matching managers
+  and recovery material; Upgrade, repeated Install and SetMode do not switch profiles.
+  Lite supports only SkillTarget none and provides no process wake-up or automatic
+  migration of unfinished tasks.
+- Adds focused PowerShell 5.1/7 subprocess fixtures and completes bounded actual-agent
+  S/M/H, handoff and queue exercises. Independent implementation verification and
+  final candidate review passed. Sixteen candidate lifecycle processes covered
+  Full/Lite Install, CheckVersion, Status and Uninstall across both PowerShell hosts;
+  diagnostics made no changes and uninstall preserved project-owned content.
+- Reuses earlier upgrade/refusal and protection evidence only for matching inputs.
+  Fictional samples on observed hosts do not establish all-host/model adherence,
+  business acceptance, zero omissions, token/latency savings or causal improvement.
+  The 86.3% comparison concerns static AGENTS.md bytes only. A committed clean export
+  and matching snapshot are required separately; this entry does not certify export,
+  proposal archival or publication.
+
 ## 1.9.6 — 2026-10-21
 
 - Adds single-line anchor references to the shared `README.md#optional-sizing-and-effort`

@@ -4,8 +4,9 @@
 
 The GitHub repository is the maintained public source. The initial public baseline
 is v1.7.0, commit `9c26c22266625aa04822637baf8f283763362677`, under MIT.
-The current release baseline is v1.9.6. Local maintenance setup does not create an active
-business batch or authorize publication.
+The latest published release baseline is v1.9.6. Version 1.10.0 is a local release
+candidate, not pushed or published. Local maintenance setup does not create an
+active business batch or authorize publication.
 
 ## Start here
 
@@ -83,7 +84,7 @@ disposable roots, not real projects. Real deployments require their own task.
 4. Check the exact file set and hashes, and run only checks justified by changed
    behavior. Run lifecycle fixtures on the staging package, keeping logs outside
    it. Test version expectations must be updated when the release version changes;
-   the current smoke script contains v1.9.6 expectations; its optional frozen
+   the current smoke script expects the v1.10.0 candidate; its optional frozen
    v1.6.1 fixture remains a separate historical check.
 5. After the release candidate is stable, copy its snapshot.json back to the
    source as release metadata and ensure a fresh export matches. Keep immutable
@@ -117,6 +118,26 @@ because an agent, role, handoff, filename or bookkeeping record changed.
 `scripts/test-skill-discovery-guidance.ps1` builds its no-guidance baseline from
 git ref `9c26c22266625aa04822637baf8f283763362677` by default (`-BaselineGitRef`
 overrides). Candidate verification uses the supplied complete package root.
+
+## Lite / Full development checks
+
+The 1.10.0 candidate manager writes manifest v2 and records the profile, exact deployment
+set and LF/UTF-8 fingerprint. Full excludes the Lite source subtree; Lite has a fixed
+projection and project-owned configuration. Development fixtures do not refresh
+the root release snapshot. For authorized candidate preparation, generate the
+snapshot in clean staging and copy back only the validated metadata using the build
+flow above. An inventoried disposable working-tree package remains distinct from
+an actual committed export; a synthetic test version is fixture metadata, not a
+reviewed release candidate.
+
+`scripts/test-lite-state.ps1` checks real validator subprocess exits and zero writes.
+`scripts/test-workflow-profiles.ps1 -PackageRoot <complete-test-package> -OriginalRoot <verified-v1.9.6-export> -LogPath <external.json>`
+checks affected lifecycle paths on the PowerShell host running it. Run it under both
+5.1 and 7. Original v1.9.6 bytes come from local tag commit
+`c12f2646ab2a2369586f2097e34fdb678e16be30`; check its complete inventory before
+using its original manager/fingerprint. Read-only diagnosis uses Status/CheckVersion,
+the existing Full doctor entry or Lite's own doctor. Host loading can remain unknown.
+These fixtures do not establish actual agent adherence or phase-3 readiness.
 
 ## Local setup and next conversation
 

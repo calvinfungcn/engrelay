@@ -4,12 +4,18 @@ param(
     [Parameter(Mandatory = $true)][string]$ProjectRoot,
     [ValidateSet('none', 'agents', 'codex', 'claude', 'cursor', 'opencode', 'antigravity', 'gemini', 'iflow', 'qwen')]
     [string]$SkillTarget = 'none',
+    [ValidateSet('full', 'lite')][string]$WorkflowProfile,
     [ValidateSet('optional', 'default', 'disabled')][string]$WorkflowMode = 'optional',
     [switch]$Preview
 )
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
+# ValidateSet accepts case-insensitive input. Persist canonical machine values so
+# every successful constructor is also readable by the strict v2 reader.
+if ($WorkflowProfile) { $WorkflowProfile = $WorkflowProfile.ToLowerInvariant() }
+$WorkflowMode = $WorkflowMode.ToLowerInvariant()
+$SkillTarget = $SkillTarget.ToLowerInvariant()
 $packageRoot = [IO.Path]::GetFullPath((Split-Path -Parent $PSScriptRoot))
 $ProjectRoot = [IO.Path]::GetFullPath($ProjectRoot).TrimEnd('\', '/')
 $stateRoot = Join-Path $ProjectRoot '.ai-collaboration-install'
@@ -19,6 +25,7 @@ $begin = '<!-- ai-collaboration:begin -->'
 $end = '<!-- ai-collaboration:end -->'
 $utf8 = New-Object Text.UTF8Encoding($false, $true)
 $sourceCloudTags = @{}
+$script:resolvedProfile = 'full'
 $targets = @{
     agents = '.agents'; codex = '.codex'; claude = '.claude'; cursor = '.cursor'
     opencode = '.opencode'; antigravity = '.agent'; gemini = '.gemini'; iflow = '.iflow'; qwen = '.qwen'
@@ -121,9 +128,24 @@ function Get-BasePlan {
     if (-not (Test-Path -LiteralPath $payload -PathType Container)) { throw 'Payload missing' }
     Assert-NoReparse $payload -AllowSourceCloud
     $items = New-Object 'Collections.Generic.List[object]'
+    if ($script:resolvedProfile -eq 'lite') {
+        $liteRoot = Join-Path $payload 'docs/ai-collaboration/lite'
+        $files = @('RULES.md','README.md','README.zh-CN.md','LICENSE','templates/project-config.md','templates/queue.md','templates/task.md','templates/handoff.md','scripts/validate-state.ps1','scripts/doctor.ps1')
+        foreach ($relative in $files) {
+            $source = Join-Path $liteRoot $relative
+            Assert-NoReparse $source -AllowSourceCloud
+            if (-not (Test-Path -LiteralPath $source -PathType Leaf)) { throw "Lite source missing: $relative" }
+            $items.Add([pscustomobject]@{path=('docs/engrelay-lite/' + $relative);kind='file';source=$source})
+        }
+        $items.Add([pscustomobject]@{path='docs/engrelay-lite.config.md';kind='project-document';source=(Join-Path $liteRoot 'templates/project-config.md')})
+        $items.Add([pscustomobject]@{path='AGENTS.md';kind='agents';source=(Join-Path $liteRoot 'agent-rules.md')})
+        $items.Add([pscustomobject]@{path='.gitignore';kind='gitignore';source=$null})
+        return $items.ToArray()
+    }
     foreach ($file in Get-ChildItem -LiteralPath $payload -Recurse -File) {
         Assert-NoReparse $file.FullName -AllowSourceCloud
         $relative = $file.FullName.Substring($payload.Length + 1).Replace('\', '/')
+        if ($relative.StartsWith('docs/ai-collaboration/lite/', [StringComparison]::Ordinal)) { continue }
         if ($relative -notmatch '^docs/ai-collaboration/' -and $relative -notin @(
             'docs/reviews/README.md', 'docs/solutions/README.md', 'docs/solutions/solution.template.md')) {
             throw "Unexpected payload file: $relative"
@@ -138,6 +160,7 @@ function Get-BasePlan {
 }
 
 function Get-Plan([string]$SelectedTarget) {
+    if ($script:resolvedProfile -eq 'lite' -and $SelectedTarget -ne 'none') { throw 'Lite supports SkillTarget none only; use explicit RULES.md reading' }
     if ($SelectedTarget -ne 'none' -and -not $targets.ContainsKey($SelectedTarget)) { throw 'Invalid Skill target' }
     $items = New-Object 'Collections.Generic.List[object]'
     foreach ($item in @(Get-BasePlan)) {
@@ -149,6 +172,10 @@ function Get-Plan([string]$SelectedTarget) {
 }
 
 function Write-InstallDiscoveryGuidance([string]$SelectedTarget) {
+    if ($script:resolvedProfile -eq 'lite') {
+        Write-Information 'WorkflowProfile: lite; SkillTarget: none; explicitly read docs/engrelay-lite/RULES.md and docs/engrelay-lite.config.md. No dedicated Skill or host discovery copies. Host loading=unknown.' -InformationAction Continue
+        return
+    }
     $canonicalRelative = 'docs/ai-collaboration/skills/ai-collab-start/SKILL.md'
     $canonicalFull = [IO.Path]::GetFullPath((Join-Path $ProjectRoot ($canonicalRelative -replace '/', '\')))
     Write-Information ("SkillTarget: " + $SelectedTarget) -InformationAction Continue
@@ -264,8 +291,8 @@ function Assert-NoRetiredResidualActivation([object]$Profile) {
     }
 }
 
-# Source-only registry of explicitly supported previous installed layouts. Unregistered or
-# unknown versions receive same-layout compatibility only; nothing here is learned from a manifest.
+# Source-only registry of trusted v1 layouts. Unknown v1 versions are refused;
+# nothing here is learned from a manifest or recalculated using new source bytes.
 function Get-SupportedLayouts {
     $registryPath = Join-Path $PSScriptRoot 'supported-layouts.json'
     if (-not (Test-Path -LiteralPath $registryPath -PathType Leaf)) { throw 'Supported layout registry missing' }
@@ -294,10 +321,28 @@ function Get-LayoutMap([object[]]$Items) {
 }
 
 # The layout a manifest claims is verified here, never inferred from the manifest's own records.
-# Unknown/unregistered versions must match the running package layout exactly (same-layout only).
+# v1 needs the trusted original registry; v2 binds its fixed profile and deployment set.
 function Get-InstalledLayout([object]$State) {
     $selectedTarget = [string](Get-StateValue $State 'skillTarget' 'none')
     if ($selectedTarget -ne 'none' -and -not $targets.ContainsKey($selectedTarget)) { throw 'Invalid Skill target' }
+    if ($State.version -eq 2) {
+        $plan = @(Get-Plan $selectedTarget)
+        $expected = @{}; foreach ($item in $plan) { $expected[$item.path] = $item }
+        $entries = @(Get-StateValue $State 'deploymentSet' @())
+        $seen = @{}
+        foreach ($entry in $entries) {
+            $path = [string](Get-StateValue $entry 'path' '')
+            if (-not $expected.ContainsKey($path) -or $seen.ContainsKey($path)) { throw 'Invalid v2 deployment set path' }
+            $item = $expected[$path]
+            $source = if ($null -eq $item.source) { '-' } else { $item.source.Substring($packageRoot.Length + 1).Replace('\','/') }
+            $size = [string](Get-StateValue $entry 'bytes' '')
+            if ($path -cne $item.path -or [string](Get-StateValue $entry 'source' '') -cne $source -or [string](Get-StateValue $entry 'kind' '') -cne $item.kind -or
+                [string](Get-StateValue $entry 'sha256' '') -cnotmatch '^[a-f0-9]{64}$' -or $size -notmatch '^(0|[1-9][0-9]{0,14})$') { throw 'Invalid v2 deployment set record' }
+            $seen[$path] = $true
+        }
+        if ($seen.Count -ne $expected.Count -or (Get-ProfileFingerprint $State.packageVersion $script:resolvedProfile $selectedTarget $entries) -cne [string](Get-StateValue $State 'deploymentFingerprint' '')) { throw 'Invalid v2 deployment fingerprint or layout' }
+        return [pscustomobject]@{Kind='current';Version=$State.packageVersion;Entry=$null;Base=$plan;Map=(Get-LayoutMap $plan)}
+    }
     $claimed = Get-StateValue $State 'packageVersion'
     if ($null -ne $claimed -and -not [string]::IsNullOrWhiteSpace([string]$claimed)) {
         $entry = @(Get-SupportedLayouts | Where-Object { [string](Get-StateValue $_ 'packageVersion') -eq [string]$claimed }) | Select-Object -First 1
@@ -316,8 +361,7 @@ function Get-InstalledLayout([object]$State) {
                 Base = @(Get-StateValue $entry 'paths'); Map = (Get-LayoutMap $expanded.ToArray()) }
         }
     }
-    return [pscustomobject]@{ Kind = 'current'; Version = $null; Entry = $null; Base = @()
-        Map = (Get-LayoutMap @(Get-Plan $selectedTarget)) }
+    throw 'Unknown v1 installation: a trusted original layout and fingerprint are required; retain the original package and backups'
 }
 
 function New-ManifestRecord([string]$Path, [string]$Kind, [string]$Hash, [bool]$Preexisting, [string]$BeforeHash, [string]$Backup, [string]$Insertion) {
@@ -369,10 +413,15 @@ function Get-UpgradePlan([object]$State) {
     $retired = New-Object 'Collections.Generic.List[string]'
     $deletes = New-Object 'Collections.Generic.List[string]'
     $modeValue = Get-StateValue $State 'workflowMode'
-    $mode = if ($null -eq $modeValue) { 'default' } else { [string]$modeValue }
+    $mode = if ($null -eq $modeValue) { 'default' } else { ([string]$modeValue).ToLowerInvariant() }
     foreach ($record in @($State.files)) {
         $relative = [string]$record.path
         $path = Resolve-ProjectFile $relative
+        if ([string]$record.kind -eq 'project-document') {
+            if (-not (Test-Path -LiteralPath $path -PathType Leaf)) { throw "Project configuration missing: $relative; restore the project-owned content before Upgrade" }
+            $records.Add($record)
+            continue
+        }
         $currentBytes = [IO.File]::ReadAllBytes($path)
         $currentHash = Get-Hash $currentBytes
         $recovery.Add([pscustomobject]@{ path = $relative; hash = $currentHash; bytes = [Convert]::ToBase64String($currentBytes) })
@@ -449,8 +498,11 @@ function Assert-PackageIntegrity {
     $listed = @{}
     foreach ($entry in @($snapshot.files)) {
         if ($null -eq $entry -or [string]::IsNullOrWhiteSpace([string]$entry.path) -or
-            $entry.path -eq 'snapshot.json' -or $listed.ContainsKey($entry.path)) { throw 'Invalid snapshot file list' }
+            -not (Test-SafeRelative ([string]$entry.path)) -or $entry.path -eq 'snapshot.json' -or
+            [string]$entry.sha256 -notmatch '^[a-fA-F0-9]{64}$' -or [string]$entry.bytes -notmatch '^(0|[1-9][0-9]{0,14})$' -or
+            $listed.ContainsKey($entry.path)) { throw 'Invalid snapshot file list' }
         $path = Join-Path $packageRoot ($entry.path.Replace('/', '\'))
+        Assert-NoReparse $path -AllowSourceCloud
         if (-not (Test-Path -LiteralPath $path -PathType Leaf)) { throw "Snapshot file missing: $($entry.path)" }
         $bytes = [IO.File]::ReadAllBytes($path)
         if ($bytes.Length -ne [int64]$entry.bytes -or
@@ -465,7 +517,7 @@ function Assert-PackageIntegrity {
     return $snapshot
 }
 
-function Get-DeploymentFingerprint([object]$Snapshot) {
+function Get-LegacyDeploymentFingerprint([object]$Snapshot) {
     # Ordinal path order keeps the fingerprint identical on PowerShell 7 and Windows PowerShell 5.1.
     # Culture-sorted 1.2.0 fingerprints are recorded per host in supported-layouts.json.
     $lines = New-Object 'Collections.Generic.List[string]'
@@ -478,6 +530,34 @@ function Get-DeploymentFingerprint([object]$Snapshot) {
         $lines.Add(([string]$entry.path) + '|' + ([string]$entry.sha256).ToLowerInvariant() + '|' + [string]$entry.bytes)
     }
     return Get-Hash ($utf8.GetBytes(($lines -join [Environment]::NewLine)))
+}
+
+function Get-DeploymentSet([object]$Snapshot, [string]$SelectedTarget) {
+    $sourceEntries = @{}; foreach ($entry in $Snapshot.files) { $sourceEntries[[string]$entry.path] = $entry }
+    foreach ($item in @(Get-Plan $SelectedTarget)) {
+        $source = if ($null -eq $item.source) { '-' } else { $item.source.Substring($packageRoot.Length + 1).Replace('\','/') }
+        if ($source -eq '-') { $hash = Get-Hash ([byte[]]@()); $size = 0 }
+        else {
+            if (-not $sourceEntries.ContainsKey($source)) { throw "Deployment source missing from inventory: $source" }
+            $hash = [string]$sourceEntries[$source].sha256; $size = [int64]$sourceEntries[$source].bytes
+        }
+        [pscustomobject]@{source=$source;path=$item.path;kind=$item.kind;sha256=$hash;bytes=$size}
+    }
+}
+
+function Get-ProfileFingerprint([string]$Version, [string]$Profile, [string]$SelectedTarget, [object[]]$Entries) {
+    $lines = New-Object 'Collections.Generic.List[string]'
+    foreach ($header in @('deployment-v2',('packageVersion='+$Version),('workflowProfile='+$Profile),('skillTarget='+$SelectedTarget))) { $lines.Add($header) }
+    $paths = [string[]]@($Entries | ForEach-Object { [string]$_.path }); [Array]::Sort($paths,[StringComparer]::Ordinal)
+    foreach ($path in $paths) {
+        $entry = @($Entries | Where-Object { [string]$_.path -ceq $path })[0]
+        $lines.Add($entry.source+'|'+$entry.path+'|'+$entry.kind+'|'+$entry.sha256+'|'+[string]$entry.bytes)
+    }
+    return Get-Hash ($utf8.GetBytes(($lines -join "`n")))
+}
+
+function Get-DeploymentFingerprint([object]$Snapshot) {
+    return Get-ProfileFingerprint $Snapshot.packageVersion $script:resolvedProfile $SkillTarget @(Get-DeploymentSet $Snapshot $SkillTarget)
 }
 
 function Get-VersionParts([string]$Version) {
@@ -500,8 +580,14 @@ function Read-State {
     Assert-NoReparse $manifestPath
     if (-not (Test-Path -LiteralPath $manifestPath)) { return $null }
     $state = (Read-Text $manifestPath) | ConvertFrom-Json
-    if ($state.version -ne 1 -or $state.projectRoot -ne $ProjectRoot -or $state.phase -notin @('installed', 'inactive')) {
+    if ($state.version -notin @(1,2) -or $state.projectRoot -ne $ProjectRoot -or $state.phase -notin @('installed', 'inactive')) {
         throw 'Invalid, moved or interrupted installation manifest; retain backups and reconcile manually'
+    }
+    if ($state.version -eq 2) {
+        $profile = [string](Get-StateValue $state 'workflowProfile' '')
+        if ($profile -cnotin @('full','lite') -or [string](Get-StateValue $state 'workflowMode' '') -cnotin @('optional','default','disabled') -or
+            [string](Get-StateValue $state 'packageVersion' '') -notmatch '^\d+\.\d+\.\d+$' -or $null -eq (Get-StateValue $state 'skillTarget' $null)) { throw 'Invalid v2 workflow profile or metadata' }
+        $script:resolvedProfile = $profile
     }
     $script:installedLayout = Get-InstalledLayout $state
     $allowedLayout = $script:installedLayout.Map
@@ -513,6 +599,12 @@ function Read-State {
             $record.preexisting -isnot [bool]) { throw 'Manifest file record is not allowed' }
         $seen[$record.path] = $true
         $null = Resolve-ProjectFile $record.path
+          if ($record.kind -eq 'project-document') {
+              if ($state.version -ne 2 -or $script:resolvedProfile -ne 'lite' -or $record.path -cne 'docs/engrelay-lite.config.md' -or
+                  $null -ne (Get-StateValue $record 'adoption' $null) -or $null -ne (Get-StateValue $record 'backup' $null) -or
+                  $null -ne (Get-StateValue $record 'insertion' $null) -or $null -ne (Get-StateValue $record 'legacyProfile' $null)) { throw 'Invalid project-document ownership record' }
+              continue
+          }
         if ($record.preexisting) {
             $before = [Convert]::FromBase64String($record.backup)
             if ((Get-Hash $before) -ne $record.beforeHash) { throw 'Corrupt original backup' }
@@ -571,9 +663,11 @@ function Assert-Installed($State, [switch]$AllowMissingNew) {
     foreach ($record in @($State.files)) {
         $path = Resolve-ProjectFile $record.path
         if (-not (Test-Path -LiteralPath $path -PathType Leaf)) {
+            if ($AllowMissingNew -and $record.kind -eq 'project-document') { continue }
             if ($AllowMissingNew -and -not $record.preexisting -and $record.kind -eq 'file') { continue }
             throw "Installed file missing: $($record.path)"
         }
+        if ($record.kind -eq 'project-document') { continue }
         if ($record.kind -eq 'file') {
             if ([string](Get-StateValue $record 'adoption' '') -eq 'project-document') {
                 if (-not (Test-Path -LiteralPath $path -PathType Leaf)) { throw "Project document missing: $($record.path)" }
@@ -606,9 +700,11 @@ function Get-ManagedInsertion([string]$Kind, [string]$Text, [string]$Mode, [stri
         $prefix = $newline
     }
     if ($Kind -eq 'agents') {
-        $canonical = (Read-FileInfo (Join-Path $packageRoot 'agent-rules.md')).Text.TrimEnd([char]13, [char]10) -replace '\r?\n', $newline
+        $rulesRelative = if ($script:resolvedProfile -eq 'lite') { 'payload/docs/ai-collaboration/lite/agent-rules.md' } else { 'agent-rules.md' }
+        $canonical = (Read-FileInfo (Join-Path $packageRoot $rulesRelative)).Text.TrimEnd([char]13, [char]10) -replace '\r?\n', $newline
         $body = '## ai-collaboration Workflow policy' + $newline +
             '- WorkflowMode: ' + $Mode + $newline +
+            '- WorkflowProfile: ' + $script:resolvedProfile + $newline +
             '- Package version: ' + [string]((Get-Snapshot).packageVersion) + $newline +
             '- This declaration controls the project default; an explicit task choice takes precedence.' + $newline + $newline + $canonical
     } else {
@@ -634,9 +730,22 @@ $separator = [IO.Path]::DirectorySeparatorChar
 if ($ProjectRoot -eq $packageRoot -or $ProjectRoot.StartsWith($packageRoot + $separator, [StringComparison]::OrdinalIgnoreCase) -or
     $packageRoot.StartsWith($ProjectRoot + $separator, [StringComparison]::OrdinalIgnoreCase)) { throw 'Project/package overlap is not allowed' }
 $state = Read-State
+if ($null -eq $state -and $PSBoundParameters.ContainsKey('WorkflowProfile')) { $script:resolvedProfile = $WorkflowProfile }
+$reinstallInactive = $null -ne $state -and $state.phase -eq 'inactive' -and $Action -eq 'Install'
+if ($reinstallInactive -and $PSBoundParameters.ContainsKey('WorkflowProfile')) { $script:resolvedProfile = $WorkflowProfile }
+if ($null -ne $state -and -not $reinstallInactive -and $PSBoundParameters.ContainsKey('WorkflowProfile') -and $WorkflowProfile -cne $script:resolvedProfile) { throw 'WorkflowProfile conflict: preserve evidence, coordinate project entries, then use protected Uninstall/Install to switch; tasks are never migrated automatically' }
+if ($null -ne $state) {
+    $installedTarget = [string](Get-StateValue $state 'skillTarget' 'none')
+    if (-not $reinstallInactive -and $PSBoundParameters.ContainsKey('SkillTarget') -and $SkillTarget -cne $installedTarget) { throw 'Uninstall before changing the Skill target' }
+    if (-not $reinstallInactive -or -not $PSBoundParameters.ContainsKey('SkillTarget')) { $SkillTarget = $installedTarget }
+}
+if ($script:resolvedProfile -eq 'lite' -and $SkillTarget -ne 'none') { throw 'Lite supports SkillTarget none only; use explicit RULES.md reading' }
+if ($Action -eq 'Adopt' -and $script:resolvedProfile -eq 'lite') { throw 'Private Lite adoption is unsupported; preserve its inputs and coordinate entries before a clean install' }
+if ($Preview -and $Action -ne 'Adopt') { throw 'Preview is supported only for Adopt; no files written' }
 
 if ($Action -eq 'CheckVersion') {
     $snapshot = Assert-PackageIntegrity
+    Write-Output ('WorkflowProfile=' + $script:resolvedProfile)
     $available = [string]$snapshot.packageVersion
     if ($null -eq $state) {
         Write-Output "Available packageVersion=$available; installed=not-installed; upgrade=install"
@@ -686,6 +795,7 @@ if ($Action -in @('Install', 'Adopt', 'Upgrade', 'SetMode')) {
 }
 
 if ($Action -eq 'Status') {
+    Write-Output ('WorkflowProfile=' + $script:resolvedProfile)
     if ($null -eq $state) { Write-Output 'Not installed' }
     elseif ($state.phase -eq 'inactive') {
         $inactiveValue = Get-StateValue $state 'packageVersion'
@@ -714,12 +824,25 @@ if ($Action -eq 'Install') {
     }
     $records = New-Object 'Collections.Generic.List[object]'
     $plannedBytes = @{}
+    if ($null -eq $state -or $script:resolvedProfile -eq 'lite') {
+        $liteDirectory = Join-Path $ProjectRoot 'docs/engrelay-lite'
+        if (($null -eq $state -or [string](Get-StateValue $state 'workflowProfile' 'full') -ne 'lite') -and (Test-Path -LiteralPath $liteDirectory)) { throw 'Unmanaged Lite directory: preserve inputs and coordinate the old entry before a clean install' }
+        $entryPath = Resolve-ProjectFile 'AGENTS.md'
+        if ($null -eq $state -and (Test-Path -LiteralPath $entryPath -PathType Leaf) -and (Read-Text $entryPath) -match '(?i)EngRelay-Lite|engrelay-lite/|engrelay-lite\.config|\.ai/engrelay-lite') { throw 'Unmanaged Lite entry: preserve and coordinate project-owned instructions before installing' }
+    }
     foreach ($item in Get-Plan $SkillTarget) {
         $path = Resolve-ProjectFile $item.path
+        Assert-NoFileAncestor $path
         $existed = Test-Path -LiteralPath $path -PathType Leaf
         [byte[]]$before = @()
         if ($existed) { $before = [IO.File]::ReadAllBytes($path) }
         $insertion = $null
+        if ($item.kind -eq 'project-document') {
+            $after = if ($existed) { $before } else { [IO.File]::ReadAllBytes($item.source) }
+            if (-not $existed) { $plannedBytes[$item.path] = $after }
+            $records.Add([pscustomobject]@{path=$item.path;kind='project-document';hash=(Get-Hash $after);preexisting=[bool]$existed})
+            continue
+        }
         if ($item.kind -eq 'file') {
             [byte[]]$after = [IO.File]::ReadAllBytes($item.source)
             if ($existed -and (Get-Hash $before) -ne (Get-Hash $after)) { throw "Refusing differing existing file: $($item.path)" }
@@ -746,12 +869,13 @@ if ($Action -eq 'Install') {
         $history = Join-Path $stateRoot ('manifest-inactive-' + [guid]::NewGuid().ToString('N') + '.json')
         Write-Bytes $history ([IO.File]::ReadAllBytes($manifestPath))
     }
-    $state = [pscustomobject]@{ version = 1; projectRoot = $ProjectRoot; packageVersion = $packageVersion
+    $state = [pscustomobject]@{ version = 2; workflowProfile = $script:resolvedProfile; deploymentSet = @(Get-DeploymentSet $snapshot $SkillTarget); projectRoot = $ProjectRoot; packageVersion = $packageVersion
         packageSource = $packageRoot; snapshotFingerprint = $snapshotFingerprint
         deploymentFingerprint = $deploymentFingerprint; workflowMode = $WorkflowMode
         skillTarget = $SkillTarget; phase = 'installing'; files = $records.ToArray() }
     Save-State $state
     foreach ($record in $state.files) {
+        if ($record.kind -eq 'project-document' -and $record.preexisting) { continue }
         if ($record.kind -eq 'file' -and $record.preexisting) { continue }
         Write-Bytes (Resolve-ProjectFile $record.path) $plannedBytes[$record.path]
     }
@@ -827,7 +951,7 @@ if ($Action -eq 'Adopt') {
         Write-Output "Adoption preview: profile=$($profile.id); tracked=$($records.Count); legacyEntryChanges=$($legacyChanges.Count); writes=$(@($plannedBytes.Keys).Count); no files written"
         return
     }
-    $state = [pscustomobject]@{ version=1; projectRoot=$ProjectRoot; packageVersion=$packageVersion; packageSource=$packageRoot
+    $state = [pscustomobject]@{ version=2; workflowProfile=$script:resolvedProfile; deploymentSet=@(Get-DeploymentSet $snapshot $SkillTarget); projectRoot=$ProjectRoot; packageVersion=$packageVersion; packageSource=$packageRoot
         snapshotFingerprint=$snapshotFingerprint; deploymentFingerprint=$deploymentFingerprint; workflowMode=$WorkflowMode; skillTarget=$SkillTarget
         phase='adopting'; adoptionProfile=[string]$profile.id; legacyEntryChanges=$legacyChanges.ToArray(); files=$records.ToArray() }
     Save-State $state
@@ -892,14 +1016,18 @@ if ($Action -eq 'Upgrade') {
     $recovery = [pscustomobject]@{ packageVersion = $packageVersion; files = @($plan.Recovery); created = @($plan.Created); retired = @($plan.Retired) }
     Write-Bytes (Join-Path $stateRoot ('upgrade-files-' + [guid]::NewGuid().ToString('N') + '.json')) ($utf8.GetBytes(($recovery | ConvertTo-Json -Depth 8)))
     $state.phase = 'upgrading'
+    if ($state.version -eq 1) { Set-StateValue $state 'legacyDeploymentFingerprint' $state.deploymentFingerprint }
     Save-State $state
     foreach ($relative in $plan.Planned.Keys) { Write-Bytes (Resolve-ProjectFile $relative) $plan.Planned[$relative] }
     foreach ($path in @($plan.Deletes)) { Assert-NoReparse $path; Remove-Item -LiteralPath $path -Force }
     Set-StateValue $state 'packageVersion' $packageVersion
+    Set-StateValue $state 'version' 2
+    Set-StateValue $state 'workflowProfile' $script:resolvedProfile
+    Set-StateValue $state 'deploymentSet' @(Get-DeploymentSet $snapshot $SkillTarget)
     Set-StateValue $state 'packageSource' $packageRoot
     Set-StateValue $state 'snapshotFingerprint' $snapshotFingerprint
     Set-StateValue $state 'deploymentFingerprint' $deploymentFingerprint
-    Set-StateValue $state 'workflowMode' (Get-StateValue $state 'workflowMode' 'default')
+    Set-StateValue $state 'workflowMode' ([string](Get-StateValue $state 'workflowMode' 'default')).ToLowerInvariant()
     Set-StateValue $state 'files' @($plan.Records)
     Set-StateValue $state 'phase' 'installed'
     Save-State $state
@@ -912,6 +1040,7 @@ $state.phase = 'uninstalling'
 Save-State $state
 foreach ($record in $state.files) {
     $path = Resolve-ProjectFile $record.path
+    if ($record.kind -eq 'project-document') { continue }
     if ($record.kind -eq 'file') {
         if ([string](Get-StateValue $record 'adoption' '') -eq 'project-document') { continue }
         if ([string](Get-StateValue $record 'adoption' '') -eq 'canonical-legacy') {
@@ -941,6 +1070,26 @@ foreach ($record in $state.files) {
         $remainder = $before + $separator + $after
         if (-not $record.preexisting -and $remainder.Length -eq 0) { Remove-Item -LiteralPath $path -Force }
         else { Write-Bytes $path (Encode-Text $remainder $info.Bom) }
+    }
+}
+if ($script:resolvedProfile -eq 'lite') {
+    # Only consider parents of non-preexisting Lite package files. Never recurse
+    # into unknown directories or remove a directory containing any entry.
+    $liteRoot = Join-Path $ProjectRoot 'docs/engrelay-lite'
+    $liteDirectories = @{}
+    foreach ($record in $state.files) {
+        if ($record.kind -ne 'file' -or $record.preexisting -or -not $record.path.StartsWith('docs/engrelay-lite/', [StringComparison]::Ordinal)) { continue }
+        $parent = Split-Path -Parent (Resolve-ProjectFile $record.path)
+        while ($parent -eq $liteRoot -or $parent.StartsWith($liteRoot + [IO.Path]::DirectorySeparatorChar, [StringComparison]::OrdinalIgnoreCase)) {
+            $liteDirectories[$parent] = $true
+            $parent = Split-Path -Parent $parent
+        }
+    }
+    foreach ($directory in @($liteDirectories.Keys | Sort-Object Length -Descending)) {
+        Assert-NoReparse $directory
+        if ((Test-Path -LiteralPath $directory -PathType Container) -and @(Get-ChildItem -LiteralPath $directory -Force).Count -eq 0) {
+            Remove-Item -LiteralPath $directory -Force
+        }
     }
 }
 $state.phase = 'inactive'

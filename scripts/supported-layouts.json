@@ -1,7 +1,194 @@
 {
   "schemaVersion": 1,
-  "description": "Source-only registry of explicitly supported previous installed layouts. Each entry binds a verified package version to its complete base path/kind set and deployment fingerprint. Not deployed. unknown or unregistered versions receive same-layout compatibility only.",
+  "description": "Source-only registry of trusted v1 installed layouts. Each entry binds a verified original package version to its complete base path/kind set and deployment fingerprint. Not deployed. Unknown v1 versions are refused; v2 records its fixed profile deployment set.",
   "supportedPreviousLayouts": [
+    {
+      "packageVersion": "1.9.6",
+      "deploymentFingerprints": [
+        "a33f47f1357e53392873ff4f41409c35bc94b664d204da0efc227e52078e8e04"
+      ],
+      "verifiedSource": "Local v1.9.6 tag commit c12f2646ab2a2369586f2097e34fdb678e16be30; verified complete snapshot SHA256 B8AB159E6D1D2DF0FA88F7F3B092B94CD9798CABC188B48CBC21351EEC9A6E08; original manager install, 65 files.",
+      "paths": [
+        {
+          "path": "docs/ai-collaboration/agent-prompts.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/compound-engineering.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/compound-skills.manifest.json",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/handoff-schema.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/host-capabilities.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/host-capabilities.zh-CN.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/legacy-adoption.json",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/operator-guide.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/operator-guide.zh-CN.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/project-adoption.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/project-adoption.zh-CN.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/README.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/review-compound-learning-optimization.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/review-handoff-optimization.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/solution-exploration.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/workflows.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/examples/mobile-points-expiry-reminder-zh.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/examples/mobile-points-expiry-reminder.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/scripts/doctor.ps1",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/scripts/find-solutions.ps1",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/scripts/install-compound-skills.ps1",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/scripts/test-install-compound-skills.ps1",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/scripts/test-validate-runtime-state.ps1",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/scripts/validate-runtime-state.ps1",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/skills/ai-collab-continue/SKILL.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/skills/ai-collab-requirements/SKILL.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/skills/ai-collab-start/SKILL.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/skills/ce-code-review/SKILL.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/skills/ce-compound/SKILL.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/skills/ce-debug/SKILL.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/skills/ce-simplify-code/SKILL.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/templates/current-task.template.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/templates/handoff.template.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/templates/implementation-result.template.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/templates/requirement-baseline.template.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/templates/response-handoff.template.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/templates/review-request.template.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/templates/review-round.template.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/ai-collaboration/templates/role-roster.template.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/reviews/README.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/solutions/README.md",
+          "kind": "file"
+        },
+        {
+          "path": "docs/solutions/solution.template.md",
+          "kind": "file"
+        },
+        {
+          "path": "AGENTS.md",
+          "kind": "agents"
+        },
+        {
+          "path": ".gitignore",
+          "kind": "gitignore"
+        }
+      ],
+      "additions": [],
+      "retirements": []
+    },
     {
       "packageVersion": "1.2.0",
       "deploymentFingerprints": [

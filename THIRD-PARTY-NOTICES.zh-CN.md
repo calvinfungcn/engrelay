@@ -70,6 +70,35 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
+## 提供的 EngRelay-Lite 参考输入
+
+payload/docs/ai-collaboration/lite 的规则和模板选择性采用或改写所提供 Lite 0.2.0
+的概念与材料，不捆绑其安装器和检查脚本。未提供独立不可变上游提交。已记录输入
+指纹只固定所审字节，不认证作者或证明完整第三方表达审计。保留以下随附 MIT
+通知及 Lite LICENSE 中的 EngRelay 修改声明。
+
+MIT License
+
+Copyright (c) 2026 Eric Fung and EngRelay-Lite contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
 ## 未捆绑工具与私有材料
 
 生成的 OpenSpec 宿主 Skill/命令、本地插件依赖及其 node_modules、个人工具设置、原项目规则、原始备份、运行交接与旧 Git 历史均排除。安装本工具包不会再分发或安装那些工具。受维护的角色工作流在显式选择时使用 OpenSpec；使用者须依其条款单独获取该工具。
