@@ -2,19 +2,19 @@
 
 ## Scope
 
-候选round-11独立审查PASS，累计8/8；当前候选批仅4.6完成、revision3 close/accepted。完整1.10.0未提交工作树包及其16次两宿主/两配置检查已对应；4.7无提交/导出授权，父提案31/32保持open。原演练批7/7关闭及全部历史Review保留。
+候选round-11独立审查PASS，累计8/8；候选批revision3仅映射4.6并已close/accepted。随后经负责人授权另行完成S级发行准备跟进4.7；父提案32/32并归档，未重开候选批或增加verdict。详细提交、导出与限制见Archive Record。
 
 ## Overall Status
 
-- `Current status`: `open`
+- `Current status`: `archived / accepted`
 - `Latest round`: [2026-10-24-round-11.md](2026-10-24-round-11.md)，PASS
 - `Legacy review sources`: none
-- `Current execution source`: [tasks.md](../../../openspec/changes/integrate-lite-full-profiles/tasks.md)
+- `Current execution source`: [archived tasks.md](../../../openspec/changes/archive/2026-10-24-integrate-lite-full-profiles/tasks.md)
 - Phase-1 batch: `engrelay-lite-full-contract-20261022-01`，保持 close/accepted，原 Review 不改。
 - Phase-2 batch: `engrelay-lite-full-implementation-20261022-01`，累计 **3**，验证通过，close/accepted。
 - Phase-3 batch: `engrelay-lite-full-pilot-20261023-01`，累计 **7/7**，本批4.1–4.5通过，close/accepted；没有追加审查或后续任务派发。
 
-- Candidate batch: `engrelay-lite-full-candidate-20261024-01`，延续累计 **8/8**，4.6通过，close/accepted；4.7仍待本地提交与干净导出授权。
+- Candidate batch: `engrelay-lite-full-candidate-20261024-01`，延续累计 **8/8**，仅映射4.6，close/accepted。4.7随后作为独立S级发行准备跟进完成，无新review/verdict；父提案任务清单32/32。
 
 ## Topic Index
 
@@ -29,8 +29,8 @@
 | CR-03 比较基线及公开收益结论失据 | `verified` | round-10 | round-04 | 独立复核18会话/24输入、P4六次启动/六条输入和标题/归属勘误；失败及共享协调单列，真人和主写者完整成本unknown。 |
 | CR-04 原始会话、独立性及等待证据缺口 | `verified` | round-09 | round-04 | 六条实际P4输入和工具顺序支持必要等待、依赖、模拟恢复及归档；不依赖错误的第七次final描述。 |
 | CR-05 M 审查后修复／独立复核分支缺失 | `verified` | round-09 | round-04 | 两侧各三条独立会话和prior/工具/产物链对应；冻结故障exit1、修复后两侧exit0独立复现，路径已纠正。 |
-| 最终候选独立审查（4.6） | `verified` | round-11 | round-11 | 完整未提交1.10.0候选79文件/78清单项与16次检查对应，本批累计8/8 accepted。 |
-| 已审提交干净导出（4.7） | `open` | none | none | 没有实际候选提交或提交/导出授权，父提案仍未完成；不以工作树包代替git archive。 |
+| 最终候选独立审查（4.6） | `verified` | round-11 | round-11 | 完整1.10.0候选79文件/78清单项与16次检查对应，本批累计8/8 accepted。 |
+| 已审提交干净导出（4.7） | `completed` | none | none | 候选批关闭后，经负责人授权作为独立S级跟进完成；实际git archive及最终快照、集合与字节复核通过，无新增review/verdict。 |
 
 ## Historical Rounds
 
@@ -50,7 +50,7 @@
 
 ## Next Action
 
-`close`，候选批Closure outcome `accepted`，Next role `none`，live revision3，累计8/8。tasks31/32，4.6完成，4.7保持未完成且无本地提交授权；本轮不自动派发后续任务、提交、导出或发布。
+候选批revision3仍为 `close/accepted`、累计8/8，仅映射4.6。4.7是之后经负责人授权的独立S级发行准备跟进，不重开候选批且没有新review/verdict。父提案tasks32/32并已归档；旧的未授权状态反映round-11之后、负责人授权4.7之前的历史状态。
 
 ## Owner Authorization — 2026-10-23
 
@@ -92,3 +92,23 @@
 - 当前：首席设计师完成核定，候选批revision1派发Implementation Engineer；没有新的verdict，任务仍30/32。
 - 候选交付：revision1→2，1.10.0包79项/清单78项、16次新调用exit0；准确来源及限制见preparation-result和candidate-inputs。准备不计verdict，4.6仍未勾选。
 - 审查结果：候选revision2→3，round-11独立PASS，累计7→8；仅4.6完成。允许写者保存只读原文、协调tasks/index/handoff并运行最终预期校验，不新增verdict。4.7及父提案保持未完成。
+
+## Archive Record
+
+- 归档日期：2026-10-24；OpenSpec change 已完成 32/32，父提案已归档至 [proposal](../../../openspec/changes/archive/2026-10-24-integrate-lite-full-profiles/proposal.md)、[spec deltas](../../../openspec/changes/archive/2026-10-24-integrate-lite-full-profiles/specs/)、[design](../../../openspec/changes/archive/2026-10-24-integrate-lite-full-profiles/design.md) 和 [tasks](../../../openspec/changes/archive/2026-10-24-integrate-lite-full-profiles/tasks.md)。主规格已同步 collaboration-package 的 3 个修改要求及 workflow-profiles 的 12 个新增要求。
+- round-11 后的历史记录称 4.7 未获授权、tasks 为 31/32；该状态在负责人后续授权前属实。候选批只映射4.6且保持revision3 close/accepted。负责人随后另行授权S级发行准备跟进，按 1.10.0 候选完成本地提交与干净导出，父提案现为32/32；没有重开候选批，也没有新增review/verdict。授权没有包含推送、GitHub Release 或真实项目安装。
+- 审查计数保留为 8/8，round 01–11 的 verdict 和原文件均未修改或移动；归档与导出没有产生第 9 次 verdict。此前 phase-1、phase-2 和 pilot 批次关闭记录不变。
+- 导出来源提交：`c7d24c4ddd8d05b4de2b0e2e9e6912fe4941a1af`；后续 snapshot 元数据提交：`4a7e81409ead4ba36b47746edee84ad4caaef4e0`。实际 `git archive` 清单为 79 个文件（snapshot 列出 78 项），snapshot SHA256 为 `9E18066A2BDC14E39F8C109886A55C872EE876483D58290F38D80F7E180A3D71`；复核导出与 preview 字节一致。完整检查范围及限制见[本地导出证据](local-export-1.10.0.md)。
+- 两份路线图保留为源码规划文档，已改链到本归档；`.gitattributes` 的 `/openspec export-ignore` 排除了 OpenSpec，`/docs/reviews export-ignore` 排除了 Review 文档，实际导出均未包含这些目录。
+- round 01–11 原文件 SHA256（用于确认原件保留）：
+  - round 01: `11A158076F728D8DCF4812A249BE4BEBDEA4C4A496A78D6465A4179C84ACC4B2`
+  - round 02: `EB0334D0A70B71E07CB7B95A01BF32DA9652F27134FA4E781474B7F32786AAF2`
+  - round 03: `BA0141BBA4A0B814F1A7917DF2A12A37CC5EDB717F8CF13DEC659C2C56893737`
+  - round 04: `5B5EC99EF2632216FE1C3E38BF830F44B4C5DA264838588F9F55C5DFA1FC8D84`
+  - round 05: `FEC2E175581E587E1A251268FB52CEE2FBAFDD6C1E9735337E7D914E4D1D4099`
+  - round 06: `DE8EC860236DC69191C7A4D12EB9C601AC862916B55DD5524F2FDC7EE31647CC`
+  - round 07: `364C9567DE7BCDDA3112EF60AA4C1040643F2FE0BDDA3A0FB2CCBC73FA04428A`
+  - round 08: `68B88887C885E85CA3FD325557EE2232F5D9E4CB8933D71466853617A7314F47`
+  - round 09: `BBC54DAAFB80A0D5A4C26199114F49105C1DCD98D3D7688AA7D172FE2CEABF76`
+  - round 10: `B140F636DC14B283695E2885C93AF3D4ACFE1CA29548294944771D12C3EEDD32`
+  - round 11: `07996A22124E4512DF79EEC7977EA8C2B8CA1D6DFEAE9E7C0C74ED48309E1CBB`

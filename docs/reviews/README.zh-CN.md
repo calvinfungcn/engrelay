@@ -13,6 +13,7 @@
 | fix-autonomous-continuation | verified / accepted | 3 | [归档记录](fix-autonomous-continuation/index.md#archive-record) |
 | harden-handoff-recovery | verified / accepted | 4 | [归档记录](harden-handoff-recovery/index.md#archive-record) |
 | link-sizing-guidance-and-pilot-lean-rules | verified / accepted | 7 | [归档记录](link-sizing-guidance-and-pilot-lean-rules/index.md#archive-record) |
+| integrate-lite-full-profiles | verified / accepted | 8 | [归档记录](integrate-lite-full-profiles/index.md#archive-record) |
 
 仅公开脱敏后的审查摘要、发现与证据哈希。原始运行态、日志和本机工具配置不提交。
 本目录保留在源码仓库，通过 `.gitattributes` 排除安装包导出。

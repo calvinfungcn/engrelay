@@ -14,9 +14,9 @@
 | 第二期 | 实现两种配置及共用管理器 | Lite 规则／模板／校验工具、配置安装与维护、清单转换、诊断、基础双语指引 | 两种配置在一次性夹具中可分别安装、升级、诊断和卸载，保护检查通过 | 高 |
 | 第三期 | 验证使用体验并完成发行准备 | S/M/H 与接续演练证据、修复、完整人类说明、独立审查与候选包证据 | 对应验收、所需审查与独立验证完成，未测范围披露，候选清单与字节一致 | 中 |
 
-正式变更：[integrate-lite-full-profiles](../changes/integrate-lite-full-profiles/proposal.md)。三期仅在该变更的 [tasks.md](../changes/integrate-lite-full-profiles/tasks.md) 维护实施勾选；本文说明目标与验收，不同步复制完成率、Review 轮次或运行态。
+正式变更：[integrate-lite-full-profiles](../changes/archive/2026-10-24-integrate-lite-full-profiles/proposal.md)。三期仅在该变更的 [tasks.md](../changes/archive/2026-10-24-integrate-lite-full-profiles/tasks.md) 维护实施勾选；本文说明目标与验收，不同步复制完成率、Review 轮次或运行态。
 
-实际实施及审查证据见本变更 tasks.md 和[审查索引](../../docs/reviews/integrate-lite-full-profiles/index.md)。规划工件齐全或单期设计验收不代表产品或三期已经完成。
+实际实施及审查证据见已归档变更的 tasks.md 和[审查索引](../../docs/reviews/integrate-lite-full-profiles/index.md)。规划工件齐全或单期设计验收不代表产品或三期已经完成。
 
 ## 共同产品决定
 

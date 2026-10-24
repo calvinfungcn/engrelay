@@ -2,7 +2,7 @@
 
 ## Context
 
-动机见 [proposal.md](proposal.md)，分期目标与非承诺事项见[路线图](../../roadmaps/lite-full-integration.zh-CN.md)。当前基线为 v1.9.6、c12f264；工作区开始规划时干净。参考 Lite 为 0.2.0，规则 145 行、安装脚本 175 行，尚不能由行数证明上下文或实际性能改善。
+动机见 [proposal.md](proposal.md)，分期目标与非承诺事项见[路线图](../../../roadmaps/lite-full-integration.zh-CN.md)。当前基线为 v1.9.6、c12f264；工作区开始规划时干净。参考 Lite 为 0.2.0，规则 145 行、安装脚本 175 行，尚不能由行数证明上下文或实际性能改善。
 
 源码核对的关键约束：
 
@@ -143,7 +143,7 @@ Full 发现目标选择 none 和 agents 作为代表回归；其他未改映射�
 
 - Design Review required: yes。
 - 原因：新增协作及归属契约，且本期产物为有界设计结论，不是可运行产品垂直切片；需要独立核对必要性、规则矛盾、来源和可执行验证路径。
-- 本批审查初始累计 0，默认额度 3；[独立第 1 轮](../../../docs/reviews/integrate-lite-full-profiles/2026-10-22-round-01.md)已给出 PASS，无必须处理项。当前累计 1，默认剩余 2；产物作者不能自审，阶段划分不增加额度。本段只协调审查结果，不改已审协议与样例。
+- 本批审查初始累计 0，默认额度 3；[独立第 1 轮](../../../../docs/reviews/integrate-lite-full-profiles/2026-10-22-round-01.md)已给出 PASS，无必须处理项。当前累计 1，默认剩余 2；产物作者不能自审，阶段划分不增加额度。本段只协调审查结果，不改已审协议与样例。
 - 通过独立设计审查只表示第一期设计验收完成。第二期产品及 H 安装验证、第三期实际使用与发行准备仍未完成，不能因本期 PASS 自动勾选。
 
 ## Phase 2 Implementation Assignment

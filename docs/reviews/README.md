@@ -14,6 +14,7 @@ archive does not reset cumulative counts or add new review conclusions.
 | fix-autonomous-continuation | verified / accepted | 3 | [Archive record](fix-autonomous-continuation/index.md#archive-record) |
 | harden-handoff-recovery | verified / accepted | 4 | [Archive record](harden-handoff-recovery/index.md#archive-record) |
 | link-sizing-guidance-and-pilot-lean-rules | verified / accepted | 7 | [Archive record](link-sizing-guidance-and-pilot-lean-rules/index.md#archive-record) |
+| integrate-lite-full-profiles | verified / accepted | 8 | [Archive record](integrate-lite-full-profiles/index.md#archive-record) |
 
 Only redacted review summaries, findings, and evidence hashes are published.
 Raw runtime state, logs, and local tool configuration are not committed.

@@ -14,9 +14,9 @@ There are three sequential phases. Phase 1 produces a reviewable protocol design
 | 2 | Implement both profiles through the shared manager | Lite rules, templates and checks; profile lifecycle; manifest conversion; diagnostics; basic bilingual guidance | Separate disposable installs, upgrades, diagnostics and uninstalls with protection checks | High |
 | 3 | Exercise usage and prepare release | S/M/H and resumption evidence, fixes, complete human guides, independent review and candidate evidence | Acceptance, required review and independent verification complete; limits disclosed; candidate inventory matches bytes | Medium |
 
-Formal change: [integrate-lite-full-profiles](../changes/integrate-lite-full-profiles/proposal.md). Its [tasks.md](../changes/integrate-lite-full-profiles/tasks.md) is the sole implementation checklist for all phases. This roadmap describes objectives and acceptance; it does not duplicate task completion, Review counts or runtime state.
+Formal change: [integrate-lite-full-profiles](../changes/archive/2026-10-24-integrate-lite-full-profiles/proposal.md). Its [tasks.md](../changes/archive/2026-10-24-integrate-lite-full-profiles/tasks.md) is the sole implementation checklist for all phases. This roadmap describes objectives and acceptance; it does not duplicate task completion, Review counts or runtime state.
 
-Consult the change's tasks.md and its [review index](../../docs/reviews/integrate-lite-full-profiles/index.md) for actual implementation and review evidence. Planning artifacts or acceptance of one design phase do not mean that the product or all three phases are implemented.
+Consult the archived change's tasks.md and its [review index](../../docs/reviews/integrate-lite-full-profiles/index.md) for actual implementation and review evidence. Planning artifacts or acceptance of one design phase do not mean that the product or all three phases are implemented.
 
 ## Shared product decisions
 

@@ -6,7 +6,7 @@
 
 ## What Changes
 
-- 用三个顺序里程碑完成整合：协议与样例定稿；产品及共用管理器集成；使用演练与发行准备。整体路线见 `../../roadmaps/lite-full-integration.zh-CN.md`，本变更的 tasks.md 是三期唯一实施清单。
+- 用三个顺序里程碑完成整合：协议与样例定稿；产品及共用管理器集成；使用演练与发行准备。整体路线见 `../../../roadmaps/lite-full-integration.zh-CN.md`，本变更的 tasks.md 是三期唯一实施清单。
 - Lite 提供负责人、执行者、评审者三类职责，短规则、项目配置、顺序队列、短交接与聚焦只读校验；保留 S/M/H、必要独立验证、有限累计审查及 Agent 派发的一行 C1–C5 建议。
 - 扩展现有管理器以选择 `WorkflowProfile=full|lite`，与现有 WorkflowMode 分开。省略配置继续使用 Full；有效旧安装保持原配置。一个项目只管理一种配置，不隐式转换未完成任务。
 - Lite 规范源仍在 payload/docs/ai-collaboration/ 下，安装内容投影到 docs/engrelay-lite/；运行态使用 .ai/engrelay-lite/，Full 现有路径、标记和 Skill 名称保留。

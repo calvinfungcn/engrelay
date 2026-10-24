@@ -20,7 +20,7 @@
 
 | 事项 | 来源 | 状态 | 变更或证据 |
 | --- | --- | --- | --- |
-| 同仓库 Lite／Full 配置 | 负责人选定的整合方向 | 已确认待实施 | [三期路线图](roadmaps/lite-full-integration.zh-CN.md)；[活动变更](changes/integrate-lite-full-profiles/proposal.md)；实施仅维护其 tasks.md |
+| 同仓库 Lite／Full 配置 | 负责人选定的整合方向 | 已完成 | [三期路线图](roadmaps/lite-full-integration.zh-CN.md)；[已归档提案](changes/archive/2026-10-24-integrate-lite-full-profiles/proposal.md)；[已归档任务](changes/archive/2026-10-24-integrate-lite-full-profiles/tasks.md)；[审查索引](../docs/reviews/integrate-lite-full-profiles/index.md) |
 | 估算定义可达性与精益规则试点 | 负责人选定的 M 级批次 | 已完成 | [已归档任务](changes/archive/2026-10-21-link-sizing-guidance-and-pilot-lean-rules/tasks.md)；[审查索引](../docs/reviews/link-sizing-guidance-and-pilot-lean-rules/index.md) |
 | 精简进度说明与交接能力输出 | 负责人选定的 M 级批次 | 已完成 | [已归档任务](changes/archive/2026-10-20-improve-lean-progress-and-capability-handoff/tasks.md)；[审查索引](../docs/reviews/improve-lean-progress-and-capability-handoff/index.md) |
 | 自动过程统计（P2） | 负责人讨论的后续事项 | 待决定 | 不作为实施承诺；试点证据支持推迟准入（见[试点证据](../docs/reviews/link-sizing-guidance-and-pilot-lean-rules/pilot-evidence.md#decision-1-p2-entry-criteria-automatic-sizing--statistics)） |

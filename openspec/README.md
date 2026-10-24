@@ -27,7 +27,7 @@ authority.
 
 | Item | Source | Status | Change or evidence |
 | --- | --- | --- | --- |
-| Lite / Full profiles in one repository | Owner-selected integration direction | Confirmed, pending implementation | [Three-phase plan](roadmaps/lite-full-integration.md); [active change](changes/integrate-lite-full-profiles/proposal.md); implementation only in its tasks.md |
+| Lite / Full profiles in one repository | Owner-selected integration direction | Completed | [Three-phase plan](roadmaps/lite-full-integration.md); [archived proposal](changes/archive/2026-10-24-integrate-lite-full-profiles/proposal.md); [archived tasks](changes/archive/2026-10-24-integrate-lite-full-profiles/tasks.md); [review index](../docs/reviews/integrate-lite-full-profiles/index.md) |
 | Estimation definition reachability and lean rules pilot | Owner-selected M batch | Completed | [Archived tasks](changes/archive/2026-10-21-link-sizing-guidance-and-pilot-lean-rules/tasks.md); [review index](../docs/reviews/link-sizing-guidance-and-pilot-lean-rules/index.md) |
 | Lean progress summaries and handoff capability output | Owner-selected M batch | Completed | [Archived tasks](changes/archive/2026-10-20-improve-lean-progress-and-capability-handoff/tasks.md); [review index](../docs/reviews/improve-lean-progress-and-capability-handoff/index.md) |
 | Automatic process statistics (P2) | Owner follow-up discussion | Pending decision | Not an implementation commitment; pilot evidence deferred entry ([pilot evidence](../docs/reviews/link-sizing-guidance-and-pilot-lean-rules/pilot-evidence.md#decision-1-p2-entry-criteria-automatic-sizing--statistics)) |
