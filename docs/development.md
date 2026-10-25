@@ -4,8 +4,7 @@
 
 The GitHub repository is the maintained public source. The initial public baseline
 is v1.7.0, commit `9c26c22266625aa04822637baf8f283763362677`, under MIT.
-The latest published release baseline is v1.9.6. Version 1.10.0 is a local release
-candidate, not pushed or published. Local maintenance setup does not create an
+The current release baseline is v1.10.0. Local maintenance setup does not create an
 active business batch or authorize publication.
 
 ## Start here
@@ -73,7 +72,7 @@ disposable roots, not real projects. Real deployments require their own task.
 1. Finish a coherent change and its relevant review; synchronize both README
    editions when public behavior changes. Choose the intended package version
    and update CHANGELOG.md with its date, changes, and verification limits before
-   exporting the release candidate.
+   exporting the release package.
 2. Export an explicitly reviewed commit into a new disposable staging directory
    using git archive. The committed .gitattributes excludes openspec/ and
    docs/reviews/ from this installation export. Ignored runtime/host directories
@@ -84,7 +83,7 @@ disposable roots, not real projects. Real deployments require their own task.
 4. Check the exact file set and hashes, and run only checks justified by changed
    behavior. Run lifecycle fixtures on the staging package, keeping logs outside
    it. Test version expectations must be updated when the release version changes;
-   the current smoke script expects the v1.10.0 candidate; its optional frozen
+   the current smoke script expects v1.10.0; its optional frozen
    v1.6.1 fixture remains a separate historical check.
 5. After the release candidate is stable, copy its snapshot.json back to the
    source as release metadata and ensure a fresh export matches. Keep immutable
@@ -121,14 +120,14 @@ overrides). Candidate verification uses the supplied complete package root.
 
 ## Lite / Full development checks
 
-The 1.10.0 candidate manager writes manifest v2 and records the profile, exact deployment
+The 1.10.0 manager writes manifest v2 and records the profile, exact deployment
 set and LF/UTF-8 fingerprint. Full excludes the Lite source subtree; Lite has a fixed
 projection and project-owned configuration. Development fixtures do not refresh
 the root release snapshot. For authorized candidate preparation, generate the
 snapshot in clean staging and copy back only the validated metadata using the build
 flow above. An inventoried disposable working-tree package remains distinct from
 an actual committed export; a synthetic test version is fixture metadata, not a
-reviewed release candidate.
+reviewed release package.
 
 `scripts/test-lite-state.ps1` checks real validator subprocess exits and zero writes.
 `scripts/test-workflow-profiles.ps1 -PackageRoot <complete-test-package> -OriginalRoot <verified-v1.9.6-export> -LogPath <external.json>`

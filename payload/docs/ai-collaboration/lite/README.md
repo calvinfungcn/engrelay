@@ -37,6 +37,12 @@ and independent verification. The default total of three completed verdicts neve
 resets when changing phase, model or profile. At capacity unresolved work waits
 for the owner; there is no fourth autonomous loop.
 
+Optional tool, model, reasoning, existing review-launch, limit and isolation entries in
+`docs/engrelay-lite.config.md` are advisory. A blank or unavailable preference never blocks
+work, grants permission or starts a tool, and an upgrade does not overwrite an existing
+project instance. Queue completion rows keep the original columns with one short result and
+a stable link. Delivery quality ratings follow [RULES.md](RULES.md); they are advice, not a gate.
+
 At each real boundary decide the next values, save/read back and check them:
 
 ```powershell

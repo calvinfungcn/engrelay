@@ -16,6 +16,11 @@ evidence. These are entry points: read actual source, module guidance and accept
 evidence as needed. There is no Full handbook or dedicated Skill prerequisite.
 Consultation alone creates no runtime task.
 
+Within one active session, reuse a reference already read only while its content is
+known unchanged. Reread it for a new agent, missing context, a changed input or a rule
+question, and refresh the live task and handoff at real boundaries. Project instructions,
+module guidance and triggered Skills still apply.
+
 An applicable OpenSpec change owns scope, acceptance and its sole tasks.md checklist;
 reference it rather than duplicating it. Otherwise Task Owner approves the goal,
 scope and acceptance in the queue (S) or tasks/<id>.md (M/H). Configuration records
@@ -50,6 +55,27 @@ extension. Do not start a fourth autonomous fix/review cycle. An extension retai
 owner, date, batch=Task ID, from, through, scope and evidence in the existing form:
 `Task Owner decision: review-budget-extension; owner=...; date=YYYY-MM-DD; batch=T01; from=3; through=5; scope=...; evidence=relative/file.md`.
 Use it only when from <= current count < through and the real authorization matches.
+
+## Advisory delivery quality
+
+When the independent reviewer of an implementation (Code Reviewer for M, or the Lite
+Reviewer) or of a fix actually evaluates the delivery, its review conclusion adds one
+advisory line by default: a 1-5 score or `not scored`, the findings, evidence and reviewed
+version it relies on, and a brief reason or suggestion. The final response briefly repeats
+that line from the existing review, without new investigation. Rate only the implementation
+or fix delivery; do not rate other roles or create an extra session, score file or handoff
+field.
+
+- 5: no proven must-fix item in the current scope and the required evidence is present.
+- 4: generally reliable, with local items that can be fixed.
+- 3: a clear omission, an insufficient required check or an incomplete fix.
+- 2: a critical error, regression, or a stated issue left unresolved after repeated attempts.
+- 1: a severe departure from requirements, a mainly unusable result or a serious hazard.
+
+Score actual impact against clear requirements, not defect count, round count or length.
+Use `not scored` when evidence is insufficient, and do not attribute an unexplained gap to
+the implementer. The rating does not change acceptance, routing, risk, the C1-C5 tier,
+the cumulative Review round or owner authority, and old reviews are not backfilled.
 
 ## State and sequential work
 

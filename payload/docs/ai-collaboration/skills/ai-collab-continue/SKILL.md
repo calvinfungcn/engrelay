@@ -26,12 +26,20 @@ under `docs/ai-collaboration/README.md#optional-activation-and-coexistence`.
 Use project-relative paths only:
 
 - `.ai/current-task.md` and `.ai/handoff.md`, the latest authority for Next action
-- `docs/ai-collaboration/handoff-schema.md` for Routing, autonomous continuation
-  and Operator Command rules
+- `docs/ai-collaboration/handoff-schema.md#routing-section-schema`,
+  `#autonomous-continuation` and `#dispatch-commands` for Routing, continuation and
+  Operator Command rules; `#source-matched-recovery` only when step 1 finds a candidate,
+  `#response-handoff-fallback` only for a read-only or unpersisted return, and
+  `#expected-state-validation` only when you write a handoff boundary
 - `docs/ai-collaboration/README.md#routing-contract` and
   `docs/ai-collaboration/README.md#review-round-circuit-breaker`
 - the authoritative artifacts named by the handoff, such as the OpenSpec tasks,
   `docs/reviews/<change-id>/index.md` and the latest review round
+
+Reuse a reference already read in this session only while its content is known
+unchanged. Reread the live `.ai/` files, the named authority and the anchored rule
+sections for a new agent, missing context, a changed input or a rule question
+(`docs/ai-collaboration/agent-prompts.md#common-preflight`).
 
 ## Procedure
 

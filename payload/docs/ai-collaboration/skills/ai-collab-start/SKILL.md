@@ -25,13 +25,20 @@ under `docs/ai-collaboration/README.md#optional-activation-and-coexistence`.
 
 Use project-relative paths only:
 
-- `docs/ai-collaboration/workflows.md#1-task-intake`
-- `docs/ai-collaboration/workflows.md#requirements-analyst-conditional-role-action`
-- `docs/ai-collaboration/agent-prompts.md#requirements-analyst`
+- `docs/ai-collaboration/workflows.md#1-task-intake`, and the templates below when
+  preparing the task input
 - `docs/ai-collaboration/templates/current-task.template.md`
 - `docs/ai-collaboration/templates/handoff.template.md`
 - `.ai/current-task.md` and `.ai/handoff.md`, when they exist
 - the named `openspec/changes/<change-id>/` artifacts, when the user names a change
+- only when Task Intake cannot safely summarize material business ambiguity (step 5):
+  `docs/ai-collaboration/workflows.md#requirements-analyst-conditional-role-action` and
+  `docs/ai-collaboration/agent-prompts.md#requirements-analyst`
+
+Reuse a reference already read in this session only while its content is known
+unchanged; reread it for a new agent, missing context, a changed input or a rule
+question (`docs/ai-collaboration/agent-prompts.md#common-preflight`). Mandatory
+module instructions and triggered Skills still apply.
 
 ## Procedure
 

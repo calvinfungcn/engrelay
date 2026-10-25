@@ -138,6 +138,38 @@ Source-repository follow-up items (for example deferred demo work) live in the
 public EngRelay OpenSpec navigation on GitHub, not in the installed package
 export.
 
+## Evidence and read-only return examples
+
+These examples are illustrative. The hypothetical figures do not record a real run.
+
+- **Externalize large output.** Write a long check to a named file outside the handoff,
+  such as `.ai/<batch>/checks/unit.log`. Return only the exit code, a short summary and
+  the path. Record the command and exit code in the result file's `Checks Run` table,
+  not in handoff evidence backticks.
+- **One minimal capture first.** When acceptance needs evidence of real Agent calls and
+  the capture method is unproven, run one minimal end-to-end call first. Confirm that it
+  links the input, the returned output, the produced artifact and the final handoff check.
+  Record unobtainable host facts as unknown; never fill in a status after the fact.
+- **Count erratum.** A summary says "seven launches", but the named source table lists six
+  Agent invocations. Add a dated erratum beside the summary that cites that source and
+  states six. Report launches, follow-up inputs, failures and shared coordination
+  separately, and do not treat a missing record as zero. Recheck only the affected totals
+  and leave the original report unchanged.
+- **Fully read-only return.** A read-only reviewer returns its complete verdict, findings
+  and Response Handoff, including source role, source Agent, work producer, source Execution
+  Batch ID, Task ID, prior State revision, prior live SHA256, target State revision and
+  cumulative Review round. The still-active writer then applies
+  [source-matched recovery](handoff-schema.md#source-matched-recovery): the source batch must
+  match the current task, and the prior revision and live SHA256 must match the live handoff,
+  so the candidate is pending. A conflict, an advanced state or a missing attribution item
+  stops here; the live handoff stays unchanged and the complete return remains an unpersisted
+  response handoff. Only when the writer is permitted to write the handoff does it save the
+  complete return to the named container, re-read the live bytes, publish the complete
+  Action State as `.ai/handoff.md`, read it back, and run expected-state validation with the
+  decided batch, action, next role, Review round and target revision. The verdict is counted
+  once. Only unambiguous formatting may change; never rewrite a technical conclusion to fit
+  a format.
+
 ## Cost and authority
 
 Focused checks match affected behavior. Before substantial low-benefit or

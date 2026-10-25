@@ -2,9 +2,24 @@
 
 [Simplified Chinese](CHANGELOG.zh-CN.md)
 
-## 1.10.0 — 2026-10-24 (local release candidate)
+## 1.10.0 — 2026-10-25
 
-Not pushed or published. The latest published GitHub release remains 1.9.6.
+- Aligns Full start/continue, Common Preflight and Lite reading guidance: reuse of known-unchanged
+  references within a session, reread on a new agent, missing context, changed inputs or a rule
+  question. Mandatory module instructions and triggered Skills still apply.
+- Adds optional Lite project preferences for tools, models, reasoning, existing review launch,
+  limits and isolation. Blank or unavailable entries never block work or grant permission, and
+  existing project instances are not overwritten.
+- Adds by default an advisory 1–5 delivery rating (or `not scored`) to existing Code Reviewer and
+  fix verification conclusions, briefly repeated in the final response; no new review, field or file.
+- Adds bounded evidence examples to the operator guide (externalized output, one minimal capture,
+  count erratum, fully read-only return) and Lite queue completion and organization guidance,
+  without automatic moves.
+- Evidence examples use fictional samples. The earlier bounded Phase 3 S/M/H and queue
+  exercises have invocation evidence. Separately, this context/feedback improvement
+  received independent review on one S continuation and one normal M implementation;
+  fixed-input evidence used text only. This does not establish all-host adherence,
+  token savings, business acceptance or causal improvement.
 
 - Adds fixed Lite/Full profiles in the shared protected manager, manifest v2,
   trusted v1.9.6 Full Upgrade conversion and retained Lite project configuration.
@@ -18,15 +33,15 @@ Not pushed or published. The latest published GitHub release remains 1.9.6.
   migration of unfinished tasks.
 - Adds focused PowerShell 5.1/7 subprocess fixtures and completes bounded actual-agent
   S/M/H, handoff and queue exercises. Independent implementation verification and
-  final candidate review passed. Sixteen candidate lifecycle processes covered
+  final review passed. Sixteen lifecycle processes covered
   Full/Lite Install, CheckVersion, Status and Uninstall across both PowerShell hosts;
   diagnostics made no changes and uninstall preserved project-owned content.
 - Reuses earlier upgrade/refusal and protection evidence only for matching inputs.
   Fictional samples on observed hosts do not establish all-host/model adherence,
   business acceptance, zero omissions, token/latency savings or causal improvement.
   The 86.3% comparison concerns static AGENTS.md bytes only. A committed clean export
-  and matching snapshot are required separately; this entry does not certify export,
-  proposal archival or publication.
+  and matching snapshot are required for a complete package; this entry does not
+  certify host loading, proposal archival or publication.
 
 ## 1.9.6 — 2026-10-21
 

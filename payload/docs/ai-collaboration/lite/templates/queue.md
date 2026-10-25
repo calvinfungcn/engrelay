@@ -12,3 +12,9 @@ not acceptance evidence. S may include approved goal/scope/acceptance in its row
 M/H reference tasks/<id>.md. Save paused tasks/<id>-handoff.md before another
 independent approved task proceeds. Keep their own count and snapshot. Completed
 tasks need actual acceptance and required review evidence before dependents start.
+
+Completed rows keep the original columns and state one short result with a stable
+evidence link, for example `accepted; tasks/T01-review-1.md`. Organize rows only with
+owner approval: keep every row that a dependent task or formal record still references,
+keep paused snapshots with their evidence paths, and never move or hide rows automatically
+or because of a row count.

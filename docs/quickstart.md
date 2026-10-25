@@ -10,11 +10,10 @@ and offline package handling.
 EngRelay does not bundle sample product applications or mock fixtures. This guide
 assumes you already have a prepared task input with clear objectives.
 
-## Profile selection (1.10.0 local candidate)
+## Profile selection (1.10.0)
 
-Version 1.10.0 is a local candidate, not pushed or published; the latest published
-release is 1.9.6 and does not contain Lite/Full selection. The steps below use the
-default Full profile and its seven Skills. Lite in the 1.10.0 candidate
+Version 1.10.0 includes Lite/Full selection. The steps below use the
+default Full profile and its seven Skills. Lite
 uses the same complete package and `-WorkflowProfile lite -SkillTarget none` on
 Install. Read its [self-contained guide](../payload/docs/ai-collaboration/lite/README.md)
 for explicit reading prompts, isolated runtime, checks and protected maintenance.
@@ -25,12 +24,12 @@ Do not use the v1.9.6 manager on v2 state. Keep matching managers and backups.
 The existing entry-file baseline shows 86.3% fewer static AGENTS.md bytes in Lite;
 this is not a reduction in total context, tokens or latency. Single-artifact task/review
 records are a protocol design, not proof of runtime adherence. The bounded Phase 3
-S/M/H and queue pilot now has invocation evidence; its results and independent review
-status are recorded in the source review history. Evidence covers fictional samples
-on observed hosts; broader host adherence is unverified. Independent candidate
-review is complete. A complete candidate package requires an actual committed
-export and matching inventory under the documented build flow; its export evidence
-is recorded separately. Publication requires a separate request.
+S/M/H and queue pilot has invocation evidence; its results and review status are
+recorded in the source review history. Separately, this context/feedback improvement
+received independent review on one S continuation and one normal M implementation.
+Fixed-input evidence used text only. This evidence does not
+establish all-host adherence or token savings. The 86.3% comparison concerns static
+AGENTS.md bytes only.
 
 ## 1. Directory boundaries
 
@@ -39,7 +38,7 @@ Keep these three directories separate during your trial:
 | Directory | Role | Description |
 | --- | --- | --- |
 | **Development source** | Maintenance only | The working git checkout of EngRelay itself (e.g. `engrelay-github`). Do not install from this checkout, and do not use it as a trial project. |
-| **Complete release package** | Installation source | A trusted, extracted release ZIP (e.g. `engrelay-1.8.0/`) containing `snapshot.json`. Files must remain unchanged. |
+| **Complete release package** | Installation source | A trusted, extracted release ZIP (e.g. `engrelay-1.10.0/`) containing `snapshot.json`. Files must remain unchanged. |
 | **Disposable trial project** | Target project | A fresh, isolated directory (e.g. `E:\Projects\trial-project`) created specifically for this trial. |
 
 ## 2. Environment prerequisite: PowerShell 7 (`pwsh`)
@@ -65,7 +64,7 @@ or alter your global execution policy.
 If your environment cannot access GitHub directly:
 
 1. A collaborator with access downloads the complete official release ZIP
-   (e.g., `engrelay-1.8.0.zip`) from the trusted GitHub release page and records
+   (e.g., `engrelay-1.10.0.zip`) from the trusted GitHub release page and records
    any published integrity information. If no checksum is published, the trusted
    collaborator computes the ZIP's SHA256 with `Get-FileHash -Algorithm SHA256`
    before transfer and sends that hash through a separate trusted channel.
@@ -75,7 +74,7 @@ If your environment cannot access GitHub directly:
    transfer integrity; it is not a publisher signature):
 
 ```powershell
-$zipPath = 'E:\Transfers\engrelay-1.8.0.zip'
+$zipPath = 'E:\Transfers\engrelay-1.10.0.zip'
 $expectedSha256 = '<published-or-separately-transferred-sha256>'
 $actualSha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $zipPath).Hash
 if ($actualSha256 -ne $expectedSha256) {
@@ -95,7 +94,7 @@ if ($actualSha256 -ne $expectedSha256) {
 
 ```powershell
 # Complete package root (not the trial project):
-$engrelayPackageRoot = 'E:\Packages\engrelay-1.8.0'
+$engrelayPackageRoot = 'E:\Packages\engrelay-1.10.0'
 $trialProject = 'E:\Projects\trial-project'
 if (-not (Test-Path -LiteralPath $trialProject -PathType Container)) {
     New-Item -ItemType Directory -Path $trialProject | Out-Null
@@ -187,7 +186,7 @@ Run the installer from your complete release package directory:
 
 ```powershell
 $engrelayProject = 'E:\Projects\trial-project'
-Set-Location 'E:\Packages\engrelay-1.8.0'
+Set-Location 'E:\Packages\engrelay-1.10.0'
 & .\scripts\manage.ps1 -Action Install -ProjectRoot $engrelayProject -WorkflowMode optional
 ```
 

@@ -1077,6 +1077,29 @@ authoritative issue or OpenSpec source; `.ai/` alone is not durable tracking. A
 later Task Intake action must cite and disposition the ID before creating its
 owning batch.
 
+### Advisory Delivery Quality Rating
+
+When an existing independent review actually evaluates an implementation or fix
+delivery, its conclusion adds one advisory line by default: a 1–5 score or `not scored`, with
+the findings, evidence and reviewed version it relies on and a brief reason or
+suggestion when useful. The final response briefly repeats that line from the existing
+review, without new investigation. The Code Reviewer rates an implementation. For a fix, the
+independent reviewer that verifies it rates the fix (Code Reviewer for `M`,
+Verification Reviewer for `H`). No other role is rated, and the rating creates no extra
+review session, score file, handoff field, weighting or model-capability judgement.
+
+- 5: no proven must-fix item in the current scope, and the required evidence is present.
+- 4: generally reliable, with local items that can be fixed.
+- 3: a clear omission, an insufficient required check or an incomplete fix.
+- 2: a critical error, regression, or a stated issue left unresolved after repeated attempts.
+- 1: a severe departure from requirements, a mainly unusable result or a serious hazard.
+
+Score actual impact against clear requirements, not defect count, round count or length.
+Use `not scored` when evidence is insufficient; do not assign an unexplained gap to the
+implementer. The rating is advice: it does not change formal findings, acceptance, routing,
+risk, the C1–C5 tier, the cumulative Review round or owner authority, and historical
+reviews are not backfilled.
+
 ## Quick Start
 
 1. Have the active agent select risk level `S`, `M`, or `H` and define one Execution Batch in

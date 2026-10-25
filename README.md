@@ -9,27 +9,28 @@ working in existing repositories. It provides role prompts, task and handoff
 templates, independent reviews based on risk, and tools for checking the evidence
 used to call work complete.
 
-**Local release candidate 1.10.0 — not pushed or published** · [MIT License](LICENSE)
+**Version 1.10.0** · [Download the complete package](https://github.com/calvinfungcn/engrelay/releases/tag/v1.10.0) · [MIT License](LICENSE)
 
-Latest published version: **1.9.6** · [Download its complete package](https://github.com/calvinfungcn/engrelay/releases/tag/v1.9.6).
-The Lite/Full features below belong to the 1.10.0 candidate, not that download.
+## Workflow profiles (1.10.0)
 
-## Workflow profiles (1.10.0 candidate)
-
-The candidate adds `-WorkflowProfile full|lite` to the shared manager.
+Version 1.10.0 adds `-WorkflowProfile full|lite` to the shared manager.
 New installs default to Full; existing installations retain their recorded profile
 when the parameter is omitted. WorkflowMode still controls activation independently.
 Full owns the seven Skills and existing role chain. Lite installs only its
 [short rules, templates and read-only tools](payload/docs/ai-collaboration/lite/README.md),
 uses `.ai/engrelay-lite/` and supports only SkillTarget none. It requires explicit
 canonical reading, including on hosts that do not auto-read AGENTS.md.
+Lite projects may record optional tool, model, reasoning and review-launch preferences;
+blank entries never block work. Existing independent implementation/fix reviews
+also add an advisory 1–5 delivery rating (or `not scored`) by default; it does not
+add a review or affect acceptance.
 
 ```powershell
 & ./scripts/manage.ps1 -Action Install -ProjectRoot $engrelayProject -WorkflowProfile lite -SkillTarget none
 ```
 
-These changes are not included in the v1.9.6 download above. Tests use isolated
-complete working-tree packages; the source checkout is not an installation source.
+Tests use isolated complete working-tree packages; the source checkout is not an
+installation source.
 New installations use manifest v2; trusted v1 Full converts only through Upgrade.
 The original v1.9.6 manager refuses v2. Keep the matching complete package, manager
 and original recovery material. Upgrade, repeated Install and SetMode never switch
@@ -40,12 +41,11 @@ Private Lite is not automatically adopted, and unfinished tasks are not migrated
 The existing entry-file baseline shows 86.3% fewer static AGENTS.md bytes in Lite;
 this is not a reduction in total context, tokens or latency. Single-artifact task/review
 records are a protocol design, not proof of runtime adherence. The bounded Phase 3
-S/M/H and queue pilot now has invocation evidence; its results and independent review
-status are recorded in the source review history. Evidence covers fictional samples
-on observed hosts; broader host adherence is unverified. Independent candidate
-review is complete. A complete candidate package requires an actual committed
-export and matching inventory under the documented build flow; its export evidence
-is recorded separately. Publication requires a separate request.
+S/M/H and queue pilot has invocation evidence; results and review status are recorded
+in the source review history. Separately, this context/feedback improvement received
+independent review on one S continuation and one normal M implementation. Fixed-input
+evidence used text only. Evidence does not establish all-host adherence or token
+savings. Read the matching package's complete inventory before installation.
 
 ## What you get
 
@@ -103,6 +103,11 @@ for entry selection and handoffs.
   the next work item; see
   [capability tier guidance](payload/docs/ai-collaboration/handoff-schema.md#capability-tier-guidance).
   It is not a blocker or model certification. Older handoffs without it stay valid.
+- Reference reuse is limited to material already read in the same session and known
+  unchanged; a new agent, missing context, a changed input or a rule question triggers a reread.
+- An independent review of an implementation or fix adds one advisory 1–5 delivery rating
+  by default, or `not scored`, to the existing review record, and the final response briefly
+  repeats it. It does not change acceptance, routing or the review count.
 - Progress is shown as an observable outcome, its evidence, and remaining work in the
   existing handoff sections. Rough sizing and human effort are optional, never gate
   routing, and are not a completion percentage.
@@ -132,8 +137,8 @@ See the [maintained role contracts](payload/docs/ai-collaboration/README.md).
 Use a trusted complete package in its own directory. Back up the target project's
 rules and read its existing agent instructions. For a new project:
 
-Download `engrelay-1.9.6.zip` from the release and extract it. Run commands from
-the extracted `engrelay-1.9.6` directory. Keep that complete package unchanged;
+Download `engrelay-1.10.0.zip` from the release and extract it. Run commands from
+the extracted `engrelay-1.10.0` directory. Keep that complete package unchanged;
 extra tool files or edited bytes make it differ from its inventory. The repository
 source can also be used when its file set and bytes exactly match `snapshot.json`.
 

@@ -9,20 +9,19 @@ Windows 最小排错以及离线取包方式。
 EngRelay 不随附样例产品程序或模拟夹具（fixture）。本指引假定你已经准备好
 具有明确目标和说明的试用任务输入。
 
-## 配置选择（1.10.0 本地候选）
+## 配置选择（1.10.0）
 
-1.10.0 为本地候选，尚未推送或发布；最近已发布版本为 1.9.6，不含 Lite／Full
-选择。下文使用默认 Full 及其七个 Skill。1.10.0 候选中的 Lite 从同一完整包执行 Install 时增加
+1.10.0 已包含 Lite／Full 配置。下文使用默认 Full 及其七个 Skill。Lite 从同一完整包执行 Install 时增加
 `-WorkflowProfile lite -SkillTarget none`；明确读取提示、隔离运行态、检查和维护
 见[自包含指南](../payload/docs/ai-collaboration/lite/README.zh-CN.md)。后续操作省略
 配置参数就保持原配置。切换前保存项目配置／任务证据并协调旧入口，再受保护卸载／
 安装；无私人 Lite 自动接管或任务迁移。v1.9.6 管理器不能维护 v2；保留对应管理器
 及备份。既有入口文件基准显示 Lite 的 AGENTS.md 静态字节少 86.3%，不代表总上下文、
 token 或延迟减少。单工件任务／审查记录是协议设计，不证明运行时遵从。第三期有界
-S/M/H 与队列演练已有调用证据，结果和独立审查状态记录在源码审查历史中。证据限于
-虚构样本及已观察宿主，更广泛的宿主遵从性未验证；独立候选审查已完成。完整候选包
-须按文档中的构建流程，以实际提交导出和匹配清单为依据；导出证据另行记录。
-发布须单独请求。
+S/M/H 与队列演练已有调用证据，结果和审查状态记录在源码审查历史中。证据限于
+虚构样本及已观察宿主。本次 context/feedback 改进另有一个 S 接续和一个正常 M 实施接受独立审查；
+固定输入证据仅使用文本。
+这些证据不证明全宿主遵从或 token 节省。
 
 ## 1. 目录边界
 
@@ -31,7 +30,7 @@ S/M/H 与队列演练已有调用证据，结果和独立审查状态记录在�
 | 目录 | 角色 | 说明 |
 | --- | --- | --- |
 | **开发源码目录** | 仅供维护 | EngRelay 本身的 Git 工作检出（如 `engrelay-github`）。不要从此目录安装，也不要将其作为试用目标。 |
-| **完整发行包** | 安装源 | 包含 `snapshot.json` 的可信官方发行解压目录（如 `engrelay-1.8.0/`）。文件集合与字节须保持未修改。 |
+| **完整发行包** | 安装源 | 包含 `snapshot.json` 的可信官方发行解压目录（如 `engrelay-1.10.0/`）。文件集合与字节须保持未修改。 |
 | **一次性试用项目** | 目标项目 | 为本次试用专门创建的独立、干净且可丢弃的目录（如 `E:\Projects\trial-project`）。 |
 
 ## 2. 环境前提：PowerShell 7（`pwsh`）检查
@@ -53,12 +52,12 @@ pwsh -NoProfile -Command 'if ($PSVersionTable.PSVersion.Major -ge 7) { $PSVersio
 
 如果你的环境无法直接访问 GitHub：
 
-1. 由能访问 GitHub 的协作者从可信 GitHub 发行页面下载对应版本的完整安装包（例如 `engrelay-1.8.0.zip`），并记录可用的已公布完整性信息。若没有公布校验和，由可信协作者在转交前用 `Get-FileHash -Algorithm SHA256` 计算 ZIP 的 SHA256，并通过另一条可信渠道传递哈希。
+1. 由能访问 GitHub 的协作者从可信 GitHub 发行页面下载对应版本的完整安装包（例如 `engrelay-1.10.0.zip`），并记录可用的已公布完整性信息。若没有公布校验和，由可信协作者在转交前用 `Get-FileHash -Algorithm SHA256` 计算 ZIP 的 SHA256，并通过另一条可信渠道传递哈希。
 2. 协作者原样转交该 ZIP 文件，同时提供准确的发行版本号、来源链接以及可用校验和及其来源。
 3. 接收者在解压前核对转交的 ZIP（SHA256 用于校验传输是否损坏，不是发布者的数字签名）：
 
 ```powershell
-$zipPath = 'E:\Transfers\engrelay-1.8.0.zip'
+$zipPath = 'E:\Transfers\engrelay-1.10.0.zip'
 $expectedSha256 = '<published-or-separately-transferred-sha256>'
 $actualSha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $zipPath).Hash
 if ($actualSha256 -ne $expectedSha256) {
@@ -72,7 +71,7 @@ if ($actualSha256 -ne $expectedSha256) {
 
 ```powershell
 # 完整包根目录（不是试用项目目录）：
-$engrelayPackageRoot = 'E:\Packages\engrelay-1.8.0'
+$engrelayPackageRoot = 'E:\Packages\engrelay-1.10.0'
 $trialProject = 'E:\Projects\trial-project'
 if (-not (Test-Path -LiteralPath $trialProject -PathType Container)) {
     New-Item -ItemType Directory -Path $trialProject | Out-Null
@@ -150,7 +149,7 @@ git status --short
 
 ```powershell
 $engrelayProject = 'E:\Projects\trial-project'
-Set-Location 'E:\Packages\engrelay-1.8.0'
+Set-Location 'E:\Packages\engrelay-1.10.0'
 & .\scripts\manage.ps1 -Action Install -ProjectRoot $engrelayProject -WorkflowMode optional
 ```
 

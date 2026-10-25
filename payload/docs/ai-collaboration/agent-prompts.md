@@ -845,6 +845,12 @@ Rules:
   concrete unmet authorized behavior; a preferred mock edge or surviving
   theoretical mutant alone is insufficient. Do not escalate such a test-only
   disagreement to Chief Designer.
+- For an implementation or fix delivery reviewed in this round, add by default the advisory
+  line described in `README.md#advisory-delivery-quality-rating` to the review conclusion: a
+  1-5 score or `not scored`, with the evidence, finding IDs and reviewed version it relies on.
+  For a fix, state whether the stated findings are resolved and whether the necessary evidence
+  and regression checks are present. Rate only that delivery; do not rewrite earlier ratings,
+  rate other roles, or add a separate review session. The final response briefly repeats the line.
 - Classify findings by formal status: open, fixed-not-verified, verified, deferred.
 - Add a priority for actionable findings: must-fix, should-fix, or nice-to-have.
 - Disposition every should-fix before closure: assign it to the current fix
@@ -1041,6 +1047,10 @@ Rules:
   acceptance/OpenSpec work, and deviations or risks, then repeat a concise
   informational Task Owner summary in the final response. Do not create or
   dispatch the later batch.
+- For a fix delivery, add by default the advisory line described in
+  `README.md#advisory-delivery-quality-rating` (1-5 or `not scored`), based on whether the
+  fix resolves the stated findings, keeps the necessary evidence and avoids regression.
+  Cite the reviewed version. Rate only the fix.
 - Distinguish evaluation evidence from production readiness and OpenSpec
   completion. If acceptance remains unmet or the direction is inconclusive,
   record that result and remaining work rather than marking the item complete.

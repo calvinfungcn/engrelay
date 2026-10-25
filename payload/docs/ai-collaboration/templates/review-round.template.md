@@ -33,6 +33,7 @@
 - Next action decision: `<dispatch|continue|close>`
 - Broad evidence reused: `<path/command/result or none>`
 - Additional checks run in this round: `<focused checks or none>`
+- Advisory delivery quality (implementation or fix delivery only; omit otherwise): `<1-5 or not scored>`; basis: `<finding IDs and evidence>`; reason or suggestion: `<brief or none>`
 
 ## OpenSpec Impact
 
