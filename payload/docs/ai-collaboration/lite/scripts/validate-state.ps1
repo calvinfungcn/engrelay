@@ -39,28 +39,23 @@ function Read-Input([string]$Relative) {
     return $utf8.GetString($bytes).TrimStart([char]0xfeff)
 }
 function Get-Sections([string]$Text) {
-    $sections = @{}; $current = ''; $fenceChar = ''; $fenceSize = 0
-    foreach ($line in ($Text -split '\r?\n')) {
-        $isFence = $line -match '^ {0,3}(`{3,}|~{3,})(.*)$'
-        if ($fenceSize) {
-            if ($current) { $sections[$current].Raw.Add($line) }
-            if ($isFence -and $Matches[1][0].ToString() -ceq $fenceChar -and $Matches[1].Length -ge $fenceSize -and [string]::IsNullOrWhiteSpace($Matches[2])) { $fenceSize = 0 }
-            continue
-        }
-        if ($isFence) {
-            $fenceChar = $Matches[1][0].ToString(); $fenceSize = $Matches[1].Length
-            if ($current) { $sections[$current].Raw.Add($line) }
-            continue
-        }
-        if ($line -match '^## +(.+?)\s*$') {
+    $sections = @{}; $current = ''; $parsed = Get-Markdown $Text
+    for ($i=0; $i -lt $parsed.Lines.Count; $i++) {
+        $line = $parsed.Lines[$i]
+        # A real H1 (0-3 leading spaces, then space/TAB or end of line) ends the current
+        # H2 section, so a later H1 cannot lend its command.
+        if ($parsed.Outside[$i] -and $line -match '^ {0,3}#(?:[ \t]|$)') { $current = ''; continue }
+        if ($parsed.Outside[$i] -and $line -match '^## +(.+?)\s*$') {
             $current = $Matches[1]
             if ($sections.ContainsKey($current)) { throw "Duplicate section: $current" }
             $sections[$current] = @{ Raw=(New-Object 'Collections.Generic.List[string]'); Plain=(New-Object 'Collections.Generic.List[string]') }
             continue
         }
-        if ($current) { $sections[$current].Raw.Add($line); $sections[$current].Plain.Add($line) }
+        if ($current) {
+            $sections[$current].Raw.Add($line)
+            if ($parsed.Outside[$i]) { $sections[$current].Plain.Add($line) }
+        }
     }
-    if ($fenceSize) { throw 'Unclosed code fence' }
     return $sections
 }
 function Get-Body($Sections, [string]$Name, [switch]$Plain) {
@@ -85,11 +80,40 @@ function Assert-Number([string]$Value, [string]$Name, [long]$Minimum) {
     if ($Value -notmatch '^[0-9]+$' -or -not [long]::TryParse($Value,[ref]$number) -or $number -lt $Minimum) { throw "Invalid $Name" }
     return $number
 }
-function Assert-Command([string]$Text, [string]$Name, [string]$Task, [string]$Role) {
-    if (-not $Text -or $Text -notmatch '(?m)^```text\s*$' -or $Text -notmatch ('(?i)\b' + [regex]::Escape($Role) + '\b') -or
-        $Text -notmatch ([regex]::Escape($Task))) { throw "Missing or incomplete $Name identity" }
+function Get-Markdown([string]$Text) {
+    $lines = @($Text -split '\r?\n'); $outside = New-Object 'Collections.Generic.List[object]'
+    $blocks = New-Object 'Collections.Generic.List[object]'; $size = 0; $char = ''; $start = 0; $info = ''
+    for ($i = 0; $i -lt $lines.Count; $i++) {
+        $line = $lines[$i]; $fence = $line -match '^ {0,3}(`{3,}|~{3,})(.*)$'
+        if ($size) {
+            $outside.Add($false)
+            if ($fence -and $Matches[1][0].ToString() -ceq $char -and $Matches[1].Length -ge $size -and [string]::IsNullOrWhiteSpace($Matches[2])) {
+                $content = if ($i -gt $start + 1) { $lines[($start + 1)..($i - 1)] -join "`n" } else { '' }
+                $blocks.Add([pscustomobject]@{ Start=$start; End=$i; Info=$info; Content=$content }); $size = 0
+            }
+        } elseif ($fence) {
+            $outside.Add($false); $char = $Matches[1][0].ToString(); $size = $Matches[1].Length; $info = $Matches[2].Trim(); $start = $i
+        } else { $outside.Add($true) }
+    }
+    if ($size) { throw 'Unclosed code fence' }
+    return @{ Lines=$lines; Outside=$outside; Blocks=$blocks }
+}
+function Assert-Command([string]$Text, [string]$Name, [string]$Task, [string]$Role, [switch]$Continuation) {
+    $parsed = Get-Markdown $Text; $begin = 0; $end = $parsed.Lines.Count
+    if ($Continuation) {
+        $headings = @(for ($i=0; $i -lt $parsed.Lines.Count; $i++) { if ($parsed.Outside[$i] -and $parsed.Lines[$i] -match '^### Continuation Command\s*$') { $i } })
+        if ($headings.Count -ne 1) { throw 'Executable continue requires one Continuation Command' }
+        $begin = $headings[0] + 1
+        for ($i=$begin; $i -lt $parsed.Lines.Count; $i++) { if ($parsed.Outside[$i] -and $parsed.Lines[$i] -match '^ {0,3}#{1,3}(?:[ \t]|$)') { $end=$i; break } }
+    }
+    $blocks = @($parsed.Blocks | Where-Object { $_.Start -ge $begin -and $_.End -lt $end -and [string]::Equals($_.Info,'text',[StringComparison]::OrdinalIgnoreCase) })
+    if ($blocks.Count -gt 1) { throw "Ambiguous ${Name}: multiple text blocks" }
+    if ($blocks.Count -ne 1) { throw "Missing or incomplete $Name identity" }
+    $content = $blocks[0].Content
+    if ($content -notmatch ('(?i)\b' + [regex]::Escape($Role) + '\b') -or
+        $content -notmatch ('(?<![A-Za-z0-9._-])' + [regex]::Escape($Task) + '(?![A-Za-z0-9_-]|\.[A-Za-z0-9._-])')) { throw "Missing or incomplete $Name identity" }
     foreach ($label in @('Read','Objective','Constraints','Output','Follow')) {
-        if ($Text -notmatch ('(?m)^' + $label + ':\s*\S')) { throw "Missing $Name $label" }
+        if ($content -notmatch ('(?m)^' + $label + ':[^\S\r\n]*\S')) { throw "Missing $Name $label" }
     }
 }
 function Test-Capacity([string]$Evidence, [string]$Task, [long]$Round) {
@@ -147,8 +171,8 @@ try {
     if (-not $valid) { throw 'Invalid route: action/status/human/next role conflict' }
     $current = Get-Body $sections 'Current Status'
     $currentPlain = Get-Body $sections 'Current Status' -Plain
+    if (($agentDispatch -or $executable) -and -not (Test-Capacity (Get-Body $sections 'Evidence' -Plain) $routing['Task ID'] $round)) { throw 'Review allowance exhausted; publish the owner decision route' }
     if ($agentDispatch) {
-        if (-not (Test-Capacity (Get-Body $sections 'Evidence' -Plain) $routing['Task ID'] $round)) { throw 'Review allowance exhausted; publish the owner decision route' }
         Assert-Command (Get-Body $sections 'Operator Command') 'Operator Command' $routing['Task ID'] $next
         $first = @($currentPlain -split '\r?\n' | Where-Object { $_.Trim() } | Select-Object -First 1)
         if (-not $first.Count -or $first[0] -cnotmatch '^Recommended capability tier: C[1-5]$') { Write-Output 'WARNING: Missing advisory capability as first Current Status line; non-blocking.' }
@@ -156,7 +180,7 @@ try {
     $commandCount = [regex]::Matches($currentPlain,'(?m)^### Continuation Command\s*$').Count
     if ($executable) {
         if ($commandCount -ne 1) { throw 'Executable continue requires one Continuation Command' }
-        Assert-Command ($current.Substring($current.IndexOf('### Continuation Command'))) 'Continuation Command' $routing['Task ID'] $routing['Current role']
+        Assert-Command $current 'Continuation Command' $routing['Task ID'] $routing['Current role'] -Continuation
     } elseif ($commandCount) { throw 'Unexpected Continuation Command' }
     if ($decision) {
         $brief = Get-Fields (Get-Body $sections 'Owner Decision Brief' -Plain) 'Owner Decision Brief'
@@ -176,10 +200,10 @@ try {
         $priorRouting = Get-Fields (Get-Body $prior 'Routing' -Plain) 'prior Routing'
         $sourceText = Read-Input $SourceResultPath
         # Metadata is outside fenced response handoffs. Do not examine other files or directories.
-        $sourceLines = New-Object 'Collections.Generic.List[string]'; $inFence = $false
-        foreach ($line in ($sourceText -split '\r?\n')) {
-            if ($line -match '^\s*`{3,}') { $inFence = -not $inFence; continue }
-            if (-not $inFence -and $line -match '^\s*- (Task ID|Source role|Source agent|Work producer|Named result|Prior revision|Prior handoff SHA256|Target revision|Cumulative verdicts|Verdict):') { $sourceLines.Add($line) }
+        $sourceLines = New-Object 'Collections.Generic.List[string]'; $sourceMarkdown = Get-Markdown $sourceText
+        for ($i=0; $i -lt $sourceMarkdown.Lines.Count; $i++) {
+            $line = $sourceMarkdown.Lines[$i]
+            if ($sourceMarkdown.Outside[$i] -and $line -match '^\s*- (Task ID|Source role|Source agent|Work producer|Named result|Prior revision|Prior handoff SHA256|Target revision|Cumulative verdicts|Verdict):') { $sourceLines.Add($line) }
         }
         $source = Get-Fields ($sourceLines -join "`n") 'source'
         foreach ($field in @('Task ID','Source role','Source agent','Work producer','Named result','Prior revision','Prior handoff SHA256','Target revision','Cumulative verdicts','Verdict')) { if (-not $source.ContainsKey($field)) { throw "Missing source $field" } }

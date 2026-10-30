@@ -99,7 +99,7 @@ try {
     Invoke-Case 'extension-exhausted' ($extended.Replace('Review round: 3','Review round: 5')) $false 'Review allowance exhausted'
     Invoke-Case 'extension-duplicate-key' ($extended.Replace('from=3','from=3; from=3')) $false 'review-budget-extension fields'
     Invoke-Case 'advisory' ($base.Replace('Recommended capability tier: C3','')) $true 'WARNING: Missing advisory capability'
-    Invoke-Case 'fenced-routing' ($base + "`n``````text`n- Next action: close`n``````") $true 'expectations match'
+    Invoke-Case 'fenced-routing' ($base + "`n## Example`n``````text`n- Next action: close`n``````") $true 'expectations match'
     $continuation = @'
 ### Continuation Command
 ```text
@@ -114,10 +114,68 @@ Follow: docs/engrelay-lite/RULES.md.
     $continue = $base.Replace('- Next action: dispatch','- Next action: continue').Replace('- Next role: Reviewer','- Next role: none').Replace('Recommended capability tier: C3','')
     $continue = $continue.Substring(0,$continue.IndexOf('## Operator Command')).Replace('## Evidence',$continuation + "`n## Evidence")
     Invoke-Case 'continue' $continue $true 'expectations match'
+    Invoke-Case 'continue-capacity-2' ($continue.Replace('Review round: 0','Review round: 2')) $true 'expectations match'
+    Invoke-Case 'continue-capacity-3' ($continue.Replace('Review round: 0','Review round: 3')) $false 'Review allowance exhausted'
+    Invoke-Case 'continue-capacity-8' ($continue.Replace('Review round: 0','Review round: 8')) $false 'Review allowance exhausted'
+    $continueExtended = $continue.Replace('Review round: 0','Review round: 3').Replace('## Evidence',"## Evidence`n- Task Owner decision: review-budget-extension; owner=Fixture Owner; date=2026-10-22; batch=T01; from=3; through=5; scope=repair; evidence=.ai/engrelay-lite/owner-decision.md")
+    Invoke-Case 'continue-extension' $continueExtended $true 'expectations match'
+    Invoke-Case 'continue-extension-exhausted' ($continueExtended.Replace('Review round: 3','Review round: 5')) $false 'Review allowance exhausted'
+    Invoke-Case 'continue-extension-wrong-task' ($continueExtended.Replace('batch=T01','batch=T99')) $false 'review-budget-extension task'
+    Invoke-Case 'continue-extension-before-from' ($continueExtended.Replace('from=3','from=4')) $false 'Review allowance exhausted'
+    Invoke-Case 'command-outside-label' ($base.Replace('Follow: docs/engrelay-lite/RULES.md.', 'Missing follow.') + "`nFollow: outside") $false 'Missing Operator Command Follow'
+    foreach ($label in @('Read','Objective','Constraints','Output','Follow')) {
+        Invoke-Case ('command-missing-'+$label) ([regex]::Replace($base, ('(?m)^' + $label + ':.*$'), ($label + ':'))) $false ('Missing Operator Command ' + $label)
+    }
+    Invoke-Case 'command-longer-task' ($base.Replace('task T01.','task T010.')) $false 'identity'
+    Invoke-Case 'command-missing-role' ($base.Replace('You are the Reviewer','You are the Observer')) $false 'identity'
+    Invoke-Case 'command-other-section-label' ($base.Replace('Follow: docs/engrelay-lite/RULES.md.', 'Missing follow.') + "`n## Other`nFollow: elsewhere") $false 'Missing Operator Command Follow'
+    Invoke-Case 'command-tilde' ($base.Replace('```text','~~~text').Replace('```','~~~')) $true 'expectations match'
+    Invoke-Case 'command-long-fence' ($base.Replace('```','````')) $true 'expectations match'
+    Invoke-Case 'command-unclosed' ($base.Substring(0,$base.LastIndexOf('```'))) $false 'Unclosed code fence'
+    Invoke-Case 'command-multiple' ($base + "`n``````text`nextra`n``````") $false 'multiple'
+    $fakeHeading = "~~~~markdown`n### Continuation Command`n``````text`nIncomplete example`n```````n~~~~`n"
+    Invoke-Case 'continue-fenced-heading' ($continue.Replace('### Continuation Command',($fakeHeading + '### Continuation Command'))) $true 'expectations match'
+    Invoke-Case 'continue-only-fenced-heading' ($continue.Replace('### Continuation Command','### Example').Replace('## Evidence',($fakeHeading + "`n## Evidence"))) $false 'Continuation Command'
     Invoke-Case 'continue-no-command' ($continue.Replace('### Continuation Command','### Example')) $false 'Continuation Command'
+    # Corrective CR-01: a longer legal task ID, including a dot, must not supply the
+    # current identity. Correct dotted IDs and sentence-ending punctuation stay valid.
+    Invoke-Case 'command-longer-dash-id' ($base.Replace('for task T01.','for task T01.-other')) $false 'identity'
+    Invoke-Case 'command-longer-underscore-id' ($base.Replace('for task T01.','for task T01._other')) $false 'identity'
+    Invoke-Case 'command-longer-dotdot-id' ($base.Replace('for task T01.','for task T01..other')) $false 'identity'
+    Invoke-Case 'command-sentence-punctuation' ($base.Replace('for task T01.','for task T01.)')) $true 'expectations match'
+    $dotted = $base.Replace('- Task ID: T01','- Task ID: T01.2').Replace('for task T01.','for task T01.2.')
+    Invoke-Case 'command-dotted-id' $dotted $true 'expectations match'
+    Invoke-Case 'command-shorter-than-dotted-id' ($dotted.Replace('for task T01.2.','for task T01.')) $false 'identity'
+    # Corrective CR-02: a real higher heading ends the action section; H3 text and
+    # fenced fake headings inside the section do not.
+    Invoke-Case 'command-borrowed-across-h1' ($base.Replace("## Operator Command`n","## Operator Command`n# Other section`n")) $false 'identity'
+    Invoke-Case 'command-h3-inside-section' ($base.Replace("## Operator Command`n","## Operator Command`n### Notes`n")) $true 'expectations match'
+    Invoke-Case 'command-fenced-h1-inside-section' ($base.Replace("## Operator Command`n","## Operator Command`n~~~~markdown`n# Example heading`n~~~~`n")) $true 'expectations match'
+    Invoke-Case 'continue-borrowed-across-h1' ($continue.Replace('Implementation ready for independent review.',"Implementation ready for independent review.`n# Other section")) $false 'Continuation Command'
+    # Corrective CR-02 remainder: a real H1 with 0-3 leading spaces, a TAB separator
+    # or an empty heading also ends the action section; four-space code and text stay.
+    Invoke-Case 'command-indented-h1-borrowed' ($base.Replace("## Operator Command`n","## Operator Command`n # Other`n")) $false 'identity'
+    Invoke-Case 'command-tab-h1-borrowed' ($base.Replace("## Operator Command`n","## Operator Command`n#`tOther`n")) $false 'identity'
+    Invoke-Case 'command-empty-h1-borrowed' ($base.Replace("## Operator Command`n","## Operator Command`n#`n")) $false 'identity'
+    Invoke-Case 'continue-indented-h1-borrowed' ($continue.Replace('Implementation ready for independent review.',"Implementation ready for independent review.`n # Other section")) $false 'Continuation Command'
+    Invoke-Case 'continue-tab-h1-borrowed' ($continue.Replace('Implementation ready for independent review.',"Implementation ready for independent review.`n#`tOther section")) $false 'Continuation Command'
+    Invoke-Case 'continue-empty-h1-borrowed' ($continue.Replace('Implementation ready for independent review.',"Implementation ready for independent review.`n#")) $false 'Continuation Command'
+    Invoke-Case 'continue-indented-h1-inside-continuation' ($continue.Replace('### Continuation Command',"### Continuation Command`n # Other section")) $false 'Continuation Command'
+    Invoke-Case 'command-four-space-hash-kept' ($base.Replace("## Operator Command`n","## Operator Command`n    # Example code`n")) $true 'expectations match'
+    Invoke-Case 'command-hash-without-space-kept' ($base.Replace("## Operator Command`n","## Operator Command`n#Other`n")) $true 'expectations match'
+    Invoke-Case 'command-fenced-indented-h1-kept' ($base.Replace("## Operator Command`n","## Operator Command`n~~~~markdown`n # Example heading`n~~~~`n")) $true 'expectations match'
+    Invoke-Case 'continue-four-space-hash-kept' ($continue.Replace('Implementation ready for independent review.',"Implementation ready for independent review.`n    # Example code")) $true 'expectations match'
+    # Corrective CR-03: the existing text info string keeps ordinal case-insensitive
+    # compatibility; variants still count as one actual command block.
+    Invoke-Case 'command-uppercase-text-fence' ($base.Replace('```text','```TEXT')) $true 'expectations match'
+    Invoke-Case 'command-mixed-text-fence' ($base.Replace('```text','```Text')) $true 'expectations match'
+    Invoke-Case 'continue-uppercase-text-fence' ($continue.Replace('```text','```TEXT')) $true 'expectations match'
+    Invoke-Case 'command-text-case-variant-ambiguous' ($base + "`n``````TEXT`nextra`n``````") $false 'multiple'
     $withoutCommand = $continue.Substring(0,$continue.IndexOf('### Continuation Command')) + "`n## Evidence`nRecorded result."
     $blocked = $withoutCommand.Replace('in-progress','blocked') + "`n## Blockers`nTried one bounded retry. Resume condition: package host reachable."
     Invoke-Case 'tool-wait' $blocked $true 'expectations match'
+    Invoke-Case 'blocked-at-capacity' ($blocked.Replace('Review round: 0','Review round: 8')) $true 'expectations match'
+    Invoke-Case 'resumed-at-capacity' ($continue.Replace('Review round: 0','Review round: 8')) $false 'Review allowance exhausted'
     Invoke-Case 'human-wait-missing-preparation' ($blocked.Replace('Human Action Required: none','Human Action Required: awaiting-environment')) $false 'Human preparation'
     Invoke-Case 'human-wait' ($blocked.Replace('Human Action Required: none','Human Action Required: awaiting-environment') + "`nHuman preparation: Start the approved test session and report its address.") $true 'expectations match'
     Invoke-Case 'blocked-no-resume' ($blocked.Replace('Resume condition:','Later:')) $false 'Resume condition'
@@ -131,10 +189,12 @@ Follow: docs/engrelay-lite/RULES.md.
 - After the reply: Executor updates task and handoff.
 '@
     Invoke-Case 'decision-continue' $decision $true 'expectations match'
+    Invoke-Case 'decision-at-capacity' ($decision.Replace('Review round: 0','Review round: 8')) $true 'expectations match'
     Invoke-Case 'decision-dispatch' ($decision.Replace('- Next action: continue','- Next action: dispatch').Replace('- Next role: none','- Next role: Task Owner')) $true 'expectations match'
     Invoke-Case 'false-human-wait' ($base.Replace('Human Action Required: none','Human Action Required: awaiting-decision')) $false 'Invalid route'
     $close = $withoutCommand.Replace('in-progress','completed').Replace('- Next action: continue','- Next action: close') + "`n## Outcome`naccepted; recorded checks and review in Evidence."
     Invoke-Case 'close' $close $true 'expectations match'
+    Invoke-Case 'close-at-capacity' ($close.Replace('Review round: 0','Review round: 8')) $true 'expectations match'
     Invoke-Case 'close-with-command' ($close + "`n## Operator Command`nDo work.") $false 'Unexpected Operator Command'
     Invoke-Case 'path-escape' $base $false 'Path must stay inside WorkspaceRoot' @('-HandoffPath','../outside.md')
 
@@ -156,6 +216,21 @@ Follow: docs/engrelay-lite/RULES.md.
     $candidate = $base.Replace('State revision: 4','State revision: 5').Replace('Review round: 0','Review round: 1').Replace('Current role: Executor','Current role: Reviewer').Replace('Current agent: fixture-executor','Current agent: fixture-reviewer').Replace('Next role: Reviewer','Next role: Executor').Replace('You are the Reviewer','You are the Executor')
     $sourceArgs = @('-SourceResultPath','.ai/engrelay-lite/tasks/T01-review-1.md','-PriorHandoffPath','.ai/engrelay-lite/prior.md')
     Invoke-Case 'source-matched' $candidate $true 'Source matches explicit prior input' $sourceArgs
+    Write-Fixture '.ai/engrelay-lite/tasks/T01-review-1.md' ("~~~text`n" + $result + "`n~~~")
+    Invoke-Case 'source-fenced-only' $candidate $false 'Missing source' $sourceArgs
+    Write-Fixture '.ai/engrelay-lite/tasks/T01-review-1.md' ("``````text`n" + $result + "`n``````")
+    Invoke-Case 'source-backtick-only' $candidate $false 'Missing source' $sourceArgs
+    Write-Fixture '.ai/engrelay-lite/tasks/T01-review-1.md' ($result + "`n~~~~markdown`n" + $candidate + "`n~~~~")
+    Invoke-Case 'source-nested-response' $candidate $true 'Source matches explicit prior input' $sourceArgs
+    Write-Fixture '.ai/engrelay-lite/tasks/T01-review-1.md' ($result + "`n````````markdown`n" + $candidate + "`n````````")
+    Invoke-Case 'source-backtick-nested-response' $candidate $true 'Source matches explicit prior input' $sourceArgs
+    Write-Fixture '.ai/engrelay-lite/tasks/T01-review-1.md' ($result + "`n- Task ID: T01")
+    Invoke-Case 'source-duplicate-outside' $candidate $false 'Duplicate source field' $sourceArgs
+    Write-Fixture '.ai/engrelay-lite/tasks/T01-review-1.md' ($result + "`n~~~~markdown`n~~~`n```````n~~~~ trailing`n- Task ID: fake`n~~~~")
+    Invoke-Case 'source-fake-closers' $candidate $true 'Source matches explicit prior input' $sourceArgs
+    Write-Fixture '.ai/engrelay-lite/tasks/T01-review-1.md' ($result + "`n~~~~markdown`n- Task ID: fake")
+    Invoke-Case 'source-unclosed' $candidate $false 'Unclosed code fence' $sourceArgs
+    Write-Fixture '.ai/engrelay-lite/tasks/T01-review-1.md' $result
     Write-Fixture '.ai/engrelay-lite/prior.md' ($base + "`nChanged input.")
     Invoke-Case 'source-hash-conflict' $candidate $false 'Prior handoff SHA256 mismatch' $sourceArgs
     Write-Fixture '.ai/engrelay-lite/prior.md' $base

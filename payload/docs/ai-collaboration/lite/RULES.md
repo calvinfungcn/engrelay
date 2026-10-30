@@ -55,6 +55,9 @@ extension. Do not start a fourth autonomous fix/review cycle. An extension retai
 owner, date, batch=Task ID, from, through, scope and evidence in the existing form:
 `Task Owner decision: review-budget-extension; owner=...; date=YYYY-MM-DD; batch=T01; from=3; through=5; scope=...; evidence=relative/file.md`.
 Use it only when from <= current count < through and the real authorization matches.
+Executable continue and Agent dispatch both require remaining capacity. A genuine
+blocked wait, owner decision or valid close may be recorded at capacity; recheck
+capacity when work becomes executable again. A blocked record grants no new cycle.
 
 ## Advisory delivery quality
 
@@ -111,6 +114,12 @@ actual Current agent; Current status=in-progress|blocked|awaiting-owner-decision
 Next action=continue|dispatch|close; Human Action Required=none|awaiting-decision|awaiting-environment;
 nonnegative Review round; Next role=none|Executor|Reviewer|Task Owner; Risk level=S|M|H.
 Keep Current Status and Evidence, plus only the applicable action blocks.
+Each executable command uses one complete closed `text` fence in its actual action
+section, containing task, role and nonempty Read, Objective, Constraints, Output and
+Follow. Narrative or another block cannot supply missing content. A real H1 ends the
+action section. The task identity is the complete ID, not a longer one. The info string
+`text` matches case-insensitively. Backtick and tilde fences follow the same character,
+length and closing rules; unclosed fences fail.
 
 - continue/in-progress: human none, next role none. Put a complete Continuation
   Command under Current Status: same role/task, Read, Objective, Constraints,
@@ -162,3 +171,5 @@ revision/timestamp or replay/recount. Without a permitted publisher keep the ful
 response and its unpersisted status. The validator's optional SourceResultPath and
 PriorHandoffPath compare a review return to explicit prior input only; they do not
 discover sources, authenticate authors, apply transfers or replace this judgment.
+Source metadata is read only outside fences; a fenced response or example cannot
+provide or duplicate metadata. This comparison does not authenticate its author.

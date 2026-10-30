@@ -20,6 +20,9 @@
 
 | 事项 | 来源 | 状态 | 变更或证据 |
 | --- | --- | --- | --- |
+| Lite 可执行交接额度、围栏解析及已发布说明 | 负责人选定的项目修复 F1／F2／F5 | 已完成 | [已归档提案](changes/archive/2026-10-30-harden-lite-handoff-validation/proposal.md)；[已归档任务](changes/archive/2026-10-30-harden-lite-handoff-validation/tasks.md)；[审查索引](../docs/reviews/harden-lite-handoff-validation/index.md)；发行前独立审查通过，累计第 5 轮 |
+| SetMode 失败恢复（F3） | 负责人选定的后续工作 | 已确认待实施 | [范围入口](changes/archive/2026-10-30-harden-lite-handoff-validation/proposal.md#follow-up-work)；尚未建立独立变更，保留入口／清单不一致的现有证据 |
+| 可信 v2 布局演进（F4） | 负责人选定的后续工作 | 已确认待实施 | [范围入口](changes/archive/2026-10-30-harden-lite-handoff-validation/proposal.md#follow-up-work)；尚未建立独立变更，须在后续新增或退役受管路径的发行前解决 |
 | 同仓库 Lite／Full 配置 | 负责人选定的整合方向 | 已完成 | [三期路线图](roadmaps/lite-full-integration.zh-CN.md)；[已归档提案](changes/archive/2026-10-24-integrate-lite-full-profiles/proposal.md)；[已归档任务](changes/archive/2026-10-24-integrate-lite-full-profiles/tasks.md)；[审查索引](../docs/reviews/integrate-lite-full-profiles/index.md) |
 | 估算定义可达性与精益规则试点 | 负责人选定的 M 级批次 | 已完成 | [已归档任务](changes/archive/2026-10-21-link-sizing-guidance-and-pilot-lean-rules/tasks.md)；[审查索引](../docs/reviews/link-sizing-guidance-and-pilot-lean-rules/index.md) |
 | 精简进度说明与交接能力输出 | 负责人选定的 M 级批次 | 已完成 | [已归档任务](changes/archive/2026-10-20-improve-lean-progress-and-capability-handoff/tasks.md)；[审查索引](../docs/reviews/improve-lean-progress-and-capability-handoff/index.md) |

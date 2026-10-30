@@ -2,8 +2,8 @@
 
 [简体中文](README.zh-CN.md) · [Rules](RULES.md)
 
-This guide covers the local 1.10.0 candidate, not pushed or published. The latest
-published release, 1.9.6, does not contain Lite.
+Lite is available in the published 1.10.0 release. The earlier 1.9.6 release does
+not contain Lite.
 
 Lite is a fixed profile in the shared EngRelay package. It uses Executor and
 Reviewer responsibilities and a sequential approved queue. Full keeps the seven

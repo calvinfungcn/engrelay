@@ -8,7 +8,7 @@ EngRelay 取自 Engineering + Relay，意为工程接力。它为已有代码库
 Agent 提供角色提示词、任务和交接模板、按风险引入的独立审查，以及检查交付
 证据的工具。
 
-**版本 1.10.0** · [下载完整发行包](https://github.com/calvinfungcn/engrelay/releases/tag/v1.10.0) · [MIT 许可证](LICENSE)
+**版本 1.10.1** · [下载完整发行包](https://github.com/calvinfungcn/engrelay/releases/tag/v1.10.1) · [MIT 许可证](LICENSE)
 
 ## 工作流配置（1.10.0）
 
@@ -19,6 +19,7 @@ Agent 提供角色提示词、任务和交接模板、按风险引入的独立�
 不自动读取 AGENTS.md 的宿主也须收到明确读取提示。
 Lite 项目可记录可选的工具、模型、推理与评审启动偏好；留空不阻塞工作。既有
 实施／修复独立审查默认附建议性 1–5 分（或 `not scored`），不新增审查或影响验收。
+1.10.1 更新 Lite 校验：检查可执行动作额度、实际动作小节内的完整围栏命令，以及围栏外的来源元数据。
 
 ```powershell
 & ./scripts/manage.ps1 -Action Install -ProjectRoot $engrelayProject -WorkflowProfile lite -SkillTarget none
@@ -98,7 +99,7 @@ Lite 项目配置和运行态在升级／卸载后仍保留；普通包文件继
 使用可信完整包，放在业务项目以外的独立目录。先备份目标项目规则，读取其
 现有 Agent 指令。新项目示例：
 
-从发行页面下载 `engrelay-1.10.0.zip`，解压后进入 `engrelay-1.10.0` 目录执行命令。
+从发行页面下载 `engrelay-1.10.1.zip`，解压后进入 `engrelay-1.10.1` 目录执行命令。
 保留完整包原样；额外工具文件或字节修改会使它与清单不匹配。仓库源码仅在
 实际文件集合和字节与 `snapshot.json` 完全一致时，也可作为安装源。
 

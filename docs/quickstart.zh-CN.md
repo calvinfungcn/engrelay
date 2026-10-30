@@ -52,12 +52,12 @@ pwsh -NoProfile -Command 'if ($PSVersionTable.PSVersion.Major -ge 7) { $PSVersio
 
 如果你的环境无法直接访问 GitHub：
 
-1. 由能访问 GitHub 的协作者从可信 GitHub 发行页面下载对应版本的完整安装包（例如 `engrelay-1.10.0.zip`），并记录可用的已公布完整性信息。若没有公布校验和，由可信协作者在转交前用 `Get-FileHash -Algorithm SHA256` 计算 ZIP 的 SHA256，并通过另一条可信渠道传递哈希。
+1. 由能访问 GitHub 的协作者从可信 GitHub 发行页面下载对应版本的完整安装包（例如 `engrelay-1.10.1.zip`），并记录可用的已公布完整性信息。若没有公布校验和，由可信协作者在转交前用 `Get-FileHash -Algorithm SHA256` 计算 ZIP 的 SHA256，并通过另一条可信渠道传递哈希。
 2. 协作者原样转交该 ZIP 文件，同时提供准确的发行版本号、来源链接以及可用校验和及其来源。
 3. 接收者在解压前核对转交的 ZIP（SHA256 用于校验传输是否损坏，不是发布者的数字签名）：
 
 ```powershell
-$zipPath = 'E:\Transfers\engrelay-1.10.0.zip'
+$zipPath = 'E:\Transfers\engrelay-1.10.1.zip'
 $expectedSha256 = '<published-or-separately-transferred-sha256>'
 $actualSha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $zipPath).Hash
 if ($actualSha256 -ne $expectedSha256) {
@@ -71,7 +71,7 @@ if ($actualSha256 -ne $expectedSha256) {
 
 ```powershell
 # 完整包根目录（不是试用项目目录）：
-$engrelayPackageRoot = 'E:\Packages\engrelay-1.10.0'
+$engrelayPackageRoot = 'E:\Packages\engrelay-1.10.1'
 $trialProject = 'E:\Projects\trial-project'
 if (-not (Test-Path -LiteralPath $trialProject -PathType Container)) {
     New-Item -ItemType Directory -Path $trialProject | Out-Null
@@ -149,7 +149,7 @@ git status --short
 
 ```powershell
 $engrelayProject = 'E:\Projects\trial-project'
-Set-Location 'E:\Packages\engrelay-1.10.0'
+Set-Location 'E:\Packages\engrelay-1.10.1'
 & .\scripts\manage.ps1 -Action Install -ProjectRoot $engrelayProject -WorkflowMode optional
 ```
 

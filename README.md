@@ -9,7 +9,7 @@ working in existing repositories. It provides role prompts, task and handoff
 templates, independent reviews based on risk, and tools for checking the evidence
 used to call work complete.
 
-**Version 1.10.0** · [Download the complete package](https://github.com/calvinfungcn/engrelay/releases/tag/v1.10.0) · [MIT License](LICENSE)
+**Version 1.10.1** · [Download the complete package](https://github.com/calvinfungcn/engrelay/releases/tag/v1.10.1) · [MIT License](LICENSE)
 
 ## Workflow profiles (1.10.0)
 
@@ -24,6 +24,8 @@ Lite projects may record optional tool, model, reasoning and review-launch prefe
 blank entries never block work. Existing independent implementation/fix reviews
 also add an advisory 1–5 delivery rating (or `not scored`) by default; it does not
 add a review or affect acceptance.
+The 1.10.1 Lite validation update checks executable review capacity, complete
+fenced commands in their actual sections, and source metadata outside fences.
 
 ```powershell
 & ./scripts/manage.ps1 -Action Install -ProjectRoot $engrelayProject -WorkflowProfile lite -SkillTarget none
@@ -137,8 +139,8 @@ See the [maintained role contracts](payload/docs/ai-collaboration/README.md).
 Use a trusted complete package in its own directory. Back up the target project's
 rules and read its existing agent instructions. For a new project:
 
-Download `engrelay-1.10.0.zip` from the release and extract it. Run commands from
-the extracted `engrelay-1.10.0` directory. Keep that complete package unchanged;
+Download `engrelay-1.10.1.zip` from the release and extract it. Run commands from
+the extracted `engrelay-1.10.1` directory. Keep that complete package unchanged;
 extra tool files or edited bytes make it differ from its inventory. The repository
 source can also be used when its file set and bytes exactly match `snapshot.json`.
 

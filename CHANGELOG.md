@@ -2,6 +2,24 @@
 
 [Simplified Chinese](CHANGELOG.zh-CN.md)
 
+## Unreleased
+
+## 1.10.1 — 2026-10-30
+
+- Hardens Lite validation so executable `continue` and dispatch both respect the
+  cumulative review allowance, while valid waits, closes and finite owner grants
+  retain their existing behavior.
+- Reads source metadata only outside fences and requires one complete, closed
+  `text` command in its actual action section. It rejects longer task-ID prefixes,
+  commands borrowed across real H1 headings, and keeps `text` info-string matching
+  case-insensitive for compatibility. Correctly formed existing commands remain
+  valid; malformed handoffs previously accepted may now be rejected.
+- Corrects the Lite release guidance and synchronizes the paired human guides.
+- The focused Lite suite passed 97/97 on Windows PowerShell 5.1 and 97/97 on
+  PowerShell 7. An independent review also passed 24 additional command-boundary
+  calls. These checks cover the stated inputs; they do not prove real-agent
+  adherence, host loading, business acceptance or deployment.
+
 ## 1.10.0 — 2026-10-25
 
 - Aligns Full start/continue, Common Preflight and Lite reading guidance: reuse of known-unchanged

@@ -12,6 +12,7 @@
 | add-handoff-capability-guidance | verified / accepted | 1 | [归档记录](add-handoff-capability-guidance/index.md#archive-record) |
 | fix-autonomous-continuation | verified / accepted | 3 | [归档记录](fix-autonomous-continuation/index.md#archive-record) |
 | harden-handoff-recovery | verified / accepted | 4 | [归档记录](harden-handoff-recovery/index.md#archive-record) |
+| harden-lite-handoff-validation | verified / accepted | 5 | [归档记录](harden-lite-handoff-validation/index.md#archive-record) |
 | link-sizing-guidance-and-pilot-lean-rules | verified / accepted | 7 | [归档记录](link-sizing-guidance-and-pilot-lean-rules/index.md#archive-record) |
 | integrate-lite-full-profiles | verified / accepted | 8 | [归档记录](integrate-lite-full-profiles/index.md#archive-record) |
 
