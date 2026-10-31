@@ -4,3 +4,6 @@
 # Development requirements are retained in Git but omitted from installation exports.
 /openspec export-ignore
 /docs/reviews export-ignore
+
+# Source-only first-handoff sample is not part of installation exports.
+/examples/handoff-demo export-ignore

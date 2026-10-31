@@ -174,6 +174,12 @@ $engrelayProject = 'E:\Projects\your-project'
 须走官方卸载/重装，管理器不会自动迁移或删除你手工维护的副本。不覆盖无关同名
 Skill，不运行继承的全目标安装器。文件放入发现目录不等于宿主已加载。
 
+## 首次交接试用
+
+源码仓库在 `examples/handoff-demo/` 提供一个固定的、仅限源码的样例。它不在安装包中，也不在
+GitHub 自动生成的源码 ZIP 中，因此请使用包含它的提交的 Git 检出。按[快速上手](docs/quickstart.zh-CN.md)
+完成三目录划分与会话 A 到会话 B 的步骤。本地候选尚非已发布样例，也不证明宿主加载或外部十分钟目标。
+
 ## 对 Agent 说什么
 
 人类指南：[快速上手](docs/quickstart.zh-CN.md)

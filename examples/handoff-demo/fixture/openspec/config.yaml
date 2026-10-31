@@ -1,0 +1,5 @@
+schema: spec-driven
+
+context: |
+  Language: English.
+  This is a disposable EngRelay demo project. Keep artifacts short and concrete.

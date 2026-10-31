@@ -4,6 +4,15 @@
 
 ## Unreleased
 
+- Adds a source-only first-handoff sample with bilingual guidance and a fixed
+  OpenSpec exercise. Two repaired internal A/B runs reached local S closure on
+  Windows PowerShell 5.1 and PowerShell 7; earlier partial runs and the failed
+  attempt remain recorded. The affected sample behavior received independent
+  review, with the cumulative review history preserved. This does not establish
+  external G0, a ten-minute completion, host loading, or all-host adherence.
+  Version remains 1.10.1; the root snapshot remains the previous release
+  inventory. The next release must refresh it from clean staging.
+
 ## 1.10.1 — 2026-10-30
 
 - Hardens Lite validation so executable `continue` and dispatch both respect the

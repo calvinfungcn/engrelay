@@ -225,6 +225,14 @@ requires official uninstall/reinstall; the manager does not migrate or remove
 hand-maintained copies for you. Do not overwrite unrelated same-name Skills or run
 the inherited all-target installer. Placement does not prove host loading.
 
+## First handoff trial
+
+The source repository includes a fixed, source-only sample under `examples/handoff-demo/`.
+It is excluded from the package and from GitHub's automatic source ZIP, so use a Git
+checkout of a commit that contains it. Follow the [quickstart](docs/quickstart.md) for the
+three directories and the Session A to Session B steps. A local candidate is not yet a
+published sample, and it does not prove host loading or the external ten-minute target.
+
 ## Talk to an agent
 
 Human guides: [quickstart](docs/quickstart.md)

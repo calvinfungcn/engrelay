@@ -7,8 +7,10 @@ It covers directory boundaries, environment prerequisites, an inspectable Git
 baseline, the handoff between Session A and Session B, Windows troubleshooting,
 and offline package handling.
 
-EngRelay does not bundle sample product applications or mock fixtures. This guide
-assumes you already have a prepared task input with clear objectives.
+The EngRelay package does not bundle sample product applications or mock fixtures. This
+guide assumes you already have a prepared task input with clear objectives. The source
+repository has an optional source-only sample, described in section 0 below; it is not
+in the package.
 
 ## Profile selection (1.10.0)
 
@@ -30,6 +32,17 @@ received independent review on one S continuation and one normal M implementatio
 Fixed-input evidence used text only. This evidence does not
 establish all-host adherence or token savings. The 86.3% comparison concerns static
 AGENTS.md bytes only.
+
+## 0. Optional source-only sample
+
+The source repository includes a fixed sample under `examples/handoff-demo/`. It is not
+in the package. If you do not want to prepare your own task, copy its `fixture/` folder
+into an empty disposable project, create a Git baseline, and follow the sample guide in
+the source repository (`examples/handoff-demo/README.md`). Until a public commit that
+contains the sample is recorded, it is a local candidate; the complete package still comes
+from the trusted release. Steps 1 and 3 to 6 of the sample guide correspond to sections 4
+to 6 of this guide; steps 2 and 7 are the sample's own checks. Do not use GitHub's automatic source ZIP for the sample, because it may
+not contain it.
 
 ## 1. Directory boundaries
 

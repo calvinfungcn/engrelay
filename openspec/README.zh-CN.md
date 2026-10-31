@@ -35,7 +35,7 @@
 | 获准边界的 handoff 持久化 | 负责人选定的 M 级批次 | 已完成 | [已归档任务](changes/archive/2026-10-19-fix-handoff-persistence/tasks.md)；[审查索引](../docs/reviews/fix-handoff-persistence/index.md) |
 | 交接恢复加固 | 负责人选定的 M 级批次 | 已完成 | [已归档任务](changes/archive/2026-10-19-harden-handoff-recovery/tasks.md)；[审查索引](../docs/reviews/harden-handoff-recovery/index.md) |
 | OBS-01：负责人扩展解析中的批次序数比较 | 第 03 轮观察项 | 待决定 | [审查索引](../docs/reviews/fix-handoff-persistence/index.md#deferred-follow-up)；实施前须由 Task Intake 决定范围 |
-| 自包含演示样例 | 路线讨论；[Phase 0 非目标](changes/archive/2026-10-17-improve-phase0-first-trial/proposal.md#non-goals) | 待决定 | 链接仅说明曾排除，不代表完整路线图 |
+| 源码专用首次交接样例与有限内部演练 | 负责人选定的校准后 Phase 0 范围 | 本地交付已接受 | [试用证据](../docs/reviews/improve-first-handoff-trial/trial-evidence.md)记录两次新目录 `S` 级内部演练，此前两次 `M` 级部分结果保留；本地[独立审查与关闭](../docs/reviews/improve-first-handoff-trial/index.md)已完成。公开固定提交取得和外部 G0 仍待验证；[已归档提案](changes/archive/2026-10-31-improve-first-handoff-trial/proposal.md)；[唯一清单](changes/archive/2026-10-31-improve-first-handoff-trial/tasks.md)；[校准路线图](roadmaps/product-growth.zh-CN.md) |
 | Phase 0 / G0 外部试用 | 负责人阶段目标（讨论） | 待验证 | 尚未开展；包检查不等于外部试用 |
 | Quickstart 排错与全链路演练 | [1.9.0 发行审查](../docs/reviews/release-1.9.0.md) | 待验证 | 该记录中的明确未测范围 |
-| Phase 1–3 路线图 | 负责人外部规划（未随本仓库发布） | 待决定 | 须按最新试用事实另选范围；不虚构变更编号 |
+| Phase 1–3 执行 | 负责人选定的路线图方向 | 待决定 | [校准后的源码路线图](roadmaps/product-growth.zh-CN.md)；后续可执行范围须按试用事实另选；外部 G0 与公开样例取得分别保持待验证 |
