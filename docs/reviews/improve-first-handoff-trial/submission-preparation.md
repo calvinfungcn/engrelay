@@ -24,10 +24,24 @@ source bytes. A future release must export the reviewed commit to clean staging,
 regenerate and verify the staging snapshot, and then update release metadata.
 That release work is outside this preparation.
 
-The actual public source SHA and a clean export of the committed tree are not
-available before the parent agent creates the commit. They must be recorded only
-after that commit exists and its export has been checked. No sample-publication,
-release, or push result is asserted here.
+Source commit: `304aa95702f106da262bcc741576293dfbeddc8d`.
+It was committed and pushed to `origin/main` on 2026-10-31 after the complete
+independent review passed. A new Git clone from the public GitHub repository was
+checked out at this exact commit; all eight fixture files matched their reviewed
+SHA256 values. The later documentation commit records these observations without
+rewriting the earlier reviews or claiming a new release.
+
+An actual `git archive` export of that commit contained 79 files, with the same
+file set as the previous release inventory. The sample, OpenSpec and root review
+directories were excluded. Seven root documentation/attribute files differ from
+the previous release hashes, as expected. The tracked snapshot was not refreshed;
+this source export is not an installation package with a matching inventory.
+
+The GitHub API also confirmed the existing non-draft, non-prerelease `v1.10.1`
+release with `engrelay-1.10.1.zip` and `SHA256SUMS`. That check confirms asset
+availability; it is not a new download or checksum verification. Internal exercises
+used the already recorded, locally verified complete package. Source checkout,
+complete installation package and disposable target remain separate.
 
 ## Privacy, language, and scope checks
 
@@ -52,7 +66,9 @@ development/release guidance, OpenSpec configuration and change artifacts;
 checking the pending Git scope and existing ignore rules; reviewing the public
 trial evidence and review history; and checking bilingual changelog wording.
 No full historical test suite, installation, release export, Git index update,
-commit, push, or publication was performed by this preparation agent.
+commit, push, or publication was performed by the preparation subagent. The parent
+subsequently performed the source commit, export, push and fresh source checkout
+recorded above. No tag or GitHub Release was created.
 
 The round 01 review keeps its historical filename `2026-10-30-round-01.md`,
 although that record states the actual review date as 2026-10-31. The existing

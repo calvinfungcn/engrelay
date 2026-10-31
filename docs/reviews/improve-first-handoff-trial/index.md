@@ -22,4 +22,6 @@
 
 第 03 轮是负责人本次明确要求的完整独立审查，累计为 3/3，无 must-fix。本轮通过后，负责人本次请求授权归档及 GitHub 提交准备、提交和推送；不授权发布新版本或外部试用。原第 02 轮收尾及当时权限说明作为历史保留。
 
+提案已[归档](../../../openspec/changes/archive/2026-10-31-improve-first-handoff-trial/proposal.md)，四项增量要求已同步主规格。源码提交、真实干净导出和 GitHub 固定检出的后续证据见[提交记录](submission-preparation.md)；这些准备检查不增加 verdict。第 01 轮中保留的活动提案路径对应同名归档路径，历史 Review 原件不重写。
+
 Advisory delivery rating: **4/5**（第 03 轮），具体证据与限制见完整独立审查；第 02 轮 4/5 和第 01 轮 3/5 原评分保留。

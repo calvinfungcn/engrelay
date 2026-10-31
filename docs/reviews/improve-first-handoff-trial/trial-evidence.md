@@ -3,7 +3,7 @@
 Change: `improve-first-handoff-trial`
 Execution Batch: `engrelay-first-handoff-trial-20261030-01`
 Scope: source-only sample, bilingual guides, export boundary, internal A/B exercises.
-Status: local delivery independently reviewed and accepted at round 02; the owner authorized item 3.2 and status synchronization on 2026-10-31. Final closure validation is recorded in the [round 02 review](2026-10-31-round-02.md). Public fixed-commit acquisition and external G0 remain pending.
+Status: local delivery independently reviewed and accepted at round 02; the owner authorized item 3.2 and status synchronization on 2026-10-31. Final closure validation is recorded in the [round 02 review](2026-10-31-round-02.md). The requested [round 03 complete review](2026-10-31-round-03.md) also passed. Public fixed-commit acquisition was subsequently verified in the [submission record](submission-preparation.md); external G0 remains pending.
 
 This record contains no private paths, account names, chat transcripts or raw session content. Raw logs and invocation records stay in the author's local evidence area and are referenced here only by hash.
 
@@ -18,7 +18,7 @@ This record contains no private paths, account names, chat transcripts or raw se
 | Internal A/B exercises | Four fresh directories in total. Runs 02 and 03 are partial (classified `M`). Runs 04 and 05 (repair round) reached the `S` closure locally. See the table below |
 | Earlier failed attempt (attempt 01) | Its harness masked the return shape, so Session B stopped and routed back. Kept as a failure record; not counted as a pass |
 
-## Fixture reference (candidate, not published)
+## Fixture reference (internal candidate inputs)
 
 The offline copy named in the guides is checked against these SHA256 values. Paths are relative to `examples/handoff-demo/fixture/`.
 
@@ -35,7 +35,7 @@ The offline copy named in the guides is checked against these SHA256 values. Pat
 
 Repair round 01 changed only `AGENTS.md`, adding a short "Demo scope and impact" section. The defect in `labels.ps1` and the checks in `test-labels.ps1` are unchanged. Runs 02 and 03 used the earlier `AGENTS.md` with SHA256 `BE2BBE84E7CB85E7FEB9C116075C25B8D0DCF734BEA37268D9687A924BB0A659`; the other seven files were identical.
 
-The source repository baseline is `a4aff94d3970e5659c121874eba3817a561ad8ca` (v1.10.1). The sample has no published commit SHA yet.
+The source repository baseline for these internal exercises was `a4aff94d3970e5659c121874eba3817a561ad8ca` (v1.10.1). The sample had no published commit SHA at that time. Its later verified public source commit is `304aa95702f106da262bcc741576293dfbeddc8d`; the eight fixture files above are unchanged.
 
 ## Inputs and versions
 
@@ -81,7 +81,7 @@ Runs 02 and 03 (earlier, fixture without the scope note) have their original tra
 - Internal runs do not establish external users, host loading, all-host adherence, token savings or cost.
 - Time was not measured for the ten-minute target; the guide does not claim it.
 - The external G0 trial has not started. No outside participant was contacted.
-- The sample is not yet a published commit, and the public acquisition path has not been checked.
+- Public acquisition was not checked during the internal exercises. The later submission record separately verifies a fresh GitHub checkout at the fixed source commit; it does not add an external user trial.
 - The four checks cover a single-item output array through the blank-label case, but do not include a separate single-element input or a `$null` element in `-Labels`. Session B also ran an ad hoc single-element input check without adding a new check.
 - The source checkout's `.gitattributes` now differs from the root `snapshot.json` inventory; the next release staging must regenerate the snapshot.
 - Independent Code Reviewer round 02 verified CR-01, CR-02 and CR-03. Local accepted closure covers the mapped delivery only; it does not establish public acquisition, external G0 or release readiness. See the [review index](index.md) and [final boundary evidence](2026-10-31-round-02.md#负责人授权后的-32-收尾).

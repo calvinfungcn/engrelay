@@ -12,9 +12,9 @@ not contain it. The package installer never copies it into a target project.
 
 ## Status
 
-- The sample is a **local candidate**. No public commit SHA containing it is published
-  yet. Record the commit you checked out, or the file hashes you verified for an
-  offline copy.
+- Sample source commit: `304aa95702f106da262bcc741576293dfbeddc8d`. On 2026-10-31,
+  a fresh checkout from GitHub matched all eight fixture files. See the
+  [submission record](../../docs/reviews/improve-first-handoff-trial/submission-preparation.md).
 - Two fresh trial runs and the external first-user trial (G0) are tracked in
   [trial evidence](../../docs/reviews/improve-first-handoff-trial/trial-evidence.md).
   Until they are recorded there, the sample is not a verified ten-minute path.
@@ -53,9 +53,17 @@ and PowerShell 7 (`pwsh`). Do not treat Windows PowerShell 5.1 as meeting this.
 
 Use one of these two sources:
 
-1. A Git checkout of a commit that contains this directory. Record the commit SHA.
+1. A Git checkout of the verified source commit below. Record the commit SHA.
 2. An offline copy of this `fixture/` folder whose file SHA256 hashes match the values
    recorded in the trial evidence.
+
+```powershell
+git clone https://github.com/calvinfungcn/engrelay.git engrelay-demo-source
+git -C engrelay-demo-source checkout --detach 304aa95702f106da262bcc741576293dfbeddc8d
+```
+
+The fixture is under `engrelay-demo-source/examples/handoff-demo/fixture/`.
+Obtain the complete installation package separately from the trusted v1.10.1 release.
 
 Do not use GitHub's automatic source ZIP for this sample. It is produced by
 `git archive`, and `export-ignore` removes this directory from that output.

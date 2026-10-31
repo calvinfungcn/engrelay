@@ -38,8 +38,9 @@ AGENTS.md bytes only.
 The source repository includes a fixed sample under `examples/handoff-demo/`. It is not
 in the package. If you do not want to prepare your own task, copy its `fixture/` folder
 into an empty disposable project, create a Git baseline, and follow the sample guide in
-the source repository (`examples/handoff-demo/README.md`). Until a public commit that
-contains the sample is recorded, it is a local candidate; the complete package still comes
+the [source sample guide](https://github.com/calvinfungcn/engrelay/blob/main/examples/handoff-demo/README.md).
+Use source commit `304aa95702f106da262bcc741576293dfbeddc8d`, whose eight fixture files
+were checked after a fresh GitHub checkout; obtain the complete package separately
 from the trusted release. Steps 1 and 3 to 6 of the sample guide correspond to sections 4
 to 6 of this guide; steps 2 and 7 are the sample's own checks. Do not use GitHub's automatic source ZIP for the sample, because it may
 not contain it.

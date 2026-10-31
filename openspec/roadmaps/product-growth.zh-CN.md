@@ -17,8 +17,8 @@
 | Phase 0 选定八项改进 | 已完成；[归档范围](../changes/archive/2026-10-17-improve-phase0-first-trial/proposal.md)明确没有交付完整 Phase 0 |
 | Lite／Full 配置 | 已完成；[整合任务](../changes/archive/2026-10-24-integrate-lite-full-profiles/tasks.md)；首个新增演示使用 Full，Lite 现有使用方式保持独立说明 |
 | 交接能力、恢复与上下文反馈 | 已完成；[当前后续事项导航](../README.zh-CN.md)链接相应验收，不代表所有宿主或模型都已验证 |
-| 公开样例及最新版内部演练 | 本地交付经[独立审查与关闭](../../docs/reviews/improve-first-handoff-trial/index.md)已接受；[试用证据](../../docs/reviews/improve-first-handoff-trial/trial-evidence.md)记录两次新目录 `S` 级内部演练，此前两次 `M` 级部分结果保留。公开固定提交取得仍待验证；见[improve-first-handoff-trial](../changes/archive/2026-10-31-improve-first-handoff-trial/proposal.md)与其[唯一实施清单](../changes/archive/2026-10-31-improve-first-handoff-trial/tasks.md) |
-| 公开固定提交取得与外部 G0 | 待验证；本地代码完成、结构检查和 Release 标题均不代替这些证据 |
+| 公开样例及最新版内部演练 | 本地交付经[独立审查与关闭](../../docs/reviews/improve-first-handoff-trial/index.md)已接受；[试用证据](../../docs/reviews/improve-first-handoff-trial/trial-evidence.md)记录两次新目录 `S` 级内部演练，此前两次 `M` 级部分结果保留。样例取得已核对固定提交 [`304aa95702f106da262bcc741576293dfbeddc8d`](https://github.com/calvinfungcn/engrelay/commit/304aa95702f106da262bcc741576293dfbeddc8d)；[提交准备记录](../../docs/reviews/improve-first-handoff-trial/submission-preparation.md)记录全新克隆和归档检查。见[improve-first-handoff-trial](../changes/archive/2026-10-31-improve-first-handoff-trial/proposal.md)与其[唯一实施清单](../changes/archive/2026-10-31-improve-first-handoff-trial/tasks.md) |
+| 外部 G0 | 待验证；内部演练、全新克隆取得样例和包结构检查不代替目标用户的首次试用 |
 | F3／F4 | 已确认待独立实施；[范围入口](../changes/archive/2026-10-30-harden-lite-handoff-validation/proposal.md#follow-up-work) |
 
 ## 阶段安排

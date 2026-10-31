@@ -11,8 +11,8 @@
 
 ## 状态
 
-- 本样例是**本地候选**。目前尚未发布包含它的公开提交 SHA。请记录你检出的提交，或离线副本
-  已核对的文件哈希。
+- 样例源码提交为 `304aa95702f106da262bcc741576293dfbeddc8d`。2026-10-31 已从 GitHub 全新检出，
+  八个 fixture 文件指纹全部匹配，见[提交记录](../../docs/reviews/improve-first-handoff-trial/submission-preparation.md)。
 - 两次新目录内部演练与外部首次试用（G0）记录在
   [试用证据](../../docs/reviews/improve-first-handoff-trial/trial-evidence.md)。在那里记录前，
   本样例不应视为已验证的十分钟路径。
@@ -49,8 +49,16 @@ Windows PowerShell 5.1 不满足该前提。
 
 二选一：
 
-1. 包含本目录的提交的 Git 检出。记录提交 SHA。
+1. 下列已验证源码提交的 Git 检出，记录提交 SHA。
 2. 本 `fixture/` 文件夹的离线副本，且其文件 SHA256 与试用证据中记录的值一致。
+
+```powershell
+git clone https://github.com/calvinfungcn/engrelay.git engrelay-demo-source
+git -C engrelay-demo-source checkout --detach 304aa95702f106da262bcc741576293dfbeddc8d
+```
+
+fixture 位于 `engrelay-demo-source/examples/handoff-demo/fixture/`。
+完整安装包另从可信的 v1.10.1 发行版取得。
 
 不要用 GitHub 自动生成的源码 ZIP 获取本样例。它由 `git archive` 生成，而 `export-ignore`
 会把本目录从该输出中去掉。

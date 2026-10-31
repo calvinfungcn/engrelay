@@ -230,8 +230,9 @@ the inherited all-target installer. Placement does not prove host loading.
 The source repository includes a fixed, source-only sample under `examples/handoff-demo/`.
 It is excluded from the package and from GitHub's automatic source ZIP, so use a Git
 checkout of a commit that contains it. Follow the [quickstart](docs/quickstart.md) for the
-three directories and the Session A to Session B steps. A local candidate is not yet a
-published sample, and it does not prove host loading or the external ten-minute target.
+three directories and the Session A to Session B steps. Sample source commit
+`304aa95702f106da262bcc741576293dfbeddc8d` was retrieved from GitHub and its eight
+fixture files verified. This does not prove host loading or the external ten-minute target.
 
 ## Talk to an agent
 
