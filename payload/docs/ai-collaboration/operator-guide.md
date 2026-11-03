@@ -155,6 +155,24 @@ These examples are illustrative. The hypothetical figures do not record a real r
   states six. Report launches, follow-up inputs, failures and shared coordination
   separately, and do not treat a missing record as zero. Recheck only the affected totals
   and leave the original report unchanged.
+- **Evidence correspondence.** Citing an old upload result cannot prove that the current
+  FileId entrypoint succeeds. When the entrypoint, input, or environment does not correspond
+  to claimed acceptance, keep the item unverified and disclose the exact gap, rather than
+  substituting an offline fake or narrative assertion.
+- **Privacy-safe reporting and minimal redaction.** Never include real credentials, invoice
+  fields, or private customer identifiers in review reports, handoffs, or commit diffs;
+  use fictional aliases, synthetic counts, and mock states. If an existing report contains
+  prohibited sensitive values, apply minimal redaction under applicable authorization
+  without exposing values in diffs, preserving facts, verdicts, and a value-free explanation.
+- **Post-closure review and capacity.** When the Task Owner requests a single additional
+  review on already-closed work, keep historical closure records and counts intact. The
+  single review evaluates only that authorized scope without reopening the batch or granting
+  three new fix cycles. Genuinely new defects require applicable authorization to start a
+  linked repair batch.
+- **Bounded archive check.** Archive verification focuses on spec delta / main spec
+  correspondence, completeness, tasks, index links, and delivery privacy. Passing the check
+  concludes it; unrelated historical failures in global checks are reported separately without
+  blocking current closure or falsely claiming global pass.
 - **Fully read-only return.** A read-only reviewer returns its complete verdict, findings
   and Response Handoff, including source role, source Agent, work producer, source Execution
   Batch ID, Task ID, prior State revision, prior live SHA256, target State revision and

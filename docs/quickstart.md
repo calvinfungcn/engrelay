@@ -78,7 +78,7 @@ or alter your global execution policy.
 If your environment cannot access GitHub directly:
 
 1. A collaborator with access downloads the complete official release ZIP
-   (e.g., `engrelay-1.10.1.zip`) from the trusted GitHub release page and records
+   (e.g., `engrelay-1.10.2.zip`) from the trusted GitHub release page and records
    any published integrity information. If no checksum is published, the trusted
    collaborator computes the ZIP's SHA256 with `Get-FileHash -Algorithm SHA256`
    before transfer and sends that hash through a separate trusted channel.
@@ -88,7 +88,7 @@ If your environment cannot access GitHub directly:
    transfer integrity; it is not a publisher signature):
 
 ```powershell
-$zipPath = 'E:\Transfers\engrelay-1.10.1.zip'
+$zipPath = 'E:\Transfers\engrelay-1.10.2.zip'
 $expectedSha256 = '<published-or-separately-transferred-sha256>'
 $actualSha256 = (Get-FileHash -Algorithm SHA256 -LiteralPath $zipPath).Hash
 if ($actualSha256 -ne $expectedSha256) {
@@ -108,7 +108,7 @@ if ($actualSha256 -ne $expectedSha256) {
 
 ```powershell
 # Complete package root (not the trial project):
-$engrelayPackageRoot = 'E:\Packages\engrelay-1.10.1'
+$engrelayPackageRoot = 'E:\Packages\engrelay-1.10.2'
 $trialProject = 'E:\Projects\trial-project'
 if (-not (Test-Path -LiteralPath $trialProject -PathType Container)) {
     New-Item -ItemType Directory -Path $trialProject | Out-Null
@@ -200,7 +200,7 @@ Run the installer from your complete release package directory:
 
 ```powershell
 $engrelayProject = 'E:\Projects\trial-project'
-Set-Location 'E:\Packages\engrelay-1.10.1'
+Set-Location 'E:\Packages\engrelay-1.10.2'
 & .\scripts\manage.ps1 -Action Install -ProjectRoot $engrelayProject -WorkflowMode optional
 ```
 

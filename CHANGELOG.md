@@ -2,16 +2,39 @@
 
 [Simplified Chinese](CHANGELOG.zh-CN.md)
 
-## Unreleased
+## 1.10.2 — 2026-11-03
 
+- Clarifies review closure, evidence quality, and post-closure boundaries across Full and Lite:
+  preserves complete independent review before archive covering all authorized acceptance,
+  final diff, compatibility, evidence correspondence, documentation, and delivery privacy in
+  one aggregated round without skipping on prior PASS; continuing unfinished acceptance under
+  a new name preserves cumulative counts without capacity reset; an authorized single review
+  at capacity or post-closure evaluates only that bounded scope without granting three new fix
+  cycles.
+- Enforces evidence correspondence between claimed entrypoint, input, environment, and observed
+  result (old upload success cannot prove FileId success; unverified if lacking).
+- Bounded rechecks reuse matching evidence for unchanged inputs, while shared contract changes
+  or invalidated evidence expand checks along the blast radius.
+- Enforces delivery privacy for review artifacts and staged copies using fictional aliases,
+  dated errata for count mismatches, and minimal redaction without exposing private values in diffs.
+- Bounded archive checks scale to spec synchronization and completeness, ending on pass, with
+  unrelated global check failures reported separately.
+- Advisory delivery quality rating adds rework attribution (implementation, fix, evidence
+  interpretation, review artifact, or unknown) when evidence allows, without blaming the
+  implementer for unexplained gaps or review artifact disclosures.
+- Actual agent observations are recorded in source review history for five bounded fictional
+  scenarios: wrong evidence,
+  a local redaction recheck, a shared-contract blast-radius change, a post-closure or
+  capacity-limited review, and bounded archive verification. These observations do not
+  claim business behavior, package installation, a new Lite session-isolation result,
+  all-host adherence, or fixed token savings.
 - Adds a source-only first-handoff sample with bilingual guidance and a fixed
   OpenSpec exercise. Two repaired internal A/B runs reached local S closure on
   Windows PowerShell 5.1 and PowerShell 7; earlier partial runs and the failed
   attempt remain recorded. The affected sample behavior received independent
   review, with the cumulative review history preserved. This does not establish
-  external G0, a ten-minute completion, host loading, or all-host adherence.
-  Version remains 1.10.1; the root snapshot remains the previous release
-  inventory. The next release must refresh it from clean staging.
+  external G0, a ten-minute completion, host loading, or all-host adherence; external
+  G0 remains incomplete. The sample is source-only.
 
 ## 1.10.1 — 2026-10-30
 

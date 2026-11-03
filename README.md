@@ -9,7 +9,7 @@ working in existing repositories. It provides role prompts, task and handoff
 templates, independent reviews based on risk, and tools for checking the evidence
 used to call work complete.
 
-**Version 1.10.1** · [Download the complete package](https://github.com/calvinfungcn/engrelay/releases/tag/v1.10.1) · [MIT License](LICENSE)
+**Version 1.10.2** · [Download the complete package](https://github.com/calvinfungcn/engrelay/releases/tag/v1.10.2) · [MIT License](LICENSE)
 
 ## Workflow profiles (1.10.0)
 
@@ -83,6 +83,15 @@ for entry selection and handoffs.
   verification where high-risk work requires it.
 - Record one next action: `continue`, `dispatch`, or `close`. A dispatch includes
   a complete command the next agent can use without the preceding chat.
+- Complete review before archive covers all authorized acceptance, final diff,
+  compatibility, evidence correspondence, documentation, and delivery privacy in
+  one aggregated round. Renaming unfinished work preserves cumulative verdicts
+  without reset; authorized single reviews at capacity or post-closure do not grant
+  three new fix cycles. Evidence must correspond to claimed entrypoints and results
+  (unverified if lacking). Focused rechecks reuse matching evidence for unchanged
+  inputs, while shared contract changes or invalid evidence expand checks along the
+  blast radius. Review artifacts remain privacy-safe, and bounded archive checks
+  verify spec sync and completeness, ending on pass.
 - Handoff `Human Action Required` shows whether a person needs to act now.
   Later environment notices require no current action or reply. Executable
   `continue` includes a self-contained Continuation Command; an active capable
@@ -139,8 +148,8 @@ See the [maintained role contracts](payload/docs/ai-collaboration/README.md).
 Use a trusted complete package in its own directory. Back up the target project's
 rules and read its existing agent instructions. For a new project:
 
-Download `engrelay-1.10.1.zip` from the release and extract it. Run commands from
-the extracted `engrelay-1.10.1` directory. Keep that complete package unchanged;
+Download `engrelay-1.10.2.zip` from the release and extract it. Run commands from
+the extracted `engrelay-1.10.2` directory. Keep that complete package unchanged;
 extra tool files or edited bytes make it differ from its inventory. The repository
 source can also be used when its file set and bytes exactly match `snapshot.json`.
 

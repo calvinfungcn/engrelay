@@ -13,11 +13,11 @@
 
 ## Scope
 
-<What this round is checking and what is explicitly out of scope.>
+<What this round is checking (reviewed version/diff, complete authorized acceptance or focused fix recheck, relative change) and what is explicitly out of scope.>
 
 ## Evidence
 
-<Commands and results, or a clear procedure with observed outcomes. Include dates.>
+<Commands and results, or a clear procedure with observed outcomes. Include dates. Ensure entrypoint, input, environment and observed result correspond to claimed acceptance; state unverified when lacking. Keep artifacts privacy-safe using fictional aliases.>
 
 ## Findings
 
@@ -27,13 +27,13 @@
 
 ## Conclusion
 
-<What is true after this round, and what remains open.>
+<What is true after this round, what remains open, and which prior evidence is reused or invalidated.>
 
 - Batch closure decision: `<closed|fix-required|task-owner-decision>`
 - Next action decision: `<dispatch|continue|close>`
 - Broad evidence reused: `<path/command/result or none>`
 - Additional checks run in this round: `<focused checks or none>`
-- Advisory delivery quality (implementation or fix delivery only; omit otherwise): `<1-5 or not scored>`; basis: `<finding IDs and evidence>`; reason or suggestion: `<brief or none>`
+- Advisory delivery quality (implementation or fix delivery only; omit otherwise): `<1-5 or not scored>`; basis: `<finding IDs and evidence>`; attribution (when rework occurs): `<implementation|fix|evidence-interpretation|review-artifact|unknown>`; reason or suggestion: `<brief or none>`
 
 ## OpenSpec Impact
 

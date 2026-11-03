@@ -49,15 +49,43 @@ design, code or verification actions; changing role labels cannot create indepen
 
 Review round counts completed design/code/verification/adjudication verdicts for
 the same mapped acceptance. Default allowance is three, across sessions, stages,
-tools and profiles. Never rename unresolved work to reset it. At capacity accept
-only on evidence, otherwise wait for Task Owner disposition or an applicable finite
-extension. Do not start a fourth autonomous fix/review cycle. An extension retains
-owner, date, batch=Task ID, from, through, scope and evidence in the existing form:
+tools and profiles. Never rename unresolved work to reset it; continuing the same
+unfinished acceptance under a new name or phase preserves its cumulative count.
+At capacity accept only on evidence, otherwise wait for Task Owner disposition or an
+applicable finite extension. Do not start a fourth autonomous fix/review cycle. An
+extension retains owner, date, batch=Task ID, from, through, scope and evidence in the
+existing form:
 `Task Owner decision: review-budget-extension; owner=...; date=YYYY-MM-DD; batch=T01; from=3; through=5; scope=...; evidence=relative/file.md`.
 Use it only when from <= current count < through and the real authorization matches.
+When an unclosed task at capacity is authorized for one extra review only, record that
+single-verdict ceiling (`from=N`, `through=N+1`); it does not grant three new fix cycles.
+A single additional review requested on already-closed work evaluates that authorized scope
+while preserving historical closure records and counts; it does not reopen the batch or grant
+three fix cycles. A genuinely new defect requires applicable authorization for a linked repair.
 Executable continue and Agent dispatch both require remaining capacity. A genuine
 blocked wait, owner decision or valid close may be recorded at capacity; recheck
 capacity when work becomes executable again. A blocked record grants no new cycle.
+
+When explicitly requested for a complete review before archive, Reviewer covers all authorized
+acceptance, final diff, compatibility, evidence correspondence, documentation, and delivery
+privacy; aggregate findings in one round without skipping on prior PASS. If existing independent
+conclusions cover all current inputs and no extra review was requested, that conclusion may be
+reused. Evidence must correspond to claimed entrypoint, inputs, environment, and result; lacking
+evidence remains unverified. Subsequent rechecks focus on assigned fixes and affected behavior,
+reusing matching evidence for unchanged inputs; privacy redactions or explanation fixes do not
+rerun broad suites. If a fix alters a shared contract or invalidates evidence, expand checks
+along the blast radius; do not use focused rechecks to conceal defects.
+
+Review artifacts and staged copies must remain privacy-safe using fictional aliases, synthetic
+counts, and mock states; real credentials, invoice tokens, or private sample values must not
+enter reports or diffs. Factual count mismatches use dated errata. Historical sensitive values
+undergo minimal redaction under applicable authorization without exposing values in diffs,
+preserving facts and verdicts.
+
+Archive checks focus on spec delta to main spec correspondence, completeness, task completion
+state, index links, and delivery privacy, scaled to current impact. Passing ends the check
+without redundant review. Unrelated historical failures in global checks are reported separately
+without falsely claiming global pass or blocking current closure.
 
 ## Advisory delivery quality
 
@@ -65,9 +93,12 @@ When the independent reviewer of an implementation (Code Reviewer for M, or the 
 Reviewer) or of a fix actually evaluates the delivery, its review conclusion adds one
 advisory line by default: a 1-5 score or `not scored`, the findings, evidence and reviewed
 version it relies on, and a brief reason or suggestion. The final response briefly repeats
-that line from the existing review, without new investigation. Rate only the implementation
-or fix delivery; do not rate other roles or create an extra session, score file or handoff
-field.
+that line from the existing review, without new investigation. When rework occurs, the review
+conclusion briefly notes the rework source (implementation, fix, evidence interpretation,
+review artifact, or unknown) based only on evidence visible in this round. State `unknown`
+when evidence is insufficient; do not attribute unexplained rework or review artifact
+disclosures to the implementer. Rate only the implementation or fix delivery; do not rate
+other roles, rewrite earlier scores, or create an extra session, score file or handoff field.
 
 - 5: no proven must-fix item in the current scope and the required evidence is present.
 - 4: generally reliable, with local items that can be fixed.

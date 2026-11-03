@@ -928,6 +928,10 @@ Required decisions:
 
 - files changed
 - checks run
+- ensure evidence corresponds to the claimed entrypoint, inputs, environment,
+  and observed results, stating unverified when lacking (README.md#evidence-reuse)
+- ensure implementation artifacts and staged copies remain privacy-safe using
+  fictional aliases and synthetic values (README.md#privacy-safe-review-artifacts)
 - risks and limitations
 - scope authority: do not silently add a suggestion, assumption, or future
   preference to OpenSpec, current-task acceptance, or implementation scope;
@@ -1052,6 +1056,24 @@ Required decisions:
 - verdict or status
 - all high-confidence actual defects in the current batch, reported together in one
   round with no fixed count cap; preferences and test-only style remain advisory
+- evidence correspondence: entrypoint, inputs, environment, and observed results
+  must match claimed acceptance; an old upload result cannot prove current FileId
+  success, and missing evidence remains unverified (README.md#evidence-reuse)
+- when explicitly requested for complete review before archive, cover all authorized
+  acceptance, final diff, compatibility, evidence correspondence, documentation, and
+  delivery privacy in one aggregated round; do not skip because of prior PASS. If existing
+  independent conclusions cover all current inputs and no extra review was requested, reuse
+  that conclusion without a duplicate round (README.md#evidence-reuse)
+- verify that the review artifact itself and applicable staged copies respect delivery
+  privacy, using fictional aliases without leaking credentials or private sample data
+  (README.md#privacy-safe-review-artifacts)
+- when evaluating implementation or fix delivery, add by default the advisory rating
+  (1–5 or `not scored`); when rework occurs, note the rework source (implementation, fix,
+  evidence interpretation, review artifact, or unknown) based on current evidence, without
+  attributing unexplained gaps to the implementer (README.md#advisory-delivery-quality-rating)
+- apply bounded archive verification rules when conducting archive checks: scale inspection
+  to spec synchronization and archive impact, end the check on pass, and report unrelated
+  global failures separately (README.md#bounded-archive-verification)
 - evidence
 - scope authority: judge implementation against authorized current-task/OpenSpec
   acceptance and evidenced necessary constraints; unauthorized scope or an

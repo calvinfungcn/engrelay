@@ -597,8 +597,39 @@ or deployment authorization.
   and reviewer independence. When the finite allowance is exhausted again
   without acceptance, the agent updates the analysis and recommendation; there
   is no automatic renewal, rename, or reset.
+- Continuing the same unfinished acceptance under a changed phase, role, file
+  or batch name preserves its actual cumulative count and unfinished mapping;
+  renaming grants no new review cycles or capacity reset. When an unclosed
+  batch at capacity (N=3) is explicitly authorized for one additional
+  independent review only, record the actual bounded scope and ceiling
+  (`from=N`, `through=N+1`) using the finite-extension field above; it must
+  not be treated as unlimited authorization or three new fix cycles.
+- When the Task Owner requests a single additional review on already-closed
+  work, original closure snapshots and historical verdict counts remain
+  unchanged; establish a named, bounded review scope linked to the historical
+  record through existing task intake and index references, and record its
+  actual verdict. That single review does not reopen the closed batch or
+  automatically authorize a new three-round repair cycle. If the review
+  identifies a genuinely new defect and applicable repair authorization
+  exists, handle it as a distinct linked repair batch while preserving
+  historical facts and prior verdict counts; renaming unfinished original
+  acceptance is not a new defect.
 - The agent that verifies a batch may also perform documentation closure; do
   not create a Documentation Steward round only to copy status between files.
+
+### Bounded Archive Verification
+
+Independent archive checks occur only when explicitly requested by the Task
+Owner or required by active applicable constraints; they are not a mandatory
+barrier for every task. The check is proportioned to the impact of the current
+spec synchronization and archive artifacts: verify spec delta to main spec
+correspondence, file completeness, task completion state, review index links,
+and delivery privacy, reusing matching implementation evidence. Passing the
+authorized archive check concludes that check; do not dispatch redundant roles
+to duplicate status. If a global check fails due to unrelated historical
+archives while the current archive is valid, record both the current valid
+result and the unrelated global failure separately; do not falsely claim global
+pass, and do not block current archive closure on fixing unrelated proposals.
 
 ## Technical Disposition Exit Contracts
 
@@ -690,6 +721,68 @@ review evidence, record the repository, base/diff or content hash, command,
 and environment. Link to it from handoff files instead of copying the same
 evidence into multiple files. Keep paths referenced by durable records stable;
 do not move a referenced result merely to reduce the local `.ai/` file count.
+
+### Evidence Correspondence
+
+Evidence must correspond to the claimed entrypoint, inputs, environment, and
+actual observed results:
+
+- An earlier upload result cannot prove that the current FileId entrypoint
+  succeeds.
+- An offline fake or simulated mock cannot substitute for an explicitly
+  required authenticated HTTP endpoint or external service integration.
+- If corresponding evidence is lacking, the acceptance criterion remains
+  unverified with the exact gap disclosed, rather than marked passed based on
+  narrative assertion or structural validation alone.
+- When existing command invocations, exit codes, versions, or content hashes
+  already establish correspondence, cite them directly; do not add redundant
+  metadata layers or duplicate tables.
+- Unobtainable host facts are recorded as unknown and evaluated against actual
+  acceptance impact; they do not become arbitrary new blocking requirements.
+
+### Complete Review, Focused Rechecks, and Scope Expansion
+
+The depth and scope of review must match actual authorization and changes:
+
+- **Complete review before archive**: When the Task Owner explicitly requests a
+  complete independent review before archive, the review must cover all
+  authorized acceptance criteria, final diff, compatibility, evidence
+  correspondence, documentation, and delivery privacy; aggregate findings in
+  one round. Do not skip it because of a prior passing round. If no additional
+  review is requested and existing independent conclusions already cover all
+  current inputs, that conclusion may be reused without creating a redundant
+  duplicate review or adding an archive review barrier to standard `S` tasks.
+- **Focused rechecks**: Subsequent rechecks focus on assigned fixes, the diff,
+  and directly affected behaviors, reusing matching evidence for unchanged
+  inputs. A documentation, explanation, or privacy redaction fix that preserves
+  behavior and test inputs does not trigger unrelated broad regression, vendor
+  calls, or whole-suite re-runs.
+- **Expanding checks**: When a repair changes a shared contract, caller
+  assumptions, or relevant inputs, or when the review reveals a genuine new
+  defect or invalidates prior evidence, the reviewer expands inspection and
+  necessary checks along the causal blast radius. Expand to a full review when
+  justified by the impact; do not use focused recheck to conceal or bypass
+  defects.
+
+### Privacy-Safe Review Artifacts
+
+Review, verification, fix reports, handoffs, and working/staged copies must
+respect delivery privacy boundaries:
+
+- Summaries and review records use fictional aliases, placeholder identifiers,
+  synthetic counts, and mock states to illustrate evidence.
+- Real invoice fields, customer identifiers, credentials, tokens, or private
+  sample content must not appear in review reports, handoffs, tool logs, or
+  committed diffs. Necessary private primary sources remain governed by
+  project boundaries, without generating new unmanaged backups.
+- Reviewers inspect the review artifact itself and applicable staged copies
+  during existing delivery steps.
+- Ordinary factual errors (such as mismatched counts) are corrected with dated
+  errata beside the summary, preserving original records.
+- If a historical report contains prohibited sensitive values, apply minimal
+  redaction under applicable authorization without exposing values in diffs,
+  while preserving underlying facts, verdicts, ratings, and a clear
+  value-free explanation.
 
 ## Selected Compound Engineering Capabilities
 
@@ -1096,9 +1189,16 @@ review session, score file, handoff field, weighting or model-capability judgeme
 
 Score actual impact against clear requirements, not defect count, round count or length.
 Use `not scored` when evidence is insufficient; do not assign an unexplained gap to the
-implementer. The rating is advice: it does not change formal findings, acceptance, routing,
-risk, the C1–C5 tier, the cumulative Review round or owner authority, and historical
-reviews are not backfilled.
+implementer. When subsequent findings cause rework, the review conclusion briefly
+notes the source of rework (implementation, fix, evidence interpretation, or review
+artifact) based only on evidence already visible in the current round. State `unknown`
+when evidence is insufficient; do not attribute unexplained rework to the implementer.
+An accidental disclosure introduced by a review artifact must not lower the implementer's
+delivery score. Retain earlier scores; a high score on a final fix does not overwrite the
+initial implementation rating. Do not introduce dedicated reviewer-rating roles, scoring
+files, or attribution investigation procedures. The rating is advice: it does not change
+formal findings, acceptance, routing, risk, the C1–C5 tier, the cumulative Review round or
+owner authority, and historical reviews are not backfilled.
 
 ## Quick Start
 

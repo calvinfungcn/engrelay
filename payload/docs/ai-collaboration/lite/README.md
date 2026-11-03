@@ -33,9 +33,20 @@ Templates alone do not approve work. Read actual code and module instructions as
 For example, an approved S documentation correction with defined acceptance may
 finish after relevant self-checks. An M implementation needs independent review
 and confirmation of must-fix repairs; an H change retains applicable design review
-and independent verification. The default total of three completed verdicts never
-resets when changing phase, model or profile. At capacity unresolved work waits
-for the owner; there is no fourth autonomous loop.
+and independent verification. When the Task Owner requests a complete review before
+archive, the Reviewer verifies all authorized acceptance, final diff, compatibility,
+evidence correspondence, documentation, and delivery privacy in one round. The default
+total of three completed verdicts never resets when changing phase, model, task name or
+profile; continuing unfinished work preserves its cumulative count. At capacity or
+post-closure, an authorized single review evaluates that bounded scope without granting
+three new fix cycles. Evidence must correspond to the claimed entrypoint, inputs, and
+result (unverified if lacking). Focused rechecks reuse matching evidence for unchanged
+inputs, while shared contract changes or invalid evidence expand checks along the blast
+radius. Review artifacts remain privacy-safe without committing credentials or private
+sample values. Bounded archive checks verify spec synchronization and completeness, ending
+on pass. Delivery quality ratings follow [RULES.md](RULES.md); they are advice, not a gate,
+and attribute rework source when evidence allows without blaming the implementer for
+unexplained gaps or review disclosures.
 
 Optional tool, model, reasoning, existing review-launch, limit and isolation entries in
 `docs/engrelay-lite.config.md` are advisory. A blank or unavailable preference never blocks

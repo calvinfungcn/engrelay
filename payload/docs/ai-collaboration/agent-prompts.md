@@ -252,6 +252,12 @@ Focus:
   Owner or needed for decisions (README.md#optional-sizing-and-effort); omit for
   clear small tasks
 - handoff to Design Reviewer, Architect, UI Designer, Test Engineer, or Implementation Engineer
+- apply bounded archive verification rules when managing archive checks: scale inspection
+  to spec synchronization and archive artifact impact, end the check on pass, and report
+  unrelated global failures separately (README.md#bounded-archive-verification)
+- enforce post-closure and capacity limits: renaming unfinished acceptance preserves cumulative
+  verdicts without capacity reset; an authorized single review does not grant three new fix
+  loops, and genuine new defect repair requires applicable authorization (README.md#review-round-circuit-breaker)
 - phrase the first demonstrable slice in owner-observable terms and identify
   its inspection evidence or steps; keep this as informational progress,
   unless the existing Task Owner Boundary requires a decision
@@ -741,6 +747,10 @@ Rules:
   reconfirmation. Requirements Analyst returns only to Chief Designer, who
   decides any rescope or technical disposition.
 - Add or update focused tests when feasible.
+- Ensure implementation evidence corresponds to the claimed entrypoint, inputs,
+  environment, and result, disclosing any gap (README.md#evidence-reuse).
+- Ensure implementation artifacts and staged copies remain privacy-safe using
+  fictional aliases and synthetic values (README.md#privacy-safe-review-artifacts).
 - Run the required checks from .ai/current-task.md.
 - After focused checks pass, use `ce-simplify-code` once when a meaningful code
   diff may contain accidental complexity. Keep it limited to this batch and
@@ -849,8 +859,22 @@ Rules:
   line described in `README.md#advisory-delivery-quality-rating` to the review conclusion: a
   1-5 score or `not scored`, with the evidence, finding IDs and reviewed version it relies on.
   For a fix, state whether the stated findings are resolved and whether the necessary evidence
-  and regression checks are present. Rate only that delivery; do not rewrite earlier ratings,
-  rate other roles, or add a separate review session. The final response briefly repeats the line.
+  and regression checks are present. When rework occurs, note the source of rework
+  (implementation, fix, evidence interpretation, review artifact, or unknown); do not
+  attribute unexplained rework or review artifact disclosures to the implementer.
+  Rate only that delivery; do not rewrite earlier ratings, rate other roles, or add a separate
+  review session. The final response briefly repeats the line.
+- Verify evidence correspondence: entrypoint, inputs, environment, and observed result must
+  match the claimed acceptance; an old upload result cannot prove current FileId success, and
+  missing evidence remains unverified (README.md#evidence-reuse).
+- When explicitly requested to perform a complete review before archive, verify all authorized
+  acceptance criteria, final diff, compatibility, evidence correspondence, documentation, and
+  delivery privacy in one aggregated round; do not skip because of prior PASS. If existing
+  independent conclusions cover all current inputs and no extra review was requested, reuse
+  that conclusion without a duplicate round (README.md#evidence-reuse).
+- Verify that the review artifact itself and applicable staged copies respect delivery
+  privacy, using fictional aliases and synthetic values without leaking private customer or
+  credential data (README.md#privacy-safe-review-artifacts).
 - Classify findings by formal status: open, fixed-not-verified, verified, deferred.
 - Add a priority for actionable findings: must-fix, should-fix, or nice-to-have.
 - Disposition every should-fix before closure: assign it to the current fix
@@ -972,6 +996,11 @@ Rules:
   expensive check has little additional benefit or exceeds the stated cost,
   stop that optional expansion and use the existing Owner Decision Brief;
   continue ordinary local checks and disclose any necessary acceptance risk.
+- If a fix changes a shared contract, caller assumptions, or relevant inputs, or
+  invalidates prior evidence, expand verification along the causal blast radius
+  rather than relying on a narrow check (README.md#evidence-reuse).
+- Ensure fix artifacts and staged copies remain privacy-safe without leaking private
+  values into diffs or handoffs (README.md#privacy-safe-review-artifacts).
 - Use `ce-debug` for non-obvious root-cause work. After fixes pass focused
   checks, use `ce-simplify-code` only when the fix diff warrants it and without
   broadening the assigned findings.
@@ -1050,7 +1079,14 @@ Rules:
 - For a fix delivery, add by default the advisory line described in
   `README.md#advisory-delivery-quality-rating` (1-5 or `not scored`), based on whether the
   fix resolves the stated findings, keeps the necessary evidence and avoids regression.
-  Cite the reviewed version. Rate only the fix.
+  When rework occurs, note the source of rework (implementation, fix, evidence interpretation,
+  review artifact, or unknown); do not attribute unexplained rework or review artifact disclosures
+  to the implementer. Cite the reviewed version. Rate only the fix.
+- Verify evidence correspondence: entrypoint, inputs, environment, and result must correspond
+  to claimed acceptance; missing evidence remains unverified (README.md#evidence-reuse).
+- Expand rechecks along the causal blast radius if the fix changed a shared contract or invalidated
+  prior evidence; do not use focused recheck to conceal regressions (README.md#evidence-reuse).
+- Verify that verification records and staged copies respect delivery privacy (README.md#privacy-safe-review-artifacts).
 - Distinguish evaluation evidence from production readiness and OpenSpec
   completion. If acceptance remains unmet or the direction is inconclusive,
   record that result and remaining work rather than marking the item complete.
