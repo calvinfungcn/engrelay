@@ -43,6 +43,6 @@ Advisory delivery rating: **5/5**（第 01 轮实施交付），依据与限制�
 
 - 归档位置：`openspec/changes/archive/2026-11-03-improve-review-closure-and-evidence-quality/`。
 - 唯一实施清单归档时为 8/8；原关闭 round 01 PASS、关闭后完整审查 FAIL、授权集中纠错及独立复核 PASS（累计 3/3）均保留，未重置或改写历史 Review。
-- Delta 已同步至 `openspec/specs/collaboration-package/spec.md`（更新两项既有要求并新增隐私安全审查产物、有界归档核对两项要求）及 `openspec/specs/workflow-profiles/spec.md`（更新 Lite 聚合职责要求及其场景）。
+- Delta 已同步至 `openspec/specs/collaboration-package/spec.md`（更新三项既有要求，包括交付评分的返工归因说明，并新增隐私安全审查产物、有界归档核对两项要求）及 `openspec/specs/workflow-profiles/spec.md`（更新 Lite 聚合职责要求及其场景）。
 - 历史 Review 正文与原链接未移动或改写；旧报告中指向活动变更的相对路径可按上述归档目录映射解析，完整提案、设计、delta 与 tasks.md 现存于归档目录。
 - 归档仅核对本提案的规范同步、文件完整性、完成状态、索引及适用隐私边界；不代表全局归档检查或未开展的宿主／业务验收已通过。
