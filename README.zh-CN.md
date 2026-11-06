@@ -8,7 +8,7 @@ EngRelay 取自 Engineering + Relay，意为工程接力。它为已有代码库
 Agent 提供角色提示词、任务和交接模板、按风险引入的独立审查，以及检查交付
 证据的工具。
 
-**版本 1.10.2** · [下载完整发行包](https://github.com/calvinfungcn/engrelay/releases/tag/v1.10.2) · [MIT 许可证](LICENSE)
+**版本 1.10.3** · [下载完整发行包](https://github.com/calvinfungcn/engrelay/releases/tag/v1.10.3) · [MIT 许可证](LICENSE)
 
 ## 工作流配置（1.10.0）
 
@@ -103,7 +103,7 @@ Lite 项目配置和运行态在升级／卸载后仍保留；普通包文件继
 使用可信完整包，放在业务项目以外的独立目录。先备份目标项目规则，读取其
 现有 Agent 指令。新项目示例：
 
-从发行页面下载 `engrelay-1.10.2.zip`，解压后进入 `engrelay-1.10.2` 目录执行命令。
+从发行页面下载 `engrelay-1.10.3.zip`，解压后进入 `engrelay-1.10.3` 目录执行命令。
 保留完整包原样；额外工具文件或字节修改会使它与清单不匹配。仓库源码仅在
 实际文件集合和字节与 `snapshot.json` 完全一致时，也可作为安装源。
 
@@ -213,6 +213,11 @@ GitHub 自动生成的源码 ZIP 中，因此请使用包含它的提交的 Git 
 ```
 
 **接续已有任务**（`ai-collab-continue`）：
+
+批次关闭后的答复说明有证据的结果、剩余或未知范围、无下一角色及一条适用下一步。
+明确且已获授权的后续工作在同会话经既有 Task Intake 处理，保留旧关闭和累计审查额度；
+仅说“继续”不自动选择父提案待办。按实际路由读规则，同会话仅复用已读且已知未变的参考。
+Lite 保留自身批准队列：就绪项继续，否则说明待批准／依赖及 Lite 下一步，不调用 Full Skill。
 
 ```text
 使用 ai-collab-continue：接续最新、已获授权的 handoff。

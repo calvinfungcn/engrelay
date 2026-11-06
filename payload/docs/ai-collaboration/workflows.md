@@ -459,6 +459,18 @@ and does not manufacture a review artifact.
 
 Owner: Active agent
 
+For current authorized follow-up after close, apply
+[closed-batch guidance](README.md#closed-batch-guidance) in the same session.
+An active parent change alone is not an unfinished batch or a reason to loop
+start back to closed continue. Check the sole tasks.md, scope and dependencies,
+applicable authority, waits and execution ownership. Preserve closed inputs via
+the existing archive rule before preparing new live input. Keep cumulative counts
+and finite limits for the same unfinished acceptance; distinct scope has its own
+mapping without rewriting history. Single post-closure reviews follow the existing
+bounded, independent review path. No repeated equivalent request or implicit
+explicit-only Skill invocation is needed. Ambiguous/stale requests only get
+evidenced closure and next-step guidance, without creating or archiving work.
+
 Inputs:
 
 - OpenSpec change, issue, user request, or prior review round

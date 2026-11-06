@@ -9,7 +9,7 @@ working in existing repositories. It provides role prompts, task and handoff
 templates, independent reviews based on risk, and tools for checking the evidence
 used to call work complete.
 
-**Version 1.10.2** · [Download the complete package](https://github.com/calvinfungcn/engrelay/releases/tag/v1.10.2) · [MIT License](LICENSE)
+**Version 1.10.3** · [Download the complete package](https://github.com/calvinfungcn/engrelay/releases/tag/v1.10.3) · [MIT License](LICENSE)
 
 ## Workflow profiles (1.10.0)
 
@@ -148,8 +148,8 @@ See the [maintained role contracts](payload/docs/ai-collaboration/README.md).
 Use a trusted complete package in its own directory. Back up the target project's
 rules and read its existing agent instructions. For a new project:
 
-Download `engrelay-1.10.2.zip` from the release and extract it. Run commands from
-the extracted `engrelay-1.10.2` directory. Keep that complete package unchanged;
+Download `engrelay-1.10.3.zip` from the release and extract it. Run commands from
+the extracted `engrelay-1.10.3` directory. Keep that complete package unchanged;
 extra tool files or edited bytes make it differ from its inventory. The repository
 source can also be used when its file set and bytes exactly match `snapshot.json`.
 
@@ -275,6 +275,14 @@ Discuss the requirements with me first. Communicate in English.
 ```
 
 **Resume recorded work** (`ai-collab-continue`):
+
+For a closed batch, the reply gives the evidenced result, remaining or unknown scope,
+no next role, and one applicable next step. A clear, authorized follow-up uses the
+existing Task Intake in the same session, preserving old closure and cumulative
+review limits; a bare “continue” does not select parent work. Read rules for the
+actual route and reuse only already-read, known-unchanged session references.
+Lite keeps its own approved queue: ready items continue; otherwise it reports
+pending approval/dependencies and a Lite next step, without invoking Full Skills.
 
 ```text
 Use ai-collab-continue: continue the latest authorized handoff.

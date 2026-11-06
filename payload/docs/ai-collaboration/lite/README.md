@@ -54,6 +54,14 @@ work, grants permission or starts a tool, and an upgrade does not overwrite an e
 project instance. Queue completion rows keep the original columns with one short result and
 a stable link. Delivery quality ratings follow [RULES.md](RULES.md); they are advice, not a gate.
 
+After the current task ends, an approved, dependency-ready, nonconflicting next
+queue item continues without repeated approval. If none is executable, report the
+actual result, pending approval/dependencies or unknowns and one Lite next step,
+such as “Use EngRelay-Lite: define and approve queue item T02.” Distinguish limited
+owner acceptance, stopped and superseded from ordinary acceptance; name missing
+or conflicting evidence. A status-only answer leaves files intact. Do not use
+Full-only Skills or change profiles for this guidance.
+
 At each real boundary decide the next values, save/read back and check them:
 
 ```powershell

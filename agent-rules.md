@@ -38,8 +38,12 @@ Use the current project root, not a source example's WM path.
 - Current code and fresh tests/runtime evidence determine actual behavior.
 - Read module AGENTS.md/CONTRIBUTING.md before touching a module. Preserve
   project-specific build, runtime, permission, encoding and Git constraints.
-- Read docs/ai-collaboration/README.md at actual role transfer or when producing
-  handoff; read the assigned role in agent-prompts.md and workflows.md.
+- Read the assigned role in docs/ai-collaboration/agent-prompts.md and workflows.md
+  for an actual role action. Consult README.md#routing-contract and applicable
+  authority/review-limit sections for the actual route; read handoff-schema.md
+  sections for the triggered command, recovery or write boundary. A status-only
+  closed-batch answer uses README.md#closed-batch-guidance, without preloading
+  unrelated execution branches. Project instructions and triggered Skills still apply.
 - One responsible agent may perform adjacent non-independent actions. Roles
   are responsibilities, not mandatory new sessions.
 - The mapped Execution Batch in `.ai/current-task.md` is the phase scope; its

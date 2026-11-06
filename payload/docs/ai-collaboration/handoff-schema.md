@@ -12,6 +12,14 @@ Another selected workflow does not have to manufacture these files or pass this
 validator. Switching modes preserves incomplete acceptance and evidence without
 inventing accepted closure. No new routing action/status is introduced.
 
+Read sections for the actual route: Routing when interpreting fields,
+Autonomous Continuation for executable continue, Dispatch Commands for dispatch,
+Source-matched recovery for a named candidate, and Expected state validation at
+an actual write boundary. Apply project/triggered-Skill required reading and
+refresh changed inputs; reuse only already-read, known-unchanged session references.
+A closed status answer uses README.md#closed-batch-guidance and the named outcome
+and scope evidence, without rewriting handoff or loading unrelated command branches.
+
 ## General Rules
 
 - Keep `.ai/` files short enough for the next agent to read quickly.

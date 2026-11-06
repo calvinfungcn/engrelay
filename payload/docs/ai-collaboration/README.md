@@ -199,7 +199,8 @@ A normal batch should:
 An Execution Batch is independently closable. Unfinished work in the parent
 OpenSpec change or proposal does not enter this batch or block its closure.
 Later work starts through separate Task Intake and names its own mapped
-acceptance.
+acceptance; an explicitly authorized current follow-up can enter that action in
+the same session under [closed-batch guidance](#closed-batch-guidance).
 
 A batch is invalid when its outcome can only be described as creating or
 changing a file, class, type, method, DTO, database field, API endpoint, UI
@@ -848,7 +849,7 @@ replaceable roster data, not a role definition.
   review rounds, reports, and code locations rather than copying full finding tables,
   diff outputs, or terminal logs into `.ai/current-task.md` or `.ai/handoff.md`.
 - **Concise Operator Commands**: Keep the agent `dispatch` Operator Command focused
-  on the 5-part skeleton (Role/Batch, Read, Objective, Constraints, Output, Follow).
+  on the six-part skeleton (Role/Batch, Read, Objective, Constraints, Output, Follow).
   Do not paste entire role contracts, handbooks, or evidence into the command.
 - **Existing fast paths and continuity**: Use risk-proportional workflows (risk `S`
   direct close after self-verification; risk `M`/`H` aggregated review at coherent
@@ -1001,6 +1002,38 @@ Every final role response must state the selected Next Action. For agent
 reproduce the command when the response fallback applied. For human decision
 `dispatch`, it must present the Owner Decision Brief. For `close`, it must state
 explicitly that no next role or Operator Command exists.
+
+### Closed Batch Guidance
+
+For a closed batch, confirm the latest task/handoff and named outcome evidence,
+including the sole parent tasks.md when remaining scope matters. Briefly report
+the actual mapped result, known remaining work or unknowns, no next role or
+Operator Command for that batch, and one applicable next step. Ordinary accepted
+is distinct from owner-limited acceptance (`Acceptance basis: owner-decision`),
+stopped and superseded; none proves all parent work or unavailable checks passed.
+Name missing/conflicting files and the smallest recovery direction instead of
+guessing an outcome, remaining scope or count. Legacy records remain readable;
+do not invent missing outcomes or rewrite them just to provide guidance.
+
+If the owner only says “continue” and parent work remains, name the known items
+and offer a minimal request such as “Use EngRelay: implement <change> item <id>.”
+Do not choose or authorize it for the owner. If checked parent scope is complete,
+offer ai-collab-start for a stated new goal. A status-only answer leaves files intact.
+
+When the current request clearly identifies and authorizes distinguishable
+follow-up work, the active agent uses [Task Intake](workflows.md#1-task-intake)
+in the same session; no equivalent request needs to be resent. Check applicable
+authority, scope, dependencies, real waits, allowance and execution ownership.
+Preserve the old closure using the existing archive rule before new live input;
+do not replay its Operator Command. An active parent change alone does not route
+start back to closed continue. Keep actual cumulative verdicts and finite limits
+for the same unfinished acceptance; genuinely different scope has its own mapping
+and count without altering old records. Use the existing finite, independent
+post-closure review path for an explicitly authorized single review; it grants no
+new three-cycle repair allowance. This is a Task Intake action, not implicit
+invocation of an explicit-only Skill. Stale notices and ambiguous requests grant
+no new work. Disabled mode, another controller, real waits, independent review
+and external-operation authorization retain their existing boundaries.
 
 ### Stop, Resume And Late Messages
 

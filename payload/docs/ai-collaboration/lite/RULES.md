@@ -128,6 +128,16 @@ may remain clearly tracked. Archive accepted task evidence without overwriting
 existing records, reconcile queue references, then select the next eligible task.
 This is active-agent sequential work; it provides no scheduler or automatic wake-up.
 
+If no approved, dependency-ready, nonconflicting next item exists, briefly report
+the current task's actual outcome, known pending approval/dependencies or unknowns,
+and one applicable Lite next step using this queue and project configuration.
+Distinguish ordinary acceptance from owner-limited acceptance, stopped or superseded;
+do not imply unavailable checks or waiting work passed. Name missing/conflicting
+task evidence instead of inventing a task. Offer a concrete request to approve or
+define a Lite queue item when appropriate; never suggest Full-only Skills or switch
+profiles. A ready, already-approved next item continues under the rules above
+without repeated approval. A status-only answer requires no new handoff.
+
 ## Handoff at real boundaries
 
 At dispatch, actual wait, planned session end (even same role), or closure, decide

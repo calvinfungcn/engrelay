@@ -42,18 +42,30 @@ module instructions and triggered Skills still apply.
 
 ## Procedure
 
-1. Same-work check: if the goal belongs to an existing active change or unfinished
-   batch, reuse its identity, acceptance and cumulative review count. Do not reset
-   the count and do not create a duplicate batch. Continue it through
+1. Same-work check: only when the current request belongs to the existing batch
+   or the same unfinished acceptance, and that batch is executable, waiting, or
+   has a named pending transfer, reuse its identity, acceptance and cumulative review count.
+   Do not reset the count or create a duplicate batch. Continue it through
    `ai-collab-continue`, which first applies its source-matched recovery to a
    same-batch completed review or response handoff that the live file predates
    (`docs/ai-collaboration/handoff-schema.md#source-matched-recovery`).
-2. Unrelated unfinished batch: keep its live `.ai` inputs untouched. Explain the
+2. Unrelated unfinished batch: when the request is unrelated, do not continue the
+   existing batch under step 1; keep its live `.ai` inputs untouched. Explain the
    conflict and request the smallest owner choice. Replacement needs explicit owner
    authorization. Response-only discussion may proceed without writes.
-3. Closed previous batch: archive its current-task, handoff and any baseline under
-   `.ai/archive/<batch id>/` by the existing closure rule. Referenced evidence stays
-   where it is.
+3. Closed previous batch: use `README.md#closed-batch-guidance` under
+   `docs/ai-collaboration/`. An active parent change alone does not send start back
+   to closed continue. Check the sole tasks.md and dependencies for the clearly
+   identified, authorized follow-up, then perform Task Intake here without asking
+   for the same request again. Preserve counts/finite limits for the same unfinished
+   acceptance; distinct scope gets its own mapping without rewriting old history.
+   A single post-closure review follows the existing bounded-review rule, including
+   independence and no new three-cycle repair allowance. For ambiguous requests or
+   stale notices report actual closure, remaining/unknown scope and one applicable
+   next step; do not create work or archive state just for that answer.
+   Before preparing authorized new input, archive the closed current-task, handoff
+   and any baseline under `.ai/archive/<batch id>/` by the existing closure rule,
+   without overwriting records. Referenced evidence stays where it is.
 4. Prepare the minimum coherent `.ai/current-task.md`: task ID, change ID if any,
    Execution Batch ID mapped to OpenSpec checklist items, risk `S`, `M` or `H` with a
    reason, the observable outcome, must-have acceptance, out-of-scope work, required

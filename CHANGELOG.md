@@ -2,6 +2,17 @@
 
 [Simplified Chinese](CHANGELOG.zh-CN.md)
 
+## 1.10.3 — 2026-11-06
+
+- Closed-batch replies explain the evidenced result, remaining or unknown scope,
+  no next role and an applicable next step. Clear authorized follow-ups enter existing
+  Task Intake in-session while preserving closure, review counts and finite limits.
+- Full entries and shared rules read references by actual route, retaining project
+  instructions, new-agent refresh, source recovery and boundary validation. The
+  Operator Command skeleton has six parts. Lite retains its approved queue and gives
+  status and a Lite next step when no item is executable.
+- These guidance changes do not establish all-host Agent adherence or token savings.
+
 ## 1.10.2 — 2026-11-03
 
 - Clarifies review closure, evidence quality, and post-closure boundaries across Full and Lite:

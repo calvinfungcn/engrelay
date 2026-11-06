@@ -51,8 +51,12 @@ only to Chief Designer.
 
 ### Continue
 
-Read `.ai/current-task.md` and `.ai/handoff.md`. Follow the recorded Next
-action only; do not reset review counts or replay closed batches.
+Read `.ai/current-task.md` and `.ai/handoff.md`, then the rule sections and named
+evidence needed for the actual route. Follow the latest applicable action; do not
+reset review counts or replay closed batches. Reuse only references already read
+in the same session and known unchanged; a new agent, missing context, changed
+input or rule question requires refreshing the affected material. Project and
+triggered-Skill required reading still applies.
 
 Check `Human Action Required` first: `none` means no human intervention now,
 `awaiting-decision` means answer the decision brief, and `awaiting-environment`
@@ -114,6 +118,21 @@ does not wake stopped processes. See
 Results and formal review rounds are indexed under `docs/reviews/` when recorded.
 
 ## Closing and verification
+
+After closure, the reply states the actual mapped result, known remaining work or
+unknowns, no next role or Operator Command for that batch, and one useful next step.
+It distinguishes ordinary acceptance, limited owner acceptance, stopped and superseded.
+A bare “continue” does not select unfinished parent work: the agent names known items
+and offers a request such as “Use EngRelay: implement <change> item <id>.” If no work
+remains, it offers start for a new stated goal. Missing/conflicting evidence is named.
+A status answer leaves files intact.
+
+If your current request clearly identifies and authorizes follow-up work, the agent
+uses the existing Task Intake in the same session; you need not resend it through
+start. It checks scope and dependencies, preserves old closure and same-acceptance
+review counts, and honors actual waits and controller boundaries. A single authorized
+post-closure review retains its finite scope and independence; it grants no new
+three-cycle repair allowance. See [closed-batch guidance](README.md#closed-batch-guidance).
 
 Ordinary `accepted` closure means the mapped batch is complete under the
 recorded acceptance criteria, not that every parent OpenSpec item or business

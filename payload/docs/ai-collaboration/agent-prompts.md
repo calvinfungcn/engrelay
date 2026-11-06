@@ -32,6 +32,13 @@ Before starting, read:
 Use docs/ai-collaboration/README.md and handoff-schema.md as reference when a
 rule or output shape is unclear. Do not reread the complete handbook in every
 round or paste this entire Common Preflight into Operator Command.
+Read applicable route, allowance and assigned-role sections before execution;
+load source-matched recovery for a named candidate, dispatch/continuation rules
+for that action, and expected-state validation at a real write boundary.
+A closed-batch status answer follows README.md#closed-batch-guidance without
+preloading unrelated execution rules. A clear current authorized follow-up
+uses the existing Task Intake in-session, preserving old closure and counts;
+it does not require another equivalent request or implicit Skill invocation.
 Within the same session, reuse already-read reference material only when its
 content is known unchanged. Refresh live task/handoff and affected inputs at
 real boundaries; reread on a new agent, missing context, change or uncertainty.
@@ -90,6 +97,9 @@ rule are in handoff-schema.md#source-matched-recovery and
 handoff-schema.md#expected-state-validation.
 In the final response, always state the selected Next Action; for close, state that
 no next role or Operator Command exists.
+For closed status, also give the evidenced mapped result, remaining scope or
+unknowns and one applicable next step under README.md#closed-batch-guidance;
+owner-limited acceptance, stopped and superseded are not full technical passes.
 For agent `dispatch`, add one advisory line `Recommended capability tier: C1`
 through `C5` as the first line under handoff `Current Status` and briefly echo
 the same tier in the final response; see handoff-schema.md#capability-tier-guidance.

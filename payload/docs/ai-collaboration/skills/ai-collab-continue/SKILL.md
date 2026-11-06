@@ -23,18 +23,28 @@ under `docs/ai-collaboration/README.md#optional-activation-and-coexistence`.
 
 ## Read First
 
-Use project-relative paths only:
+Start with applicable project instructions and project-relative paths:
 
 - `.ai/current-task.md` and `.ai/handoff.md`, the latest authority for Next action
-- `docs/ai-collaboration/handoff-schema.md#routing-section-schema`,
-  `#autonomous-continuation` and `#dispatch-commands` for Routing, continuation and
-  Operator Command rules; `#source-matched-recovery` only when step 1 finds a candidate,
-  `#response-handoff-fallback` only for a read-only or unpersisted return, and
-  `#expected-state-validation` only when you write a handoff boundary
-- `docs/ai-collaboration/README.md#routing-contract` and
-  `docs/ai-collaboration/README.md#review-round-circuit-breaker`
-- the authoritative artifacts named by the handoff, such as the OpenSpec tasks,
-  `docs/reviews/<change-id>/index.md` and the latest review round
+- the named authority needed to confirm the actual route, outcome and remaining
+  scope: mapped OpenSpec tasks, applicable result, review index and linked round
+
+Then read the sections triggered by the actual action, not every execution branch:
+
+- route interpretation or close: `docs/ai-collaboration/README.md#routing-contract`
+  (including `#closed-batch-guidance`); use
+  `handoff-schema.md#routing-section-schema` when interpreting its fields
+- executable continue: `handoff-schema.md#autonomous-continuation`; agent or human
+  dispatch: `handoff-schema.md#dispatch-commands` and the assigned role sections
+- execution, verdict/count or allowance questions, including post-closure review:
+  `README.md#review-round-circuit-breaker`
+- a named recovery candidate from step 1: `handoff-schema.md#source-matched-recovery`
+- an actual write boundary: `handoff-schema.md#expected-state-validation`;
+  read-only or unpersisted return: `handoff-schema.md#response-handoff-fallback`
+
+These reference paths are under `docs/ai-collaboration/`. Project instructions and
+mandatory reading from triggered Skills still apply; this is no prohibition on
+additional reading needed to resolve uncertainty.
 
 Reuse a reference already read in this session only while its content is known
 unchanged. Reread the live `.ai/` files, the named authority and the anchored rule
@@ -60,8 +70,22 @@ sections for a new agent, missing context, a changed input or a rule question
    An equal Next action, Next role and Review round alone do not show the transfer
    was applied. Never recount, replay or reopen a batch from a candidate alone.
 2. Resolve actual waits and limits before executing any command:
-   - `close`: report the actual closure outcome and unfinished scope; never reopen
-     the batch or replay its dispatch. Necessary new repair uses ai-collab-start.
+   - `close`: follow `README.md#closed-batch-guidance`. Briefly state the evidenced
+     outcome and mapped result, known remaining scope or unknowns, no next role or
+     Operator Command for that closed batch, and one applicable next step. Distinguish
+     ordinary accepted, owner-limited acceptance, stopped and superseded. Do not write
+     a new handoff just to answer status or replay the closed batch.
+     If this current request clearly identifies and authorizes distinguishable
+     follow-up work, use `workflows.md#1-task-intake` in this session after checking
+     scope, dependencies, authority, real waits and execution ownership. Preserve the
+     old closure via the existing archive rule; retain cumulative verdicts and finite
+     limits for the same unfinished acceptance. A genuinely different scope gets its
+     own mapping and count without rewriting history. This uses the existing workflow
+     action, not an implicit invocation of the explicit-only ai-collab-start Skill;
+     do not ask the owner to resend equivalent authorization. Explicit single reviews
+     after closure use the existing bounded-review rule and independent reviewer,
+     never a fresh three-cycle allowance. Ambiguous requests and stale notices only
+     get state-aware guidance; do not infer work or authorization from them.
    - `awaiting-owner-decision` (including human dispatch): present the recorded
      Owner Decision Brief; continue only after an applicable reply. Silence is
      not approval. Reuse an already answered decision without asking again.
@@ -96,8 +120,9 @@ sections for a new agent, missing context, a changed input or a rule question
      review. A reviewer never reviews its own design or implementation. If not
      eligible, do not perform the review; present the original Operator Command for
      the correct recipient and the reason.
-4. A request that targets a closed batch or an earlier revision reports the latest
-   actual state. It does not replay a dispatch or change prior acceptance.
+4. A delayed request targeting a closed batch or an earlier revision reports the
+   latest actual state; it does not replay dispatch or change prior acceptance.
+   Distinguish it from a clear current follow-up request under step 2.
 5. If the authoritative inputs are missing or conflicting, name the exact file and
    conflict, and give the smallest recovery direction. Never invent a role, verdict,
    count or acceptance from chat history.
