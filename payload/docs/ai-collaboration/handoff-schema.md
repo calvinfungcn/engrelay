@@ -869,6 +869,15 @@ file/response handoffs include it once in Routing:
 | `awaiting-decision` | Current status is `awaiting-owner-decision`; retain the Owner Decision Brief |
 | `awaiting-environment` | `continue` + `blocked`, with an unmet human-only prerequisite needed before the next action and a Resume condition |
 
+Under manual relay (the default for new Full tasks), `Human Action Required`
+remains `none` on agent dispatch because no business decision or immediate human
+environment blocker is active. However, the human operator must relay the
+Operator Command to the next AI tool. Legacy machine consumers reading `none`
+might interpret it literally as "no human action required at all"; this is an
+evidenced limitation of maintaining compatibility with the existing 3-value enum.
+The top transfer notice blockquote and final chat response make the transfer
+action explicit to human operators.
+
 A later-only notice or a ready prerequisite cannot require environment action
 now. Old handoffs may omit this field without warning, migration or backfill;
 read their actual status, decisions and prerequisites instead. Never use
@@ -934,6 +943,11 @@ or stop solely because a prior single-turn runner exited. Use available safe
 tools; a missing permission or actual capability is a concrete limit to report.
 Check an existing same-batch writer before taking over; do not duplicate writes,
 launch competing agents, or kill another process to manufacture ownership.
+
+Distinguish between formal agent dispatch, explicit automated progression, and active same-role continuation:
+- **Manual relay at agent dispatch (default for new Full tasks)**: When reaching formal agent `dispatch`, the active role saves, reads back, and validates the handoff, places the top human transfer blockquote (`> 人工接力：请由你选择 AI 工具，将本交接中的 Operator Command 转交给 <Next role>。` / `> Manual Relay: Please select an AI tool and relay the Operator Command from this handoff to <Next role>.`), states the advisory capability tier and where the Operator Command is located, and ends the turn for the operator to relay the command. The dispatcher must not autonomously launch the successor role via subagents, external CLIs, or APIs.
+- **Explicit automation override**: Allowed only when `Constraints` in `.ai/current-task.md` explicitly authorizes autonomous continuation for the scoped successor roles and the host supports it. Resumed existing tasks retain their verified existing choice; an unstated preference does not invent autonomous dispatch, and a narrower current instruction takes precedence.
+- **Active same-role continuation**: When an agent has already been started by the user and is actively executing its role, executable `continue` and local micro-steps proceed directly without pausing at every tool call or micro-step.
 
 At an executable `continue` boundary, new/updated handoffs include one compact
 subsection **inside Current Status** (not in Routing):
@@ -1004,6 +1018,22 @@ Output: <required files or closure decision>.
 Follow: docs/ai-collaboration/agent-prompts.md#<role-section>.
 ```
 ````
+
+Under manual relay (the default for new Full tasks):
+1. Place a top human transfer notice right after the H1 title in `.ai/handoff.md`:
+   `> 人工接力：请由你选择 AI 工具，将本交接中的 Operator Command 转交给 <Next role>。`
+   (or English: `> Manual Relay: Please select an AI tool and relay the Operator Command from this handoff to <Next role>.`).
+2. Include the advisory capability tier as the first line under `Current Status`:
+   `Recommended capability tier: C1` through `C5`.
+3. Provide the copy-ready `## Operator Command` naming the next role, batch, authoritative inputs, specific objective, constraints, and required outputs.
+4. Save, read back, and validate the handoff with expected state (`validate-runtime-state.ps1`).
+5. In the final response, state the next role, recommended capability tier, where the Operator Command is located, and that the turn ends here for the operator to relay the command to their chosen AI platform or tool.
+6. End the turn without launching the successor agent, subagents, or external CLIs/APIs.
+
+For cross-platform relay across workspaces:
+- In a **shared workspace**, the successor tool accesses the same repository directory, reads `.ai/handoff.md`, `.ai/current-task.md`, and authoritative evidence, checks execution ownership and remaining review capacity, and executes its authorized role without requiring repeated business approval.
+- In a **non-shared or read-only workspace**, the operator provides only a minimal vetted excerpt; the tool uses the response handoff fallback, and a permitted writer in the primary workspace verifies source revision and SHA256 match before persisting. Never copy whole repositories, credentials, or private data; no tool automatically sanitizes input.
+- Using distinct tools, models, or platforms does not establish review independence; independence is governed strictly by role and author separation.
 
 For human decision `dispatch` (`Next role` is `Task Owner`, `User`, or `Data Owner`):
 `Current status` must be `awaiting-owner-decision`. `Recommended next agent`, `Next input files`,

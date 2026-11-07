@@ -74,6 +74,9 @@
 ## Constraints
 
 - <technical, business, compatibility, security, or workflow constraint>
+<!-- New Full tasks default to manual relay on agent dispatch: record in Constraints
+     (e.g., "Manual relay on formal agent dispatch; save and validate handoff, then stop for operator relay.").
+     Explicit automated continuation across roles is recorded only when explicitly requested by the user. -->
 <!-- Include foreseeable environment prerequisites here or under Required Checks.
      Put live readiness and human-only preparation notices in handoff's conditional
      Environment Preparation section. A stop condition permits pausing affected work,

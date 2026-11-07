@@ -16,7 +16,10 @@
 
 ## Current Status
 
-<Actual progress and unfinished acceptance. This is a template, not live state.>
+<Actual progress and unfinished acceptance. This is a template, not live state.
+When manual relay is chosen, explain the human transfer in the final reply;
+Human Action Required remains none, which reflects no business decision or
+environment blocker rather than an absence of operator transfer.>
 
 ### Continuation Command
 

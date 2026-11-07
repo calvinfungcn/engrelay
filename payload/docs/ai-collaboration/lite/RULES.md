@@ -138,6 +138,29 @@ define a Lite queue item when appropriate; never suggest Full-only Skills or swi
 profiles. A ready, already-approved next item continues under the rules above
 without repeated approval. A status-only answer requires no new handoff.
 
+When the user explicitly specifies manual relay in task constraints or project
+configuration preferences, active-agent sequential continuation pauses at the boundary:
+- On agent dispatch (Executor -> Reviewer or Reviewer -> Executor), save, read back, and
+  validate the handoff, explain the transfer and capability tier in the reply, and stop
+  without launching the next role.
+- On task closure when the next authorized queue item is ready, save completed task and
+  queue records, explain the next queue item and Lite resume entry, and stop without
+  automatically starting the next task.
+- In a **shared workspace**, the successor tool accesses the project directory, reads
+  `.ai/engrelay-lite/handoff.md`, `tasks/<id>.md`, and evidence directly.
+- In a **non-shared workspace** (where the successor tool cannot access or write the live project),
+  the operator provides only a minimal, user-vetted excerpt (task goal, constraints, and bounded
+  inputs; never copy whole repositories, credentials, or private sample data; no tool automatically
+  sanitizes input). The non-shared tool cannot claim live project files were persisted or verified;
+  it returns findings and handoff using the unpersisted response handoff format, and a permitted
+  writer in the primary workspace verifies source revision and SHA256 match before persisting via
+  existing source-matched recovery. Tool separation does not establish review independence.
+Without an explicit manual relay preference, the active agent continues sequential queue
+work under the rules above without repeated approval. Lite retains its fixed 11 fields,
+lite-1 schema version, and existing Human Action Required enum (none|awaiting-decision|awaiting-environment).
+Human Action Required: none summarizes no decision or environment blocker; disclose that
+legacy consumers might misread none as requiring no human operator transfer.
+
 ## Handoff at real boundaries
 
 At dispatch, actual wait, planned session end (even same role), or closure, decide
@@ -173,6 +196,8 @@ length and closing rules; unclosed fences fail.
   Current Status line: Recommended capability tier: C3; echo it in the reply.
   Only explicit task difficulty supports C1/C2/C4/C5 overrides; this advice is
   non-blocking and never a model qualification. Do not copy Full tier tables.
+  Under explicit manual relay, explain the transfer in the reply and end the turn
+  without autonomously launching the next agent.
 - Owner wait: status awaiting-owner-decision, human awaiting-decision; continue
   uses next none, human dispatch uses Task Owner. Include Owner Decision Brief
   with Decision needed, Recommendation (reason), Alternatives (consequences),
@@ -196,11 +221,12 @@ write/read-back step. Do not auto-migrate private unversioned Lite handoffs.
 
 Review business files read-only, but permit named review/result/handoff outputs
 when assigned. Pre-name the expected result in the task or prior handoff Evidence.
-If entirely read-only, return full verdict/findings/next handoff, actual source
-role/agent, producer, Task ID, prior revision and real prior-byte SHA256, target
-revision and cumulative count. State that nothing was persisted. An active permitted
-writer saves the complete return and publishes the checked state in the same turn;
-retain the reviewer attribution and count each verdict once. Never overwrite an
+When an external or non-shared tool cannot access the live project workspace, the operator
+provides only a minimal, user-vetted excerpt; the tool returns full verdict/findings/next handoff,
+actual source role/agent, producer, Task ID, prior revision and real prior-byte SHA256, target
+revision and cumulative count, stating that nothing was persisted to disk. An active permitted
+writer in the primary workspace saves the complete return and publishes the checked state in the
+same turn; retain the reviewer attribution and count each verdict once. Never overwrite an
 existing result or ask the owner to hand-maintain these files.
 
 Later recovery reads only the one explicitly named pending source. Match task,

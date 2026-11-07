@@ -1,5 +1,10 @@
 # Handoff - <task id or round>
 
+<!-- For manual relay agent dispatch (default for new Full tasks), place the top human transfer notice right after the title:
+> 人工接力：请由你选择 AI 工具，将本交接中的 Operator Command 转交给 <Next role>。
+(or English: > Manual Relay: Please select an AI tool and relay the Operator Command from this handoff to <Next role>.)
+-->
+
 ## Routing
 
 - Next action: `<dispatch|continue|close>`
@@ -36,6 +41,8 @@
   use `continue` with the same role and agent, omit Operator Command, and record next local step below.
 - Set Human Action Required to none unless currently waiting for a human decision
   (awaiting-decision) or unmet immediate human-only setup (awaiting-environment).
+  Manual relay dispatch uses none because no business decision or immediate environment
+  block is active; note that legacy machine consumers might interpret none literally.
   Later-only notices require no current human action or reply.
 - For unavailable environment: use continue + blocked, omit Owner Decision Brief,
   and put - Resume condition: ... under Blockers. Do not close blocked work.

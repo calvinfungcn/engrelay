@@ -20,6 +20,7 @@ a launch instruction or an independence waiver, and a blank entry never blocks w
 - Preferred executor tool, model and reasoning: <optional; unverified unless observed>
 - Preferred reviewer tool, model and reasoning: <optional; must still satisfy independence>
 - Existing review launch method: <actual command or manual step, if any>
+- Relay preference: <optional; manual-relay or automatic-queue (default is automatic-queue)>
 - Project limits and isolation example: <for example, the reviewer uses a separate session and reads only the named inputs>
 
 Do not store credentials here. Do not infer model suitability or permission from

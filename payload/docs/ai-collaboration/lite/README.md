@@ -55,7 +55,18 @@ project instance. Queue completion rows keep the original columns with one short
 a stable link. Delivery quality ratings follow [RULES.md](RULES.md); they are advice, not a gate.
 
 After the current task ends, an approved, dependency-ready, nonconflicting next
-queue item continues without repeated approval. If none is executable, report the
+queue item continues under active-agent execution without repeated approval when manual
+relay is not requested. When the user explicitly requests manual relay in task constraints
+or project configuration preferences, role dispatch and ready-queue continuation pause after
+saving the handoff or queue record to explain operator transfer and end the turn. In a shared
+workspace, the successor tool reads live project state directly. In a non-shared workspace (tool
+cannot access or write the live project directory), the operator provides only a minimal,
+user-vetted excerpt (never copy entire repositories, credentials, or private sample data; no
+platform automatically sanitizes input). The tool returns via unpersisted response handoff, and an
+authorized writer in the primary workspace verifies source revision and SHA256 match before
+persisting. Tool separation does not create review independence. Lite retains its fixed 11 lite-1
+fields and existing enums intact; Human Action Required: none reflects no business decision or
+environment wait rather than an absence of manual transfer. If none is executable, report the
 actual result, pending approval/dependencies or unknowns and one Lite next step,
 such as “Use EngRelay-Lite: define and approve queue item T02.” Distinguish limited
 owner acceptance, stopped and superseded from ordinary acceptance; name missing

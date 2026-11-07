@@ -119,7 +119,12 @@ sections for a new agent, missing context, a changed input or a rule question
      agent is the named role and is independent of the producer of the work under
      review. A reviewer never reviews its own design or implementation. If not
      eligible, do not perform the review; present the original Operator Command for
-     the correct recipient and the reason.
+     the correct recipient and the reason. When this agent completes its role and
+     dispatches the successor under manual relay (default for new Full tasks), save,
+     read back, and validate the handoff with expected state, place the top human transfer
+     notice, explain the transfer in chat, and stop the turn without autonomously
+     launching the next role. Explicit automation applies only when authorized in
+     Constraints and not overridden by a narrower user instruction.
 4. A delayed request targeting a closed batch or an earlier revision reports the
    latest actual state; it does not replay dispatch or change prior acceptance.
    Distinguish it from a clear current follow-up request under step 2.
@@ -147,7 +152,8 @@ sections for a new agent, missing context, a changed input or a rule question
 State the Next action you followed, the evidence you checked, and any unfinished
 mapped work. For an agent dispatch, confirm where the Operator Command is written and
 that its first `Current Status` line carries the advisory capability tier, echoed in
-the final reply; a response-only fallback carries the same line. For a human decision,
+the final reply; a response-only fallback carries the same line. Under manual relay,
+state that the turn stops for operator transfer. For a human decision,
 present the brief and omit the line. For `close`, state that no next role exists.
 
 EngRelay material and modifications: Copyright (c) 2026 calvinfungcn and EngRelay

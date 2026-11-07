@@ -105,6 +105,12 @@ Every role action ends with exactly one decision:
   Operator Command, and add the advisory capability tier line under
   `Current Status` per
   [handoff-schema.md#capability-tier-guidance](handoff-schema.md#capability-tier-guidance).
+  Under manual relay (default for new Full tasks), place the top human transfer
+  notice (`> 人工接力：请由你选择 AI 工具，将本交接中的 Operator Command 转交给 <Next role>。`
+  or `> Manual Relay: Please select an AI tool and relay the Operator Command from this handoff to <Next role>.`),
+  explain the transfer in chat, and stop the turn without autonomously invoking
+  subagents, external CLIs, or APIs. Explicit automation override applies only
+  when `Constraints` explicitly authorizes it.
   For human decision dispatch (`Task Owner`, `User`, or
   `Data Owner`), set Current status to `awaiting-owner-decision`, set
   Recommended next agent and next files/prompt fields to `none`, strictly omit
@@ -493,6 +499,7 @@ Required decisions:
 - module scope and explicit out-of-scope work
 - required checks
 - first assigned role and recommended agent/tool
+- relay boundary: new Full tasks default to manual relay in Constraints; an explicit automation scope is recorded only when explicitly authorized by the user. General implementation authorization does not imply autonomous cross-role dispatch
 - whether the first executable action is available or crosses an owner
   approval, deployment, rollback, or external-environment boundary
 

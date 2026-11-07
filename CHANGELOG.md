@@ -2,6 +2,22 @@
 
 [Simplified Chinese](CHANGELOG.zh-CN.md)
 
+## 1.10.4 — 2026-11-07
+
+- Full tasks default to manual relay across platforms on formal agent dispatch for new tasks:
+  saves, reads back, and validates handoff with expected state, adds top human transfer notice blockquote,
+  provides advisory capability tier (C1–C5) and copy-ready Operator Command, and ends turn for the operator
+  to relay it; autonomous launch via subagents, external CLIs, or APIs is prohibited. Explicit automated
+  progression applies only when authorized in Constraints and supported by the host. In-role micro-steps
+  and user-launched executable `continue` proceed directly without pausing at each tool call.
+- Lite supports opt-in manual relay via task constraints or project configuration preferences, while
+  preserving default sequential queue execution for active agents; retains 11 lite-1 fields and existing enums intact.
+- Clarifies that `Human Action Required: none` summarizes no business decision or immediate environment block
+  rather than an absence of manual operator transfer; honestly discloses legacy machine consumer misinterpretation.
+  Provides bounded portable guidance for shared vs. non-shared / read-only workspaces, noting that tool separation
+  does not establish review independence.
+- These specification and guidance updates do not guarantee all-host agent compliance or token savings.
+
 ## 1.10.3 — 2026-11-06
 
 - Closed-batch replies explain the evidenced result, remaining or unknown scope,

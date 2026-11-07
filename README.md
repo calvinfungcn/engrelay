@@ -9,7 +9,7 @@ working in existing repositories. It provides role prompts, task and handoff
 templates, independent reviews based on risk, and tools for checking the evidence
 used to call work complete.
 
-**Version 1.10.3** · [Download the complete package](https://github.com/calvinfungcn/engrelay/releases/tag/v1.10.3) · [MIT License](LICENSE)
+**Version 1.10.4** · [Download the complete package](https://github.com/calvinfungcn/engrelay/releases/tag/v1.10.4) · [MIT License](LICENSE)
 
 ## Workflow profiles (1.10.0)
 
@@ -82,7 +82,14 @@ for entry selection and handoffs.
 - Introduce independent code review for medium-risk work and independent
   verification where high-risk work requires it.
 - Record one next action: `continue`, `dispatch`, or `close`. A dispatch includes
-  a complete command the next agent can use without the preceding chat.
+  a complete command the next agent can use without the preceding chat. New Full
+  tasks default to manual relay on formal agent dispatch: the agent saves, reads back,
+  and validates the handoff, places a top human transfer notice, explains the next role,
+  capability tier (C1–C5) and Operator Command in chat, and ends the turn for the operator
+  to relay it; it does not launch the successor via subagents, external CLIs, or APIs.
+  Explicit automated progression applies only when authorized in Constraints and supported
+  by the host. In-role micro-steps and user-launched executable `continue` proceed directly.
+  Lite retains its default sequential queue for active agents, supporting opt-in manual relay.
 - Complete review before archive covers all authorized acceptance, final diff,
   compatibility, evidence correspondence, documentation, and delivery privacy in
   one aggregated round. Renaming unfinished work preserves cumulative verdicts
@@ -93,6 +100,10 @@ for entry selection and handoffs.
   blast radius. Review artifacts remain privacy-safe, and bounded archive checks
   verify spec sync and completeness, ending on pass.
 - Handoff `Human Action Required` shows whether a person needs to act now.
+  Under manual relay dispatch the field remains `none` (no business decision or environment
+  blocker); disclose the known limitation that legacy machine consumers might read it literally.
+  Non-shared tools use minimal vetted excerpts and response handoff fingerprint matching; tool
+  separation does not establish review independence.
   Later environment notices require no current action or reply. Executable
   `continue` includes a self-contained Continuation Command; an active capable
   agent proceeds within existing authorization and chooses its local CLI/IDE host.
@@ -148,8 +159,8 @@ See the [maintained role contracts](payload/docs/ai-collaboration/README.md).
 Use a trusted complete package in its own directory. Back up the target project's
 rules and read its existing agent instructions. For a new project:
 
-Download `engrelay-1.10.3.zip` from the release and extract it. Run commands from
-the extracted `engrelay-1.10.3` directory. Keep that complete package unchanged;
+Download `engrelay-1.10.4.zip` from the release and extract it. Run commands from
+the extracted `engrelay-1.10.4` directory. Keep that complete package unchanged;
 extra tool files or edited bytes make it differ from its inventory. The repository
 source can also be used when its file set and bytes exactly match `snapshot.json`.
 

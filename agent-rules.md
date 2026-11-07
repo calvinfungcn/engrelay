@@ -62,7 +62,16 @@ Use the current project root, not a source example's WM path.
   project's live state. Keep runtime state out of Git.
 - At transfer, wait, interruption or completion declare dispatch, continue or
   close under handoff-schema.md. Agent dispatch needs a self-contained Operator
-  Command; real human decisions use Owner Decision Brief.
+  Command; real human decisions use Owner Decision Brief. Under manual relay
+  (default for new Full tasks), agent dispatch saves, reads back, and validates the
+  handoff, places the top human transfer notice, states the C1-C5 capability tier,
+  and ends the turn for the operator to relay the command to their chosen AI tool;
+  do not autonomously launch the successor role. Explicit automation override applies
+  only when Constraints explicitly authorizes it. Active same-role continue proceeds directly.
+  Human Action Required remains none for manual relay dispatch (no decision or environment
+  blocker), but disclose that legacy machine consumers might misread none as no transfer.
+  In non-shared or read-only tools, use response handoff fallback and source matching;
+  never copy whole repositories or secrets. Tool choice does not alter review independence.
 - Foreseeable human-only prerequisites must be explained before dependent
   dispatch. Environment waits use continue/blocked and a resume condition.
   For immediate human intervention, state where to act, what to do and the

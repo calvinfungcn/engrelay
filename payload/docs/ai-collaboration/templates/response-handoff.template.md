@@ -1,5 +1,10 @@
 # Response Handoff
 
+<!-- For manual relay agent dispatch (default for new Full tasks), place the top human transfer notice right after the title:
+> 人工接力：请由你选择 AI 工具，将本交接中的 Operator Command 转交给 <Next role>。
+(or English: > Manual Relay: Please select an AI tool and relay the Operator Command from this handoff to <Next role>.)
+-->
+
 <Use for an actual handoff when read-only instructions or tool permissions
 prevent updating `.ai/handoff.md`. Response-only consultation does not take over
 another batch's live state. Report review findings before this section.>
@@ -30,7 +35,8 @@ another batch's live state. Report review findings before this section.>
      For executable continue keep Current Status with Continuation Command;
      omit the capability line for human decision dispatch, continue and close.
      Human Action Required summarizes actual intervention: none unless waiting
-     for a decision or unmet immediate human-only environment preparation. -->
+     for a decision or unmet immediate human-only environment preparation;
+     manual relay uses none, with known legacy machine misinterpretation limits. -->
 <!-- Explicit limited acceptance by Chief Designer may use Acceptance basis:
      owner-decision plus Task Owner decision, retaining unmet mapping/tasks and
      disclosing uncompleted acceptance. Not technical verification or merge permission. -->

@@ -870,6 +870,45 @@ Forward environment notices (`Needed before next action: no`) use neutral later
 dependency/check information and explicitly require no action or reply now.
 Only unmet immediate preparation blocks the dependent step.
 
+For new Full tasks, formal agent `dispatch` defaults to manual relay: when an
+agent dispatch boundary is reached, the active agent saves, reads back, and
+validates the handoff with expected state, places a top human transfer notice
+(`> 人工接力：请由你选择 AI 工具，将本交接中的 Operator Command 转交给 <Next role>。`
+or `> Manual Relay: Please select an AI tool and relay the Operator Command from this handoff to <Next role>.`),
+explains the next role, recommended capability tier, and copy-ready Operator
+Command in chat, and ends the turn for the operator to transfer the command to
+their chosen AI tool or platform. The dispatcher must not autonomously launch the
+successor role via subagents, external CLIs, or APIs.
+
+Explicit automation override applies only when `Constraints` in
+`.ai/current-task.md` explicitly authorizes autonomous progression for scoped
+successor roles and the host supports it. Resumed existing tasks retain their
+verifiable existing choice and authority; an unstated preference does not invent
+autonomous dispatch, and a narrower current user instruction takes precedence.
+When an active agent is already executing in-role after user launch, local
+micro-steps and executable `continue` proceed directly without pausing at every tool
+call or step.
+
+Under manual relay agent dispatch, `Human Action Required` remains `none` because
+there is no business decision (`awaiting-decision`) or unmet immediate human
+environment block (`awaiting-environment`). Note this known limitation: legacy
+machine consumers reading `none` might interpret it as "no human action required
+at all"; the top human transfer blockquote and chat response make the transfer
+action explicit to human operators.
+
+For cross-platform manual relay:
+- In a **shared workspace**, the successor tool accesses the same repository
+  directory, reads `.ai/handoff.md`, `.ai/current-task.md`, and authoritative
+  evidence, checks execution ownership and remaining review capacity, and executes
+  its authorized role without requiring repeated business approval.
+- In a **non-shared or read-only workspace**, the operator provides only a minimal
+  vetted excerpt; the tool uses the response handoff fallback, and a permitted
+  writer in the primary workspace verifies source revision and SHA256 match before
+  persisting. Never copy whole repositories, credentials, or private data; no tool
+  automatically sanitizes input.
+- Using distinct tools, models, or platforms does not establish review
+  independence; independence is governed strictly by role and author separation.
+
 An active capable agent must execute an authorized `continue` after checking
 latest task/evidence, review allowance, permissions and execution ownership.
 Choosing a local CLI or IDE host for offline work must not become a Task Owner

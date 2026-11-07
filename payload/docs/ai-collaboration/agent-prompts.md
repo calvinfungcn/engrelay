@@ -338,7 +338,8 @@ Output:
   non-independent step; use `dispatch` only when another agent or independent
   review must act, with complete Routing and a copy-ready Operator Command (or
   human decision dispatch with Owner Decision Brief when an owner decision is
-  required).
+  required). Under manual relay, place the top human transfer notice, explain the
+  transfer in chat, and stop without autonomously launching the next role.
 - If the design must be durable, create or update the requested design document.
 
 Do not select a more complex option unless the Minimal Option fails a current
@@ -778,7 +779,9 @@ Output:
 - For risk S completion, use Next action `close` with
   `Closure outcome: accepted` after self-verification.
 - For risk M/H review, use Next action `dispatch` and create `.ai/handoff.md`
-  with a copy-ready Operator Command for Code Reviewer.
+  with a copy-ready Operator Command for Code Reviewer. Under manual relay,
+  place the top human transfer notice, explain the transfer and capability tier
+  in chat, and stop without autonomously launching Code Reviewer.
 - In that Code Reviewer command, keep business code and tests read-only and
   list each writable handoff output by name (the review record, the review index
   and `.ai/handoff.md`). Do not add a `.ai/` write ban unless a user or
@@ -940,7 +943,9 @@ Local-only output, when explicitly requested:
 Exit contract:
 - Always state the selected Next Action in the final response.
 - With assigned actionable findings, use `dispatch`, update .ai/handoff.md,
-  and provide one aggregated, copy-ready Fix Engineer Operator Command.
+  and provide one aggregated, copy-ready Fix Engineer Operator Command. Under
+  manual relay, place the top human transfer notice, explain the transfer in chat,
+  and stop without autonomously launching Fix Engineer.
 - When clean and evidence is sufficient, use `close` and state explicitly that
   there is no next role or Operator Command.
 - Never finish with only findings, checks, residual risks, and a verdict.
@@ -1024,7 +1029,8 @@ Output:
   otherwise continue the bounded fix or record its blocker.
 - Next action `dispatch` with .ai/handoff.md and a copy-ready Operator Command
   for the original Code Reviewer for risk M or an independent Verification
-  Reviewer for risk H
+  Reviewer for risk H. Under manual relay, place the top human transfer notice,
+  explain the transfer in chat, and stop without autonomously launching the reviewer.
 
 The result must explain how each assigned finding or user-reported defect was handled.
 ```
@@ -1122,7 +1128,9 @@ Workspace-level output:
   technical decision; changing business scope/acceptance or proposing STOP/SPLIT
   uses the required Task Owner decision route.
 - On failed verification after the normal loop, dispatch Chief Designer only
-  while the cumulative ceiling permits it.
+  while the cumulative ceiling permits it. Under manual relay, place the top
+  human transfer notice, explain the transfer in chat, and stop without
+  autonomously launching Chief Designer.
 ```
 
 ## Documentation Steward

@@ -58,11 +58,36 @@ in the same session and known unchanged; a new agent, missing context, changed
 input or rule question requires refreshing the affected material. Project and
 triggered-Skill required reading still applies.
 
-Check `Human Action Required` first: `none` means no human intervention now,
-`awaiting-decision` means answer the decision brief, and `awaiting-environment`
-means the next step needs the recorded human preparation. A later-only
-environment notice must state that no action or reply is needed now. Recheck
-the actual status and prerequisites if an older handoff omits this summary.
+Check `Human Action Required` first: `none` means no current business decision
+(`awaiting-decision`) or unmet immediate human-only environment preparation (`awaiting-environment`).
+Under manual relay for new Full tasks, the field remains `none` on agent dispatch,
+but the operator must relay the Operator Command to the chosen AI tool. Disclose
+the known limitation that legacy machine consumers might read `none` literally as
+"no human action required at all"; the top blockquote notice and final response make
+the operator transfer explicit. A later-only environment notice must state that no
+action or reply is needed now. Recheck the actual status and prerequisites if an
+older handoff omits this summary.
+
+New Full tasks default to manual relay across platforms on formal agent dispatch.
+The agent saves, reads back, and validates the handoff, adds a top transfer notice
+(`> 人工接力：请由你选择 AI 工具，将本交接中的 Operator Command 转交给 <Next role>。`
+or `> Manual Relay: Please select an AI tool and relay the Operator Command from this handoff to <Next role>.`),
+explains the next role, recommended capability tier (C1–C5), and Operator Command in
+chat, and ends the turn. The user selects the tool, model, and reasoning effort
+best suited for that role, without repeating business authorization. If `Constraints`
+explicitly authorizes automated cross-role progression and the host supports it,
+the workflow advances autonomously. In-role micro-steps and user-launched executable
+`continue` proceed directly without pausing at every tool call.
+
+Portable relay across workspaces:
+- **Shared workspace**: The successor tool accesses the same repository directory,
+  reads `.ai/handoff.md` and `.ai/current-task.md`, verifies execution ownership
+  and review capacity, and proceeds.
+- **Non-shared or read-only tools**: The operator provides only a minimal vetted excerpt;
+  the tool returns a response handoff, and a permitted writer in the primary workspace
+  verifies source revision and SHA256 match before persisting. Never copy whole
+  repositories or credentials; no platform automatically sanitizes data. Tool or
+  model separation does not establish review independence.
 
 Executable `continue` includes a `### Continuation Command` under Current
 Status. An active capable agent follows it directly after checking latest

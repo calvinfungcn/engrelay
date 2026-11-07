@@ -69,8 +69,10 @@ module instructions and triggered Skills still apply.
 4. Prepare the minimum coherent `.ai/current-task.md`: task ID, change ID if any,
    Execution Batch ID mapped to OpenSpec checklist items, risk `S`, `M` or `H` with a
    reason, the observable outcome, must-have acceptance, out-of-scope work, required
-   checks and the Initial role. Keep `openspec/changes/<change-id>/tasks.md` as the
-   only implementation checklist; do not create a second task list.
+   checks, Constraints (recording the default manual relay for formal agent dispatch,
+   or an explicit automation scope when explicitly authorized by the user) and the Initial role.
+   Keep `openspec/changes/<change-id>/tasks.md` as the only implementation checklist;
+   do not create a second task list.
 5. Route by the existing rules:
    - material business ambiguity that Task Intake cannot safely summarize: set
      Initial role to Requirements Analyst and run the conditional role action in
@@ -104,7 +106,9 @@ or an Owner Decision Brief for a wait, as defined by
 For an agent `dispatch`, the first `Current Status` line is the advisory
 `Recommended capability tier: Cn` (`docs/ai-collaboration/handoff-schema.md#capability-tier-guidance`).
 Confirm it at the same readback and echo the same tier in the final reply; a
-response-only fallback carries the same line.
+response-only fallback carries the same line. Under manual relay, include the top human
+transfer notice in handoff, state where the Operator Command is located, and stop the turn
+for operator transfer without autonomously launching the next role.
 
 EngRelay material and modifications: Copyright (c) 2026 calvinfungcn and EngRelay
 contributors, MIT. The full notice accompanies the installed kit at the project-root
