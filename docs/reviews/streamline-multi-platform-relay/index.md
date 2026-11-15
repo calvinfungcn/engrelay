@@ -113,3 +113,4 @@
 - 主规格已同步；OpenSpec 归档命令报告 3 条新增、8 条修改，无删除或重命名。
 - 三阶段及纠错工作 13/13 完成；review 文件共 9 轮记录，R08 纠错批次关联累计 verdict 为 5/5。各阶段历史关闭和各自原累计 3 保持不变。
 - round 09 为独立复核 PASS。宿主真实遵从、认证数据路径及 token 节省效果仍未实测；发行版本和 Release 状态以单独发行记录为准。
+- 1.11.0 发行准备：[中文记录](release-preparation.zh-CN.md)、[English record](release-preparation.md)。仅记录归档与发行核对，不新增 verdict 或修复额度。
