@@ -109,6 +109,9 @@ does not wake stopped processes. See
   not approve models, block work, or replace independent review. Definitions and
   the fixed next-role defaults live in
   [handoff-schema.md#capability-tier-guidance](handoff-schema.md#capability-tier-guidance).
+  An unavailable environment is a recorded gap with its Resume condition, not a rating of the
+  implementer. Unchanged blocked checks are not redispatched; a relevant environment, input, code or configuration change first triggers a readiness check, and simulated results never prove
+  a real authenticated or data entrypoint.
   Human decision dispatch, `continue`, and `close` omit the line. The line is a
   suggestion, not a gate; an older handoff without it stays valid, and a structure
   check does not confirm the line.
@@ -147,7 +150,8 @@ Results and formal review rounds are indexed under `docs/reviews/` when recorded
 After closure, the reply states the actual mapped result, known remaining work or
 unknowns, no next role or Operator Command for that batch, and one useful next step.
 It distinguishes ordinary acceptance, limited owner acceptance, stopped and superseded.
-A bare “continue” does not select unfinished parent work: the agent names known items
+A bare “continue” selects unfinished parent work only under a recorded standing
+authorization with exactly one unambiguous ready item; otherwise the agent names known items
 and offers a request such as “Use EngRelay: implement <change> item <id>.” If no work
 remains, it offers start for a new stated goal. Missing/conflicting evidence is named.
 A status answer leaves files intact.
@@ -157,7 +161,7 @@ uses the existing Task Intake in the same session; you need not resend it throug
 start. It checks scope and dependencies, preserves old closure and same-acceptance
 review counts, and honors actual waits and controller boundaries. A single authorized
 post-closure review retains its finite scope and independence; it grants no new
-three-cycle repair allowance. See [closed-batch guidance](README.md#closed-batch-guidance).
+repair allowance. See [closed-batch guidance](README.md#closed-batch-guidance).
 
 Ordinary `accepted` closure means the mapped batch is complete under the
 recorded acceptance criteria, not that every parent OpenSpec item or business
@@ -211,7 +215,7 @@ These examples are illustrative. The hypothetical figures do not record a real r
 - **Post-closure review and capacity.** When the Task Owner requests a single additional
   review on already-closed work, keep historical closure records and counts intact. The
   single review evaluates only that authorized scope without reopening the batch or granting
-  three new fix cycles. Genuinely new defects require applicable authorization to start a
+  new fix cycles. Genuinely new defects require applicable authorization to start a
   linked repair batch.
 - **Bounded archive check.** Archive verification focuses on spec delta / main spec
   correspondence, completeness, tasks, index links, and delivery privacy. Passing the check

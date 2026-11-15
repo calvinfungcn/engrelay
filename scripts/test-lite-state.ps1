@@ -91,13 +91,41 @@ try {
     Invoke-Case 'unknown-field' ($base.Replace('## Current Status',"- Extra: value`n## Current Status")) $false 'Unknown Routing field'
     Invoke-Case 'invalid-role' ($base.Replace('- Next role: Reviewer','- Next role: Designer')) $false 'Invalid Next role'
     Invoke-Case 'invalid-number' ($base.Replace('- Review round: 0','- Review round: -1')) $false 'Invalid Review round'
-    Invoke-Case 'capacity' ($base.Replace('- Review round: 0','- Review round: 3')) $false 'Review allowance exhausted'
+    Invoke-Case 'capacity-without-extension-permits-dispatch' ($base.Replace('- Review round: 0','- Review round: 3')) $true 'expectations match'
+    Invoke-Case 'capacity-8-without-extension-permits-dispatch' ($base.Replace('- Review round: 0','- Review round: 8')) $true 'expectations match'
     Write-Fixture '.ai/engrelay-lite/owner-decision.md' 'Fictional scoped extension for T01.'
     $extended=$base.Replace('- Review round: 0','- Review round: 3').Replace('## Evidence',"## Evidence`n- Task Owner decision: review-budget-extension; owner=Fixture Owner; date=2026-10-22; batch=T01; from=3; through=5; scope=repair; evidence=.ai/engrelay-lite/owner-decision.md")
     Invoke-Case 'finite-extension' $extended $true 'expectations match'
     Invoke-Case 'extension-wrong-task' ($extended.Replace('batch=T01','batch=T99')) $false 'review-budget-extension task'
-    Invoke-Case 'extension-exhausted' ($extended.Replace('Review round: 3','Review round: 5')) $false 'Review allowance exhausted'
+    Invoke-Case 'extension-exhausted' ($extended.Replace('Review round: 3','Review round: 5')) $false 'Review budget extension does not permit'
+    Invoke-Case 'extension-ceiling-four-permits' ($extended.Replace('Review round: 3','Review round: 4')) $true 'expectations match'
+    Invoke-Case 'extension-below-from-rejected' ($extended.Replace('from=3','from=4')) $false 'Review budget extension does not permit'
     Invoke-Case 'extension-duplicate-key' ($extended.Replace('from=3','from=3; from=3')) $false 'review-budget-extension fields'
+    # CR-01: indented, double-quoted and backtick-wrapped structured lines are recognized,
+    # so a visible extension at its ceiling is never treated as absent.
+    $ceilingLine = 'review-budget-extension; owner=Fixture Owner; date=2026-10-22; batch=T01; from=4; through=6; scope=repair; evidence=.ai/engrelay-lite/owner-decision.md'
+    $sixBase = $base.Replace('- Review round: 0','- Review round: 6')
+    Invoke-Case 'capacity-bare-extension-at-ceiling-rejected' ($sixBase.Replace('## Evidence',"## Evidence`n- Task Owner decision: $ceilingLine")) $false 'Review budget extension does not permit'
+    Invoke-Case 'capacity-double-quoted-extension-at-ceiling-rejected' ($sixBase.Replace('## Evidence',"## Evidence`n- Task Owner decision: `"$ceilingLine`"")) $false 'Review budget extension does not permit'
+    Invoke-Case 'capacity-backtick-extension-at-ceiling-rejected' ($sixBase.Replace('## Evidence',"## Evidence`n- Task Owner decision: ``$ceilingLine``")) $false 'Review budget extension does not permit'
+    Invoke-Case 'capacity-indented-extension-at-ceiling-rejected' ($sixBase.Replace('## Evidence',"## Evidence`n  - Task Owner decision: $ceilingLine")) $false 'Review budget extension does not permit'
+    Invoke-Case 'capacity-two-extension-lines-fail-closed' ($extended.Replace('## Evidence',"## Evidence`n  - Task Owner decision: $ceilingLine")) $false 'Duplicate Task Owner decision'
+    Invoke-Case 'capacity-indented-quoted-extension-in-range-permits' ($sixBase.Replace('Review round: 6','Review round: 4').Replace('## Evidence',"## Evidence`n  - Task Owner decision: `"$ceilingLine`"")) $true 'expectations match'
+    # R08-01: a structured limit whose value sits on the next non-empty line of its own
+    # field is validated like a same-line value; it is never treated as absent.
+    Invoke-Case 'capacity-next-line-extension-at-ceiling-rejected' ($sixBase.Replace('## Evidence',"## Evidence`n- Task Owner decision:`n  $ceilingLine")) $false 'Review budget extension does not permit'
+    Invoke-Case 'capacity-next-line-bulleted-extension-at-ceiling-rejected' ($sixBase.Replace('## Evidence',"## Evidence`n- Task Owner decision:`n- $ceilingLine")) $false 'Review budget extension does not permit'
+    Invoke-Case 'capacity-next-line-quoted-extension-at-ceiling-rejected' ($sixBase.Replace('## Evidence',"## Evidence`n- Task Owner decision:`n  ``$ceilingLine``")) $false 'Review budget extension does not permit'
+    Invoke-Case 'capacity-next-line-extension-below-from-rejected' ($sixBase.Replace('Review round: 6','Review round: 3').Replace('## Evidence',"## Evidence`n- Task Owner decision:`n  $ceilingLine")) $false 'Review budget extension does not permit'
+    Invoke-Case 'capacity-next-line-extension-in-range-permits' ($sixBase.Replace('Review round: 6','Review round: 4').Replace('## Evidence',"## Evidence`n- Task Owner decision:`n  $ceilingLine")) $true 'expectations match'
+    $nextLineMissingEvidence = 'review-budget-extension; owner=Fixture Owner; date=2026-10-22; batch=T01; from=4; through=6; scope=repair'
+    Invoke-Case 'capacity-next-line-missing-field-rejected' ($sixBase.Replace('Review round: 6','Review round: 4').Replace('## Evidence',"## Evidence`n- Task Owner decision:`n  $nextLineMissingEvidence")) $false 'Invalid review-budget-extension'
+    $nextLineWrongTask = $ceilingLine.Replace('batch=T01','batch=T99')
+    Invoke-Case 'capacity-next-line-wrong-task-rejected' ($sixBase.Replace('Review round: 6','Review round: 4').Replace('## Evidence',"## Evidence`n- Task Owner decision:`n  $nextLineWrongTask")) $false 'review-budget-extension task'
+    Invoke-Case 'capacity-next-line-prose-permits' ($sixBase.Replace('## Evidence',"## Evidence`n- Task Owner decision:`n  Owner accepted the repair scope in chat.")) $true 'expectations match'
+    Invoke-Case 'capacity-next-line-field-boundary-permits' ($sixBase.Replace('## Evidence',"## Evidence`n- Task Owner decision:")) $true 'expectations match'
+    Invoke-Case 'capacity-next-line-fenced-example-ignored' ($sixBase.Replace('## Evidence',"## Evidence`n- Task Owner decision:`n``````text`n$ceilingLine`n``````")) $true 'expectations match'
+    Invoke-Case 'capacity-next-line-duplicate-rejected' ($extended.Replace('## Evidence',"## Evidence`n- Task Owner decision:`n  $ceilingLine")) $false 'Duplicate Task Owner decision'
     Invoke-Case 'advisory' ($base.Replace('Recommended capability tier: C3','')) $true 'WARNING: Missing advisory capability'
     Invoke-Case 'fenced-routing' ($base + "`n## Example`n``````text`n- Next action: close`n``````") $true 'expectations match'
     $continuation = @'
@@ -115,13 +143,16 @@ Follow: docs/engrelay-lite/RULES.md.
     $continue = $continue.Substring(0,$continue.IndexOf('## Operator Command')).Replace('## Evidence',$continuation + "`n## Evidence")
     Invoke-Case 'continue' $continue $true 'expectations match'
     Invoke-Case 'continue-capacity-2' ($continue.Replace('Review round: 0','Review round: 2')) $true 'expectations match'
-    Invoke-Case 'continue-capacity-3' ($continue.Replace('Review round: 0','Review round: 3')) $false 'Review allowance exhausted'
-    Invoke-Case 'continue-capacity-8' ($continue.Replace('Review round: 0','Review round: 8')) $false 'Review allowance exhausted'
+    Invoke-Case 'continue-capacity-3-without-extension' ($continue.Replace('Review round: 0','Review round: 3')) $true 'expectations match'
+    Invoke-Case 'continue-capacity-8-without-extension' ($continue.Replace('Review round: 0','Review round: 8')) $true 'expectations match'
     $continueExtended = $continue.Replace('Review round: 0','Review round: 3').Replace('## Evidence',"## Evidence`n- Task Owner decision: review-budget-extension; owner=Fixture Owner; date=2026-10-22; batch=T01; from=3; through=5; scope=repair; evidence=.ai/engrelay-lite/owner-decision.md")
     Invoke-Case 'continue-extension' $continueExtended $true 'expectations match'
-    Invoke-Case 'continue-extension-exhausted' ($continueExtended.Replace('Review round: 3','Review round: 5')) $false 'Review allowance exhausted'
+    Invoke-Case 'continue-extension-exhausted' ($continueExtended.Replace('Review round: 3','Review round: 5')) $false 'Review budget extension does not permit'
     Invoke-Case 'continue-extension-wrong-task' ($continueExtended.Replace('batch=T01','batch=T99')) $false 'review-budget-extension task'
-    Invoke-Case 'continue-extension-before-from' ($continueExtended.Replace('from=3','from=4')) $false 'Review allowance exhausted'
+    Invoke-Case 'continue-extension-before-from' ($continueExtended.Replace('from=3','from=4')) $false 'Review budget extension does not permit'
+    # R08-01: the executable continue route applies the same next-line validation.
+    Invoke-Case 'continue-next-line-extension-at-ceiling-rejected' ($continue.Replace('Review round: 0','Review round: 6').Replace('## Evidence',"## Evidence`n- Task Owner decision:`n  $ceilingLine")) $false 'Review budget extension does not permit'
+    Invoke-Case 'continue-next-line-extension-in-range-permits' ($continue.Replace('Review round: 0','Review round: 5').Replace('## Evidence',"## Evidence`n- Task Owner decision:`n  $ceilingLine")) $true 'expectations match'
     Invoke-Case 'command-outside-label' ($base.Replace('Follow: docs/engrelay-lite/RULES.md.', 'Missing follow.') + "`nFollow: outside") $false 'Missing Operator Command Follow'
     foreach ($label in @('Read','Objective','Constraints','Output','Follow')) {
         Invoke-Case ('command-missing-'+$label) ([regex]::Replace($base, ('(?m)^' + $label + ':.*$'), ($label + ':'))) $false ('Missing Operator Command ' + $label)
@@ -175,7 +206,11 @@ Follow: docs/engrelay-lite/RULES.md.
     $blocked = $withoutCommand.Replace('in-progress','blocked') + "`n## Blockers`nTried one bounded retry. Resume condition: package host reachable."
     Invoke-Case 'tool-wait' $blocked $true 'expectations match'
     Invoke-Case 'blocked-at-capacity' ($blocked.Replace('Review round: 0','Review round: 8')) $true 'expectations match'
-    Invoke-Case 'resumed-at-capacity' ($continue.Replace('Review round: 0','Review round: 8')) $false 'Review allowance exhausted'
+    Invoke-Case 'resumed-at-capacity-without-extension' ($continue.Replace('Review round: 0','Review round: 8')) $true 'expectations match'
+    # CR-02 (Lite already): a recorded blocked wait at a reached extension ceiling passes; resuming it is rechecked.
+    $ceilingDecision = 'review-budget-extension; owner=Fixture Owner; date=2026-10-22; batch=T01; from=4; through=6; scope=repair; evidence=.ai/engrelay-lite/owner-decision.md'
+    Invoke-Case 'blocked-at-extension-ceiling-recorded' ($blocked.Replace('Review round: 0','Review round: 6').Replace('## Evidence',"## Evidence`n- Task Owner decision: $ceilingDecision")) $true 'expectations match'
+    Invoke-Case 'resumed-continue-at-extension-ceiling-rejected' ($continue.Replace('Review round: 0','Review round: 6').Replace('## Evidence',"## Evidence`n- Task Owner decision: $ceilingDecision")) $false 'Review budget extension does not permit'
     Invoke-Case 'human-wait-missing-preparation' ($blocked.Replace('Human Action Required: none','Human Action Required: awaiting-environment')) $false 'Human preparation'
     Invoke-Case 'human-wait' ($blocked.Replace('Human Action Required: none','Human Action Required: awaiting-environment') + "`nHuman preparation: Start the approved test session and report its address.") $true 'expectations match'
     Invoke-Case 'blocked-no-resume' ($blocked.Replace('Resume condition:','Later:')) $false 'Resume condition'

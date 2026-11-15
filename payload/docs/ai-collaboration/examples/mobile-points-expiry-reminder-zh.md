@@ -248,8 +248,9 @@ OpenSpec 条目 `2.1` 和 `2.2` 已完成。除正常发布验证外没有偏差
   `Implementation Engineer -> Code Reviewer -> Fix Engineer -> independent
   Verification Reviewer -> close`。
 - 证据完整且审查无问题的 `H` 批次可以直接关闭。
-- 唯一允许的修复和验证闭环失败时，派发 Chief Designer 作出 `REVISE`、
-  `STOP` 或 `SPLIT`，不得自动开始新闭环。
+- 聚合修复和验证闭环失败、且未达有限上限或确认停滞时，派发 Chief Designer 作出一次技术处置。
+  可在既有授权内执行的原范围处置交回责任角色并继续闭环；`REVISE` 仅用于实质设计修订，
+  `STOP` 或 `SPLIT` 需走负责人路由。
 
 ## Owner 决策示例
 

@@ -88,7 +88,7 @@ Lite SHALL 以短规则、项目配置和当前任务输入为日常入口，接
 
 ### Requirement: Aggregated responsibilities with independent review
 
-Lite SHALL 使用负责人、执行者、评审者三类职责并按实际影响判定 S/M/H。相邻非独立动作 SHALL 允许同一 Agent 连续处理；M SHALL 独立审查并复核必须修项，H SHALL 满足实际需要的设计和独立验证，实施或修复者 SHALL NOT 自审或自任同批 H 验证。累计 verdict 默认上限为三次，有限扩展 SHALL 保留已有授权及历史。
+Lite SHALL 使用负责人、执行者、评审者三类职责并按实际影响判定 S/M/H。相邻非独立动作 SHALL 允许同一 Agent 连续处理；M SHALL 独立审查并复核必须修项，H SHALL 满足实际需要的设计和独立验证，实施或修复者 SHALL NOT 自审或自任同批 H 验证。实际 verdict SHALL 单调记录，默认三次总数 SHALL NOT 单独阻断已授权的正常工作；已有明确有限授权 SHALL 保留实际范围、上限及历史。
 
 Lite SHALL 在自身短规则和现有任务／审查产物中表达完整审查、证据对应及隐私、按变化复核、关闭后有限授权和归档核对，保留三类职责与历史。SHALL NOT 要求 Full 手册、新机器字段、产物台账或固定审批；归档或换任务标识不授予额外修复循环，已给授权不重复请示。
 
@@ -101,8 +101,8 @@ Lite SHALL 在自身短规则和现有任务／审查产物中表达完整审查
 - **THEN** 按实际独立性安排验证者，不能因只有三类职责而省略验证或让修复者自验
 
 #### Scenario: Review allowance is exhausted
-- **WHEN** 同批累计三次 verdict 后仍有未解决问题，且没有适用有限追加授权
-- **THEN** 保存结果并交负责人决定，不因换模型、阶段、文件或配置而清零或再开循环
+- **WHEN** 当前动作受负责人明确的有限审查或修复授权约束，且范围或上限已用尽
+- **THEN** 保存结果及历史，不因换模型、阶段、文件或配置而规避限制；确需扩大授权时给出具体负责人决定出口
 
 #### Scenario: Owner requests a complete Lite review
 - **WHEN** 负责人要求对 Lite 成果作归档前完整独立审查
@@ -119,6 +119,18 @@ Lite SHALL 在自身短规则和现有任务／审查产物中表达完整审查
 #### Scenario: Lite archive check has no implementation change
 - **WHEN** 已授权核对仅涉及规范同步、归档、完成状态和隐私，实施输入未变
 - **THEN** 按当前影响定级并复用相符实施证据，通过后结束该核对，不因父任务为 H 重跑所有套件或新增角色／审批
+
+#### Scenario: Normal review reaches three verdicts
+- **WHEN** 设计、代码和必要独立验证形成三次 verdict，仍有已授权工作且没有适用明确上限
+- **THEN** 按真实问题和依赖继续，不仅因累计数为三而要求追加授权；保留人工接力偏好和独立性
+
+#### Scenario: Repeated repair makes no verified progress
+- **WHEN** 针对同一未解决发现连续两次修复和独立复核，均无已核对且能缩小根因或消除既有阻碍的新证据，也无已验证的实质改善
+- **THEN** 暂停该问题的重复循环，依据现有任务及审查记录分析原因和下一步；真正需要改变授权、风险或业务取舍时才请求负责人决定
+
+#### Scenario: Unrelated historical review
+- **WHEN** 原批次包含两个可区分验收，后续一次审查明确只涉及其中之一
+- **THEN** 保留历史编号和原始记录，另一范围只关联实际相关 verdict；关联不明时保持未知，不猜测清零
 
 ### Requirement: Sequential authorized queues with dependency-aware blocking
 
@@ -212,7 +224,7 @@ Lite 运行态 SHALL 使用 .ai/engrelay-lite/ 并与 Full 状态隔离。真实
 
 ### Requirement: Lightweight validation and advisory capability
 
-Lite SHALL 有独立的小型只读结构校验，支持对已决定任务、动作、下一职责、审查数及修订的预期比对；失败 SHALL 非零退出且不写回。可执行 continue 和 Agent dispatch SHALL 遵守累计额度及适用有限扩展，SHALL NOT 因同职责接续绕过额度。负责人等待、合法关闭及真实非执行 blocked 记录 SHALL 保留；blocked 恢复为可执行路由前 SHALL 重新核对额度。动作指令 SHALL 从其真实小节内唯一、完整且已闭合的 text 命令块读取身份与 Read、Objective、Constraints、Output、Follow；围栏外说明或其他样例 SHALL NOT 补齐缺项。来源元数据 SHALL 只取围栏外文本，按围栏字符、长度及结束条件排除响应样例，并保留显式来源、旧状态 SHA256、修订、计数及归属核对。Agent 派发 SHALL 输出一行既有含义的 C1–C5 建议并在回复同步，Lite 执行者／评审者默认 C3，只有已有明确难度信息才覆盖。能力行缺失 SHALL 仅提示，不能成为新阻塞或模型资格门槛。
+Lite SHALL 有独立的小型只读结构校验，支持对已决定任务、动作、下一职责、审查数及修订的预期比对；失败 SHALL 非零退出且不写回。可执行 continue 和 Agent dispatch SHALL 遵守适用的明确有限授权，SHALL NOT 因同职责接续绕过明确上限或范围。负责人等待、合法关闭及真实非执行 blocked 记录 SHALL 保留；blocked 恢复为可执行路由前 SHALL 重新核对适用授权。动作指令 SHALL 从其真实小节内唯一、完整且已闭合的 text 命令块读取身份与 Read、Objective、Constraints、Output、Follow；围栏外说明或其他样例 SHALL NOT 补齐缺项。来源元数据 SHALL 只取围栏外文本，按围栏字符、长度及结束条件排除响应样例，并保留显式来源、旧状态 SHA256、修订、计数及归属核对。Agent 派发 SHALL 输出一行既有含义的 C1–C5 建议并在回复同步，Lite 执行者／评审者默认 C3，只有已有明确难度信息才覆盖。能力行缺失 SHALL 仅提示，不能成为新阻塞或模型资格门槛。
 
 #### Scenario: Old valid handoff differs from the intended transfer
 - **WHEN** 文件结构可读但其任务或路由与调用者提供的本次预期不符
@@ -227,20 +239,20 @@ Lite SHALL 有独立的小型只读结构校验，支持对已决定任务、动
 - **THEN** 只报告实际检查结论，不声称业务验收、实际独立性、来源认证或宿主遵从已经被脚本证明
 
 #### Scenario: Unextended executable continuation reaches the default limit
-- **WHEN** 有效任务的可执行 continue 或 Agent dispatch 累计已达三次或更多 verdict，且没有适用有限扩展
-- **THEN** 校验非零退出，说明执行额度耗尽和负责人决定出口；不修改 handoff、不清零计数，也不把进程退出当作新增授权
+- **WHEN** 有效任务的可执行 continue 或 Agent dispatch 累计已达三次或更多 verdict，没有适用的明确有限上限且其他结构合法
+- **THEN** 校验不因旧默认三次门槛拒绝；不修改 handoff、不清零计数，也不把进程退出当作新增授权
 
 #### Scenario: Executable routes retain unused finite authorization
-- **WHEN** 可执行 continue 或 Agent dispatch 的计数尚低于三，或存在批次、证据及其他既有字段有效且 from 小于等于当前计数、当前计数小于 through 的有限扩展
-- **THEN** 额度检查不阻断该路由，其他结构、预期与来源检查仍必须成立
+- **WHEN** 可执行 continue 或 Agent dispatch 受适用有限授权约束，且批次、证据及既有字段有效、from 小于等于当前计数、当前计数小于 through
+- **THEN** 有限授权检查不阻断该路由，其他结构、预期与来源检查仍必须成立
 
 #### Scenario: Expired or mismatched extension cannot authorize execution
-- **WHEN** 超额执行所引用扩展已到 through、未到 from、任务不符、字段重复／无效或缺少既有要求的证据
-- **THEN** 校验非零退出，不将其用于允许接续或派发
+- **WHEN** 当前动作引用的适用有限授权已到 through、未到 from、任务不符、字段重复／无效或缺少既有要求的证据
+- **THEN** 校验非零退出，不将其用于允许接续或派发；不能把用于当前动作的无效有限授权当成不存在
 
 #### Scenario: Non-executable records do not require unused execution capacity
-- **WHEN** handoff 是格式有效的负责人等待、合法 close，或带真实恢复条件且没有执行命令的 blocked 记录，即使默认额度已用尽
-- **THEN** 不仅因缺少可执行额度而拒绝该记录；blocked 恢复后的 continue／dispatch 仍须重新检查额度，不能据此开始未经授权的修复循环
+- **WHEN** handoff 是格式有效的负责人等待、合法 close，或带真实恢复条件且没有执行命令的 blocked 记录，即使明确有限授权已用尽
+- **THEN** 不仅因缺少可执行额度而拒绝该记录；blocked 恢复后的 continue／dispatch 仍须重新检查适用授权，不能据此开始未经授权的修复循环
 
 #### Scenario: Complete existing command remains valid
 - **WHEN** 动作对应的真实小节含唯一完整 text 代码块，使用既有三反引号或合法的较长反引号／波浪线围栏，任务、职责及五项必需内容均在同一命令块内
@@ -281,6 +293,10 @@ Lite SHALL 有独立的小型只读结构校验，支持对已决定任务、动
 #### Scenario: Fence closing rules prevent false boundaries
 - **WHEN** 输入围栏中出现不同字符、短于开启长度或尾随非空内容的伪结束行，或者真正围栏未闭合
 - **THEN** 不因伪结束行读取其中样例作为真实命令或元数据；未闭合围栏非零退出，输入文件保持不变
+
+#### Scenario: Semantic convergence is not a structural proof
+- **WHEN** 结构与预期校验成功，但实际授权真实性、独立性、证据或同一发现是否持续无进展未知
+- **THEN** 仅报告结构结论，由负责角色按现有任务和审查记录判断；不声称脚本证明真实授权或已完成验收
 
 ### Requirement: Bounded diagnostics and evidence-backed readiness
 

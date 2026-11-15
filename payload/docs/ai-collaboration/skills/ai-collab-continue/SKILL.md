@@ -84,19 +84,32 @@ sections for a new agent, missing context, a changed input or a rule question
      action, not an implicit invocation of the explicit-only ai-collab-start Skill;
      do not ask the owner to resend equivalent authorization. Explicit single reviews
      after closure use the existing bounded-review rule and independent reviewer,
-     never a fresh three-cycle allowance. Ambiguous requests and stale notices only
-     get state-aware guidance; do not infer work or authorization from them.
+     never a fresh repair allowance. Ambiguous requests and stale notices only
+     get state-aware guidance; do not infer work or authorization from them. A bare
+     “continue” is covered only by a recorded standing authorization for the parent
+     proposal with exactly one unambiguous ready item (README.md#closed-batch-guidance);
+     otherwise it is ambiguous and gets the closed-batch guidance.
    - `awaiting-owner-decision` (including human dispatch): present the recorded
      Owner Decision Brief; continue only after an applicable reply. Silence is
-     not approval. Reuse an already answered decision without asking again.
+     not approval. Reuse an already answered decision without asking again. An
+     older wait caused only by the former default count of three may resume without
+     a new reply only when its recorded Owner Decision Brief proves the migration
+     basis in README.md#review-round-circuit-breaker (no non-convergence, material
+     limitation or scope trade-off) and no other wait or limit remains; cite that
+     basis and keep the unknowns.
    - `continue` + `blocked`: check the Resume condition and current evidence;
      perform a cheap safe check if available. Resume only if the actual condition
      is resolved; record that evidence and update the wait/summary before executing
      the authorized step. Otherwise retain the wait and report its resume condition.
      A no-action forward notice alone is not a blocker.
-   - exhausted review capacity: follow the existing circuit breaker and any
-     applicable finite owner extension. Never start a fourth autonomous cycle or
+   - reached review ceiling: follow the existing circuit breaker and any applicable
+     finite owner extension. Never start an autonomous cycle past a reached ceiling, or
      reset the count. Use the evidenced owner-decision route when required.
+   - confirmed same-finding stall: allow only its one technical analysis inside the
+     original scope (README.md#review-round-circuit-breaker). An executable disposition it
+     proposes proceeds within existing authorization; use the evidenced owner-decision
+     route only when the owner conditions there apply. Never start another repair/review
+     loop for that finding without an applicable authorization.
 3. Otherwise follow the latest executable Next action:
    - `continue`: immediately perform the stated authorized next step if capable
      and permitted. Read the Continuation Command under Current Status when

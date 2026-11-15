@@ -48,23 +48,24 @@ design, code or verification actions; changing role labels cannot create indepen
   verification evidence need not manufacture another verdict.
 
 Review round counts completed design/code/verification/adjudication verdicts for
-the same mapped acceptance. Default allowance is three, across sessions, stages,
+the same mapped acceptance, across sessions, stages,
 tools and profiles. Never rename unresolved work to reset it; continuing the same
 unfinished acceptance under a new name or phase preserves its cumulative count.
-At capacity accept only on evidence, otherwise wait for Task Owner disposition or an
-applicable finite extension. Do not start a fourth autonomous fix/review cycle. An
+The count alone does not block a route. At a reached ceiling accept only on evidence, otherwise wait for Task Owner disposition or an
+applicable finite extension. Do not start another autonomous fix/review cycle past that limit. A confirmed stall gets only the one technical analysis below; an executable disposition within existing authorization proceeds normally, and only the owner conditions below go to the owner route. An
 extension retains owner, date, batch=Task ID, from, through, scope and evidence in the
 existing form:
 `Task Owner decision: review-budget-extension; owner=...; date=YYYY-MM-DD; batch=T01; from=3; through=5; scope=...; evidence=relative/file.md`.
-Use it only when from <= current count < through and the real authorization matches.
+Use it only when the real authorization matches. Indented, bulleted or quoted forms are read the same way, and two structured lines fail closed. While such a line is present for this task, executable continue and Agent dispatch are permitted only when from <= current count < through; a malformed, cross-task or below-from line blocks those routes.
 When an unclosed task at capacity is authorized for one extra review only, record that
-single-verdict ceiling (`from=N`, `through=N+1`); it does not grant three new fix cycles.
+single-verdict ceiling (`from=N`, `through=N+1`); it does not grant new fix cycles.
 A single additional review requested on already-closed work evaluates that authorized scope
-while preserving historical closure records and counts; it does not reopen the batch or grant
-three fix cycles. A genuinely new defect requires applicable authorization for a linked repair.
-Executable continue and Agent dispatch both require remaining capacity. A genuine
+while preserving historical closure records and counts; it does not reopen the batch or grant new fix cycles. A genuinely new defect requires applicable authorization for a linked repair.
+Executable continue and Agent dispatch require remaining capacity only while a structured extension is present. A genuine
 blocked wait, owner decision or valid close may be recorded at capacity; recheck
 capacity when work becomes executable again. A blocked record grants no new cycle.
+A verdict is associated with an unfinished acceptance only when it covers that acceptance; splitting a task or renaming a finding does not remove related history. Recorded counts and an already written valid extension are never recomputed retroactively. Carry every structured extension line verbatim into any successor, recovery or response handoff while the acceptance remains unfinished; the validator cannot see a dropped line from one new state, so the responsible role compares it with the named source before routing.
+Same-finding stall: after two consecutive repair-and-independent-review loops for one unresolved finding, with no newly verified evidence that narrows its root cause or removes its blocker and no independently verified material improvement for that same finding, pause that finding's repeated loop. Cite both results, the remaining risk and the smallest next step, then route to the responsible role for one technical analysis inside the original scope. Only authorization, a business or risk decision, a material cost above the planned sessions, or an inability to continue goes to the Task Owner. Renaming, role or model changes, repeated logs, and improvement in another issue are not progress. Distinct new must-fix findings that keep recurring across loops get the same analysis step. An older owner-decision wait caused only by the former default count of three may resume under this rule only when its brief shows no non-convergence, material limitation or scope trade-off; the resuming handoff cites that basis and keeps unknowns.
 
 When explicitly requested for a complete review before archive, Reviewer covers all authorized
 acceptance, final diff, compatibility, evidence correspondence, documentation, and delivery
@@ -74,7 +75,14 @@ reused. Evidence must correspond to claimed entrypoint, inputs, environment, and
 evidence remains unverified. Subsequent rechecks focus on assigned fixes and affected behavior,
 reusing matching evidence for unchanged inputs; privacy redactions or explanation fixes do not
 rerun broad suites. If a fix alters a shared contract or invalidates evidence, expand checks
-along the blast radius; do not use focused rechecks to conceal defects.
+along the blast radius; do not use focused rechecks to conceal defects. When a dependent entrypoint is unavailable, or is reachable
+but its required authentication, account, sample or data is missing, keep it unverified with its
+Resume condition and continue authorized offline work. While the environment, entrypoint, inputs,
+and the related code, configuration, callers or persisted data stay unchanged since that record, do
+not repeat the same dependent check. A relevant change first triggers the readiness check; the
+dependent verification runs only once that readiness is actually met, otherwise the same gap and
+Resume condition stay recorded. A simulation never stands in for the real entrypoint, and the gap
+never lowers a rating.
 
 Review artifacts and staged copies must remain privacy-safe using fictional aliases, synthetic
 counts, and mock states; real credentials, invoice tokens, or private sample values must not
@@ -229,7 +237,10 @@ writer in the primary workspace saves the complete return and publishes the chec
 same turn; retain the reviewer attribution and count each verdict once. Never overwrite an
 existing result or ask the owner to hand-maintain these files.
 
-Later recovery reads only the one explicitly named pending source. Match task,
+Later recovery reads only the one explicitly named pending source. Every structured
+extension line of that source is carried verbatim into the restored or successor
+handoff; the optional SourceResultPath and PriorHandoffPath check does not compare
+extension lines and cannot detect a dropped one. Match task,
 prior revision and SHA256, ownership, allowance and full action body before applying.
 Same target revision requires equal Routing and action content to be already applied;
 an advanced live state is not overwritten. A close or real wait cannot be bypassed.

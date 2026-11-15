@@ -14,8 +14,7 @@
 - Current status: `<operational status>`
 - Review round: `0`
 <!-- Cumulative completed review/verification/adjudication verdicts, not artifact
-     numbering. Increment on verdict; never reset on REVISE. At >=3 only supported
-     close or awaiting-owner-decision; no agent dispatch. -->
+     numbering. Increment on verdict; never reset on REVISE. The count alone blocks no route; a structured review-budget-extension line limits its own route (from <= N < through). A reached ceiling allows only supported close or awaiting-owner-decision; no agent dispatch. A confirmed same-finding stall allows only its one technical analysis first. -->
 <!-- Optional: Execution Batch ID matching current-task; State revision as a
      positive integer for manual comparison, not automatic stale-write protection. -->
 - Next role: `<role>`

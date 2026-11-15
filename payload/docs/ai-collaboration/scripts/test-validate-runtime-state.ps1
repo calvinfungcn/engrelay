@@ -407,6 +407,7 @@ Clarify which expiring benefit users should see and when.
         -ExpectedExitCode 0 `
         -ExpectNoWarnings
 
+    # The count alone no longer blocks a normal dispatch (no structured extension).
     foreach ($overLimitRound in @('3', '4', '45')) {
         $overLimitDispatch = $originalHandoff.Replace(
             '- Review round: `0`',
@@ -414,11 +415,11 @@ Clarify which expiring benefit users should see and when.
         )
         Set-Content -LiteralPath $handoffCopy -Value $overLimitDispatch -NoNewline
         Invoke-ValidatorCase `
-            -Name "review round $overLimitRound circuit breaker rejects agent dispatch" `
+            -Name "review round $overLimitRound without extension permits agent dispatch" `
             -CurrentTaskRelativePath $currentTaskRelativePath `
             -HandoffRelativePath $handoffRelativePath `
-            -ExpectedExitCode 1 `
-            -ExpectedErrors @('Review round circuit breaker reached at 3; agent dispatch is not permitted')
+            -ExpectedExitCode 0 `
+            -ExpectNoWarnings
     }
 
     $chiefDesignerOverLimitDispatch = $originalHandoff.Replace(
@@ -445,11 +446,11 @@ Clarify which expiring benefit users should see and when.
     )
     Set-Content -LiteralPath $handoffCopy -Value $chiefDesignerOverLimitDispatch -NoNewline
     Invoke-ValidatorCase `
-        -Name "review round 3 circuit breaker rejects Chief Designer agent dispatch" `
+        -Name "review round 3 without extension permits Chief Designer agent dispatch" `
         -CurrentTaskRelativePath $currentTaskRelativePath `
         -HandoffRelativePath $handoffRelativePath `
-        -ExpectedExitCode 1 `
-        -ExpectedErrors @('Review round circuit breaker reached at 3; agent dispatch is not permitted')
+        -ExpectedExitCode 0 `
+        -ExpectNoWarnings
 
     $missingReviewRound = $originalHandoff.Replace(
         '- Review round: `0`',
@@ -503,9 +504,9 @@ Clarify which expiring benefit users should see and when.
     # Finite review-budget extension consumers (AC-P2-08). The structured
     # single-line extension lives in the existing Task Owner decision value;
     # fields split on ';' because owner identity may contain spaces. An
-    # applicable unused extension permits the budgeted route; every other
-    # over-limit route keeps the existing circuit-breaker rejection and no
-    # other check is weakened.
+    # structured line for this batch limits only its own route, and only while
+    # from <= Review round < through. Without such a line the count alone does
+    # not block a route. No other check is weakened.
     $budgetDecisionFor = {
         param([int]$From, [int]$Through, [string]$Extra = '')
         $line = '- Task Owner decision: review-budget-extension; owner=Task Owner Example; date=2026-10-02; batch=validator-mapped-items; from=' + $From + '; through=' + $Through + '; scope=budget recovery consumers; evidence=fixture decision'
@@ -557,6 +558,93 @@ Clarify which expiring benefit users should see and when.
         -ExpectedExitCode 0 `
         -ExpectNoWarnings
 
+    # CR-01: indented, quoted and backtick-wrapped structured lines are recognized,
+    # so a visible extension at its ceiling is never treated as absent.
+    $extensionFourToSix = 'review-budget-extension; owner=Task Owner Example; date=2026-10-02; batch=validator-mapped-items; from=4; through=6; scope=budget recovery consumers; evidence=fixture decision'
+    foreach ($wrappedDecision in @(
+        @{ Name = 'indented'; Line = ('  - Task Owner decision: ' + $extensionFourToSix) },
+        @{ Name = 'double-quoted'; Line = ('- Task Owner decision: "' + $extensionFourToSix + '"') },
+        @{ Name = 'backtick-wrapped'; Line = ('- Task Owner decision: `' + $extensionFourToSix + '`') }
+    )) {
+        $wrappedAtCeiling = $originalHandoff.Replace(
+            '- Review round: `0`',
+            '- Review round: `6`'
+        ).Replace(
+            '- No formal review state changes.',
+            ('- No formal review state changes.' + "`n" + $wrappedDecision.Line)
+        )
+        Set-Content -LiteralPath $handoffCopy -Value $wrappedAtCeiling -NoNewline
+        Invoke-ValidatorCase `
+            -Name "$($wrappedDecision.Name) extension at its ceiling rejects dispatch" `
+            -CurrentTaskRelativePath $currentTaskRelativePath `
+            -HandoffRelativePath $handoffRelativePath `
+            -ExpectedExitCode 1 `
+            -ExpectedErrors @('Review budget extension does not permit Review round 6; agent dispatch is not permitted')
+    }
+
+    $wrappedInRange = $originalHandoff.Replace(
+        '- Review round: `0`',
+        '- Review round: `4`'
+    ).Replace(
+        '- No formal review state changes.',
+        ('- No formal review state changes.' + "`n" + '  - Task Owner decision: "' + $extensionFourToSix + '"')
+    )
+    Set-Content -LiteralPath $handoffCopy -Value $wrappedInRange -NoNewline
+    Invoke-ValidatorCase `
+        -Name "indented quoted extension inside its range permits dispatch" `
+        -CurrentTaskRelativePath $currentTaskRelativePath `
+        -HandoffRelativePath $handoffRelativePath `
+        -ExpectedExitCode 0 `
+        -ExpectNoWarnings
+
+    $twoExtensions = $originalHandoff.Replace(
+        '- No formal review state changes.',
+        ('- No formal review state changes.' + "`n" + (& $budgetDecisionFor 0 5) + "`n" + '  - Task Owner decision: ' + $extensionFourToSix)
+    )
+    Set-Content -LiteralPath $handoffCopy -Value $twoExtensions -NoNewline
+    Invoke-ValidatorCase `
+        -Name "two structured extension lines fail closed on any route" `
+        -CurrentTaskRelativePath $currentTaskRelativePath `
+        -HandoffRelativePath $handoffRelativePath `
+        -ExpectedExitCode 1 `
+        -ExpectedErrors @('Review Or Task State Impact must contain at most one review-budget-extension decision')
+
+    # CR-02: a real blocked wait at a reached count is recorded; the same route
+    # is rechecked and refused only once the handoff is executable again.
+    $blockedAtCeiling = (Convert-ToNonDispatchHandoff `
+        ($originalHandoff.Replace('- Review round: `0`', '- Review round: `6`')) `
+        "continue").Replace(
+        '- Current status: `ready-for-review`',
+        '- Current status: `blocked`'
+    ).Replace(
+        '- None.',
+        '- Resume condition: `fixture dependency is available`'
+    ).Replace(
+        '- No formal review state changes.',
+        ('- No formal review state changes.' + "`n" + (& $budgetDecisionFor 4 6))
+    )
+    Set-Content -LiteralPath $handoffCopy -Value $blockedAtCeiling -NoNewline
+    Invoke-ValidatorCase `
+        -Name "blocked continue at a reached extension ceiling is recorded" `
+        -CurrentTaskRelativePath $currentTaskRelativePath `
+        -HandoffRelativePath $handoffRelativePath `
+        -ExpectedExitCode 0 `
+        -ExpectNoWarnings
+
+    $resumedAtCeiling = (Convert-ToNonDispatchHandoff `
+        ($originalHandoff.Replace('- Review round: `0`', '- Review round: `6`')) `
+        "continue").Replace(
+        '- No formal review state changes.',
+        ('- No formal review state changes.' + "`n" + (& $budgetDecisionFor 4 6))
+    )
+    Set-Content -LiteralPath $handoffCopy -Value $resumedAtCeiling -NoNewline
+    Invoke-ValidatorCase `
+        -Name "executable continue at a reached extension ceiling is rejected" `
+        -CurrentTaskRelativePath $currentTaskRelativePath `
+        -HandoffRelativePath $handoffRelativePath `
+        -ExpectedExitCode 1 `
+        -ExpectedErrors @('Review budget extension does not permit Review round 6; executable continue is not permitted')
+
     $budgetRoleChange = $originalHandoff.Replace(
         '- Review round: `0`',
         '- Review round: `4`'
@@ -591,7 +679,7 @@ Clarify which expiring benefit users should see and when.
         -CurrentTaskRelativePath $currentTaskRelativePath `
         -HandoffRelativePath $handoffRelativePath `
         -ExpectedExitCode 1 `
-        -ExpectedErrors @('Review round circuit breaker reached at 3; agent dispatch is not permitted')
+        -ExpectedErrors @('Review budget extension does not permit Review round')
 
     $replayedDispatch = $originalHandoff.Replace(
         '- Review round: `0`',
@@ -606,7 +694,7 @@ Clarify which expiring benefit users should see and when.
         -CurrentTaskRelativePath $currentTaskRelativePath `
         -HandoffRelativePath $handoffRelativePath `
         -ExpectedExitCode 1 `
-        -ExpectedErrors @('Review round circuit breaker reached at 3; agent dispatch is not permitted')
+        -ExpectedErrors @('Review budget extension does not permit Review round')
 
     $ordinaryDispatchAtThree = $originalHandoff.Replace(
         '- Review round: `0`',
@@ -617,11 +705,59 @@ Clarify which expiring benefit users should see and when.
     )
     Set-Content -LiteralPath $handoffCopy -Value $ordinaryDispatchAtThree -NoNewline
     Invoke-ValidatorCase `
-        -Name "ordinary owner prose grants no budget capacity" `
+        -Name "ordinary owner prose grants no budget capacity but blocks nothing" `
+        -CurrentTaskRelativePath $currentTaskRelativePath `
+        -HandoffRelativePath $handoffRelativePath `
+        -ExpectedExitCode 0 `
+        -ExpectNoWarnings
+
+    # DR-03: a structured line for this batch applies only at from <= N < through.
+    $belowFromDispatch = $originalHandoff.Replace(
+        '- Review round: `0`',
+        '- Review round: `3`'
+    ).Replace(
+        '- No formal review state changes.',
+        ('- No formal review state changes.' + "`n" + (& $budgetDecisionFor 4 6))
+    )
+    Set-Content -LiteralPath $handoffCopy -Value $belowFromDispatch -NoNewline
+    Invoke-ValidatorCase `
+        -Name "extension from=4 through=6 rejects dispatch at count 3" `
         -CurrentTaskRelativePath $currentTaskRelativePath `
         -HandoffRelativePath $handoffRelativePath `
         -ExpectedExitCode 1 `
-        -ExpectedErrors @('Review round circuit breaker reached at 3; agent dispatch is not permitted')
+        -ExpectedErrors @('Review budget extension does not permit Review round 3; agent dispatch is not permitted')
+
+    foreach ($extensionRound in @(@('4', 0), @('5', 0))) {
+        $permittedRoundDispatch = $originalHandoff.Replace(
+            '- Review round: `0`',
+            ('- Review round: `' + $extensionRound[0] + '`')
+        ).Replace(
+            '- No formal review state changes.',
+            ('- No formal review state changes.' + "`n" + (& $budgetDecisionFor 4 6))
+        )
+        Set-Content -LiteralPath $handoffCopy -Value $permittedRoundDispatch -NoNewline
+        Invoke-ValidatorCase `
+            -Name "extension from=4 through=6 permits dispatch at count $($extensionRound[0])" `
+            -CurrentTaskRelativePath $currentTaskRelativePath `
+            -HandoffRelativePath $handoffRelativePath `
+            -ExpectedExitCode 0 `
+            -ExpectNoWarnings
+    }
+
+    $exhaustedAtSix = $originalHandoff.Replace(
+        '- Review round: `0`',
+        '- Review round: `6`'
+    ).Replace(
+        '- No formal review state changes.',
+        ('- No formal review state changes.' + "`n" + (& $budgetDecisionFor 4 6))
+    )
+    Set-Content -LiteralPath $handoffCopy -Value $exhaustedAtSix -NoNewline
+    Invoke-ValidatorCase `
+        -Name "extension from=4 through=6 rejects dispatch at count 6" `
+        -CurrentTaskRelativePath $currentTaskRelativePath `
+        -HandoffRelativePath $handoffRelativePath `
+        -ExpectedExitCode 1 `
+        -ExpectedErrors @('Review budget extension does not permit Review round 6; agent dispatch is not permitted')
 
     foreach ($defectiveDecision in @(
         @{ Name = 'malformed'; Line = '- Task Owner decision: review-budget-extension owner without separators' },
@@ -645,7 +781,7 @@ Clarify which expiring benefit users should see and when.
             -CurrentTaskRelativePath $currentTaskRelativePath `
             -HandoffRelativePath $handoffRelativePath `
             -ExpectedExitCode 1 `
-            -ExpectedErrors @('Review round circuit breaker reached at 3; agent dispatch is not permitted')
+            -ExpectedErrors @('Review budget extension does not permit Review round')
     }
 
     $budgetTrailingProse = $originalHandoff.Replace(
@@ -1816,7 +1952,8 @@ Follow: docs/ai-collaboration/agent-prompts.md#implementation-engineer.
         @{ Name = 'owner wait with matching summary passes'; Text = $modernOwnerWait; Exit = 0 },
         @{ Name = 'owner wait cannot report none'; Text = $modernOwnerWait.Replace('Required: `awaiting-decision`', 'Required: `none`'); Exit = 1; Error = 'awaiting-owner-decision requires Human Action Required: awaiting-decision' },
         @{ Name = 'owner wait cannot auto-execute continuation'; Text = $modernOwnerWait.Replace('## Delta Since Last Handoff', ($continuationBlock + '## Delta Since Last Handoff')); Exit = 1; Error = 'Continuation Command is permitted only for executable continue' },
-        @{ Name = 'continue command cannot override review limit'; Text = $modernContinue.Replace('Review round: `0`', 'Review round: `3`'); Exit = 1; Error = 'Review round circuit breaker reached at 3' },
+        @{ Name = 'continue at count 3 without extension is not blocked by count'; Text = $modernContinue.Replace('Review round: `0`', 'Review round: `3`'); Exit = 0 },
+        @{ Name = 'continue at exhausted extension ceiling is rejected'; Text = $modernContinue.Replace('Review round: `0`', 'Review round: `3`').Replace('- No formal review state changes.', ('- No formal review state changes.' + "`n" + '- Task Owner decision: review-budget-extension; owner=Task Owner Example; date=2026-10-02; batch=validator-mapped-items; from=0; through=3; scope=budget recovery consumers; evidence=fixture decision')); Exit = 1; Error = 'Review budget extension does not permit Review round 3' },
         @{ Name = 'invalid human action enum fails'; Text = $modernContinue.Replace('Required: `none`', 'Required: `maybe`'); Exit = 1; Error = 'Human Action Required must be none, awaiting-decision, or awaiting-environment' },
         @{ Name = 'empty human action fails'; Text = $modernContinue.Replace('Required: `none`', 'Required:'); Exit = 1; Error = 'Human Action Required must be none, awaiting-decision, or awaiting-environment' },
         @{ Name = 'duplicate human action fails'; Text = $modernContinue.Replace('Required: `none`', "Required: ``none```n- Human Action Required: ``none``"); Exit = 1; Error = 'Routing must contain at most one Human Action Required' },

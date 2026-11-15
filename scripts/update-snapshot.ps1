@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param(
     [string]$PackageRoot = '',
-    [ValidatePattern('^\d+\.\d+\.\d+$')][string]$Version = '1.10.1',
+    [ValidatePattern('^\d+\.\d+\.\d+$')][string]$Version = '1.11.0',
     [switch]$ForRelease
 )
 

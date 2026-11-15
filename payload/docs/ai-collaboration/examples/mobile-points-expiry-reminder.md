@@ -256,8 +256,11 @@ risk `M` example above.
   `Implementation Engineer -> Code Reviewer -> Fix Engineer -> independent
   Verification Reviewer -> close` when findings require fixes.
 - A clean `H` review may close directly when its required evidence is complete.
-- If the single allowed fix and verification loop fails, dispatch Chief
-  Designer for `REVISE`, `STOP`, or `SPLIT` instead of starting another loop.
+- If the aggregated fix and verification loop fails without a reached ceiling or
+  confirmed stall, dispatch Chief Designer for one technical disposition. An
+  in-scope executable disposition returns to the responsible role under existing
+  authorization; `REVISE` is only for a material design revision, and `STOP` or
+  `SPLIT` needs the Task Owner route.
 
 ## Owner Decision Examples
 

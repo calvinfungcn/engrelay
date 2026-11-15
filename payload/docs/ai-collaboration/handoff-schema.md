@@ -69,10 +69,11 @@ and scope evidence, without rewriting handoff or loading unrelated command branc
   current-task, handoff, result, and formal review files.
 - A technical `REVISE` is `dispatch` from Chief Designer to Design Reviewer;
   material revision may restart design review at round 1, but never resets the
-  cumulative batch `Review round` or overrides the default-three circuit
-  breaker. At an exhausted allowance without an applicable finite owner
+  cumulative batch `Review round` or overrides a structured
+  review-budget-extension limit. At a reached finite-extension ceiling without an applicable finite owner
   authorization, use accepted closure with evidence or the Task Owner decision
-  route; no agent dispatch is permitted. An applicable finite owner
+  route; no agent dispatch is permitted. A confirmed stall allows only its one
+  technical analysis first. An applicable finite owner
   authorization permits the budgeted route as defined in
   README.md#review-round-circuit-breaker. `STOP` and `SPLIT` may
   use `close` with Next role `none` only after explicit, applicable Task Owner
@@ -81,8 +82,9 @@ and scope evidence, without rewriting handoff or loading unrelated command branc
   durably, and require separate Task Intake before a split successor.
 - After Design Review round 2 returns unresolved `must-address` findings,
   Design Reviewer may dispatch Chief Designer only below the cumulative
-  allowance; at an exhausted allowance without an applicable finite owner
-  authorization it uses the Task Owner decision route. A third review of an
+  allowance; at a reached ceiling without an applicable finite owner
+  authorization it uses the Task Owner decision route. A confirmed stall allows
+  only its one technical analysis first. A third review of an
   unchanged design is forbidden.
 - A disputed assigned finding is dispatched by Fix Engineer to the original
   Code Reviewer for adjudication only below the cumulative review allowance.
@@ -795,6 +797,12 @@ explicit task basis for this handoff.
 The tier describes the suggested capability for **this** next item of work, not
 a permanent rating of the role, agent, or model.
 
+An unavailable environment, unverified entrypoint or blocked wait limits the item; it is
+never evidence that the implementer or model underperformed. Record it as Blockers or as
+the unverified gap with its Resume condition, and do not reduce any tier or rating for it.
+The Task Owner chooses the tool, model and reasoning strength; the tier only suggests a
+starting point and is never a requirement.
+
 ### When to show or omit the line
 
 | Situation | Capability line |
@@ -843,11 +851,16 @@ REVISE and disputed-finding routes. A design-cycle counter, State revision and
 optional Process Metrics are not substitutes. Never reset the count by renaming
 the same unfinished batch.
 
-At `Review round: 3` or higher, only evidence-supported `close`, a Task Owner
-decision route (`continue`/human `dispatch` with `awaiting-owner-decision`),
-or a route covered by an applicable finite owner authorization under
-README.md#review-round-circuit-breaker is allowed. No fourth agent review,
-fix, or design dispatch is allowed without one. Existing
+Only a structured review-budget-extension line limits a route by count
+(README.md#review-round-circuit-breaker). A `Review round` of 3 or higher alone
+permits normal dispatch. At a reached ceiling, only evidence-supported `close`, a
+Task Owner decision route (`continue`/human `dispatch` with
+`awaiting-owner-decision`), or a route covered by an applicable finite owner
+authorization is allowed. No further agent review, fix, or design dispatch is
+allowed past such a limit without one. A confirmed same-finding stall pauses only
+that finding's repeated loop: one technical analysis inside the original scope is
+allowed first. An executable disposition it proposes proceeds within existing authorization; closure or the owner route applies only when
+the conditions in README.md#review-round-circuit-breaker require it. Existing
 closure, owner-authorization and independence checks still apply. For migrated
 over-limit batches preserve the actual known count and converge immediately;
 do not fabricate history. See README.md#review-round-circuit-breaker.
@@ -974,7 +987,7 @@ cumulative Review round. A transfer superseded by that takeover compares as adva
 independent review still uses `dispatch` with its Operator Command.
 
 Omit the continuation block for `blocked`, `awaiting-owner-decision`, `dispatch`
-and `close`. Those conditions, exhausted review allowance and conflicting inputs
+and `close`. Those conditions, a reached review ceiling or stall, and conflicting inputs
 take precedence over any stale command. Legacy executable continue without the
 block resumes from Current Status and authoritative task inputs when sufficient;
 missing new fields alone never requires owner approval. This protocol does not
@@ -1207,14 +1220,16 @@ narration in the existing record, not a runtime field.
    names the missing item.
 3. **Protections first.** A candidate never overrides a closed live batch (it is
    not reopened) or a real wait (`blocked` or `awaiting-owner-decision`). A
-   candidate whose cumulative Review round is 3 or more and that routes to
-   another agent dispatch is protected unless its own complete handoff carries
-   one valid, same-batch `review-budget-extension` line in the Task Owner
-   decision field with `from <= N < through`, where N is that candidate's Review
-   round (README.md#review-round-circuit-breaker). A missing, malformed,
-   duplicate-key, unknown-key, cross-batch, below-`from` or at-`through`
-   authorization grants no capacity. The live file's older authorization does
-   not authorize a candidate that omits it. Each protected case keeps the live
+   candidate that routes to another agent dispatch or executable continue is
+   protected only by a structured limit: its own complete handoff must carry one
+   valid, same-batch `review-budget-extension` line in the Task Owner decision
+   field with `from <= N < through`, where N is that candidate's Review round
+   (README.md#review-round-circuit-breaker). A Review round of 3 or more alone
+   protects nothing. A malformed, duplicate-key, unknown-key, cross-batch,
+   below-`from` or at-`through` line in the candidate grants no capacity and
+   protects that route. If the live file carries a valid same-batch extension
+   line that the candidate omits, the line was dropped: keep the live state and
+   name the missing line rather than restoring the candidate. Each protected case keeps the live
    state and names the existing route: close, resume condition or Task Owner
    decision. A candidate protected by none of these continues to step 4.
    Human-decision and `close` candidates pass through the same protections; they
@@ -1285,8 +1300,7 @@ narration in the existing record, not a runtime field.
    values from the candidate's route: batch, Next action, Next role, Review round
    and target `State revision`. Never take those values from the stale file.
 
-Older records that lack the new narration are not backfilled. Closed batches and
-exhausted review allowances are not reopened by a candidate.
+Older records that lack the new narration are not backfilled. Closed batches are not reopened by a candidate, and neither is a reached review ceiling or confirmed stall.
 
 ## Source Of Truth Rules
 

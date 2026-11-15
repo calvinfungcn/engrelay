@@ -9,7 +9,7 @@ working in existing repositories. It provides role prompts, task and handoff
 templates, independent reviews based on risk, and tools for checking the evidence
 used to call work complete.
 
-**Version 1.10.4** · [Download the complete package](https://github.com/calvinfungcn/engrelay/releases/tag/v1.10.4) · [MIT License](LICENSE)
+**Version 1.11.0** · [Download the complete package](https://github.com/calvinfungcn/engrelay/releases/tag/v1.11.0) · [MIT License](LICENSE)
 
 ## Workflow profiles (1.10.0)
 
@@ -94,7 +94,7 @@ for entry selection and handoffs.
   compatibility, evidence correspondence, documentation, and delivery privacy in
   one aggregated round. Renaming unfinished work preserves cumulative verdicts
   without reset; authorized single reviews at capacity or post-closure do not grant
-  three new fix cycles. Evidence must correspond to claimed entrypoints and results
+  new fix cycles. Evidence must correspond to claimed entrypoints and results
   (unverified if lacking). Focused rechecks reuse matching evidence for unchanged
   inputs, while shared contract changes or invalid evidence expand checks along the
   blast radius. Review artifacts remain privacy-safe, and bounded archive checks
@@ -125,6 +125,10 @@ for entry selection and handoffs.
   the next work item; see
   [capability tier guidance](payload/docs/ai-collaboration/handoff-schema.md#capability-tier-guidance).
   It is not a blocker or model certification. Older handoffs without it stay valid.
+- An unavailable environment or unverified entrypoint is recorded as a gap with its Resume
+  condition, never as a lower rating for the implementer. A recorded unmet check is not
+  redispatched while the environment, inputs and related code or configuration are unchanged; a relevant change first triggers a readiness check, and simulated results never
+  stand in for the real entrypoint. Tool, model and reasoning choices stay with you.
 - Reference reuse is limited to material already read in the same session and known
   unchanged; a new agent, missing context, a changed input or a rule question triggers a reread.
 - An independent review of an implementation or fix adds one advisory 1–5 delivery rating
@@ -159,8 +163,8 @@ See the [maintained role contracts](payload/docs/ai-collaboration/README.md).
 Use a trusted complete package in its own directory. Back up the target project's
 rules and read its existing agent instructions. For a new project:
 
-Download `engrelay-1.10.4.zip` from the release and extract it. Run commands from
-the extracted `engrelay-1.10.4` directory. Keep that complete package unchanged;
+Download `engrelay-1.11.0.zip` from the release and extract it. Run commands from
+the extracted `engrelay-1.11.0` directory. Keep that complete package unchanged;
 extra tool files or edited bytes make it differ from its inventory. The repository
 source can also be used when its file set and bytes exactly match `snapshot.json`.
 
@@ -290,7 +294,9 @@ Discuss the requirements with me first. Communicate in English.
 For a closed batch, the reply gives the evidenced result, remaining or unknown scope,
 no next role, and one applicable next step. A clear, authorized follow-up uses the
 existing Task Intake in the same session, preserving old closure and cumulative
-review limits; a bare “continue” does not select parent work. Read rules for the
+review limits; a bare “continue” selects parent work only under a recorded standing
+authorization with exactly one unambiguous ready item, otherwise it names the
+candidates and chooses none. Read rules for the
 actual route and reuse only already-read, known-unchanged session references.
 Lite keeps its own approved queue: ready items continue; otherwise it reports
 pending approval/dependencies and a Lite next step, without invoking Full Skills.
@@ -310,8 +316,9 @@ provide techniques within the assigned role; they add no second lifecycle.
 ## Review limits and cost
 
 Completed design, code, verification and adjudication verdicts accumulate within
-the batch; the default autonomous allowance is three. If problems remain at the
-limit, the responsible agent explains the cause, viable options, costs and a
+the batch and are kept for traceability; the count alone does not block normal
+work. If problems remain at a reached finite-extension ceiling, or after a confirmed
+same-finding stall whose one technical analysis still needs an owner decision, the responsible agent explains the cause, viable options, costs and a
 recommendation to the task owner. It does not unilaterally end the project.
 Further cycles require applicable explicit finite owner authorization under the
 [review rule](payload/docs/ai-collaboration/README.md#review-round-circuit-breaker).

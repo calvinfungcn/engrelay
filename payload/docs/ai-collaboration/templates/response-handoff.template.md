@@ -108,7 +108,7 @@ Follow: docs/ai-collaboration/agent-prompts.md#<current-role-section>.
 <!-- When current human intervention is needed, give instructions here: where/what/why,
      smallest reply; file/CLI actions need exact verified paths and copy-ready
      snippets. UI-only actions need exact application/screen/steps, not code.
-     At Review round >=3 only supported close or owner decision, no agent dispatch. -->
+     A reached review-budget-extension ceiling allows only supported close or owner decision, no agent dispatch; a confirmed same-finding stall allows only its one technical analysis first. -->
 
 ## Operator Command
 

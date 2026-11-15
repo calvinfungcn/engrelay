@@ -117,10 +117,33 @@ function Assert-Command([string]$Text, [string]$Name, [string]$Task, [string]$Ro
     }
 }
 function Test-Capacity([string]$Evidence, [string]$Task, [long]$Round) {
-    $decisions = @([regex]::Matches($Evidence,'(?m)^- Task Owner decision:\s*(.+)$'))
+    # Same recognition as Full: indented or bulleted lines, with backtick or quote wrapping, still count.
+    # A value moved to the next non-empty line of the same field is read too, outside fences and never
+    # across another field or heading, so a damaged or expired limit cannot pass as absent.
+    $markdown = Get-Markdown $Evidence
+    $decisions = New-Object 'Collections.Generic.List[string]'
+    for ($i = 0; $i -lt $markdown.Lines.Count; $i++) {
+        if (-not $markdown.Outside[$i]) { continue }
+        $match = [regex]::Match($markdown.Lines[$i],'^[ \t]*(?:[-*][ \t]+)?Task Owner decision:[ \t]*(.*?)[ \t]*$')
+        if (-not $match.Success) { continue }
+        $value = $match.Groups[1].Value.Trim()
+        if (-not $value) {
+            $next = $i + 1
+            while ($next -lt $markdown.Lines.Count -and $markdown.Outside[$next] -and [string]::IsNullOrWhiteSpace($markdown.Lines[$next])) { $next++ }
+            if ($next -lt $markdown.Lines.Count -and $markdown.Outside[$next] -and
+                $markdown.Lines[$next] -notmatch '^[ \t]*#' -and
+                $markdown.Lines[$next] -notmatch '^[ \t]*(?:[-*][ \t]+)?[A-Za-z][A-Za-z0-9 _-]*:') {
+                $value = ($markdown.Lines[$next] -replace '^[ \t]*(?:[-*][ \t]+)?','').Trim()
+            }
+        }
+        $decisions.Add($value)
+    }
     if ($decisions.Count -gt 1) { throw 'Duplicate Task Owner decision' }
-    if (-not $decisions.Count -or -not $decisions[0].Groups[1].Value.Trim('`').StartsWith('review-budget-extension',[StringComparison]::Ordinal)) { return ($Round -lt 3) }
-    $parts = $decisions[0].Groups[1].Value.Trim('`') -split ';'
+    # No structured extension: the Review round count alone never blocks a route; ordinary prose grants and blocks nothing.
+    if (-not $decisions.Count) { return $true }
+    $value = $decisions[0].Trim().Trim([char[]]@([char]96,[char]34,[char]39)).Trim()
+    if (-not $value.StartsWith('review-budget-extension',[StringComparison]::Ordinal)) { return $true }
+    $parts = $value -split ';'
     if ($parts[0].Trim() -cne 'review-budget-extension') { throw 'Invalid review-budget-extension' }
     $fields = @{}
     foreach ($part in ($parts | Select-Object -Skip 1)) {
@@ -133,7 +156,8 @@ function Test-Capacity([string]$Evidence, [string]$Task, [long]$Round) {
     $through = Assert-Number $fields['through'] 'extension through' 1
     if ($through -le $from) { throw 'Invalid review-budget-extension ceiling' }
     $null = Resolve-Input $fields['evidence']
-    return ($Round -lt 3 -or ($from -le $Round -and $Round -lt $through))
+    # A valid structured extension limits its own route only: from <= Round < through (count below from is not permitted).
+    return ($from -le $Round -and $Round -lt $through)
 }
 
 try {
@@ -171,7 +195,7 @@ try {
     if (-not $valid) { throw 'Invalid route: action/status/human/next role conflict' }
     $current = Get-Body $sections 'Current Status'
     $currentPlain = Get-Body $sections 'Current Status' -Plain
-    if (($agentDispatch -or $executable) -and -not (Test-Capacity (Get-Body $sections 'Evidence' -Plain) $routing['Task ID'] $round)) { throw 'Review allowance exhausted; publish the owner decision route' }
+    if (($agentDispatch -or $executable) -and -not (Test-Capacity (Get-Body $sections 'Evidence') $routing['Task ID'] $round)) { throw 'Review budget extension does not permit this route; publish the owner decision route' }
     if ($agentDispatch) {
         Assert-Command (Get-Body $sections 'Operator Command') 'Operator Command' $routing['Task ID'] $next
         $first = @($currentPlain -split '\r?\n' | Where-Object { $_.Trim() } | Select-Object -First 1)

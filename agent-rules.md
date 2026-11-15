@@ -84,11 +84,12 @@ Use the current project root, not a source example's WM path.
   Close a bounded batch without reopening unrelated parent work.
 - Track cumulative completed review verdicts (design, code, verification and
   adjudication). Dispatch states the remaining capacity when it affects the next
-  action. Three is the default autonomous allowance; at three verdicts, only
-  evidence-supported acceptance, the Task Owner decision route, or a route
-  covered by an applicable finite owner authorization under
+  action. The count alone does not block normal routes. At a reached finite
+  extension ceiling, only evidence-supported
+  acceptance, the Task Owner decision route, or a route covered by an applicable
+  finite owner authorization under
   docs/ai-collaboration/README.md#review-round-circuit-breaker is allowed.
-  No fourth autonomous fix/design/review loop and no reset
+  No autonomous fix/design/review loop past such a limit and no reset
   by role change, REVISE or a new file.
 - Stay in role for stable-scope local work: continue with the same agent and
   record the step. Escalate to Chief Designer only for a material change in

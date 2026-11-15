@@ -49,8 +49,7 @@ Do not rely on prior chat history as the source of truth.
 Keep implementation and evidence changes within the scope defined in `.ai/current-task.md`.
 All role exits below are subordinate to README.md#review-round-circuit-breaker.
 Preserve Routing Review round across design/code review, verification and
-adjudication. At >=3 there is no agent dispatch or further local review/fix
-cycle without an applicable finite owner authorization: use supported closure,
+adjudication. At a reached finite-extension ceiling there is no agent dispatch or further local review/fix cycle without an applicable finite owner authorization: use supported closure,
 await Task Owner decision, or take a route covered by
 README.md#review-round-circuit-breaker. Explicit limited
 owner acceptance is recorded by Chief Designer with Acceptance basis:
@@ -123,6 +122,10 @@ Before dispatch, notify foreseeable human-only preparation in handoff and chat
 (handoff-schema.md#environment-preparation). A pending prerequisite for the next
 action keeps the current agent waiting; a later-only check allows safe offline work
 with that limit recorded. Routine environment setup is not a return to Chief Designer.
+While the environment and inputs of a recorded unmet check remain unchanged, do not
+dispatch that dependent check again to rediscover the same blocker; a new condition
+triggers the readiness check, and the dependent verification runs only once that check confirms actual readiness. Mock or structural results never prove an unverified
+authenticated or data entrypoint.
 Human notices follow handoff-schema.md#actionable-human-instructions: verified path
 or screen, action, purpose and smallest reply, with a copy-ready snippet only for
 file/CLI work. Never invent a fix.
@@ -266,7 +269,7 @@ Focus:
   to spec synchronization and archive artifact impact, end the check on pass, and report
   unrelated global failures separately (README.md#bounded-archive-verification)
 - enforce post-closure and capacity limits: renaming unfinished acceptance preserves cumulative
-  verdicts without capacity reset; an authorized single review does not grant three new fix
+  verdicts without capacity reset; an authorized single review does not grant new fix
   loops, and genuine new defect repair requires applicable authorization (README.md#review-round-circuit-breaker)
 - phrase the first demonstrable slice in owner-observable terms and identify
   its inspection evidence or steps; keep this as informational progress,
@@ -852,12 +855,7 @@ Rules:
 - Report all high-confidence findings for the batch in one round; do not stop
   after the first actionable issue.
 - Record `Review round: N` monotonically for every review, verification, or
-  finding-adjudication verdict for the same batch and acceptance. Three is the
-  default autonomous allowance; role changes, `REVISE`, new finding IDs, and
-  new review files cannot reset it. At the third verdict, close on evidenced
-  mapped acceptance or route a material limitation to the Task Owner; do not
-  dispatch another agent or start a fourth review/fix cycle without an
-  applicable finite owner authorization under
+  finding-adjudication verdict for the same batch and acceptance. The count alone does not block a route; role changes, `REVISE`, new finding IDs, and new review files cannot reset it. At a reached finite-extension ceiling, close on evidenced mapped acceptance or route a material limitation to the Task Owner; do not dispatch another agent or start another review/fix cycle without an applicable finite owner authorization under
   README.md#review-round-circuit-breaker.
 - If production behavior files are unchanged and relevant suites are green,
   mock strictness, assertion preference, test-only seams, and mutation-only
@@ -997,7 +995,7 @@ Rules:
   cumulative allowance permits it. Adjudication increments that
   count. If the reviewer accepts the dispute with fresh evidence, it may mark
   the topic `verified`; if it rejects it, the topic remains `open` within this
-  same assigned fix path. At an exhausted allowance without an applicable
+  same assigned fix path. At a reached finite-extension ceiling without an applicable
   finite owner authorization, use the Task Owner decision route
   rather than dispatching another agent. `H` still requires an independent
   Verification Reviewer while the allowance permits that review.
@@ -1005,7 +1003,7 @@ Rules:
   agent session only when Code Reviewer independence remains intact and, for
   `H`, the Verification Reviewer remains independent. Use `continue` only for
   bounded local fix steps under the same Fix Engineer role; keep the existing
-  single fix/verification loop.
+  aggregated fix/verification loop while the cumulative limits permit it.
 - Run required checks.
 - Prefer finding-specific checks and input-matched reuse. If a proposed
   expensive check has little additional benefit or exceeds the stated cost,
@@ -1074,11 +1072,7 @@ Rules:
   batch unless it blocks the current acceptance criteria.
 - Record `Review round: N` monotonically for this verification and every prior
   review, verification, or finding-adjudication verdict for the same batch and
-  acceptance. Three is the default autonomous allowance and cannot be reset by
-  a role change, `REVISE`, new finding ID, or new review file. At the third
-  verdict, close on evidenced acceptance or use the existing Task Owner
-  decision route; do not dispatch another agent without an applicable finite
-  owner authorization under README.md#review-round-circuit-breaker.
+  acceptance. The count alone does not block a route and cannot be reset by a role change, `REVISE`, new finding ID, or new review file. At a reached finite-extension ceiling, close on evidenced acceptance or use the existing Task Owner decision route (a confirmed stall gets only its one technical analysis first); do not dispatch another agent without an applicable finite owner authorization under README.md#review-round-circuit-breaker.
 - When production behavior files are unchanged and relevant suites are green,
   mock strictness, assertion preference, test-only seams, and mutation-only
   hypotheticals remain advisory. Keep them blocking only with a demonstrated
@@ -1106,13 +1100,14 @@ Rules:
 - Distinguish evaluation evidence from production readiness and OpenSpec
   completion. If acceptance remains unmet or the direction is inconclusive,
   record that result and remaining work rather than marking the item complete.
-- If verification fails after the normal single allowed fix loop and the
-  cumulative allowance has not been reached, dispatch Chief
-  Designer with the evidence for a technical `REVISE`, `STOP`, or `SPLIT`
-  disposition and do not start another automatic loop. At an exhausted
-  allowance without an applicable finite owner authorization, close
-  on evidenced acceptance or use the existing Task Owner decision route; do
-  not dispatch another agent.
+- If verification fails inside the aggregated loop, the cumulative allowance has
+  not been reached and no confirmed stall applies, dispatch Chief Designer with
+  the evidence for one technical disposition. An in-scope executable disposition
+  returns to the responsible role under existing authorization and the aggregated
+  loop continues; `REVISE` is only for a material design revision, and `STOP` or
+  `SPLIT` needs the Task Owner route. At a reached ceiling without an applicable
+  finite owner authorization, close on evidenced acceptance or use the existing
+  Task Owner decision route; do not dispatch another agent.
 
 Workspace-level output:
 - Create a new docs/reviews/<change-id>/YYYY-MM-DD-round-##.md verification round.
@@ -1127,8 +1122,10 @@ Workspace-level output:
   for technical reconciliation. Continuing with unchanged acceptance is a
   technical decision; changing business scope/acceptance or proposing STOP/SPLIT
   uses the required Task Owner decision route.
-- On failed verification after the normal loop, dispatch Chief Designer only
-  while the cumulative ceiling permits it. Under manual relay, place the top
+- On failed verification inside the aggregated loop, dispatch Chief Designer for
+  the technical disposition only while the cumulative ceiling permits it; an
+  in-scope executable disposition then proceeds under existing authorization.
+  Under manual relay, place the top
   human transfer notice, explain the transfer in chat, and stop without
   autonomously launching Chief Designer.
 ```

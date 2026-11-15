@@ -320,6 +320,39 @@ function Test-ReviewBudgetExtension {
     return ($count -ge $Extension.From -and $count -lt $Extension.Through)
 }
 
+function Get-ReviewBudgetCandidates {
+    # Every Task Owner decision line in the section, whether top-level, indented,
+    # or bulleted, whose value (after ordinary backtick or quote wrapping) starts
+    # with review-budget-extension. Ordinary prose returns nothing and grants nothing.
+    param([string]$Section)
+
+    $candidates = [Collections.Generic.List[string]]::new()
+    if ([string]::IsNullOrWhiteSpace($Section)) {
+        return $candidates.ToArray()
+    }
+    $lines = @((Get-MarkdownStructure $Section).UnfencedText -split "`n")
+    for ($i = 0; $i -lt $lines.Count; $i++) {
+        $match = [regex]::Match(
+            $lines[$i],
+            '^[ \t]*(?:[-*][ \t]+)?Task Owner decision:[ \t]*(?<value>.*)$'
+        )
+        if (-not $match.Success) {
+            continue
+        }
+        $value = $match.Groups["value"].Value.Trim()
+        $next = $i + 1
+        while ($value -eq "" -and $next -lt $lines.Count) {
+            $value = $lines[$next].Trim()
+            $next++
+        }
+        $normalized = $value.Trim([char[]]@([char]96, [char]34, [char]39)).Trim()
+        if ($normalized.StartsWith("review-budget-extension", [StringComparison]::Ordinal)) {
+            $candidates.Add($normalized)
+        }
+    }
+    return $candidates.ToArray()
+}
+
 function Get-ItemFieldValue {
     param(
         [string]$Text,
@@ -915,46 +948,49 @@ if ($filesReady) {
         )
     }
     if ($reviewRound -match '^\d+$') {
+        # The Review round count alone never blocks a normal agent dispatch or
+        # executable continue. Only a structured review-budget-extension line
+        # for this batch limits those routes: it must be valid and satisfy
+        # from <= Review round < through. Ordinary prose grants and blocks nothing.
         $reviewRoundNumber = $reviewRound.TrimStart('0')
         if ([string]::IsNullOrEmpty($reviewRoundNumber)) {
             $reviewRoundNumber = "0"
         }
-        $atOrAboveCircuitBreaker = (
-            $reviewRoundNumber.Length -gt 1 -or
-            ($reviewRoundNumber.Length -eq 1 -and $reviewRoundNumber -ge "3")
+        # A real blocked or awaiting-owner-decision wait is recorded at any count;
+        # its route is rechecked when the work becomes executable again.
+        $routeIsGated = (
+            ($action -eq "dispatch" -and -not $isHumanRole) -or
+            $executableContinue
         )
-        if ($atOrAboveCircuitBreaker) {
-            # An applicable finite owner authorization permits the budgeted
-            # route; every other over-limit route keeps the existing rejection.
-            $budgetPermitsRoute = $false
-            if (($action -eq "dispatch" -and -not $isHumanRole) -or (
-                $action -eq "continue" -and
-                $currentStatus -ne "awaiting-owner-decision"
-            )) {
-                $budgetImpact = Get-Section $handoff "Review Or Task State Impact"
-                $budgetDecision = $null
-                if ($budgetImpact) {
-                    $budgetDecision = Get-SectionFieldContent `
-                        $budgetImpact "Task Owner decision"
-                }
+        if ($routeIsGated) {
+            $budgetImpact = Get-Section $handoff "Review Or Task State Impact"
+            $budgetCandidates = @(Get-ReviewBudgetCandidates $budgetImpact)
+            $budgetExtension = $null
+            if ($budgetCandidates.Count -gt 0) {
+                $budgetExtension = Get-ReviewBudgetExtension $budgetCandidates[0]
+            }
+            if ($null -ne $budgetExtension) {
                 $budgetPermitsRoute = Test-ReviewBudgetExtension `
-                    (Get-ReviewBudgetExtension $budgetDecision) `
+                    $budgetExtension `
                     (Get-FieldValue $batchClassification "Execution Batch ID") `
                     $reviewRound
-            }
-            if (-not $budgetPermitsRoute) {
-                if ($action -eq "dispatch" -and -not $isHumanRole) {
-                    Add-ValidationError (
-                        "Review round circuit breaker reached at 3; agent dispatch is not permitted; " +
-                        "close or await Task Owner decision"
-                    )
-                } elseif (
-                    $action -eq "continue" -and
-                    $currentStatus -ne "awaiting-owner-decision"
-                ) {
-                    Add-ValidationError (
-                        "Review round circuit breaker reached at 3; continue is permitted only while awaiting-owner-decision"
-                    )
+                if (-not $budgetPermitsRoute) {
+                    $budgetReason = ""
+                    if (-not $budgetExtension.IsValid) {
+                        $budgetReason = " (invalid: " + $budgetExtension.Reason + ")"
+                    }
+                    if ($action -eq "dispatch" -and -not $isHumanRole) {
+                        Add-ValidationError (
+                            "Review budget extension does not permit Review round " +
+                            "$reviewRoundNumber$budgetReason; agent dispatch is not permitted; " +
+                            "close or await Task Owner decision"
+                        )
+                    } else {
+                        Add-ValidationError (
+                            "Review budget extension does not permit Review round " +
+                            "$reviewRoundNumber$budgetReason; executable continue is not permitted; close or await Task Owner decision"
+                        )
+                    }
                 }
             }
         }
@@ -1340,6 +1376,13 @@ if ($filesReady) {
         Add-ValidationError (
             "Review Or Task State Impact must contain one Task Owner decision field; " +
             "duplicate actual decision fields are not accepted"
+        )
+    }
+    # Indented or bulleted decision lines count too; two structured extensions
+    # are ambiguous and fail closed on every route.
+    if (@(Get-ReviewBudgetCandidates $reviewImpact).Count -gt 1) {
+        Add-ValidationError (
+            "Review Or Task State Impact must contain at most one review-budget-extension decision"
         )
     }
     $acceptanceBasis = Get-SectionFieldContent $reviewImpact "Acceptance basis"

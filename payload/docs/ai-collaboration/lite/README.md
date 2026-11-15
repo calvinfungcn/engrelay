@@ -35,12 +35,13 @@ finish after relevant self-checks. An M implementation needs independent review
 and confirmation of must-fix repairs; an H change retains applicable design review
 and independent verification. When the Task Owner requests a complete review before
 archive, the Reviewer verifies all authorized acceptance, final diff, compatibility,
-evidence correspondence, documentation, and delivery privacy in one round. The default
-total of three completed verdicts never resets when changing phase, model, task name or
-profile; continuing unfinished work preserves its cumulative count. At capacity or
-post-closure, an authorized single review evaluates that bounded scope without granting
-three new fix cycles. Evidence must correspond to the claimed entrypoint, inputs, and
-result (unverified if lacking). Focused rechecks reuse matching evidence for unchanged
+evidence correspondence, documentation, and delivery privacy in one round. Completed verdicts
+are counted for traceability and never reset when changing phase, model, task name or
+profile; continuing unfinished work preserves its cumulative count. The count alone blocks no
+route; a structured review-budget-extension line limits its own route, a reached ceiling requires the
+owner route, and a confirmed same-finding stall gets one technical analysis first; an executable disposition within existing authorization proceeds normally, and only the owner conditions in RULES.md go to the Task Owner. Post-closure, an authorized single review evaluates that bounded scope without granting
+new fix cycles. Evidence must correspond to the claimed entrypoint, inputs, and
+result (unverified if lacking). An unavailable entrypoint, or one reachable without its required authentication or data, stays a recorded gap with its Resume condition; it is not rechecked while the environment, inputs and related code, configuration or persisted data are unchanged. A relevant change first triggers a readiness check, and offline authorized work continues. Focused rechecks reuse matching evidence for unchanged
 inputs, while shared contract changes or invalid evidence expand checks along the blast
 radius. Review artifacts remain privacy-safe without committing credentials or private
 sample values. Bounded archive checks verify spec synchronization and completeness, ending

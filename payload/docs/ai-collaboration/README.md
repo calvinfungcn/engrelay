@@ -183,7 +183,7 @@ OpenSpec change
   -> one or more Execution Batches
        -> implementation
        -> one aggregated review
-       -> one fix/verification loop when required
+       -> aggregated fix/verification loop while the mapped acceptance remains unmet
 ```
 
 A normal batch should:
@@ -263,6 +263,17 @@ and resumes normal routing. If only a later check needs the environment, notify
 early and dispatch safe offline work with that limit explicit; repeat the
 readiness check before the dependent step. Do not omit an accepted check merely
 to claim the work is unblocked or complete.
+Record each unmet or unverified prerequisite with the check it blocks, the actual
+gap and its `Resume condition`. While the environment and the check's entrypoint
+and inputs remain unchanged since that record, do not dispatch the same dependent
+check again merely to rediscover the blocker; the recorded limit is the reusable
+evidence of that gap. A new condition (observed readiness change, changed input,
+or changed code, configuration or persisted data the check exercises) first triggers the
+readiness check. Run the dependent verification only after that check confirms the entrypoint
+and its inputs are actually available; if the authenticated account or data is still missing,
+the same gap and `Resume condition` remain recorded. A fictional, mock or structural result never
+stands in for an unverified authenticated or data entrypoint and never marks its
+acceptance verified; keep that limit visible in Blockers and the final reply.
 
 An engineer discovering an operational blocker uses the same in-role notice
 and wait; it does not return to Chief Designer for routine environment setup.
@@ -439,7 +450,8 @@ unknown is answered, evidence is inconclusive, or scope, acceptance, or risk
 changes; the coherent batch then follows its normal routing.
 
 The complete batch receives only its existing risk-required aggregated review
-and at most the existing one fix/verification loop. At closure, state in the
+and the existing aggregated fix/verification loop, limited by the finite-extension
+and same-finding stall rules in the review-round circuit breaker. At closure, state in the
 existing handoff sections whether evidence supports the current direction,
 rejects it, or cannot yet resolve it, along with remaining uncertainty and
 deferred work. Evaluation evidence is not production readiness and cannot
@@ -519,17 +531,22 @@ specialist reviewer; only the material conditions above route to Chief Designer.
 
 `Review round: N` is a cumulative, monotonic count for every design review,
 code review, verification, and finding-adjudication verdict for the same
-Execution Batch and acceptance. Three is the default autonomous allowance. A
-role change, `REVISE`, new finding ID, new review file, or successor wording
-cannot reset the count. The normal path remains one aggregated review -> fix
--> verification loop. At the third verdict, the only exits are
-evidence-supported `accepted` for the mapped acceptance, the existing Task
-Owner decision route for a material limitation (including the
-exhausted-capacity analysis and finite-extension recommendation below), or a
-route covered by an applicable finite owner authorization. No agent may
-dispatch another agent or begin a fourth review/fix cycle without one. Unmet
-parent OpenSpec items remain pending and
-must not be reported as verified.
+Execution Batch and acceptance. The count is kept for traceability and for any
+structured finite owner authorization; by itself it does not block a normal
+design, code, or verification route. A role change, `REVISE`, new finding ID,
+new review file, or successor wording cannot reset the count. The normal path
+is one aggregated review -> fix -> verification loop, repeated while the mapped
+acceptance remains unmet. Only two conditions limit that loop, plus the material
+limitation route: (1) a structured finite owner authorization whose ceiling has
+been reached (below); (2) a same-finding no-progress stall (below). A material
+limitation that needs a business, risk, authorization or cost decision goes to
+the existing Task Owner decision route. In those cases, close only on
+evidence-supported `accepted` for the mapped acceptance, or use the Task Owner
+decision route; no agent may dispatch another agent or begin another
+review/fix cycle past the limit without an applicable finite owner
+authorization. A confirmed stall allows only the one technical analysis described
+below. An executable disposition it proposes proceeds under existing authorization; only the owner conditions listed below reach the owner route. Unmet parent OpenSpec items remain pending and must
+not be reported as verified.
 If the Task Owner explicitly accepts a bounded mapped outcome despite known
 unmet technical criteria, only Chief Designer may close it as `accepted` with
 `Acceptance basis: owner-decision` and the scoped `Task Owner decision`.
@@ -542,39 +559,78 @@ or deployment authorization.
 - A reviewer must report all high-confidence actual findings for the batch in one
   aggregated round, with no fixed numeric cap; the upstream three-finding limit
   is not adopted. Advisory preferences stay non-blocking.
-- Before dispatching a verdict, state the cumulative count and the verdict it
-  will become when that affects routing. For example, after two design verdicts
-  the code verdict is round 3: it may record defects, but no autonomous fix or
-  verification follows, so unresolved acceptance uses the existing owner-decision
-  route.
+- Before dispatching a verdict, state the cumulative count and the route it will
+  affect whenever a structured extension or a stall determination is in force.
+  For example, with `from=3; through=4`, a verdict that makes the count 4 may
+  record defects, but no autonomous fix or verification follows, so unresolved
+  acceptance uses the existing owner-decision route. Without such a line the
+  count alone does not change the route.
 - A Fix Engineer handles all assigned `must-fix` findings and selected
   `should-fix` findings together.
 - Reuse the original reviewer session for verification when practical. For
   `H` work, the verifier remains independent from the implementation/fix role.
 - Allow bounded same-role evaluation iterations with `continue` only while
   the batch scope, acceptance, risk, and identity remain stable; keep the
-  normal review boundary and the cumulative review limit below unchanged.
-- The normal path remains one aggregated review -> fix -> verification loop.
+  normal review boundary and the finite-authorization and stall rules below
+  unchanged.
+- The normal path is an aggregated review -> fix -> verification loop, repeated
+  while the mapped acceptance remains unmet and no ceiling or confirmed stall applies.
   Record monotonic `Review round: N` for every review, verification, or finding
-  adjudication verdict for the same batch and acceptance. Three is the default
-  autonomous allowance; a new role, `REVISE`, finding ID, or review file
-  cannot reset or evade the count.
-- Before the third verdict, a failed fix may still be routed to Chief Designer
-  for one evidence-based technical disposition. At the third verdict, close
-  only on evidenced mapped acceptance or use the existing Task Owner decision
-  route for a material limitation. No autonomous fourth review, fix, or Chief
-  Designer re-litigation is permitted without an applicable finite owner
-  authorization.
-- An exhausted default allowance produces analysis, not termination. When
-  acceptance is still unmet, the responsible agent keeps the batch open with
-  `continue`/`awaiting-owner-decision`, explains the remaining defects, impact,
-  evidence, and why prior repair did not converge (or what is still unknown),
-  recommends the smallest repair-and-independent-review plan with reasons,
-  offers viable alternatives with consequences, and states the exact reply
-  needed to resume. The agent never stops or replaces the batch merely because
-  the count is exhausted, never asks the owner to edit workflow files, and
-  never starts an unauthorized additional cycle. Unsafe steps may still pause
-  separately with a resume path.
+  adjudication verdict for the same batch and acceptance. A new role, `REVISE`,
+  finding ID, or review file cannot reset or evade the count, even though the
+  count alone does not block a route.
+- A failed fix may be routed to Chief Designer for one evidence-based technical
+  disposition whenever the normal loop needs it. A reached finite-extension
+  ceiling closes only on evidenced mapped acceptance or uses the
+  existing Task Owner decision route for a material limitation. No autonomous
+  continuation past that point, and no Chief Designer re-litigation, is
+  permitted without an applicable finite owner authorization.
+- A reached finite-extension ceiling produces analysis, not
+  termination. When acceptance is still unmet, the responsible agent keeps the
+  batch open with `continue`/`awaiting-owner-decision`, explains the remaining
+  defects, impact, evidence, and why prior repair did not converge (or what is
+  still unknown), recommends the smallest repair-and-independent-review plan with
+  reasons, offers viable alternatives with consequences, and states the exact
+  reply needed to resume. The agent never stops or replaces the batch merely
+  because a ceiling or stall was reached, never asks the owner to edit workflow
+  files, and never starts an unauthorized additional cycle. Unsafe steps may still
+  pause separately with a resume path.
+- Same-finding no-progress stall. One loop is one scoped repair of the same
+  unresolved finding followed by its independent re-review. When two consecutive
+  loops for that finding produce no newly verified evidence that narrows its root
+  cause or removes the blocker, and no independently verified material
+  improvement, pause that finding's repeated loop. The responsible agent cites the
+  two results, the remaining risk and the smallest next step in the existing
+  review record or handoff. Renaming files, roles, models, wording, timestamps, or
+  repeating an old log is not progress. Improvement in a different issue does not
+  hide a stalled finding. When the evidence cannot decide, keep the state unknown
+  and check the named records before declaring progress.
+- A stall is first handled by the role with authority inside the original scope,
+  as one technical analysis that proposes an executable disposition. Only actual
+  authorization, a business trade-off, a risk decision, a material cost above the
+  batch's recorded Expected implementation sessions estimate, or a situation that
+  cannot continue under existing conditions reaches the Task Owner decision route; otherwise the proposed disposition proceeds through the normal role and independent review rules.
+  Distinct new must-fix findings that keep appearing in successive loops, each
+  introduced or exposed by the previous fix, get the same technical-analysis step.
+  No numeric cap, new field, or state is added for this rule. A new finding that
+  enlarges the original scope still follows the normal authorization rule.
+- A structured finite-extension line is the only way to limit a route by count.
+  Carry that line verbatim through any successor, recovery, or response handoff
+  while the mapped acceptance remains unfinished. The validator reads only the
+  live handoff, so a dropped line is not detectable by the script; the responsible
+  role must compare it with the source before routing.
+- An older owner-decision wait that was caused only by the former default count of
+  three may resume under the current rule only when its Owner Decision Brief shows
+  no non-convergence, material limitation or scope trade-off. The resuming handoff
+  cites that brief's basis, keeps the unknowns, and never reopens a closed batch
+  without such a basis.
+- Each review keeps its own scope and its original global file number. A verdict is
+  associated with an unfinished acceptance only when it covers that acceptance; splitting
+  a batch or renaming a finding does not remove related history. When two sub-scopes were
+  both covered by earlier rounds, a later round covers only the one it names, and the other
+  sub-scope is not treated as verified by it. Recorded counts and an already written valid
+  extension are never recomputed retroactively: an existing `from=4; through=6` keeps its
+  4 to 6 meaning and must not be rewritten to 3 to gain room.
 - A finite owner authorization permits scoped same-batch continuation without
   resetting the count. It is recorded as one structured line in the existing
   `Task Owner decision` field under `Review Or Task State Impact` (never a new
@@ -585,32 +641,34 @@ or deployment authorization.
 ```
 
   Fields split on `;` (owner identity may contain spaces); the structured
-  line comes first and later prose in the same field adds no keys. Every
+  line comes first and later prose in the same field adds no keys. The line is recognized at top level,
+indented or bulleted, with ordinary backtick or quote wrapping; more than one
+structured line fails closed. Every
   structural key is unique and every value is non-empty; `from`/`through` are
-  non-negative integers with `through` greater than `from`; the current
-  completed count must lie within `from` and the absolute ceiling `through`,
-  and only a count below `through` may take another route. A missing ceiling,
-  unlimited or non-integer/overflowing bound, duplicate key, unknown key,
-  cross-batch value, below-`from` count, or at-`through` count grants nothing.
-  An ordinary prose decision stays readable and grants no capacity, and a
-  structurally valid line still authenticates no owner, history, or
-  independence: the responsible role checks actual authority, scope, count,
-  and reviewer independence. When the finite allowance is exhausted again
-  without acceptance, the agent updates the analysis and recommendation; there
-  is no automatic renewal, rename, or reset.
+  non-negative integers with `through` greater than `from`. While such a line is
+  present for this batch, executable continue and agent dispatch are permitted
+  only when `from <= count < through`. A malformed line, missing ceiling,
+  unlimited or non-integer/overflowing bound, duplicate or unknown key,
+  cross-batch value, below-`from` count, or at-`through` count blocks those
+  routes; an invalid line is never treated as absent. An ordinary prose decision
+  stays readable, limits nothing, and grants no capacity. A structurally valid
+  line still authenticates no owner, history, or independence: the responsible
+  role checks actual authority, scope, count, and reviewer independence. When the
+  finite allowance is exhausted again without acceptance, the agent updates the
+  analysis and recommendation; there is no automatic renewal, rename, or reset.
 - Continuing the same unfinished acceptance under a changed phase, role, file
   or batch name preserves its actual cumulative count and unfinished mapping;
   renaming grants no new review cycles or capacity reset. When an unclosed
-  batch at capacity (N=3) is explicitly authorized for one additional
-  independent review only, record the actual bounded scope and ceiling
-  (`from=N`, `through=N+1`) using the finite-extension field above; it must
-  not be treated as unlimited authorization or three new fix cycles.
+  batch whose mapped acceptance needs further independent review is explicitly
+  authorized for one additional review only, record the actual bounded scope and
+  ceiling (`from=N`, `through=N+1`) using the finite-extension field above; it
+  must not be treated as unlimited authorization or as new fix cycles.
 - When the Task Owner requests a single additional review on already-closed
   work, original closure snapshots and historical verdict counts remain
   unchanged; establish a named, bounded review scope linked to the historical
   record through existing task intake and index references, and record its
   actual verdict. That single review does not reopen the closed batch or
-  automatically authorize a new three-round repair cycle. If the review
+  automatically authorize a new repair cycle. If the review
   identifies a genuinely new defect and applicable repair authorization
   exists, handle it as a distinct linked repair batch while preserving
   historical facts and prior verdict counts; renaming unfinished original
@@ -635,9 +693,16 @@ pass, and do not block current archive closure on fixing unrelated proposals.
 ## Technical Disposition Exit Contracts
 
 When a role is routed to Chief Designer for a technical disposition, it must
-select exactly one of these exits:
+select exactly one applicable route:
 
-- `REVISE`: materially revise the design and use `dispatch` to Design Reviewer.
+- In-scope executable disposition: the original scope, design, risk and
+  acceptance stay unchanged and the proposed work is executable under existing
+  authorization. Return it to the responsible role with `dispatch` or same-role
+  `continue`, followed by the normal independent review rules. This is not a
+  design exit, adds no enumerated status, field or state, and needs no Design
+  Reviewer. A bounded repair that is not a design change never has to be forced
+  into `REVISE`, `STOP` or `SPLIT`.
+- `REVISE`: only for a material design revision; use `dispatch` to Design Reviewer.
   This is allowed only while the cumulative ceiling has not been reached. The
   revised design may use its design-review counter for readability, but that
   counter does not reset the batch counter; unchanged wording or evidence
@@ -681,7 +746,7 @@ only while the cumulative allowance has not been reached.
 Adjudication stays inside the existing aggregated fix/verification path and
 increments the same cumulative verdict count; it cannot reset the count. If accepted with fresh evidence, the reviewer may
 mark the topic `verified`; if rejected, it remains `open` within the same
-assigned fix path while the allowance permits another action. At an exhausted
+assigned fix path while the allowance permits another action. At a reached ceiling
 allowance without an applicable finite owner authorization, use the Task Owner
 decision route rather than dispatching another agent. Risk
 `H` fixes still require an
@@ -714,6 +779,13 @@ does not mean every role must rerun every unchanged command.
   changed; otherwise reuse the still-fresh recorded result.
 - Blast radius means callers, consumers, shared contracts, configuration paths,
   or persisted state whose behavior can be affected by the fix.
+- A recorded environment gap is a reusable limit, not a pass. Reuse a passing result
+  only while its entrypoint, inputs, environment and result still correspond; a change
+  to the exercised code, configuration, callers or persisted data requires rechecking
+  the affected part.
+- Handoffs link to the one authoritative artifact and carry only the minimal Routing,
+  Current Status and gap. Each role reads the sections its actual action triggers rather
+  than repeating the whole rule set or copying evidence into several files.
 - Full release suites remain mandatory at the applicable milestone or release
   gate.
 
@@ -1054,10 +1126,25 @@ Name missing/conflicting files and the smallest recovery direction instead of
 guessing an outcome, remaining scope or count. Legacy records remain readable;
 do not invent missing outcomes or rewrite them just to provide guidance.
 
-If the owner only says “continue” and parent work remains, name the known items
-and offer a minimal request such as “Use EngRelay: implement <change> item <id>.”
-Do not choose or authorize it for the owner. If checked parent scope is complete,
-offer ai-collab-start for a stated new goal. A status-only answer leaves files intact.
+If the owner only says “continue” and parent work remains, first check for a
+standing owner authorization (recorded in the current task or stated in the
+current request) to implement that parent proposal. When it exists and exactly
+one ready item has unambiguous scope, dependencies, execution ownership and
+permissions, that “continue” is covered by the authorization and the active agent
+uses Task Intake below for that item. Otherwise name the known items and offer a
+minimal request such as “Use EngRelay: implement <change> item <id>.” Do not
+choose or authorize a candidate for the owner. If checked parent scope is
+complete, offer ai-collab-start for a stated new goal. A status-only answer leaves
+files intact.
+
+A standing owner authorization to implement one parent proposal (recorded in the
+current task or stated in the current request) lets the active agent prepare the
+next batch through Task Intake when the next scope, dependencies, execution
+ownership and permissions are unambiguous. If several candidates have no ordering
+basis, or the parent scope has ended, a real wait exists, or the owner's intent is
+unclear, give the actual state and the smallest request instead of choosing a
+candidate. Under manual relay, the Task Intake result is saved, read
+back and validated, and the turn stops for operator transfer.
 
 When the current request clearly identifies and authorizes distinguishable
 follow-up work, the active agent uses [Task Intake](workflows.md#1-task-intake)
@@ -1069,7 +1156,7 @@ start back to closed continue. Keep actual cumulative verdicts and finite limits
 for the same unfinished acceptance; genuinely different scope has its own mapping
 and count without altering old records. Use the existing finite, independent
 post-closure review path for an explicitly authorized single review; it grants no
-new three-cycle repair allowance. This is a Task Intake action, not implicit
+new repair allowance. This is a Task Intake action, not implicit
 invocation of an explicit-only Skill. Stale notices and ambiguous requests grant
 no new work. Disabled mode, another controller, real waits, independent review
 and external-operation authorization retain their existing boundaries.
@@ -1286,10 +1373,10 @@ owner authority, and historical reviews are not backfilled.
 5. For a required workspace-level review, create one aggregated
    `docs/reviews/<change-id>/YYYY-MM-DD-round-##.md` file and an updated
    `docs/reviews/<change-id>/index.md`.
-6. Close a clean batch in the review round, or run at most one aggregated
-   fix/verification loop. Record the monotonic `Review round: N`; no batch may
-   exceed three cumulative review, verification, or finding-adjudication
-   verdicts without an applicable finite owner authorization under
+6. Close a clean batch in the review round, or run aggregated fix/verification
+   loops while the mapped acceptance remains unmet. Record the monotonic
+   `Review round: N`; a reached finite-extension ceiling or confirmed same-finding
+   stall, not the count alone, limits further loops under
    #review-round-circuit-breaker.
 7. Before every role stops, run:
    `powershell -ExecutionPolicy Bypass -File docs/ai-collaboration/scripts/validate-runtime-state.ps1`.

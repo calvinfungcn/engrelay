@@ -47,6 +47,8 @@
   round and provide a copy-ready Operator Command in `.ai/handoff.md`.
 - Always state the selected Next Action in the final response. A clean `close`
   has no next role or Operator Command.
-- If the single fix/verification loop already failed: dispatch Chief Designer
-  with evidence for technical `REVISE`, or proposed `STOP`/`SPLIT` subject to an
-  explicit, applicable Task Owner decision before stopped/superseded closure.
+- If the aggregated fix/verification loop already failed for the same finding: dispatch Chief Designer
+  for one technical disposition with evidence. An in-scope executable disposition returns to the
+  responsible role under existing authorization; `REVISE` only for a material design revision, and
+  proposed `STOP`/`SPLIT` only subject to an explicit, applicable Task Owner decision before
+  stopped/superseded closure.

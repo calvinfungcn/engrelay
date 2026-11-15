@@ -60,7 +60,7 @@ module instructions and triggered Skills still apply.
    for the same request again. Preserve counts/finite limits for the same unfinished
    acceptance; distinct scope gets its own mapping without rewriting old history.
    A single post-closure review follows the existing bounded-review rule, including
-   independence and no new three-cycle repair allowance. For ambiguous requests or
+   independence and no new repair allowance. For ambiguous requests or
    stale notices report actual closure, remaining/unknown scope and one applicable
    next step; do not create work or archive state just for that answer.
    Before preparing authorized new input, archive the closed current-task, handoff

@@ -2,6 +2,31 @@
 
 [Simplified Chinese](CHANGELOG.zh-CN.md)
 
+## 1.11.0 — 2026-11-15
+
+- Review budget no longer blocks normal routes by count alone (BREAKING for the former default
+  three-verdict stop). A `Review round` of 3 or higher does not block agent dispatch or executable continue
+  by itself. A valid structured `review-budget-extension` line for the batch limits those routes to
+  `from <= Review round < through`; a malformed, cross-batch, below-`from` or at-`through` line blocks them.
+  Existing field names, owner-decision waits and historical counts are unchanged. A handoff that relied on
+  the old default stop may route differently after a complete upgrade of both the validator and the managed
+  entry; mixed old/new packages can conflict and must be resolved by the project.
+- Adds a same-finding no-progress rule: two consecutive repair-and-review loops without newly verified
+  evidence that narrows the root cause or removes the blocker, and no independently verified material improvement for that finding, pause that finding's repeated loop for one
+  technical analysis; an executable disposition within existing authorization proceeds normally, and decisions are routed to the Task Owner only for authorization, business, risk or
+  material cost; no numeric cap, field or state is added.
+- Lite rejects a damaged or expired structured `review-budget-extension` whose value sits on the next non-empty
+  line of its `Task Owner decision` field, for both dispatch and executable continue; ordinary prose, fenced
+  examples and the next field grant and limit nothing.
+- Full technical-disposition guidance no longer forces a fixed single fix loop into `REVISE`, `STOP` or `SPLIT`:
+  an in-scope executable disposition returns to the responsible role under existing authorization, `REVISE` is
+  for a material design revision, and finite ceilings and confirmed stalls keep their limits.
+- Clarifies closed-batch guidance for a standing parent-proposal authorization under manual relay.
+- Environment and evidence: an unavailable environment or unverified entrypoint is recorded as a gap with its Resume condition; authorized work that does not depend on it continues; an unchanged, already-recorded blocked dependent check is not redispatched; simulated results never prove a real authenticated or data entrypoint.
+- Context and capability advice: handoffs carry the minimal Routing and gap, and each role reads only the sections its actual action triggers; an environment gap is never a low rating for the implementer; older handoffs without the capability line stay valid, and the user chooses the tool, model and reasoning strength.
+- Verification limit: validator and fixture checks cover structure only, using fictional disposable
+  directories. They do not prove host adherence, reviewer independence, business acceptance or token savings.
+
 ## 1.10.4 — 2026-11-07
 
 - Full tasks default to manual relay across platforms on formal agent dispatch for new tasks:

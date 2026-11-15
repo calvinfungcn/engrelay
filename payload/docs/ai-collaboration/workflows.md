@@ -31,10 +31,10 @@ labels are display/context only; they cannot authorize more cumulative verdicts.
   regression once for the final candidate only when a relevant dependency,
   failure or unknown impact requires it. A role, handoff, prose, source
   inventory or bookkeeping change alone does not require every suite again.
-- Allow at most one review -> fix -> verification loop per batch.
+- Allow aggregated review -> fix -> verification loops while the mapped acceptance remains unmet; the count alone does not stop them (README.md#review-round-circuit-breaker).
 - Every role exit and transition table below is subject to
   README.md#review-round-circuit-breaker: count design/code/verification/
-  adjudication verdicts cumulatively; at >=3 no Agent dispatch or local retry.
+  adjudication verdicts cumulatively; at a reached finite-extension ceiling, no Agent dispatch or local retry without an applicable finite owner authorization. A confirmed same-finding stall allows only its one technical analysis inside the original scope; an executable disposition it proposes proceeds under existing authorization, and the Task Owner route applies only to the conditions in README.md#review-round-circuit-breaker.
   Use supported closure or Task Owner decision. Explicit owner-limited
   acceptance uses Chief Designer, Acceptance basis: owner-decision and the
   scoped Task Owner decision; retain all unchecked mappings and known risks.
@@ -249,7 +249,7 @@ inconclusive, or causes scope, acceptance, or risk to change, follow normal
 batch routing.
 
 The complete coherent batch receives only its existing risk-required aggregated
-review and at most the existing one fix/verification loop. The closing summary
+review and the existing aggregated fix/verification loop, limited by the finite-extension and stall rules in README.md#review-round-circuit-breaker. The closing summary
 must state whether the evidence supports the direction, rejects it, or cannot
 yet resolve it, plus remaining uncertainty and deferred work. Evaluation-ready
 evidence is not production-ready and cannot complete an OpenSpec item whose
@@ -1139,14 +1139,7 @@ that does not exercise the claimed production path, or a concrete unmet
 authorized behavior; a preferred mock edge or surviving theoretical mutant
 alone is insufficient.
 Record `Review round: N` monotonically for every review, verification, or
-finding-adjudication verdict for the same batch and acceptance. Three is the
-default autonomous allowance; role changes, `REVISE`, new finding IDs, and new
-review files do not reset it. At the third verdict, close on evidenced
-acceptance or use the existing Task Owner decision route for a material
-limitation; an exhausted allowance without acceptance returns analysis plus an
-owner recommendation under README.md#review-round-circuit-breaker, and only an
-applicable finite owner authorization permits a further route. Do not start a
-fourth review/fix cycle without one.
+finding-adjudication verdict for the same batch and acceptance. The count alone does not block a route; role changes, `REVISE`, new finding IDs, and new review files do not reset it. A reached finite-extension ceiling closes only on evidenced acceptance or uses the existing Task Owner decision route for a material limitation; a confirmed same-finding stall first gets its one technical analysis inside the original scope; an executable disposition within existing authorization then proceeds normally, and closure or the owner route applies only to the conditions in README.md#review-round-circuit-breaker. At a reached finite-extension ceiling without acceptance, the batch returns analysis plus an owner recommendation under README.md#review-round-circuit-breaker, and only an applicable finite owner authorization permits a further route. Do not start another review/fix cycle past such a limit without one.
 
 For an unrelated cross-batch finding, record a stable ID as `deferred` in the
 durable review round and index, with evidence, rationale, and Task Intake
@@ -1189,7 +1182,7 @@ Fix all assigned findings together. Do not create one fix round per finding.
 Fix Engineer may reuse the Implementation Engineer's concrete agent session for
 adjacent fix work only when the Code Reviewer remains independent and, for `H`,
 the Verification Reviewer remains independent. Fix iterations stay inside the
-existing single fix/verification loop; use `continue` only for bounded local
+existing aggregated fix/verification loop; use `continue` only for bounded local
 steps under the same Fix Engineer role.
 
 Fix Engineer must not turn a suggestion, assumption, or reviewer preference
@@ -1202,9 +1195,9 @@ the original Code Reviewer for adjudication for both `M` and `H` only while
 the cumulative allowance has not been reached. Adjudication
 increments that count. If accepted with fresh evidence, the reviewer may mark
 the topic `verified`; if rejected, it remains `open` within the same assigned
-fix path. At an exhausted allowance without an applicable finite owner
+fix path. At a reached finite-extension ceiling without an applicable finite owner
 authorization, use the Task Owner decision route rather than
-dispatching another agent. Risk `H` fixes still require an independent
+dispatching another agent. A confirmed stall gets only its one technical analysis first. Risk `H` fixes still require an independent
 Verification Reviewer while the allowance permits that review.
 
 ### 9. Verification
@@ -1267,10 +1260,13 @@ changing business scope/acceptance or proposing STOP/SPLIT uses the required
 Task Owner decision route. Do not silently close the larger item or route a
 mechanical documentation-only round.
 
-If verification fails after the batch's normal single allowed fix loop and the
-batch remains below the cumulative allowance, the current agent
-routes the evidence to Chief Designer for technical `REVISE`, `STOP`, or
-`SPLIT` instead of starting another automatic loop. At an exhausted allowance
+If verification fails inside the aggregated loop and the batch remains below the
+cumulative allowance with no confirmed stall, the current agent routes the
+evidence to Chief Designer for one evidence-based technical disposition when the
+normal loop needs it. An in-scope executable disposition returns to the
+responsible role under existing authorization and the aggregated loop continues;
+`REVISE` is used only for a material design revision, and `STOP` or `SPLIT`
+needs the Task Owner route. At a reached finite-extension ceiling
 without an applicable finite owner authorization, use only
 evidenced acceptance or the existing Task Owner decision route; do not start
 another review or send the same test-only disagreement to Chief Designer.
@@ -1368,8 +1364,9 @@ work and remaining uncertainty without creating a new lifecycle or batch.
 | Fix Round | `M` complete | original Code Reviewer verification |
 | Fix Round | `H` complete | independent Verification Reviewer |
 | Fix Round | assigned finding disputed | `dispatch` to original Code Reviewer within the existing loop |
-| Verification | failed after normal fix loop and batch review round < 3 | Chief Designer technical disposition |
-| Any review verdict | batch review round = 3 | close on evidenced mapped acceptance or Task Owner decision; no agent dispatch |
+| Verification | failed inside the aggregated loop, no reached ceiling or confirmed stall | Chief Designer technical disposition when needed; an in-scope executable disposition returns to the responsible role under existing authorization; `REVISE` only for material design revision |
+| Any review verdict | a reached finite-extension ceiling | close on evidenced mapped acceptance or Task Owner decision; no agent dispatch |
+| Any review verdict | a confirmed same-finding stall, before its one analysis is used | one technical analysis by the responsible role inside the original scope; an executable disposition within existing authorization proceeds normally; closure or Task Owner decision only when README.md#review-round-circuit-breaker conditions apply |
 | Verification | verified | closure and OpenSpec reconciliation |
 | Any step | business outcome, priority, scope change, production/real-user approval, or risk acceptance required | same-session `continue` or human decision `dispatch` (`Task Owner`, `User`, `Data Owner`) awaiting owner decision |
 

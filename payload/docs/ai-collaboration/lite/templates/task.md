@@ -8,7 +8,7 @@
 - Risk level and reason: <S/M/H by actual impact>
 - Producer and execution ownership: <actual agent; check current writer>
 - Required independent actions: <M review/fix confirmation; applicable H design and verification; complete review before archive when requested>
-- Cumulative verdicts and remaining allowance: <actual count; default total three; single-review ceiling preserves history without capacity reset>
+- Cumulative verdicts and remaining allowance: <actual count; the count alone blocks no route; a structured review-budget-extension line, if any, limits its own route; single-review ceiling preserves history without capacity reset>
 - Named expected review/result output: <explicit relative file path>
 - Results/checks: <commands, exits, diagnostics, entrypoint/input correspondence, and privacy-safe evidence outside handoff>
 - Remaining acceptance: <unfinished mapped work>
