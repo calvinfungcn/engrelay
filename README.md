@@ -165,8 +165,8 @@ See the [maintained role contracts](payload/docs/ai-collaboration/README.md).
 Use a trusted complete package in its own directory. Back up the target project's
 rules and read its existing agent instructions. For a new project:
 
-Download `engrelay-1.11.1.zip` from the release and extract it. Run commands from
-the extracted `engrelay-1.11.1` directory. Keep that complete package unchanged;
+Download `engrelay-1.11.2.zip` from the release and extract it. Run commands from
+the extracted `engrelay-1.11.2` directory. Keep that complete package unchanged;
 extra tool files or edited bytes make it differ from its inventory. The repository
 source can also be used when its file set and bytes exactly match `snapshot.json`.
 
