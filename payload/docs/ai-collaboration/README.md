@@ -172,6 +172,40 @@ work, use existing `Blockers` to record evidence, the smallest in-scope
 option, and a recommendation, then dispatch Chief Designer; safe unaffected
 work may continue.
 
+### Task Scope Evidence
+
+Task Intake and any material scope update keep the smallest confirmed evidence
+that changes the current scope or exit, inside the existing `Source`, `Goal`,
+`Scope` or `Constraints` text. Do not copy the conversation, add a ledger, or add
+a field or approval step. Keep three things distinct:
+
+- the overall goal the user wants;
+- the current role's responsibility, such as only design or only a planning
+  estimate; and
+- the actual authority that permits work, quoted or summarized from a confirmed
+  request, decision or applicable specification reference.
+
+Mark Agent inference as inference. A design-only instruction, an intent to build
+the feature, a recommendation or the absence of a prohibition does not cancel
+an existing implementation authorization and does not grant full implementation
+authority. A requested plan or estimate may be an independent deliverable when
+its own goal and acceptance state that; it needs no separate "design only"
+approval. When authority remains unknown, say so, and use the existing
+owner-decision or minimal mapping routes; never record unknown authority as a
+user prohibition.
+
+A source or mapping conflict with an authorized target is checked by the Chief
+Designer in a minimal technical check, following the
+[design-to-implementation relay](#design-to-implementation-relay). A pure source
+or mapping correction with no substantive design change adds no Design Review.
+A real new business, risk, cost or implementation authority uses the owner
+decision route. A later explicit owner request that supplies the missing
+authority is recorded with its basis; a real business change is never hidden as
+a wording correction. Source wording, a new batch or a new proposal does not reset
+a cumulative count or bypass a finite review limit, and a source correction keeps
+the count and history unchanged. Earlier records need no backfill; a next platform
+reads the current input and its named evidence without the original conversation.
+
 ## Execution Batch
 
 The default unit of delivery is an **Execution Batch**. A batch groups the
@@ -249,7 +283,8 @@ state it; no new field or approval is required. A role name, a design-only
 checkbox, or a note that only the Chief Designer runs this round does not
 establish it. A substantive design change still uses the existing Design Review
 conditions; a substantive business scope or risk change uses the owner-decision
-route.
+route. A source or mapping correction follows [task scope evidence](#task-scope-evidence)
+and adds no Design Review by itself.
 
 A second-round design approval is not a parent-proposal terminal condition; its
 route follows the actual batch scope above. A closed independent design batch
@@ -1186,7 +1221,8 @@ Preserve the old closure using the existing archive rule before new live input;
 do not replay its Operator Command. An active parent change alone does not route
 start back to closed continue. Keep actual cumulative verdicts and finite limits
 for the same unfinished acceptance; genuinely different scope has its own mapping
-and count without altering old records. Use the existing finite, independent
+and count without altering old records. Its source check follows
+[task scope evidence](#task-scope-evidence). Use the existing finite, independent
 post-closure review path for an explicitly authorized single review; it grants no
 new repair allowance. This is a Task Intake action, not implicit
 invocation of an explicit-only Skill. Stale notices and ambiguous requests grant

@@ -4,6 +4,23 @@
 
 ## Unreleased
 
+## 1.11.2 — 2026-11-17
+
+- Full clarifies manual agent relay: prepare and save the successor handoff, then stop without executing that role.
+  Generated commands must not forbid dispatch preparation while requesting a handoff. Actual Task Owner waits
+  align `awaiting-owner-decision`, `Human Action Required: awaiting-decision`, and the Owner Decision Brief;
+  manual relay remains `none` because it needs no business decision or environment preparation. No new field,
+  validator or runtime behavior is added. Verification limit: contract and documentation checks do not prove
+  host adherence.
+- Full adds a shared task-scope evidence rule: Task Intake and material scope updates keep the smallest confirmed
+  request, decision or specification reference that separates the overall goal, the current role's responsibility
+  and the actual authority, with inference marked. A design-only instruction does not cancel an existing
+  implementation authorization, and an absent command is neither a prohibition nor a grant. Source or mapping
+  conflicts go to Chief Designer for a minimal check without a new Design Review. Canonical start/continue Skills,
+  role prompts, templates, handoff schema, agent rules and operator guides reference this one rule; no field,
+  ledger, approval, validator or runtime logic is added. Verification limit: fictional structural and static
+  checks only; they do not prove host adherence or business acceptance.
+
 ## 1.11.1 — 2026-11-17
 
 - Full clarifies the design-to-implementation relay: a design role's end does not by itself close an Execution

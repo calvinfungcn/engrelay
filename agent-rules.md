@@ -50,6 +50,10 @@ Use the current project root, not a source example's WM path.
   OpenSpec tasks define acceptance. A role session ending is not batch acceptance
   (`docs/ai-collaboration/README.md#design-to-implementation-relay`). This block adds
   no requirement, role, status or approval gate.
+- Keep the source of a batch's scope minimal and distinct: the overall goal, the
+  current role's responsibility and the actual authority. A design-only instruction
+  does not cancel an existing implementation authorization, and an absent command is
+  neither a prohibition nor a grant (`docs/ai-collaboration/README.md#task-scope-evidence`).
 - A new session, changed input or uncertainty requires rereading the current
   task, handoff and assigned role card. A link, memory or this block does not
   replace that scoped reading; same-session reuse is allowed only for material

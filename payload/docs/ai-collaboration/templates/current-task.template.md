@@ -50,6 +50,7 @@
 ## Goal
 
 <Describe the task outcome in 1-3 sentences. For uncertainty-driven work, state the critical unknown here or in Acceptance Criteria.>
+<!-- Keep only the smallest confirmed request, decision or spec reference that separates the overall goal, this role's responsibility and actual authority; mark inference (README.md#task-scope-evidence). -->
 
 ## Scope
 

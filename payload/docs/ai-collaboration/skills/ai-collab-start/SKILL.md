@@ -71,6 +71,9 @@ module instructions and triggered Skills still apply.
    reason, the observable outcome, must-have acceptance, out-of-scope work, required
    checks, Constraints (recording the default manual relay for formal agent dispatch,
    or an explicit automation scope when explicitly authorized by the user) and the Initial role.
+   Keep the smallest confirmed source evidence in `Source`, `Goal`, `Scope` or
+   `Constraints` (`docs/ai-collaboration/README.md#task-scope-evidence`): the overall
+   goal, this role's responsibility and the actual authority, with inference marked.
    Keep `openspec/changes/<change-id>/tasks.md` as the only implementation checklist;
    do not create a second task list.
 5. Route by the existing rules:

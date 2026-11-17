@@ -275,6 +275,11 @@ Rules:
 - Keep mandatory Scope, Acceptance Criteria, and Constraints within the Minimal
   Authority Rule. Suggestions and assumptions may be recorded as context, but
   do not become current requirements, tasks, or acceptance by being copied here.
+- Keep the smallest source evidence for scope and exit in `Source`, `Goal`,
+  `Scope`, or `Constraints`: the overall goal, this role's responsibility and
+  the actual authority, as confirmed or marked inference
+  ([task scope evidence](README.md#task-scope-evidence)). Do not copy the
+  conversation or add a ledger field.
 - Do not write current status, Next Action, or live routing here. Those belong
   only in `.ai/handoff.md`.
 - For an uncertainty-driven batch, keep the critical unknown in `Goal` or
@@ -942,6 +947,15 @@ example or another section.
   records.
 - The check is read-only and does not prove freshness, authenticity, reviewer
   independence or acceptance. Report it as a structure and stated-value check only.
+- Before saving, also compare the Operator Command, Current Status, Routing and
+  top human notice. When the assigned role's decided next action is another agent
+  dispatch, its command must permit that role to prepare and save the next handoff,
+  then stop without executing the successor. Avoid `Do not dispatch any further role`
+  when handoff preparation is the intended action; state `Do not execute the next role; prepare and save its
+  handoff, then stop`. When an owner decision is required, status must be
+  `awaiting-owner-decision`, Human Action Required must be `awaiting-decision`,
+  and the Owner Decision Brief must state that same pending decision. Do not say
+  that a reply is needed while the summary says `none`.
 
 ```text
 powershell -NoProfile -ExecutionPolicy Bypass -File docs/ai-collaboration/scripts/validate-runtime-state.ps1 -ExpectedBatchId <batch-id> -ExpectedNextAction dispatch -ExpectedNextRole "Fix Engineer" -ExpectedReviewRound 2 -ExpectedStateRevision 5
@@ -1044,6 +1058,8 @@ Under manual relay (the default for new Full tasks):
 4. Save, read back, and validate the handoff with expected state (`validate-runtime-state.ps1`).
 5. In the final response, state the next role, recommended capability tier, where the Operator Command is located, and that the turn ends here for the operator to relay the command to their chosen AI platform or tool.
 6. End the turn without launching the successor agent, subagents, or external CLIs/APIs.
+This boundary means the current role completes the dispatch artifact and stops;
+it does not mean omitting or refusing to prepare the successor handoff.
 
 For cross-platform relay across workspaces:
 - In a **shared workspace**, the successor tool accesses the same repository directory, reads `.ai/handoff.md`, `.ai/current-task.md`, and authoritative evidence, checks execution ownership and remaining review capacity, and executes its authorized role without requiring repeated business approval.

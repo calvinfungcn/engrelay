@@ -93,6 +93,7 @@ Follow: docs/ai-collaboration/agent-prompts.md#<current-role-section>.
 ## Delta Since Last Handoff
 
 - <only what changed since the previous owner received the batch>
+<!-- When a scope source or authority was clarified, state the confirmed basis in one line and mark inference (README.md#task-scope-evidence). -->
 
 ## Authoritative Evidence
 

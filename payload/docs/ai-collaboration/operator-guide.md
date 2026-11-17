@@ -99,6 +99,29 @@ decisions, review limits and independent review still apply. EngRelay itself
 does not wake stopped processes. See
 [autonomous continuation](handoff-schema.md#autonomous-continuation).
 
+### Scope source and design-only requests
+
+Say the overall result you want and what this round covers: design, planning or an
+estimate, or implementation. The agent keeps three things separate: the overall goal,
+the current role's responsibility and the authority you actually gave. Fictional
+examples for `demo-order-flow`:
+
+- "Fully fix demo-order-flow; this round only the Chief Designer designs and hands off."
+  The goal and the implementation authority stay recorded. After design, the handoff
+  dispatches the Implementation Engineer, and the batch stays open until implementation
+  and review finish.
+- "Give me a plan and estimate for demo-order-flow; do not implement this time."
+  A planning result that meets its own acceptance may close alone. The reply then names
+  the remaining parent work and one copyable request, such as
+  `Use EngRelay: implement demo-order-flow item 2.1.`
+- "We may build it later." This is intent, not authority. The agent records the
+  uncertainty and asks you to decide only when implementation authority is actually needed.
+
+A design-only step never cancels earlier implementation authority, and an agent should not
+treat a missing command as a prohibition. You do not need to repeat an authorization you
+already gave. A source conflict goes to the Chief Designer for a minimal check; a pure
+source or mapping correction does not start a new design review.
+
 ## Handoffs and reviews
 
 - One next action: `continue`, `dispatch`, or `close`.

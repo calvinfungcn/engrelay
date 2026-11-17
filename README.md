@@ -9,7 +9,7 @@ working in existing repositories. It provides role prompts, task and handoff
 templates, independent reviews based on risk, and tools for checking the evidence
 used to call work complete.
 
-**Version 1.11.1** · [Download the complete package](https://github.com/calvinfungcn/engrelay/releases/tag/v1.11.1) · [MIT License](LICENSE)
+**Version 1.11.2** · [Download the complete package](https://github.com/calvinfungcn/engrelay/releases/tag/v1.11.2) · [MIT License](LICENSE)
 
 ## Workflow profiles (1.10.0)
 
@@ -87,6 +87,8 @@ for entry selection and handoffs.
   and validates the handoff, places a top human transfer notice, explains the next role,
   capability tier (C1–C5) and Operator Command in chat, and ends the turn for the operator
   to relay it; it does not launch the successor via subagents, external CLIs, or APIs.
+  The current role must prepare and save that dispatch before stopping. A true owner-decision wait
+  uses status `awaiting-owner-decision`, `Human Action Required: awaiting-decision`, and a brief describing the same decision.
   Explicit automated progression applies only when authorized in Constraints and supported
   by the host. In-role micro-steps and user-launched executable `continue` proceed directly.
   Lite retains its default sequential queue for active agents, supporting opt-in manual relay.
@@ -305,6 +307,12 @@ When a design role finishes, Full either dispatches the implementer for work the
 batch still maps, or closes a genuinely independent design deliverable with the parent
 remaining work and one copyable request. See the
 [design-to-implementation relay](payload/docs/ai-collaboration/README.md#design-to-implementation-relay).
+
+Scope sources stay minimal. Say the overall result you want and whether this round is
+design, planning, estimate or implementation; an agent keeps the overall goal, the
+current role and your actual authorization distinct. A design-only round does not cancel
+an earlier implementation authorization, and a missing command is not a prohibition
+([task scope evidence](payload/docs/ai-collaboration/README.md#task-scope-evidence)).
 
 ```text
 Use ai-collab-continue: continue the latest authorized handoff.

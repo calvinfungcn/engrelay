@@ -108,9 +108,12 @@ Every role action ends with exactly one decision:
   Under manual relay (default for new Full tasks), place the top human transfer
   notice (`> 人工接力：请由你选择 AI 工具，将本交接中的 Operator Command 转交给 <Next role>。`
   or `> Manual Relay: Please select an AI tool and relay the Operator Command from this handoff to <Next role>.`),
-  explain the transfer in chat, and stop the turn without autonomously invoking
-  subagents, external CLIs, or APIs. Explicit automation override applies only
-  when `Constraints` explicitly authorizes it.
+  explain the transfer in chat, prepare and save the handoff, then stop without
+  executing the next role or autonomously invoking subagents, external CLIs, or
+  APIs. Do not put `Do not dispatch any further role` in a command whose intended
+  action is preparing this handoff; say `Do not execute the next role; prepare and
+  save its handoff, then stop`. Explicit automation override applies only when
+  `Constraints` explicitly authorizes it.
   For human decision dispatch (`Task Owner`, `User`, or
   `Data Owner`), set Current status to `awaiting-owner-decision`, set
   Recommended next agent and next files/prompt fields to `none`, strictly omit
@@ -133,6 +136,13 @@ Every role action ends with exactly one decision:
 A role's completion or session end does not by itself accept the batch. Choose
 the route from the mapped acceptance per
 [design-to-implementation relay](README.md#design-to-implementation-relay).
+
+Before saving a dispatch, cross-check the Operator Command against Routing and
+the human action summary. A required Task Owner decision uses
+`awaiting-owner-decision` with `Human Action Required: awaiting-decision` and a
+matching Owner Decision Brief. Manual relay for an agent dispatch remains
+executable with `Human Action Required: none`; it requests handoff to the chosen
+platform, not a business decision or environment preparation.
 
 At each real boundary (dispatch, wait, planned interruption or close), the role
 permitted to write saves `.ai/handoff.md`, reads back its Routing and validates
@@ -500,6 +510,10 @@ Required decisions:
   items
 - risk level `S`, `M`, or `H`, with a short reason
 - user outcome and a small set of observable must-have acceptance criteria
+- task scope evidence: the smallest confirmed request, decision or applicable
+  specification reference in `Source`, `Goal`, `Scope` or `Constraints` that keeps
+  the overall goal, this role's responsibility and the actual authority distinct
+  ([task scope evidence](README.md#task-scope-evidence))
 - module scope and explicit out-of-scope work
 - required checks
 - first assigned role and recommended agent/tool
@@ -720,7 +734,9 @@ Required decisions:
   ([design-to-implementation relay](README.md#design-to-implementation-relay));
   a design-only mapping whose authorized target includes implementation must map
   that implementation or record an evidenced independent deliverable, never a
-  silent closure
+  silent closure; the source check follows
+  [task scope evidence](README.md#task-scope-evidence) and does not infer a
+  prohibition or full implementation authority from the design step alone
 
 Pre-implementation feasibility outcomes use existing mechanisms only:
 - proceed with the smallest evidenced design and normal Design Review rules;
@@ -968,7 +984,9 @@ Required decisions:
 - scope authority: do not silently add a suggestion, assumption, or future
   preference to OpenSpec, current-task acceptance, or implementation scope;
   route a material addition through the existing Chief Designer/Owner Decision
-  path
+  path; a source conflict with the authorized target goes to Chief Designer
+  ([task scope evidence](README.md#task-scope-evidence)) rather than being read
+  as a prohibition
 - for the first implementation batch, whether a demonstrable result or bounded
   spike conclusion exists and whether approved scope or expected effort
   changed materially
@@ -1357,6 +1375,7 @@ work and remaining uncertainty without creating a new lifecycle or batch.
 | Design | independent design deliverable complete and required reviews met | `close` accepted, Next role `none`; show remaining parent work and a copyable request ([relay](README.md#design-to-implementation-relay)) |
 | Design | only design mapped while authorized target requires implementation, no independent deliverable evidence | Chief Designer minimal mapping check; no new Design Review by itself |
 | Design Review | `must-address` findings exist, round ≤ 2 | Chief Designer |
+| Design Review | source or mapping conflict only, no substantive design change | Chief Designer minimal check ([task scope evidence](README.md#task-scope-evidence)); no new Design Review by itself |
 | Design Review | approved or only observations, same batch still maps open implementation | Architect or Implementation Engineer |
 | Design Review | approved or only observations, independent design deliverable complete | `close` accepted per [relay](README.md#design-to-implementation-relay) |
 | Chief Designer disposition | `REVISE` | `dispatch` to Design Reviewer for round 1 |

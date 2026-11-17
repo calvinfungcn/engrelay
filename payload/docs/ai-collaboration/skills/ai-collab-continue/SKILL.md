@@ -69,6 +69,9 @@ sections for a new agent, missing context, a changed input or a rule question
    this Agent may write the handoff, read back, and then follow the restored route.
    An equal Next action, Next role and Review round alone do not show the transfer
    was applied. Never recount, replay or reopen a batch from a candidate alone.
+   When a live batch's source or scope is in question, apply
+   `README.md#task-scope-evidence` before routing: a design-only step never cancels
+   an existing implementation authorization, and an absent command is not a prohibition.
 2. Resolve actual waits and limits before executing any command:
    - `close`: follow `README.md#closed-batch-guidance`. Briefly state the evidenced
      outcome and mapped result, known remaining scope or unknowns, no next role or

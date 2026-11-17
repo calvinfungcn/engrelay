@@ -39,6 +39,8 @@ A closed-batch status answer follows README.md#closed-batch-guidance without
 preloading unrelated execution rules. A clear current authorized follow-up
 uses the existing Task Intake in-session, preserving old closure and counts;
 it does not require another equivalent request or implicit Skill invocation.
+Read README.md#task-scope-evidence only when a current-task source, scope or exit
+question conflicts with an authorization or changes the route; it adds no ledger.
 Within the same session, reuse already-read reference material only when its
 content is known unchanged. Refresh live task/handoff and affected inputs at
 real boundaries; reread on a new agent, missing context, change or uncertainty.
@@ -58,6 +60,11 @@ Before stopping, choose exactly one Next Action under README.md#routing-contract
 - dispatch: agent dispatch needs complete Routing and a copy-ready Operator Command
   in .ai/handoff.md; human decision dispatch uses status `awaiting-owner-decision`,
   next fields `none`, no command and a complete Owner Decision Brief in handoff and chat.
+  Under manual relay, agent `dispatch` means prepare, save and report that next-role
+  handoff, then stop; it never means execute the successor. Do not write a blanket
+  `Do not dispatch any further role` constraint when the decided next action is to
+  prepare an agent handoff. Say `Do not execute the next role; prepare and save its
+  handoff, then stop` when that is the intended boundary.
 - continue: the same responsible agent records its responsibility and next local
   step in .ai/handoff.md, with no Operator Command.
 - close: no next role; `Closure outcome: accepted|stopped|superseded` under Review
@@ -94,6 +101,13 @@ handoff is delivered and its unpersisted status is stated. Expected values come 
 never from the stale file. Source-matched recovery and the new-version boundary
 rule are in handoff-schema.md#source-matched-recovery and
 handoff-schema.md#expected-state-validation.
+Before saving an agent dispatch, reconcile the Operator Command's scope and stop
+instructions with Routing: when the assigned role's decided next action is another
+agent dispatch, the command must permit that role to prepare and save the handoff
+and forbid automatic execution when manual relay applies. If a Task Owner decision
+is actually required, use `awaiting-owner-decision` with
+`Human Action Required: awaiting-decision` and the matching Owner Decision Brief;
+do not label that wait `none` or describe an owner reply as optional.
 In the final response, always state the selected Next Action; for close, state that
 no next role or Operator Command exists.
 For closed status, also give the evidenced mapped result, remaining scope or
@@ -301,6 +315,17 @@ Focus:
   Design Review decision in the design handoff or authoritative OpenSpec
   artifact before implementation. Do not create default `docs/requirements/`
   or `docs/explorations/` authorities.
+
+Task scope evidence:
+- Before choosing the relay route, confirm from current-task's `Source`, `Goal`,
+  `Scope` or `Constraints` the overall goal, this role's responsibility and the
+  actual authority ([task scope evidence](README.md#task-scope-evidence)).
+- A design-only instruction does not cancel an existing implementation
+  authorization; an absent implementation command is neither a prohibition nor a
+  grant of full implementation authority. Carry the uncertainty forward and use
+  the existing owner-decision route only for a real authority question.
+- A requested plan or estimate may close as an independent deliverable when its
+  own goal and acceptance state that.
 
 Batch sizing rules:
 - Each Execution Batch must deliver one observable user, operator, or system
@@ -527,6 +552,11 @@ Focus:
 - authority: confirm every mandatory item passes the Minimal Authority Rule;
   unauthorized scope or unsupported necessity is `must-address`, while an
   optional reviewer improvement remains non-blocking
+- source and mapping: check that current-task's source evidence and relay mapping
+  match the authorized target ([task scope evidence](README.md#task-scope-evidence)).
+  A conflict returns to Chief Designer for a minimal check; the reviewer neither
+  expands scope nor grants authority, and a pure source or mapping correction
+  does not by itself trigger a new design review
 - necessity: does every added concept map to current acceptance or evidenced risk?
 - reuse: does the design use suitable existing project capability?
 - proportionality: are risk controls appropriate for the current outcome?
@@ -732,7 +762,9 @@ Rules:
   assumption, future preference, or reviewer recommendation into OpenSpec,
   current-task, acceptance, prerequisite, or implementation scope. Solve
   local reversible issues in-role; route material scope surprises through
-  existing handoff Blockers to Chief Designer.
+  existing handoff Blockers to Chief Designer. A source conflict with an
+  authorized target is routed the same way and is not read as a prohibition
+  ([task scope evidence](README.md#task-scope-evidence)).
 - If any new or changed complexity exception appears, stop before implementing
   it and dispatch Chief Designer. Simplify, remove, or defer an unsupported
   exception; a confirmed exception requires Design Reviewer approval before

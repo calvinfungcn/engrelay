@@ -8,7 +8,7 @@ EngRelay 取自 Engineering + Relay，意为工程接力。它为已有代码库
 Agent 提供角色提示词、任务和交接模板、按风险引入的独立审查，以及检查交付
 证据的工具。
 
-**版本 1.11.1** · [下载完整发行包](https://github.com/calvinfungcn/engrelay/releases/tag/v1.11.1) · [MIT 许可证](LICENSE)
+**版本 1.11.2** · [下载完整发行包](https://github.com/calvinfungcn/engrelay/releases/tag/v1.11.2) · [MIT 许可证](LICENSE)
 
 ## 工作流配置（1.10.0）
 
@@ -69,6 +69,8 @@ Lite 项目配置和运行态在升级／卸载后仍保留；普通包文件继
   自行启动下一角色。若任务约束中明确授权跨角色自动推进且宿主支持，则按授权自动前进。同角色微步骤
   及已启动的可执行 `continue` 直接继续，不强制每步暂停。Lite 保留已批准队列默认顺序接续，
   支持在任务约束或项目配置中明确选择人工接力。
+  当前角色须先准备并保存派发交接，再停止。真正等待负责人决定时，状态为 `awaiting-owner-decision`，
+  `Human Action Required` 为 `awaiting-decision`，决定说明须描述同一项待决定事项。
 - 归档前完整审查覆盖全部授权验收、最终差异、兼容性、证据对应、文档及交付隐私，一次聚合发现。
   换名继续同一未完成验收保留累计计数，不重置额度；到限或关闭后授权的单次审查不授予新的修复循环。
   证据须对应声称的入口与结果（不足记未验证）。聚焦复核复用未变输入的相符证据；共享契约变化或
@@ -228,6 +230,10 @@ GitHub 自动生成的源码 ZIP 中，因此请使用包含它的提交的 Git 
 Lite 保留自身批准队列：就绪项继续，否则说明待批准／依赖及 Lite 下一步，不调用 Full Skill。
 设计角色结束后，Full 要么把本批仍映射的实施派发给下一角色，要么仅凭有依据的独立设计交付关闭该设计批次，
 并给出父级剩余范围与一条可复制请求。详见[设计到实施接力](payload/docs/ai-collaboration/README.md#design-to-implementation-relay)。
+
+范围来源保持最小：说明你希望的整体结果，以及本轮是设计、规划、估算还是实施。Agent 会分开记录整体目标、
+当前角色与你实际给出的授权。仅设计的一轮不会撤销更早的实施授权，缺少命令也不等于禁止
+（[任务范围依据](payload/docs/ai-collaboration/README.md#task-scope-evidence)）。
 
 ```text
 使用 ai-collab-continue：接续最新、已获授权的 handoff。
