@@ -23,3 +23,7 @@
 | 修复（非 verdict） | Fix Engineer 补齐 CR-02 的 R2/R4 场景任务输入与 R1/R6 对应，并以原 validator 重新核对 | 已完成，CR-02 为 fixed-not-verified；不增加 verdict，待独立复核 |
 | [round 03](2026-11-17-round-03.md) | 独立聚合复核 | PASS；累计 3；CR-01–03 verified |
 | [关闭后完整审查](2026-11-17-post-closure-review.md) | 独立关闭后审查 | PASS；单次关联审查；原批次累计仍为 3 |
+
+## 发行准备
+
+1.11.1 的归档、提交范围、隐私及发行检查见[中文记录](release-preparation.zh-CN.md)与[英文记录](release-preparation.md)；该记录不增加技术 verdict 或修复额度。
