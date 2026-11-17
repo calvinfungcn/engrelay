@@ -665,7 +665,9 @@ Ordinary `close` with `Closure outcome: accepted` states mapped-batch
 acceptance, not completion of every parent OpenSpec item, log authenticity,
 host Skill loading, or business verification. These rules apply to new or
 normally updated closures; they do not rewrite historical archives or reopen
-closed batches.
+closed batches. An independent design batch closes only when
+[design-to-implementation relay](README.md#design-to-implementation-relay) finds
+its evidenced deliverable complete; a design role's end alone is not closure.
 
 This section is the single authoritative explanation. README Routing Contract,
 workflows Role Exit Contract, and Common Preflight cite it instead of restating

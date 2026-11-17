@@ -163,6 +163,13 @@ review counts, and honors actual waits and controller boundaries. A single autho
 post-closure review retains its finite scope and independence; it grants no new
 repair allowance. See [closed-batch guidance](README.md#closed-batch-guidance).
 
+When a design batch closes, the reply names the completed design deliverable, the
+parent work that remains, and one request you can copy, for example `Use EngRelay:
+implement item 2.1 of demo-approval-flow.` If the design passed but its own batch
+still maps implementation, the agent does not close it: the handoff dispatches
+Implementation Engineer with a capability line and Operator Command, and you relay
+that command as usual. See [design-to-implementation relay](README.md#design-to-implementation-relay).
+
 Ordinary `accepted` closure means the mapped batch is complete under the
 recorded acceptance criteria, not that every parent OpenSpec item or business
 check passed. Before you treat a batch as verified:

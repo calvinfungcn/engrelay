@@ -130,6 +130,10 @@ Every role action ends with exactly one decision:
   Ordinary `accepted` closure also follows
   [handoff-schema.md#accepted-closure-validation](handoff-schema.md#accepted-closure-validation).
 
+A role's completion or session end does not by itself accept the batch. Choose
+the route from the mapped acceptance per
+[design-to-implementation relay](README.md#design-to-implementation-relay).
+
 At each real boundary (dispatch, wait, planned interruption or close), the role
 permitted to write saves `.ai/handoff.md`, reads back its Routing and validates
 it with the expected state it decided
@@ -711,6 +715,12 @@ Required decisions:
 - stop conditions and suggested task grouping or slicing
 - design review decision: whether Design Reviewer should review this proposal,
   with a brief reason based on complexity and risk
+- batch relay route: whether the mapped batch still has unfinished authorized
+  implementation, or this design is an evidenced independent deliverable
+  ([design-to-implementation relay](README.md#design-to-implementation-relay));
+  a design-only mapping whose authorized target includes implementation must map
+  that implementation or record an evidenced independent deliverable, never a
+  silent closure
 
 Pre-implementation feasibility outcomes use existing mechanisms only:
 - proceed with the smallest evidenced design and normal Design Review rules;
@@ -836,6 +846,9 @@ Next role:
 - Chief Designer, if `must-address` findings exist and round limit is not
   reached
 - Architect or Implementation Engineer, if approved or only observations remain
+  and the mapped batch still has open implementation; an evidenced independent
+  design deliverable may instead close per
+  [design-to-implementation relay](README.md#design-to-implementation-relay)
 - Chief Designer for a technical recommendation and any required Task Owner decision, if `must-address` findings
   remain after round 2
 
@@ -1340,9 +1353,12 @@ work and remaining uncertainty without creating a new lifecycle or batch.
 | Design | optional exploration justified | Chief Designer via `continue`; same formal role via `dispatch` if synthesis changes agent |
 | Design | owner decision needed on feasibility trade-off | same-session `continue` or human decision `dispatch` (`Task Owner`, `User`, `Data Owner`) awaiting owner decision |
 | Design | next assigned action requires unavailable human-prepared environment | notify Task Owner before dispatch; same responsible agent waits with `continue` plus `blocked` and resume condition |
-| Design | approved and scoped | Implementation Engineer |
+| Design | approved and scoped, same batch still maps open implementation | Implementation Engineer |
+| Design | independent design deliverable complete and required reviews met | `close` accepted, Next role `none`; show remaining parent work and a copyable request ([relay](README.md#design-to-implementation-relay)) |
+| Design | only design mapped while authorized target requires implementation, no independent deliverable evidence | Chief Designer minimal mapping check; no new Design Review by itself |
 | Design Review | `must-address` findings exist, round ≤ 2 | Chief Designer |
-| Design Review | approved or only observations | Architect or Implementation Engineer |
+| Design Review | approved or only observations, same batch still maps open implementation | Architect or Implementation Engineer |
+| Design Review | approved or only observations, independent design deliverable complete | `close` accepted per [relay](README.md#design-to-implementation-relay) |
 | Chief Designer disposition | `REVISE` | `dispatch` to Design Reviewer for round 1 |
 | Chief Designer disposition | proposed `STOP`/`SPLIT`, no applicable Task Owner authorization | explain evidence, alternatives, recommendation; `continue` or human decision `dispatch` with `awaiting-owner-decision` and Owner Decision Brief |
 | Chief Designer disposition | Task Owner authorized `STOP` | `close`; `Closure outcome: stopped`, `Task Owner decision`, Next role `none` |

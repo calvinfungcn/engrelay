@@ -83,7 +83,10 @@ module instructions and triggered Skills still apply.
    - a new contract, a complexity exception, risk `H` or missing design basis goes to
      Chief Designer with a complete Operator Command;
    - a clear, bounded `S` or `M` scope goes to Implementation Engineer;
-   - an existing implementation that needs review goes to Code Reviewer.
+   - an existing implementation that needs review goes to Code Reviewer;
+   - a design-only mapping whose authorized target also needs implementation keeps
+     that implementation mapped unless an independent design deliverable is evidenced
+     (`docs/ai-collaboration/README.md#design-to-implementation-relay`).
    Reuse an already confirmed requirement baseline; do not add a repeated final
    confirmation.
 6. If the first executable action needs an owner decision, keep this role with

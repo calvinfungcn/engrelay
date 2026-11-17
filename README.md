@@ -9,7 +9,7 @@ working in existing repositories. It provides role prompts, task and handoff
 templates, independent reviews based on risk, and tools for checking the evidence
 used to call work complete.
 
-**Version 1.11.0** · [Download the complete package](https://github.com/calvinfungcn/engrelay/releases/tag/v1.11.0) · [MIT License](LICENSE)
+**Version 1.11.1** · [Download the complete package](https://github.com/calvinfungcn/engrelay/releases/tag/v1.11.1) · [MIT License](LICENSE)
 
 ## Workflow profiles (1.10.0)
 
@@ -163,8 +163,8 @@ See the [maintained role contracts](payload/docs/ai-collaboration/README.md).
 Use a trusted complete package in its own directory. Back up the target project's
 rules and read its existing agent instructions. For a new project:
 
-Download `engrelay-1.11.0.zip` from the release and extract it. Run commands from
-the extracted `engrelay-1.11.0` directory. Keep that complete package unchanged;
+Download `engrelay-1.11.1.zip` from the release and extract it. Run commands from
+the extracted `engrelay-1.11.1` directory. Keep that complete package unchanged;
 extra tool files or edited bytes make it differ from its inventory. The repository
 source can also be used when its file set and bytes exactly match `snapshot.json`.
 
@@ -300,6 +300,11 @@ candidates and chooses none. Read rules for the
 actual route and reuse only already-read, known-unchanged session references.
 Lite keeps its own approved queue: ready items continue; otherwise it reports
 pending approval/dependencies and a Lite next step, without invoking Full Skills.
+
+When a design role finishes, Full either dispatches the implementer for work the same
+batch still maps, or closes a genuinely independent design deliverable with the parent
+remaining work and one copyable request. See the
+[design-to-implementation relay](payload/docs/ai-collaboration/README.md#design-to-implementation-relay).
 
 ```text
 Use ai-collab-continue: continue the latest authorized handoff.

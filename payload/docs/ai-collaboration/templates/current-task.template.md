@@ -81,6 +81,12 @@
      Put live readiness and human-only preparation notices in handoff's conditional
      Environment Preparation section. A stop condition permits pausing affected work,
      not unilateral stopped/superseded closure; record explicit Task Owner authorization. -->
+<!-- A design-only batch closes only with an evidenced independent design deliverable;
+     if authorized implementation is still mapped, keep it open
+     (README.md#design-to-implementation-relay). At each boundary, correct only stale
+     active facts against the handoff, cited Review and the sole tasks.md; never change
+     stable acceptance or history. -->
+
 
 ## Required Checks
 

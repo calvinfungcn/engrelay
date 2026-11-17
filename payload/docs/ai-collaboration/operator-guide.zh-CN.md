@@ -118,6 +118,11 @@
 遵守真实等待和控制器边界。关闭后单次授权审查保留有限范围与独立性，不获得新的修复循环额度。
 详见[关闭批次指引](README.md#closed-batch-guidance)。
 
+设计批次关闭时，答复会说明已完成的设计交付、仍待实施的父级范围和一条可复制请求，例如：
+`本任务使用 EngRelay：实施 demo-approval-flow 的 2.1 项。` 若设计已通过且本批仍映射未完成实施，
+Agent 不会直接关闭，而是在交接中派发 Implementation Engineer（附能力行与 Operator Command），
+你照常转交。详见[设计到实施接力](README.md#design-to-implementation-relay)。
+
 普通 `accepted` 关闭表示本批映射范围在记录验收下完成，不代表父级 OpenSpec
 全部完成或业务已验收。在把批次视为“已验证”之前：
 

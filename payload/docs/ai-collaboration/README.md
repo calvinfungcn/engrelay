@@ -230,6 +230,34 @@ record it in `Blockers`, use `continue` with status `blocked`, and include
 `- Resume condition: ...`. A blocked handoff cannot use `close`; the same
 responsible agent or role resumes when the condition is met.
 
+### Design-To-Implementation Relay
+
+Ending a Chief Designer, Design Reviewer or other role session does not by itself
+close the Execution Batch. After real waits, limits and execution ownership are
+applied, choose the route from the batch's mapped acceptance:
+
+| Verified situation | Normal route |
+| --- | --- |
+| Design passed or has only observations, and the same batch still maps authorized implementation that is not done | `dispatch` Implementation Engineer; use an intermediate role only where an existing rule requires it. Save, read back and validate the handoff, then stop for operator transfer under manual relay. |
+| An independent design deliverable meets every current acceptance criterion and its required reviews are complete | `close` only this design batch with `Closure outcome: accepted` under [accepted closure validation](handoff-schema.md#accepted-closure-validation); parent remaining scope is reported separately. |
+| Only design is mapped, but the authorized target also requires implementation and no independent design deliverable is evidenced | `dispatch` Chief Designer for a minimal mapping check that keeps the original target and cumulative count. Do not shrink scope silently or start a new Design Review for a pure mapping check. |
+
+An independent design deliverable is a confirmed target that the design itself
+delivers, or an independently acceptable contract boundary with evidence, such as
+an interface proposal for an external team. Its Scope and Acceptance Criteria
+state it; no new field or approval is required. A role name, a design-only
+checkbox, or a note that only the Chief Designer runs this round does not
+establish it. A substantive design change still uses the existing Design Review
+conditions; a substantive business scope or risk change uses the owner-decision
+route.
+
+A second-round design approval is not a parent-proposal terminal condition; its
+route follows the actual batch scope above. A closed independent design batch
+shows, in the first Current Status paragraph and the final reply, that the design
+deliverable is complete, which parent work remains, and one copyable request such
+as `Use EngRelay: implement <change> item <id>.` That request is not an Operator
+Command: the closed batch keeps Next role `none` and no capability line.
+
 ### Environment Preparation Before Dispatch
 
 Task Intake and Chief Designer identify foreseeable prerequisites for the
@@ -1125,6 +1153,10 @@ stopped and superseded; none proves all parent work or unavailable checks passed
 Name missing/conflicting files and the smallest recovery direction instead of
 guessing an outcome, remaining scope or count. Legacy records remain readable;
 do not invent missing outcomes or rewrite them just to provide guidance.
+For a closed independent design batch, the first Current Status paragraph and the
+reply name the completed design deliverable, the remaining parent work and one
+copyable request, following [design-to-implementation relay](#design-to-implementation-relay).
+That request is not an Operator Command for the closed batch.
 
 If the owner only says “continue” and parent work remains, first check for a
 standing owner authorization (recorded in the current task or stated in the

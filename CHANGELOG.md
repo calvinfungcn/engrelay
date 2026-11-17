@@ -2,6 +2,19 @@
 
 [Simplified Chinese](CHANGELOG.zh-CN.md)
 
+## Unreleased
+
+## 1.11.1 — 2026-11-17
+
+- Full clarifies the design-to-implementation relay: a design role's end does not by itself close an Execution
+  Batch. Authorized implementation still mapped in the same batch dispatches the implementer; an evidenced
+  independent design deliverable may close with the remaining parent work and one copyable follow-up request;
+  a design-only mapping that omits authorized implementation returns to Chief Designer for a minimal check
+  without a new Design Review or approval. Closed-batch guidance, Task Intake, role cards, templates and the
+  operator guides follow one shared rule; no field, state, approval or runtime logic is added.
+- Verification limit: fictional routing, structural, anchor and focused evidence-correspondence checks; these do not
+  prove consistent host adherence, host loading or business acceptance. Lite and validator behavior are unchanged.
+
 ## 1.11.0 — 2026-11-15
 
 - Review budget no longer blocks normal routes by count alone (BREAKING for the former default

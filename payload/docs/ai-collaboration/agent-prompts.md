@@ -254,6 +254,11 @@ Focus:
 - when a Requirements Analyst baseline is linked, validate it against
   `.ai/current-task.md` and active OpenSpec before relying on it; reconcile
   confirmed business changes into OpenSpec before design or implementation
+- batch relay mapping: keep authorized same-batch implementation open, or record
+  an evidenced independent design deliverable before any design-only close; a
+  mismatch returned by a role gets a minimal technical check under the existing
+  authorization, not silent scope shrinkage
+  ([design-to-implementation relay](README.md#design-to-implementation-relay))
 - when receiving an `M`-to-`H` escalation, confirm `H` and its
   independent-verification requirement, reject the escalation with evidence,
   or choose `SPLIT`; `H` alone does not force Design Review unless an existing
@@ -575,12 +580,22 @@ Round tracking:
   authorization.
 
 Output:
-- Update .ai/handoff.md with classified findings, evidence, Next action
-  `dispatch`, complete Routing, and a copy-ready Operator Command.
-- Route to Chief Designer if must-address findings exist and round limit is not reached.
-- Route to Architect or Implementation Engineer if approved or only observations remain.
+- Update .ai/handoff.md with classified findings, evidence and complete Routing.
+  Choose the route from the actual result; every `dispatch` route needs a
+  copy-ready Operator Command, and `close` must not include one.
+- Route to Chief Designer (`dispatch`) if must-address findings exist and round limit
+  is not reached.
+- Route to Chief Designer (`dispatch`) for a minimal mapping check, without a new Design
+  Review, when only design is mapped but the authorized target also requires
+  implementation and no independent design deliverable is evidenced.
+- Route to Architect or Implementation Engineer (`dispatch`) if approved or only
+  observations remain and the mapped batch still has open implementation.
+- Close only an evidenced independent design deliverable under
+  [design-to-implementation relay](README.md#design-to-implementation-relay):
+  Next action `close`, `Closure outcome: accepted`, Next role `none`, no Operator Command.
+  A second-round or other approval never closes the parent proposal by itself.
 - Route to Chief Designer for a technical recommendation and any required
-  Task Owner decision after round 2.
+  Task Owner decision only if must-address findings remain unresolved after round 2.
 
 Do not implement code or redesign the proposal.
 ```
@@ -684,7 +699,8 @@ Role: Implementation Engineer
 Implement the current Execution Batch.
 
 Trigger: Chief Designer assigns an S/M/H implementation batch, or a design returns for
-implementation.
+implementation, or an approved design leaves open implementation in the same batch
+([design-to-implementation relay](README.md#design-to-implementation-relay)).
 Exit: S closes after self-verification; M/H dispatches Code Reviewer. A stable-scope local
 issue continues in-role with `continue`; a material scope, risk, authority or complexity
 change dispatches Chief Designer (README.md#risk-levels, workflows.md#6-implementation).

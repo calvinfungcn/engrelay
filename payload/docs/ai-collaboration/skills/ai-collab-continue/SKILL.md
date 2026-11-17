@@ -88,7 +88,10 @@ sections for a new agent, missing context, a changed input or a rule question
      get state-aware guidance; do not infer work or authorization from them. A bare
      “continue” is covered only by a recorded standing authorization for the parent
      proposal with exactly one unambiguous ready item (README.md#closed-batch-guidance);
-     otherwise it is ambiguous and gets the closed-batch guidance.
+     otherwise it is ambiguous and gets the closed-batch guidance. For a closed
+     independent design batch, the first Current Status paragraph and reply name the
+     completed design, remaining parent work and one copyable request
+     (`README.md#design-to-implementation-relay`), not an Operator Command.
    - `awaiting-owner-decision` (including human dispatch): present the recorded
      Owner Decision Brief; continue only after an applicable reply. Silence is
      not approval. Reuse an already answered decision without asking again. An
@@ -158,6 +161,9 @@ sections for a new agent, missing context, a changed input or a rule question
   schedule or wake processes, change host configuration, or override disabled mode.
 - A read-only request uses the response handoff fallback described in
   `docs/ai-collaboration/handoff-schema.md`.
+- At a real boundary, reconcile active narrative with the live task, handoff, cited
+  review and the sole `tasks.md`: correct only stale active facts, never stable
+  acceptance or history.
 - Owner acceptance, Git operations and deployment remain outside this entry.
 
 ## Output

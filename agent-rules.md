@@ -47,8 +47,9 @@ Use the current project root, not a source example's WM path.
 - One responsible agent may perform adjacent non-independent actions. Roles
   are responsibilities, not mandatory new sessions.
 - The mapped Execution Batch in `.ai/current-task.md` is the phase scope; its
-  OpenSpec tasks define acceptance. This block adds no requirement, role,
-  status or approval gate.
+  OpenSpec tasks define acceptance. A role session ending is not batch acceptance
+  (`docs/ai-collaboration/README.md#design-to-implementation-relay`). This block adds
+  no requirement, role, status or approval gate.
 - A new session, changed input or uncertainty requires rereading the current
   task, handoff and assigned role card. A link, memory or this block does not
   replace that scoped reading; same-session reuse is allowed only for material

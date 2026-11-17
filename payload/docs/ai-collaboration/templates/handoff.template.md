@@ -60,6 +60,7 @@
 ## Current Status
 
 <!-- For agent `dispatch` only: first line `Recommended capability tier: C1`–`C5` per handoff-schema.md#capability-tier-guidance; echo the same tier in the final response. Omit for human decision dispatch, continue, and close. -->
+<!-- A design close's first paragraph names the completed design deliverable, the remaining parent scope and one copyable follow-up request (README.md#design-to-implementation-relay); it is not an Operator Command. Reconcile stale active facts with the cited Review and sole tasks.md; leave stable acceptance and history unchanged. -->
 <!-- Recommendations and assumptions are evidence or context only; they do not
      authorize new product scope without the applicable evidence or owner
      decision. -->
