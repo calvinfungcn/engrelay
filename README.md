@@ -9,7 +9,7 @@ working in existing repositories. It provides role prompts, task and handoff
 templates, independent reviews based on risk, and tools for checking the evidence
 used to call work complete.
 
-**Version 1.11.2** · [Download the complete package](https://github.com/calvinfungcn/engrelay/releases/tag/v1.11.2) · [MIT License](LICENSE)
+**Version 1.11.3** · [Download the complete package](https://github.com/calvinfungcn/engrelay/releases/tag/v1.11.3) · [MIT License](LICENSE)
 
 ## Workflow profiles (1.10.0)
 
@@ -23,7 +23,8 @@ canonical reading, including on hosts that do not auto-read AGENTS.md.
 Lite projects may record optional tool, model, reasoning and review-launch preferences;
 blank entries never block work. Existing independent implementation/fix reviews
 also add an advisory 1–5 delivery rating (or `not scored`) by default; it does not
-add a review or affect acceptance.
+add a review or affect acceptance. Lite adopts outcome readiness, controlled trials,
+and two-loop regrouping within its existing queue and lite-1 format.
 The 1.10.1 Lite validation update checks executable review capacity, complete
 fenced commands in their actual sections, and source metadata outside fences.
 
@@ -92,6 +93,33 @@ for entry selection and handoffs.
   Explicit automated progression applies only when authorized in Constraints and supported
   by the host. In-role micro-steps and user-launched executable `continue` proceed directly.
   Lite retains its default sequential queue for active agents, supporting opt-in manual relay.
+- Responsible roles work continuously towards agreed observable outcomes within
+  authorized scope, running directly relevant development checks and grouping fixes
+  before formal review nodes. Distinguish development checks, controlled trials, and
+  final acceptance: controlled trials describe supported capabilities and unverified
+  items without auto-passing or adding owner approval gates. Hazardous paths touching real
+  devices, money, production data, or external deployments must first be fixed, disabled,
+  or isolated under authorized conditions; risk H required independent review and post-repair
+  independent verification cannot be bypassed.
+- When two consecutive repair-and-independent-review loops for the same unfinished mapped
+  acceptance occur and another formal repair or review cycle is planned, synthesize confirmed
+  improvements, remaining blockers, and minimal aggregated repair/evidence plan in existing
+  records before entering that cycle. Regrouping is not a verdict, does not increment Review
+  round, does not alter cumulative review history, and does not add a default review cap or
+  auto-stop; once recorded, does not re-trigger until two new actual loops occur; merges with
+  stall analysis if applicable; finite ceilings and manual relay are preserved.
+- Finding triage separates blocking defects, unverified gaps, and deferrable suggestions:
+  real risks (security, identity, concurrency, data, money, contracts) cannot be
+  downgraded to style or auto-passed. Project-required mechanical formatting fixes that lack
+  explicit advance-review requirements combine with related fixes and subsequent checks
+  without a dedicated formal round. Changes that affect inputs or covered behavior
+  invalidate prior evidence, while matching unchanged evidence continues to be reusable.
+- Goal-driven requests ("implement feature X") authorize achieving outcomes within scope
+  without waiving explicit review requests, rule-mandated independent reviews, or manual
+  relay. When the user explicitly specifies executing only the current role, the role
+  completes authorized work and stops without executing the next role; when routing to another
+  role via dispatch, it prepares and saves the successor handoff and adds the human transfer
+  notice, preserving clean close and owner waits.
 - Complete review before archive covers all authorized acceptance, final diff,
   compatibility, evidence correspondence, documentation, and delivery privacy in
   one aggregated round. Renaming unfinished work preserves cumulative verdicts
@@ -165,8 +193,8 @@ See the [maintained role contracts](payload/docs/ai-collaboration/README.md).
 Use a trusted complete package in its own directory. Back up the target project's
 rules and read its existing agent instructions. For a new project:
 
-Download `engrelay-1.11.2.zip` from the release and extract it. Run commands from
-the extracted `engrelay-1.11.2` directory. Keep that complete package unchanged;
+Download `engrelay-1.11.3.zip` from the release and extract it. Run commands from
+the extracted `engrelay-1.11.3` directory. Keep that complete package unchanged;
 extra tool files or edited bytes make it differ from its inventory. The repository
 source can also be used when its file set and bytes exactly match `snapshot.json`.
 

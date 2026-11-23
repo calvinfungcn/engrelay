@@ -122,6 +122,52 @@ treat a missing command as a prohibition. You do not need to repeat an authoriza
 already gave. A source conflict goes to the Chief Designer for a minimal check; a pure
 source or mapping correction does not start a new design review.
 
+### Outcome readiness and controlled trials
+
+The agent works continuously towards an agreed observable outcome without dispatching
+formal reviews for every micro-step. Fictional examples for `demo-order-flow`:
+
+- **Continuous execution**: Implementation Engineer develops the `demo-order-flow`
+  export feature, running direct unit checks and fixing issues locally without creating
+  a formal review round for every function added.
+- **Controlled trials**: Once export creates valid sample files in a local test sandbox,
+  you can try running the export command. The agent clearly notes that local generation
+  works while external SFTP upload and volume limits remain unverified. A trial lets you
+  inspect behavior early; it is not a formal pass and does not add an approval gate.
+- **Hazardous paths**: If `demo-order-flow` connects to live banking or production
+  inventories, those paths must be stubbed, disabled, or isolated in test environments
+  before offering a trial. Safe unaffected parts can still be explored.
+- **Risk H safety**: If `demo-order-flow` manages financial settlement (risk H),
+  trials or implementer self-tests cannot substitute for required independent code
+  review and post-repair independent verification.
+
+### Regrouping after repeated review loops
+
+When the same acceptance criterion in `demo-order-flow` undergoes two consecutive
+repair-and-independent-review cycles, still has defects, and another formal repair or
+review cycle is planned:
+
+- Before entering the next cycle, the responsible agent briefly synthesizes in the handoff:
+  what has been verified as improved, what blocking defects remain, and a minimal
+  aggregated repair and check plan.
+- This brief regrouping is not a new verdict, does not increment Review round, does not
+  reset the review count, and does not add a default review cap. Once recorded, it does
+  not re-trigger until two new actual loops occur. If the same-finding stall rule also
+  applies, one analysis satisfies both.
+- If the structured `review-budget-extension` ceiling is reached, the agent routes to you
+  for decision rather than continuing autonomously.
+
+### Goal-driven requests and role boundaries
+
+- "Use EngRelay: implement demo-order-flow." This goal-driven request authorizes the agent
+  to achieve the feature within approved scope, but does not waive required independent
+  reviews (such as Code Reviewer for M/H) or manual relay.
+- "Chief Designer only" or "Implementation Engineer only": The agent completes that
+  role's work and stops without executing the next role. When routing to another role via
+  dispatch, it prepares and validates the complete handoff with the human transfer notice
+  for you to transfer the command to the next tool; clean close and owner waits follow their
+  established rules without transfer notices.
+
 ## Handoffs and reviews
 
 - One next action: `continue`, `dispatch`, or `close`.

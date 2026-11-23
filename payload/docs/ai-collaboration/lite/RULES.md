@@ -38,14 +38,23 @@ apply. Do not add a generic plan approval just because work is H.
 Task Owner is human. Executor owns adjacent non-independent design details,
 implementation, self-checks and recording. Reviewer performs eligible independent
 design, code or verification actions; changing role labels cannot create independence.
+Within authorized scope and before reaching formal review nodes, Executor works
+continuously towards the agreed outcome, running direct low-cost checks and grouped fixes
+without creating mandatory new roles or queue nodes. A trial candidate describes
+supported capabilities, known limitations, and unverified items; it does not equal final
+acceptance and adds no owner approval gate. Hazardous paths (touching real devices, money,
+production data, external deployment, irreversible side effects) must first be fixed,
+disabled, or isolated under authorized conditions; safe unaffected work continues.
 
 - S: relevant self-checks suffice; no mandatory proposal or independent session.
 - M: aggregate actual findings in an independent code review. Must-fix repairs
   require independent confirmation; until then record fixed-not-verified.
 - H: obtain design/architecture review when actually triggered, independent code
   review and required independent verification after fixes. Implementation/fix
-  authors cannot verify their own batch. A clean review with matching independent
-  verification evidence need not manufacture another verdict.
+  authors cannot verify their own batch. Controlled trials and self-checks cannot
+  replace required independent code review and independent post-repair verification.
+  A clean review with matching independent verification evidence need not manufacture
+  another verdict.
 
 Review round counts completed design/code/verification/adjudication verdicts for
 the same mapped acceptance, across sessions, stages,
@@ -66,6 +75,7 @@ blocked wait, owner decision or valid close may be recorded at capacity; recheck
 capacity when work becomes executable again. A blocked record grants no new cycle.
 A verdict is associated with an unfinished acceptance only when it covers that acceptance; splitting a task or renaming a finding does not remove related history. Recorded counts and an already written valid extension are never recomputed retroactively. Carry every structured extension line verbatim into any successor, recovery or response handoff while the acceptance remains unfinished; the validator cannot see a dropped line from one new state, so the responsible role compares it with the named source before routing.
 Same-finding stall: after two consecutive repair-and-independent-review loops for one unresolved finding, with no newly verified evidence that narrows its root cause or removes its blocker and no independently verified material improvement for that same finding, pause that finding's repeated loop. Cite both results, the remaining risk and the smallest next step, then route to the responsible role for one technical analysis inside the original scope. Only authorization, a business or risk decision, a material cost above the planned sessions, or an inability to continue goes to the Task Owner. Renaming, role or model changes, repeated logs, and improvement in another issue are not progress. Distinct new must-fix findings that keep recurring across loops get the same analysis step. An older owner-decision wait caused only by the former default count of three may resume under this rule only when its brief shows no non-convergence, material limitation or scope trade-off; the resuming handoff cites that basis and keeps unknowns.
+Aggregated regrouping after repeated loops: after two consecutive repair-and-independent-review loops for the same unfinished mapped acceptance, if another formal repair or review cycle is planned, the currently authorized responsible role synthesizes a brief aggregated regrouping in existing records (tasks/<id>-handoff.md or review record). State confirmed improvements, remaining blocking issues or regressions, and the minimal aggregated repair and evidence plan before proceeding. Regrouping is not a new verdict, does not increment Review round, does not alter cumulative review history, and does not automatically request extra budget, stop work, or close acceptance. If the two loops also meet the existing same-finding stall condition or recurring new must-fix finding condition, one technical analysis satisfies both. If the applicable structured review-budget-extension ceiling has been reached, route to the Task Owner decision route under existing rules without starting an unauthorized cycle. Once recorded, regrouping does not re-trigger on single local tests, repeat commands, role switches, or viewing history; it triggers again only if two new actual repair-and-independent-review loops occur for the same unfinished acceptance and further cycles are needed.
 
 When explicitly requested for a complete review before archive, Reviewer covers all authorized
 acceptance, final diff, compatibility, evidence correspondence, documentation, and delivery
@@ -145,6 +155,8 @@ task evidence instead of inventing a task. Offer a concrete request to approve o
 define a Lite queue item when appropriate; never suggest Full-only Skills or switch
 profiles. A ready, already-approved next item continues under the rules above
 without repeated approval. A status-only answer requires no new handoff.
+Preserve existing lite-1 fields, cumulative review counts, and manual platform/model
+choices without requiring migration of old handoffs, extra status fields, or auto-launching roles.
 
 When the user explicitly specifies manual relay in task constraints or project
 configuration preferences, active-agent sequential continuation pauses at the boundary:

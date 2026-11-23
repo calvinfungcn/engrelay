@@ -6,6 +6,7 @@
 
 | 变更 | 最终状态 | 审查轮次 | 归档 |
 | --- | --- | --- | --- |
+| improve-review-readiness-and-convergence | verified / accepted | 原关闭累计 3；完整发行前审查累计 4 | [归档记录](improve-review-readiness-and-convergence/index.md#archive-record) |
 | fix-task-scope-preservation | verified / accepted | 原关闭累计 6；发行前审查另行关联记录 | [归档记录](fix-task-scope-preservation/index.md#archive-record) |
 | improve-phase0-first-trial | 可以提交（Cursor 复查） | 2 | [归档记录](improve-phase0-first-trial/index.md#archive-record) |
 | improve-skill-discovery-guidance | verified / accepted | 3 | [归档记录](improve-skill-discovery-guidance/index.md#archive-record) |

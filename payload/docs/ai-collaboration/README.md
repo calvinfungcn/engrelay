@@ -293,6 +293,45 @@ deliverable is complete, which parent work remains, and one copyable request suc
 as `Use EngRelay: implement <change> item <id>.` That request is not an Operator
 Command: the closed batch keeps Next role `none` and no capability line.
 
+### Outcome Readiness, Development Checks, and Controlled Trials
+
+Within authorized scope and role boundaries, the responsible role works continuously
+towards an agreed observable outcome (the batch's first demonstrable outcome or
+mapped acceptance). It runs directly relevant, low-cost development checks and
+groups related fixes without dispatching formal reviews or handoffs for each
+micro-step.
+
+Distinguish three levels of checks and exposure:
+- **Development checks**: In-role, finding-specific or directly relevant local
+  inspections and test commands run during implementation or repair to confirm
+  progress.
+- **Controlled trials**: Hands-on exploration or demonstration of ready, safe
+  vertical slices by the operator or users to evaluate usability and flow. A trial
+  candidate clearly discloses its supported capabilities, known limitations, and
+  unverified items. Offering or performing a trial does not constitute formal passing
+  or business acceptance, and adds no mandatory owner approval gate.
+- **Final acceptance**: Full verification against authorized acceptance criteria,
+  including required independent code reviews and independent verification.
+
+Explicit earlier checkpoints or prerequisites:
+When the user, project instructions, or active constraints explicitly require an
+advance independent review or verification before a designated step, or when an
+actual security or contract prerequisite exists, that requirement takes precedence
+over general aggregation timing and must not be skipped for speed or trial readiness.
+
+Hazardous paths not controlled:
+If a proposed trial path touches real devices, money, production databases, external
+deployments, or irreversible side effects without verified authorization and safety
+controls, it MUST NOT be offered as a usable trial. The hazardous path must first be
+fixed, disabled, or strictly isolated under authorized sandbox conditions before any
+trial. Safe, unaffected work continues.
+
+High-risk repair independence:
+For risk `H` acceptance, controlled trials and implementer/fix-author self-checks
+cannot replace required independent code review and independent post-repair
+verification. Unverified items must remain disclosed as unverified, never marked as
+verified.
+
 ### Environment Preparation Before Dispatch
 
 Task Intake and Chief Designer identify foreseeable prerequisites for the
@@ -677,6 +716,8 @@ or deployment authorization.
   introduced or exposed by the previous fix, get the same technical-analysis step.
   No numeric cap, new field, or state is added for this rule. A new finding that
   enlarges the original scope still follows the normal authorization rule.
+- Aggregated regrouping after repeated loops: see
+  [Aggregated Regrouping After Repeated Loops](#aggregated-regrouping-after-repeated-loops).
 - A structured finite-extension line is the only way to limit a route by count.
   Carry that line verbatim through any successor, recovery, or response handoff
   while the mapped acceptance remains unfinished. The validator reads only the
@@ -738,6 +779,43 @@ structured line fails closed. Every
   acceptance is not a new defect.
 - The agent that verifies a batch may also perform documentation closure; do
   not create a Documentation Steward round only to copy status between files.
+
+### Aggregated Regrouping After Repeated Loops
+<a id="aggregated-regrouping-after-repeated-loops"></a>
+
+A loop is one scoped repair of the same unfinished mapped acceptance followed by its
+independent re-review or verification verdict. Local development checks, repeated test
+commands, design discussions, and verdicts covering other acceptance criteria do not count
+as a loop for this acceptance.
+
+When two consecutive repair-and-independent-review loops for the same unfinished mapped
+acceptance occur and another formal repair or review cycle is planned: even if partial,
+verified progress was achieved in each loop, before entering the next loop, the currently
+authorized responsible role synthesizes a brief aggregated regrouping in existing records
+(the handoff or review artifact). The regrouping cites existing records, states confirmed
+improvements achieved so far, identifies remaining blocking defects or regressions, and
+outlines the minimal aggregated repair and evidence plan.
+
+Regrouping is not a new verdict, does not increment Review round, does not alter cumulative
+review history, and does not automatically request extra budget, stop work, or close
+acceptance. If the two loops also meet the existing same-finding no-progress stall condition
+or recurring new must-fix finding condition, one technical analysis satisfies both
+requirements; do not create duplicate analyses or an extra handoff. If the regrouping is
+complete and the next repair or review step belongs to another role, save, read back, and
+validate the handoff and stop under manual relay for the operator to dispatch the successor
+with user-chosen platform/model; do not autonomously launch or execute the successor. If the
+applicable structured review-budget-extension ceiling has been reached, regrouping cannot
+bypass that ceiling to start a new cycle; route to the Task Owner decision route under
+existing rules.
+
+Once recorded, regrouping does not re-trigger on single local tests, repeat commands, role
+switches, or viewing history; it triggers again only if two new actual repair-and-independent-review
+loops occur for the same unfinished acceptance and further cycles are needed. If evidence cannot
+confirm two actual loops, or if total Review round is high without a finite ceiling, retain
+uncertainty, do not invent history or infer regrouping/blocks from round count alone; continue
+authorized safe work and gather necessary evidence. Independent review, verification, and
+adjudication verdicts continue to increment Review round monotonically; loops vs cumulative
+verdicts are maintained separately.
 
 ### Bounded Archive Verification
 
@@ -899,6 +977,25 @@ The depth and scope of review must match actual authorization and changes:
   necessary checks along the causal blast radius. Expand to a full review when
   justified by the impact; do not use focused recheck to conceal or bypass
   defects.
+
+### Finding Triage, Formatting Fixes, and Evidence Invalidation
+
+The responsible role classifies findings by actual impact, evidence, and affected
+acceptance:
+- **Distinguish categories**: Separate blocking defects, unverified gaps, and
+  deferrable suggestions based on current acceptance criteria and observable impact.
+- **Real risks cannot be downgraded**: Defects affecting security, identity,
+  concurrency, data integrity, money, or actual business contracts cannot be
+  downgraded to style or suggestions, nor declared passing, to reduce review cycles or
+  speed up delivery.
+- **Combining mechanical formatting fixes**: Project-required mechanical formatting or
+  style fixes that lack explicit advance-review requirements may be combined with
+  related functional fixes and subsequent applicable checks. A single-line formatting
+  edit does not force an isolated, dedicated formal review round.
+- **Evidence invalidation**: When subsequent changes affect the inputs, environment, or
+  covered behavior of prior evidence, old evidence is invalidated for the affected scope
+  and cannot be claimed as proving passing state. Fresh checks must be run or the gap
+  explicitly recorded as unknown. Unaffected matching evidence continues to be reusable.
 
 ### Privacy-Safe Review Artifacts
 
@@ -1245,6 +1342,27 @@ and external-operation authorization retain their existing boundaries.
   batch has already advanced, do not repeat dispatch or reopen a closed batch
   because of the old notice. New evidence carried by the message is still
   evaluated, and a necessary repair is routed through the normal path.
+
+### Entries, Goal-Driven Requests, and Manual Relay
+
+Entries and goal-driven prompts preserve required reviews and manual relay:
+- **Start versus continue**: `ai-collab-start` prepares the minimum coherent task input
+  and initial route for a new task; `ai-collab-continue` resumes an existing uncompleted
+  batch following its recorded handoff, active authority, and cumulative review history.
+  Neither resets review counts or closes uncompleted acceptance.
+- **Goal-driven requests preserve review**: A user request stated as an overall goal
+  ("implement feature X", "fix bug Y") authorizes achieving the outcome within scope,
+  but does NOT waive rule-mandated independent reviews, explicit review requests, or
+  manual cross-role relay.
+- **Single-role boundary**: When the user explicitly specifies executing only the
+  current role (e.g. "Chief Designer only", "Implementation Engineer only"), the
+  assigned role completes its authorized work and stops without autonomously executing
+  the next role. When routing to another agent via `dispatch`, it prepares and saves the
+  complete successor handoff with the human transfer notice; clean `close` (with
+  `Next role: none`), valid owner-decision waits (`awaiting-owner-decision`), and
+  same-session conditional Requirements Analyst follow their established rules without
+  successor agent handoffs or transfer notices. Such a stop is an intended boundary, not an
+  environment blockage (`Human Action Required: none` under manual relay).
 
 ## Task Owner Boundary
 

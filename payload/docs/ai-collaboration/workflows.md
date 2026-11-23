@@ -32,6 +32,11 @@ labels are display/context only; they cannot authorize more cumulative verdicts.
   failure or unknown impact requires it. A role, handoff, prose, source
   inventory or bookkeeping change alone does not require every suite again.
 - Allow aggregated review -> fix -> verification loops while the mapped acceptance remains unmet; the count alone does not stop them (README.md#review-round-circuit-breaker).
+- Work continuously towards an agreed observable outcome within authorized scope, running direct checks and grouping fixes before formal review nodes (README.md#outcome-readiness-development-checks-and-controlled-trials).
+- Distinguish development checks, controlled trials, and final acceptance. Trials do not equal final acceptance; dangerous paths must be controlled; H independent review and post-fix independent verification cannot be bypassed.
+- When two consecutive repair-and-independent-review loops for the same unfinished mapped acceptance occur and another formal repair or review cycle is planned, synthesize confirmed improvements, remaining blockers, and minimal aggregated plan in existing records before entering that cycle (README.md#aggregated-regrouping-after-repeated-loops); once recorded, does not re-trigger until two new actual loops occur; merges with stall analysis if applicable.
+- Finding triage and evidence reuse: real risks (security, identity, concurrency, data, money, contracts) cannot be downgraded or auto-passed; mechanical formatting fixes that lack explicit advance-review requirements combine with related fixes; invalid evidence is replaced.
+- Goal-driven instructions do not skip required independent reviews or manual relay. When the user specifies executing only the current role, the assigned role completes its authorized work and stops without autonomously executing the next role; when routing to another agent via dispatch, prepare and save the complete successor handoff with the human transfer notice, preserving clean close, valid owner waits, and same-session conditional roles.
 - Every role exit and transition table below is subject to
   README.md#review-round-circuit-breaker: count design/code/verification/
   adjudication verdicts cumulatively; at a reached finite-extension ceiling, no Agent dispatch or local retry without an applicable finite owner authorization. A confirmed same-finding stall allows only its one technical analysis inside the original scope; an executable disposition it proposes proceeds under existing authorization, and the Task Owner route applies only to the conditions in README.md#review-round-circuit-breaker.
@@ -1064,6 +1069,44 @@ preparation. If unavailable, notify the Task Owner in handoff and chat using
 `Environment Preparation`, keep responsibility with `continue` plus `blocked`
 and a resume condition, and resume after checking readiness. Safe unaffected
 work may proceed; an operational wait alone is not a Chief Designer handoff.
+
+Continuous implementation and check boundaries:
+- Implementation Engineer works continuously within authorized scope towards the agreed
+  observable outcome (the batch's first demonstrable outcome or mapped acceptance),
+  running directly relevant low-cost development checks and grouping related fixes
+  without dispatching formal reviews or handoffs for each micro-step
+  (README.md#outcome-readiness-development-checks-and-controlled-trials).
+- Explicit earlier checkpoints or safety prerequisites take precedence: when user or
+  project instructions explicitly require an advance independent review or verification
+  before a designated step, or an actual security prerequisite exists, that requirement
+  cannot be skipped for speed or trial readiness.
+- Distinguish development checks, controlled trials, and final acceptance. A trial
+  candidate describes supported scope, known limitations, and unverified items without
+  auto-passing or adding an owner approval gate. Hazardous paths (touching real devices,
+  money, production data, external deployment, or irreversible side effects) must first be
+  fixed, disabled, or isolated under authorized sandbox conditions; safe unaffected work
+  continues. For risk `H`, trials or self-checks cannot replace required independent code
+  review and independent post-repair verification.
+- If two consecutive repair-and-independent-review loops occur for the same unfinished
+  mapped acceptance and another formal repair or review cycle is planned, synthesize
+  confirmed improvements, remaining blockers/regressions, and minimal aggregated repair
+  and evidence plan in existing records before entering that cycle (README.md#aggregated-regrouping-after-repeated-loops).
+  Once recorded, does not re-trigger until two new actual loops occur. If the next step
+  requires another role, save, read back, and validate handoff and stop under manual relay;
+  do not auto-launch successors.
+- Classify findings by actual impact; real risks (security, identity, concurrency, data,
+  money, contracts) cannot be downgraded to style or auto-passed. Project-required mechanical
+  formatting fixes that lack explicit advance-review requirements combine with related fixes
+  and subsequent checks without a dedicated formal round. When changes invalidate prior
+  evidence, fresh checks must be run or the gap recorded as unknown; matching unchanged
+  evidence is reused.
+- Goal-driven instructions ("implement X") authorize achieving the outcome within scope,
+  but do not waive explicit review requests, rule-mandated independent reviews, or manual
+  relay. If the user specifies executing only the current role, the assigned role completes
+  its authorized work and stops without autonomously executing the next role; when routing
+  to another agent via dispatch, prepare and save the complete successor handoff and add the
+  human transfer notice, preserving clean close, valid owner waits, and same-session
+  conditional roles.
 
 Next role:
 

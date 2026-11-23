@@ -116,6 +116,12 @@ sections for a new agent, missing context, a changed input or a rule question
      proposes proceeds within existing authorization; use the evidenced owner-decision
      route only when the owner conditions there apply. Never start another repair/review
      loop for that finding without an applicable authorization.
+   - repeated loops: when two consecutive repair-and-independent-review loops for the
+     same unfinished mapped acceptance have occurred and another formal repair or review
+     cycle is planned, synthesize confirmed improvements, remaining blockers/regressions,
+     and minimal aggregated repair/evidence plan in existing records before entering that
+     cycle (README.md#aggregated-regrouping-after-repeated-loops); once recorded, does not
+     re-trigger until two new actual loops occur; merges with stall analysis if applicable.
 3. Otherwise follow the latest executable Next action:
    - `continue`: immediately perform the stated authorized next step if capable
      and permitted. Read the Continuation Command under Current Status when
@@ -143,7 +149,15 @@ sections for a new agent, missing context, a changed input or a rule question
      read back, and validate the handoff with expected state, place the top human transfer
      notice, explain the transfer in chat, and stop the turn without autonomously
      launching the next role. Explicit automation applies only when authorized in
-     Constraints and not overridden by a narrower user instruction.
+     Constraints and not overridden by a narrower user instruction. Goal-driven requests
+     authorize achieving the outcome within scope, but do not waive rule-mandated
+     independent reviews, explicit review requests, or manual relay
+     (`docs/ai-collaboration/README.md#entries-goal-driven-requests-and-manual-relay`). When
+     the user explicitly specifies executing only the current role, the assigned role
+     completes its authorized work and stops without autonomously executing the next role;
+     when routing to another agent via `dispatch`, prepare and save the complete successor
+     handoff with the human transfer notice, preserving clean close, valid owner waits, and
+     same-session conditional roles.
 4. A delayed request targeting a closed batch or an earlier revision reports the
    latest actual state; it does not replay dispatch or change prior acceptance.
    Distinguish it from a clear current follow-up request under step 2.
@@ -168,6 +182,7 @@ sections for a new agent, missing context, a changed input or a rule question
   review and the sole `tasks.md`: correct only stale active facts, never stable
   acceptance or history.
 - Owner acceptance, Git operations and deployment remain outside this entry.
+- Goal-driven requests do not skip required independent reviews or manual relay.
 
 ## Output
 

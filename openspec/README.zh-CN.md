@@ -20,6 +20,7 @@
 
 | 事项 | 来源 | 状态 | 变更或证据 |
 | --- | --- | --- | --- |
+| 复核就绪、受控试用与重复往返整理 | 负责人选定的 M 级批次；保留原接受关闭，完整发行前审查在关联第 4 次 verdict 时通过 | 已完成 | [已归档任务](changes/archive/2026-11-23-improve-review-readiness-and-convergence/tasks.md)；[审查索引](../docs/reviews/improve-review-readiness-and-convergence/index.md) |
 | 有来源依据的任务范围与自洽的人工交接命令 | 负责人选定的关联修复及发行前澄清 | 已完成 | [已归档任务](changes/archive/2026-11-17-fix-task-scope-preservation/tasks.md)；[审查索引](../docs/reviews/fix-task-scope-preservation/index.md)；保留原接受关闭与关联审查历史 |
 | Lite 可执行交接额度、围栏解析及已发布说明 | 负责人选定的项目修复 F1／F2／F5 | 已完成 | [已归档提案](changes/archive/2026-10-30-harden-lite-handoff-validation/proposal.md)；[已归档任务](changes/archive/2026-10-30-harden-lite-handoff-validation/tasks.md)；[审查索引](../docs/reviews/harden-lite-handoff-validation/index.md)；发行前独立审查通过，累计第 5 轮 |
 | SetMode 失败恢复（F3） | 负责人选定的后续工作 | 已确认待实施 | [范围入口](changes/archive/2026-10-30-harden-lite-handoff-validation/proposal.md#follow-up-work)；尚未建立独立变更，保留入口／清单不一致的现有证据 |

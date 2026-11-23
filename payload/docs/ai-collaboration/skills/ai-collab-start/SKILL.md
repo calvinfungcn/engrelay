@@ -71,6 +71,13 @@ module instructions and triggered Skills still apply.
    reason, the observable outcome, must-have acceptance, out-of-scope work, required
    checks, Constraints (recording the default manual relay for formal agent dispatch,
    or an explicit automation scope when explicitly authorized by the user) and the Initial role.
+   Goal-driven requests ("implement feature X") authorize achieving the outcome within scope,
+   but do not waive rule-mandated independent reviews, explicit review requests, or manual relay
+   (`docs/ai-collaboration/README.md#entries-goal-driven-requests-and-manual-relay`). When the user
+   explicitly specifies executing only the initial role, that role completes its authorized work
+   and stops without autonomously executing the next role; when routing to another agent via
+   `dispatch`, prepare and save the complete successor handoff with the human transfer notice,
+   preserving clean close, valid owner waits, and same-session conditional roles.
    Keep the smallest confirmed source evidence in `Source`, `Goal`, `Scope` or
    `Constraints` (`docs/ai-collaboration/README.md#task-scope-evidence`): the overall
    goal, this role's responsibility and the actual authority, with inference marked.

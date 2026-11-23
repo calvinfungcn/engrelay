@@ -4,6 +4,15 @@
 
 ## Unreleased
 
+## 1.11.3 — 2026-11-23
+
+- Full adds outcome readiness and tiered checks: responsible roles work continuously towards agreed observable outcomes within authorized scope, running directly relevant development checks and grouping fixes before review nodes. Distinguishes development checks, controlled trials, and final acceptance. Controlled trials describe supported capabilities and unverified items without auto-passing or adding an owner approval gate; hazardous paths touching real devices, money, production data, or external deployments must first be fixed, disabled, or isolated under authorized sandbox conditions; risk H required independent review and post-repair independent verification cannot be bypassed.
+- Full adds aggregated regrouping after repeated loops: two consecutive repair-and-independent-review loops for the same unfinished mapped acceptance trigger a brief synthesis of confirmed improvements, remaining blockers, and a minimal aggregated repair/evidence plan in existing records when another formal repair or review cycle is planned, without re-triggering until two new actual loops occur. Regrouping is not a verdict, does not increment Review round, does not alter cumulative review history, and does not add a default review cap or auto-stop; merges with existing stall analysis when applicable; finite owner extension ceilings and manual relay are preserved.
+- Finding triage and evidence invalidation: real risks (security, identity, concurrency, data, money, contracts) cannot be downgraded or auto-passed; project-required mechanical formatting fixes lacking explicit advance-review requirements combine with related fixes and subsequent checks without a dedicated formal round; changes that affect inputs or covered behavior invalidate prior evidence, while matching unchanged evidence continues to be reusable.
+- Entries and goal-driven requests: start vs continue distinction is preserved; goal-driven requests authorize achieving outcomes within scope without waiving explicit review requests, rule-mandated independent reviews, or manual relay; specifying a single role completes authorized work and stops without executing the next role, preparing a successor handoff and transfer notice only when dispatching another role, preserving clean close and owner waits.
+- Lite synchronizes outcome readiness, controlled trials, and two-loop regrouping within its existing Executor/Reviewer roles, queue, lite-1 fields, and manual relay.
+- Bilingual documentation (root README, operator guides, and changelogs) synchronized with matching fictional examples. Verification limit: structural, static, and scenario checks using fictional disposable fixtures; these do not prove host adherence, runtime token savings, or business acceptance.
+
 ## 1.11.2 — 2026-11-17
 
 - Full clarifies manual agent relay: prepare and save the successor handoff, then stop without executing that role.

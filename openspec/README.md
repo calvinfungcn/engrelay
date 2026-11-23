@@ -27,6 +27,7 @@ authority.
 
 | Item | Source | Status | Change or evidence |
 | --- | --- | --- | --- |
+| Review readiness, controlled trials and repeated-loop regrouping | Owner-selected M batch; original acceptance retained, complete pre-release review PASS at related verdict 4 | Completed | [Archived tasks](changes/archive/2026-11-23-improve-review-readiness-and-convergence/tasks.md); [review index](../docs/reviews/improve-review-readiness-and-convergence/index.md) |
 | Source-grounded task scope and consistent manual relay commands | Owner-selected repair and pre-release clarification | Completed | [Archived tasks](changes/archive/2026-11-17-fix-task-scope-preservation/tasks.md); [review index](../docs/reviews/fix-task-scope-preservation/index.md); original accepted closure and related review history retained |
 | Lite executable handoff limits, fence parsing and published guidance | Owner-selected project fixes F1/F2/F5 | Completed | [Archived proposal](changes/archive/2026-10-30-harden-lite-handoff-validation/proposal.md); [archived tasks](changes/archive/2026-10-30-harden-lite-handoff-validation/tasks.md); [review index](../docs/reviews/harden-lite-handoff-validation/index.md); independent pre-release review PASS at cumulative round 5 |
 | SetMode failure recovery (F3) | Owner-selected follow-up | Confirmed, pending implementation | [Scoped follow-up](changes/archive/2026-10-30-harden-lite-handoff-validation/proposal.md#follow-up-work); separate change not yet created; preserve current entry/manifest inconsistency evidence |

@@ -84,6 +84,29 @@ agent must execute the authorized next step immediately. A replacement session
 can take over the same responsibility, recording its actual Current agent and incrementing State revision while
 retaining role, batch and review count. Required independent review and formal
 role transfers still use dispatch; never self-review via continue.
+Work continuously within authorized scope towards the agreed observable outcome,
+running directly relevant low-cost development checks and grouped fixes without
+dispatching formal reviews for each micro-step (README.md#outcome-readiness-development-checks-and-controlled-trials).
+Distinguish development checks, controlled trials (with disclosed limitations and
+controlled hazardous paths), and final acceptance; trials and self-checks never replace
+required independent reviews or H post-repair verification.
+When two consecutive repair-and-independent-review loops for the same unfinished mapped
+acceptance occur and another formal repair or review cycle is planned, synthesize confirmed
+improvements, remaining blockers, and minimal aggregated plan in existing records; once recorded,
+does not re-trigger until two new actual loops occur; without adding a verdict, count reset, or
+default cap; merges with stall analysis if applicable; finite limits and manual relay preserved
+(README.md#aggregated-regrouping-after-repeated-loops).
+Finding triage: real risks (security, identity, concurrency, data, money, contracts)
+cannot be downgraded or auto-passed; mechanical formatting fixes that lack explicit advance-review
+requirements combine with related fixes/checks without a dedicated formal round; invalid evidence is
+replaced (README.md#finding-triage-formatting-fixes-and-evidence-invalidation).
+Goal-driven requests authorize achieving the outcome within scope, but do not waive
+explicit review requests, rule-mandated independent reviews, or manual relay. When the
+user specifies executing only the current role, the assigned role completes its authorized
+work and stops without autonomously executing the next role; when routing to another agent
+via dispatch, prepare and save the complete successor handoff and add the human transfer
+notice, preserving clean close, valid owner waits, and same-session conditional roles
+(README.md#entries-goal-driven-requests-and-manual-relay).
 Within authorized offline work, local CLI/IDE host selection is an agent detail:
 never ask the Task Owner where to run, or seek a repeated continue approval.
 A prior single-turn CLI exit is not a blocked environment. Check other same-batch
@@ -821,6 +844,37 @@ Rules:
 - For a non-obvious, intermittent, cross-layer, environment-specific, or
   previously failed defect, use `ce-debug` or the equivalent
   `quality-systematic-debugging` method before applying a fix.
+- Work continuously within authorized scope towards the agreed observable outcome,
+  running directly relevant low-cost development checks and grouped fixes without
+  dispatching formal reviews or handoffs for each micro-step
+  (README.md#outcome-readiness-development-checks-and-controlled-trials).
+- Explicit earlier checkpoints: when user or project instructions explicitly require
+  an advance independent review or verification before a designated step, or when an
+  actual security prerequisite exists, that requirement takes precedence and cannot be
+  skipped.
+- Distinguish development checks, controlled trials, and final acceptance. A trial
+  candidate describes supported scope, known limitations, and unverified items without
+  auto-passing or adding an owner approval gate. Hazardous paths (touching real devices,
+  money, production data, external deployment, or irreversible side effects) must first be
+  fixed, disabled, or isolated under authorized sandbox conditions; safe unaffected work
+  continues. For risk `H`, trials or self-checks cannot replace required independent code
+  review and independent post-repair verification.
+- If two consecutive repair-and-independent-review loops occur for the same unfinished
+  mapped acceptance and another formal repair or review cycle is planned, synthesize
+  confirmed improvements, remaining blockers/regressions, and minimal aggregated
+  repair/evidence plan in existing records before entering that cycle (README.md#aggregated-regrouping-after-repeated-loops).
+  Once recorded, does not re-trigger until two new actual loops occur. If the next step
+  belongs to another role, save handoff and stop under manual relay.
+- Classify findings by actual impact: real risks (security, identity, concurrency, data,
+  money, contracts) cannot be downgraded to style or auto-passed; project-required mechanical
+  formatting fixes that lack explicit advance-review requirements combine with related
+  functional fixes/checks without a dedicated formal round; invalid evidence must be replaced.
+- Goal-driven instructions do not skip explicit review requests or manual relay. When
+  the user specifies executing only the current role, the assigned role completes its
+  authorized work and stops without autonomously executing the next role; when routing
+  to another agent via dispatch, prepare and save the complete successor handoff and add
+  the human transfer notice, preserving clean close, valid owner waits, and same-session
+  conditional roles.
 - Preserve unrelated user changes.
 
 Output:
