@@ -20,3 +20,4 @@
 - [已归档提案](../../../openspec/changes/archive/2026-11-23-improve-review-readiness-and-convergence/proposal.md)
 - [已归档任务](../../../openspec/changes/archive/2026-11-23-improve-review-readiness-and-convergence/tasks.md)
 - 两个主规范已同步全部新增要求，保留旧要求与 Purpose；主规范 strict 为 2/2。Review 维持原路径，原始运行态及日志不入 Git。
+- [发行准备](release-preparation.zh-CN.md)／[English](release-preparation.md)：精确包清单、双宿主安装与 Full/Lite 保护升级、脱敏及版本说明。
