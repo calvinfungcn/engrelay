@@ -10,3 +10,7 @@
 
 - Archived change: `openspec/changes/archive/2026-11-24-introduce-engrelay-v2-workflow/`
 - Main specs synchronized: `engrelay-v2-relay` (10 requirements added) and `workflow-profiles` (4 requirements modified).
+
+## Release preparation
+
+- [English](release-preparation.md) / [简体中文](release-preparation.zh-CN.md): 2.0.0 metadata, privacy, exact candidate inventory and checks, compatibility and verification limits.
