@@ -234,6 +234,7 @@ function Invoke-Native([string]$Name, [string]$Script, [string[]]$Arguments) {
 function Invoke-Manager([string]$Pkg, [string]$Root, [string]$Action, [string]$Target = '') {
     $manager = Join-Path $Pkg 'scripts/manage.ps1'
     $args = @('-Action', $Action, '-ProjectRoot', $Root)
+    if ($Pkg -eq $candidate -and $Action -eq 'Install') { $args += @('-WorkflowProfile', 'full') }
     if (-not [string]::IsNullOrEmpty($Target)) { $args += @('-SkillTarget', $Target) }
     $args += @('-WorkflowMode', 'optional')
     return Invoke-Native ($Action + ':' + $Pkg) $manager $args

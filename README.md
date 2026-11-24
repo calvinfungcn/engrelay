@@ -9,31 +9,33 @@ working in existing repositories. It provides role prompts, task and handoff
 templates, independent reviews based on risk, and tools for checking the evidence
 used to call work complete.
 
-**Version 1.11.3** · [Download the complete package](https://github.com/calvinfungcn/engrelay/releases/tag/v1.11.3) · [MIT License](LICENSE)
+**Version 2.0.0** · [Download the complete package](https://github.com/calvinfungcn/engrelay/releases/tag/v2.0.0) · [MIT License](LICENSE)
 
-## Workflow profiles (1.10.0)
+## Workflow profiles (v2 default, 2.0)
 
-Version 1.10.0 adds `-WorkflowProfile full|lite` to the shared manager.
-New installs default to Full; existing installations retain their recorded profile
-when the parameter is omitted. WorkflowMode still controls activation independently.
-Full owns the seven Skills and existing role chain. Lite installs only its
-[short rules, templates and read-only tools](payload/docs/ai-collaboration/lite/README.md),
-uses `.ai/engrelay-lite/` and supports only SkillTarget none. It requires explicit
-canonical reading, including on hosts that do not auto-read AGENTS.md.
-Lite projects may record optional tool, model, reasoning and review-launch preferences;
-blank entries never block work. Existing independent implementation/fix reviews
-also add an advisory 1–5 delivery rating (or `not scored`) by default; it does not
-add a review or affect acceptance. Lite adopts outcome readiness, controlled trials,
-and two-loop regrouping within its existing queue and lite-1 format.
-The 1.10.1 Lite validation update checks executable review capacity, complete
-fenced commands in their actual sections, and source metadata outside fences.
+`scripts/manage.ps1` supports `-WorkflowProfile v2|full|lite`.
+Fresh installs now default to **v2** (`WorkflowMode=optional`, `SkillTarget=none`);
+existing `full` and `lite` installations retain their recorded profile when
+`-WorkflowProfile` is omitted on `Upgrade`, `SetMode`, `Status`, or `CheckVersion`.
+
+- **v2 (default for new installs)**: lean cross-platform OpenSpec relay (`docs/engrelay/RULES.md` + unified `engrelay` Skill, hard budget ≤ 150 lines combined), three modes (`plan` / `do` / `review`), orthogonal **Risk (`S|M|H`)** gates + **Difficulty (`C1–C5`) × Workload (`XS|S|M|L` × `可断点|建议连续`, meaning breakable or preferably continuous)** sizing, ≤15-line cross-platform checkpoints, hard 2-round review circuit breaker, per-change `.ai/relay/<change-id>/` state, project-owned `docs/engrelay.config.md`, and optional single-target Skill discovery copy. See [EngRelay v2](payload/docs/ai-collaboration/v2/README.md).
+- **Full & Lite (frozen legacy profiles)**: pass `-WorkflowProfile full` or `-WorkflowProfile lite` explicitly for new installs that want the v1 role chain (`docs/ai-collaboration/`) or v1 Lite sequential queue (`docs/engrelay-lite/`).
 
 ```powershell
+# Default fresh install (v2, optional mode, SkillTarget none)
+& ./scripts/manage.ps1 -Action Install -ProjectRoot $engrelayProject
+# v2 with a single host discovery copy of the unified engrelay Skill
+& ./scripts/manage.ps1 -Action Install -ProjectRoot $engrelayProject -WorkflowProfile v2 -SkillTarget cursor
+# Explicit legacy Full or Lite install
 & ./scripts/manage.ps1 -Action Install -ProjectRoot $engrelayProject -WorkflowProfile lite -SkillTarget none
 ```
 
 Tests use isolated complete working-tree packages; the source checkout is not an
-installation source.
+installation source. Verification on this workstation ran across Windows PowerShell 5.1
+and PowerShell 7.6.10 (`test-v2-workflow.ps1`, `test-workflow-profiles.ps1`,
+`test-human-doc-lifecycle.ps1`, `test-public-package.ps1`, plus `test-lite-state.ps1` on PS 5.1)
+alongside disposable fictional `v2` drills (independent second-session `do` continuation and
+independent two-round `review`); external Codex/Cursor/Claude host loading remains unverified locally.
 New installations use manifest v2; trusted v1 Full converts only through Upgrade.
 The original v1.9.6 manager refuses v2. Keep the matching complete package, manager
 and original recovery material. Upgrade, repeated Install and SetMode never switch
@@ -193,8 +195,8 @@ See the [maintained role contracts](payload/docs/ai-collaboration/README.md).
 Use a trusted complete package in its own directory. Back up the target project's
 rules and read its existing agent instructions. For a new project:
 
-Download `engrelay-1.11.3.zip` from the release and extract it. Run commands from
-the extracted `engrelay-1.11.3` directory. Keep that complete package unchanged;
+Download `engrelay-2.0.0.zip` from the release and extract it. Run commands from
+the extracted `engrelay-2.0.0` directory. Keep that complete package unchanged;
 extra tool files or edited bytes make it differ from its inventory. The repository
 source can also be used when its file set and bytes exactly match `snapshot.json`.
 
@@ -266,31 +268,58 @@ installer. Warnings and unknown host-loading results remain relevant at exit0.
 ```
 
 Canonical Skills are installed without package-managed discovery copies by default
-(`none`). Read them directly under the target project, for example
-`docs/ai-collaboration/skills/ai-collab-start/SKILL.md`. That is a valid install;
-you do not need to reinstall just to use the workflow.
+(`none`). For the default **v2** install, read the unified Skill directly at
+`docs/engrelay/skills/engrelay/SKILL.md` (alongside `docs/engrelay/RULES.md`). For an
+explicit `-WorkflowProfile full` install, read the matching canonical Skill directly,
+for example `docs/ai-collaboration/skills/ai-collab-start/SKILL.md`. Either is a valid
+install; you do not need to reinstall just to use the workflow.
 
 To add host discovery copies during the **first** Install, pass exactly one
 `-SkillTarget`. For new Codex setups, prefer `-SkillTarget agents` (`.agents/skills`).
 `-SkillTarget codex` remains supported for `.codex/skills` compatibility. Other
 targets are `claude`, `cursor`, `opencode`, `antigravity`, `gemini`, `iflow`, and
-`qwen`. Repeat Install and Upgrade do not add or switch targets. Changing target
+`qwen`. For `v2`, this copies only the unified `engrelay` Skill; for `full`, it copies
+the seven `full` Skills; for `lite`, `SkillTarget` must be `none`. Repeat Install and
+Upgrade do not add or switch targets. Changing target
 requires official uninstall/reinstall; the manager does not migrate or remove
 hand-maintained copies for you. Do not overwrite unrelated same-name Skills or run
 the inherited all-target installer. Placement does not prove host loading.
 
-## First handoff trial
+## First handoff trial (Full profile)
 
 The source repository includes a fixed, source-only sample under `examples/handoff-demo/`.
 It is excluded from the package and from GitHub's automatic source ZIP, so use a Git
-checkout of a commit that contains it. Follow the [quickstart](docs/quickstart.md) for the
-three directories and the Session A to Session B steps. Sample source commit
+checkout of a commit that contains it. Follow the [quickstart](docs/quickstart.md) with
+`-WorkflowProfile full` for the three directories and the Session A to Session B steps. Sample source commit
 `304aa95702f106da262bcc741576293dfbeddc8d` was retrieved from GitHub and its eight
 fixture files verified. This does not prove host loading or the external ten-minute target.
 
 ## Talk to an agent
 
-Human guides: [quickstart](docs/quickstart.md)
+### Default v2 workflow (`plan` / `do` / `review`)
+
+Human guide: [EngRelay v2](payload/docs/ai-collaboration/v2/README.md)
+([简体中文](payload/docs/ai-collaboration/v2/README.zh-CN.md)). Start with an active
+OpenSpec change, and read `docs/engrelay/RULES.md` +
+`docs/engrelay/skills/engrelay/SKILL.md` (or let a copied `engrelay` Skill guide you):
+
+```text
+Use EngRelay v2: read docs/engrelay/RULES.md and docs/engrelay/skills/engrelay/SKILL.md,
+then run plan for openspec/changes/<change-id>/.
+```
+
+```text
+Use EngRelay v2: read .ai/relay/<change-id>/board.md and wp-01.md, then run do WP-01.
+```
+
+```text
+Use EngRelay v2: in an independent session, run review WP-01 against
+.ai/relay/<change-id>/board.md and wp-01.md.
+```
+
+### Full profile entries (`-WorkflowProfile full`)
+
+Human guides for Full: [quickstart](docs/quickstart.md)
 ( [简体中文](docs/quickstart.zh-CN.md) ),
 [operator guide](payload/docs/ai-collaboration/operator-guide.md)
 ( [简体中文](payload/docs/ai-collaboration/operator-guide.zh-CN.md) ),
@@ -300,7 +329,7 @@ Contributing, development, changelog, licensing, and OpenSpec navigation also
 have paired language editions at the repository root and under `docs/` /
 `openspec/`. Agent contracts stay English-only.
 
-**Recommended — start a task** (`ai-collab-start`):
+**Recommended (Full) — start a task** (`ai-collab-start`):
 
 ```text
 Use ai-collab-start: implement the confirmed order-export requirement.
@@ -346,13 +375,13 @@ an earlier implementation authorization, and a missing command is not a prohibit
 Use ai-collab-continue: continue the latest authorized handoff.
 ```
 
-Without a host discovery copy, ask the agent to read the matching canonical
+Without a host discovery copy in an explicit `-WorkflowProfile full` install, ask the agent to read the matching canonical
 `docs/ai-collaboration/skills/<name>/SKILL.md` in the installed project directly.
 Reading a Skill or discovering `.ai/` alone never activates the workflow.
 
-The seven canonical names are retained: the three entries above plus
+For **Full** (`-WorkflowProfile full`), the seven canonical names are retained: the three entries above plus
 `ce-code-review`, `ce-debug`, `ce-simplify-code`, and `ce-compound`. The CE Skills
-provide techniques within the assigned role; they add no second lifecycle.
+provide techniques within the assigned role; they add no second lifecycle. (Default **v2** installs deploy only the unified `engrelay` Skill under `docs/engrelay/skills/engrelay/SKILL.md`.)
 
 ## Review limits and cost
 

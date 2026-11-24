@@ -184,16 +184,16 @@ try {
     Call 'Unsupported Preview refuses' $lite @('-Action','Upgrade','-Preview') $false $true
     $full=New-Project 'full'
     Write-Project $full 'AGENTS.md' 'Original Full project text.'
-    Call 'I01 default Full' $full @('-Action','Install')
+    Call 'I01 explicit Full' $full @('-Action','Install','-WorkflowProfile','full')
     $fs=State $full
     $fingerprints['full']=$fs.deploymentFingerprint
-    Assert ($fs.version -eq 2 -and $fs.workflowProfile -ceq 'full' -and $fs.workflowMode -ceq 'optional' -and $fs.skillTarget -ceq 'none') 'Default Full optional none'
-    Assert (-not (Test-Path (Join-Path $full 'docs/ai-collaboration/lite')) -and -not (Test-Path (Join-Path $full 'docs/engrelay-lite'))) 'Full excludes Lite sources'
+    Assert ($fs.version -eq 2 -and $fs.workflowProfile -ceq 'full' -and $fs.workflowMode -ceq 'optional' -and $fs.skillTarget -ceq 'none') 'Explicit Full optional none'
+    Assert (-not (Test-Path (Join-Path $full 'docs/ai-collaboration/lite')) -and -not (Test-Path (Join-Path $full 'docs/engrelay-lite')) -and -not (Test-Path (Join-Path $full 'docs/ai-collaboration/v2')) -and -not (Test-Path (Join-Path $full 'docs/engrelay'))) 'Full excludes Lite and v2 sources'
     Call 'I06 repeated Install profile conflict' $full @('-Action','Install','-WorkflowProfile','lite') $false $true
     Call 'I06 Upgrade profile conflict' $full @('-Action','Upgrade','-WorkflowProfile','lite') $false $true
     Doctor 'Full doctor v2' $full 'payload/docs/ai-collaboration/scripts/doctor.ps1'
     $agents=New-Project 'agents'
-    Call 'Full agents install' $agents @('-Action','Install','-SkillTarget','agents')
+    Call 'Full agents install' $agents @('-Action','Install','-WorkflowProfile','full','-SkillTarget','agents')
     Assert (Test-Path (Join-Path $agents '.agents/skills/ai-collab-start/SKILL.md')) 'Full agents discovery target'
     Call 'Full agents upgrade' $agents @('-Action','Upgrade')
     Call 'Full agents uninstall' $agents @('-Action','Uninstall')
@@ -215,7 +215,7 @@ try {
     Call 'I12 private Lite entry refusal' $entry @('-Action','Install','-WorkflowProfile','lite') $false $true
     $conflict=New-Project 'new-target-conflict'
     Write-Project $conflict 'docs/ai-collaboration/README.md' 'Project-owned conflicting target.'
-    Call 'I11 new differing target refusal' $conflict @('-Action','Install') $false $true
+    Call 'I11 new differing target refusal' $conflict @('-Action','Install','-WorkflowProfile','full') $false $true
     $directory=New-Project 'config-directory'; $null=New-Item -ItemType Directory -Path (Join-Path $directory 'docs/engrelay-lite.config.md') -Force
     Call 'I13 config directory refuses' $directory @('-Action','Install','-WorkflowProfile','lite') $false $true
     foreach ($profile in @('full','lite')) {

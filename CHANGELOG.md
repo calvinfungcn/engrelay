@@ -2,7 +2,14 @@
 
 [Simplified Chinese](CHANGELOG.zh-CN.md)
 
-## Unreleased
+## 2.0.0 — 2026-11-24
+
+- **EngRelay v2 (`WorkflowProfile=v2`)**: Added a lean OpenSpec cross-platform relay profile (`payload/docs/ai-collaboration/v2/` -> `docs/engrelay/`) designed for small-quota multi-platform subscriptions:
+  - Combined `RULES.md` + unified `engrelay` Skill hard-capped at ≤ 150 lines (actual `74/150`; `agent-rules.md` `10/18`), 100% original MIT-licensed text.
+  - Three modes (`plan`, `do`, `review`): orthogonal Risk (`S|M|H`) + explicit review gates (no `C1–C5` review escalation), Difficulty (`C1–C5`) × Workload (`XS|S|M|L` × `可断点|建议连续`) sizing, ≤15-line cross-platform checkpoints, scoped diff/authority reads, `review PASS` vs acceptance completion with named downstream `⚠️` handoff, hard 2-round review cap catching fix-introduced P0/P1 regressions, and cumulative unfinished-acceptance history across splits/replans.
+  - **BREAKING (fresh-install default)**: `scripts/manage.ps1` now defaults to `WorkflowProfile=v2` for uninstalled projects (preserving `WorkflowMode=optional` and `SkillTarget=none`), supports single-target `engrelay` Skill copies for `v2`, protects project-owned `docs/engrelay.config.md` and `.ai/relay/`, and preserves existing `full`/`lite` profiles without implicit switching.
+  - Added read-only `payload/docs/ai-collaboration/v2/scripts/doctor.ps1`, Full doctor forwarding for `v2`, `update-snapshot.ps1` fixed `v2` projection check, and `scripts/test-v2-workflow.ps1`.
+  - Verification scope/limits: tested across Windows PowerShell `5.1.26100.9818` and PowerShell `7.6.10` using disposable complete working-tree packages (`test-v2-workflow.ps1` 37 calls / 34 checks, `test-workflow-profiles.ps1` 83 calls / 32 checks without `-OriginalRoot`, `test-human-doc-lifecycle.ps1` 5 cases, `test-public-package.ps1` 2 pass / `frozen-161` skipped; plus `test-lite-state.ps1` 121 cases on PS 5.1) alongside fictional `v2` drills with an independent read-only subagent review and an independent writable second-session `do` continuation from a `<= 15`-line checkpoint; external Codex/Cursor/Claude host loading and real cross-platform quota switching remain unverified locally.
 
 ## 1.11.3 — 2026-11-23
 

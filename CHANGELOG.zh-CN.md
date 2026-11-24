@@ -2,7 +2,14 @@
 
 [English](CHANGELOG.md)
 
-## Unreleased
+## 2.0.0 — 2026-11-24
+
+- **EngRelay v2（`WorkflowProfile=v2`）**：新增面向 OpenSpec 与多平台小额度订阅的极简跨平台接力配置（`payload/docs/ai-collaboration/v2/` → `docs/engrelay/`）：
+  - `RULES.md` + 统一 `engrelay` Skill 合计硬上限 ≤ 150 行（实测 `74/150`；`agent-rules.md` `10/18`），全部 100% 原创 MIT 许可编写。
+  - 三动作闭环（`plan`、`do`、`review`）：正交的风险门禁（`S|M|H`）与显式审查触发（不由 `C1–C5` 触发）、`C1–C5` × `XS|S|M|L` × `可断点|建议连续` 评估、≤15 行无仪式断点、按需定向权威查阅与完整跨仓 diff 边界、区分 `review PASS` 与验收完成及 `⚠️` 下游具名承接、两轮硬断路器拦截修复引入的 P0/P1 回归、以及跨拆分/重规划保留未完成验收累计历史。
+  - **破坏性变更（新安装默认配置）**：`scripts/manage.ps1` 对未安装项目默认安装 `v2`（仍保留 `optional` 与 `SkillTarget=none`），支持 `v2` 单一宿主 `engrelay` Skill 复制、保留 `docs/engrelay.config.md` 与 `.ai/relay/`，并保持既有 `full`/`lite` 安装不隐式转换。
+  - 新增只读 `v2` `doctor.ps1`、Full doctor 对 `v2` 的转发、`update-snapshot.ps1` 的 `v2` 固定源投影检查，以及 `scripts/test-v2-workflow.ps1`。
+  - 验证范围与限制：已在 Windows PowerShell `5.1.26100.9818` 与 PowerShell `7.6.10` 下使用一次性完整测试包通过 `test-v2-workflow.ps1`（37 次调用 / 34 项检查）、`test-workflow-profiles.ps1`（83 次调用 / 32 项检查，未传 `-OriginalRoot`）、`test-human-doc-lifecycle.ps1`（5 项）、`test-public-package.ps1`（2 项通过 / `frozen-161` 跳过）及 PS 5.1 `test-lite-state.ps1`（121 项），并完成一次性虚构 `v2` 演练（含独立只读子代理两轮验证及独立可写第二会话基于 ≤15 行断点接续 `do`）；外部宿主加载与真实跨平台额度切换尚未在本机实测。
 
 ## 1.11.3 — 2026-11-23
 

@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param(
     [string]$PackageRoot = '',
-    [ValidatePattern('^\d+\.\d+\.\d+$')][string]$Version = '1.11.3',
+    [ValidatePattern('^\d+\.\d+\.\d+$')][string]$Version = '2.0.0',
     [switch]$ForRelease
 )
 
@@ -101,15 +101,20 @@ $rootItem = Get-Item -LiteralPath $root -Force
 if (($rootItem.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0) { throw "Package root is a reparse point: $root" }
 
 $inventory = @(Get-Inventory $root)
-# A package carrying Lite must carry its entire fixed source projection. This is
-# separate from the selected deployment: both profiles remain in one inventory.
+# A package carrying Lite or v2 must carry its entire fixed source projection. This is
+# separate from the selected deployment: all profiles remain in one inventory.
 $litePrefix = 'payload/docs/ai-collaboration/lite/'
 $liteFiles = @($inventory | Where-Object { $_.path.StartsWith($litePrefix,[StringComparison]::Ordinal) })
 if ($liteFiles.Count) {
     $requiredLite = @('RULES.md','README.md','README.zh-CN.md','LICENSE','agent-rules.md','templates/project-config.md','templates/queue.md','templates/task.md','templates/handoff.md','scripts/validate-state.ps1','scripts/doctor.ps1')
     $actualLite = @($liteFiles | ForEach-Object { $_.path.Substring($litePrefix.Length) })
-    if ($actualLite.Count -ne $requiredLite.Count -or @($requiredLite | Where-Object { $actualLite -cnotcontains $_ }).Count) { throw 'Incomplete or unknown Lite source projection; retain both complete profiles before generating inventory' }
+    if ($actualLite.Count -ne $requiredLite.Count -or @($requiredLite | Where-Object { $actualLite -cnotcontains $_ }).Count) { throw 'Incomplete or unknown Lite source projection; retain complete profiles before generating inventory' }
 }
+$v2Prefix = 'payload/docs/ai-collaboration/v2/'
+$v2Files = @($inventory | Where-Object { $_.path.StartsWith($v2Prefix,[StringComparison]::Ordinal) })
+$requiredV2 = @('RULES.md','README.md','README.zh-CN.md','LICENSE','agent-rules.md','skills/engrelay/SKILL.md','templates/board.md','templates/wp.md','templates/project-config.md','scripts/doctor.ps1')
+$actualV2 = @($v2Files | ForEach-Object { $_.path.Substring($v2Prefix.Length) })
+if ($actualV2.Count -ne $requiredV2.Count -or @($requiredV2 | Where-Object { $actualV2 -cnotcontains $_ }).Count) { throw 'Incomplete or unknown v2 source projection; retain complete profiles before generating inventory' }
 $snapshot = [ordered]@{
     schemaVersion = 1
     packageVersion = $Version

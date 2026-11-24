@@ -4,7 +4,7 @@
 
 The GitHub repository is the maintained public source. The initial public baseline
 is v1.7.0, commit `9c26c22266625aa04822637baf8f283763362677`, under MIT.
-The current release baseline is v1.11.3. Local maintenance setup does not create an
+The current release baseline is v2.0.0. Local maintenance setup does not create an
 active business batch or authorize publication.
 
 ## Start here
@@ -83,7 +83,7 @@ disposable roots, not real projects. Real deployments require their own task.
 4. Check the exact file set and hashes, and run only checks justified by changed
    behavior. Run lifecycle fixtures on the staging package, keeping logs outside
    it. Test version expectations must be updated when the release version changes;
-   the current smoke script expects v1.11.3; its optional frozen
+   the current smoke script expects v2.0.0; its optional frozen
    v1.6.1 fixture remains a separate historical check.
 5. After the release candidate is stable, copy its snapshot.json back to the
    source as release metadata and ensure a fresh export matches. Keep immutable
@@ -118,25 +118,22 @@ because an agent, role, handoff, filename or bookkeeping record changed.
 git ref `9c26c22266625aa04822637baf8f283763362677` by default (`-BaselineGitRef`
 overrides). Candidate verification uses the supplied complete package root.
 
-## Lite / Full development checks
+## v2 / Lite / Full development checks
 
-The 1.10.0 manager writes manifest v2 and records the profile, exact deployment
-set and LF/UTF-8 fingerprint. Full excludes the Lite source subtree; Lite has a fixed
-projection and project-owned configuration. Development fixtures do not refresh
-the root release snapshot. For authorized candidate preparation, generate the
-snapshot in clean staging and copy back only the validated metadata using the build
-flow above. An inventoried disposable working-tree package remains distinct from
-an actual committed export; a synthetic test version is fixture metadata, not a
-reviewed release package.
+The 1.10.0+ manager writes manifest v2 and records the profile (`v2`, `full`, or `lite`),
+exact deployment set, and LF/UTF-8 fingerprint. Fresh installs without `-WorkflowProfile`
+default to `v2`, while existing `full`/`lite` installs preserve their recorded profile.
+Full excludes both `v2/` and `lite/` source subtrees; `v2` lives under
+`payload/docs/ai-collaboration/v2/` with a hard 150-line budget across `RULES.md` +
+`skills/engrelay/SKILL.md`. Development fixtures do not refresh the root release snapshot.
 
-`scripts/test-lite-state.ps1` checks real validator subprocess exits and zero writes.
-`scripts/test-workflow-profiles.ps1 -PackageRoot <complete-test-package> -OriginalRoot <verified-v1.9.6-export> -LogPath <external.json>`
-checks affected lifecycle paths on the PowerShell host running it. Run it under both
-5.1 and 7. Original v1.9.6 bytes come from local tag commit
-`c12f2646ab2a2369586f2097e34fdb678e16be30`; check its complete inventory before
-using its original manager/fingerprint. Read-only diagnosis uses Status/CheckVersion,
-the existing Full doctor entry or Lite's own doctor. Host loading can remain unknown.
-These fixtures do not establish actual agent adherence or phase-3 readiness.
+`scripts/test-v2-workflow.ps1 -PackageRoot <complete-test-package>` checks the `v2`
+lifecycle, 150-line budget, read-only `v2` `doctor.ps1`, config/runtime preservation,
+and non-switching compatibility for `full`/`lite`. Legacy Full fixture tests pass
+`-WorkflowProfile full` explicitly. Run checks under Windows PowerShell 5.1 and
+PowerShell 7 when both are available (report missing runtimes explicitly rather than
+claiming coverage). `scripts/test-lite-state.ps1` and `scripts/test-workflow-profiles.ps1`
+remain available for Lite/Full regression checks.
 
 ## Local setup and next conversation
 

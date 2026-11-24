@@ -12,12 +12,14 @@ guide assumes you already have a prepared task input with clear objectives. The 
 repository has an optional source-only sample, described in section 0 below; it is not
 in the package.
 
-## Profile selection (1.10.0)
+## Profile selection (2.0 default `v2` / Full / Lite)
 
-Version 1.10.0 includes Lite/Full selection. The steps below use the
-default Full profile and its seven Skills. Lite
-uses the same complete package and `-WorkflowProfile lite -SkillTarget none` on
-Install. Read its [self-contained guide](../payload/docs/ai-collaboration/lite/README.md)
+Fresh installations now default to **v2** (`WorkflowProfile=v2`), which deploys the lean
+OpenSpec relay (`docs/engrelay/RULES.md` and the single unified Skill
+`docs/engrelay/skills/engrelay/SKILL.md`; see the [EngRelay v2 guide](../payload/docs/ai-collaboration/v2/README.md)).
+The Session A / Session B tutorial below uses the **Full** profile explicitly
+(`-WorkflowProfile full`) and its seven Skills. Lite uses the same complete package and
+`-WorkflowProfile lite -SkillTarget none` on Install. Read its [self-contained guide](../payload/docs/ai-collaboration/lite/README.md)
 for explicit reading prompts, isolated runtime, checks and protected maintenance.
 Omit the profile on subsequent actions to retain it. To switch, preserve project
 configuration/task evidence and coordinate old entry text before protected
@@ -194,19 +196,20 @@ Confirm that the initial commit exists, `git status --short` is clean or explain
 and that `.ai/`, `.ai-collaboration-install/`, and host cache directories remain
 untracked.
 
-## 5. Install EngRelay into the trial project
+## 5. Install EngRelay into the trial project (Full profile)
 
-Run the installer from your complete release package directory:
+Run the installer from your complete release package directory. Pass
+`-WorkflowProfile full` explicitly because fresh installs now default to `v2`:
 
 ```powershell
 $engrelayProject = 'E:\Projects\trial-project'
 Set-Location 'E:\Packages\engrelay-1.10.2'
-& .\scripts\manage.ps1 -Action Install -ProjectRoot $engrelayProject -WorkflowMode optional
+& .\scripts\manage.ps1 -Action Install -ProjectRoot $engrelayProject -WorkflowProfile full -WorkflowMode optional
 ```
 
 For Codex host discovery on a fresh setup, you may optionally pass `-SkillTarget agents`.
 
-## 6. Session A and Session B handoff
+## 6. Session A and Session B handoff (Full profile)
 
 The trial splits duties between two sessions: Session A prepares the handoff;
 Session B performs implementation.
@@ -220,15 +223,15 @@ Set-Location 'E:\Projects\trial-project'
 
 Open both agent sessions with this trial project as their working directory.
 
-### Session A: Prepare handoff
+### Session A: Prepare handoff (Full profile)
 
 Installation in `optional` mode does not activate the workflow. Explicitly select
 EngRelay for this task. With the default `SkillTarget none`, ask Session A to read
-the installed canonical Skill directly; a host discovery copy is not required.
+the installed Full canonical Skill directly; a host discovery copy is not required.
 For the prepared `TASK.md` input above, send:
 
 ```text
-Use EngRelay for this task. Read docs/ai-collaboration/skills/ai-collab-start/SKILL.md
+Use EngRelay (Full profile) for this task. Read docs/ai-collaboration/skills/ai-collab-start/SKILL.md
 in this trial project and use ai-collab-start for the prepared task in TASK.md.
 Prepare only .ai/current-task.md and a complete .ai/handoff.md for Session B;
 do not implement the task in Session A.

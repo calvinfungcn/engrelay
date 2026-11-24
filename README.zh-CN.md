@@ -8,25 +8,30 @@ EngRelay 取自 Engineering + Relay，意为工程接力。它为已有代码库
 Agent 提供角色提示词、任务和交接模板、按风险引入的独立审查，以及检查交付
 证据的工具。
 
-**版本 1.11.3** · [下载完整发行包](https://github.com/calvinfungcn/engrelay/releases/tag/v1.11.3) · [MIT 许可证](LICENSE)
+**版本 2.0.0** · [下载完整发行包](https://github.com/calvinfungcn/engrelay/releases/tag/v2.0.0) · [MIT 许可证](LICENSE)
 
-## 工作流配置（1.10.0）
+## 工作流配置（默认 v2，2.0）
 
-1.10.0 为共用管理器增加 `-WorkflowProfile full|lite`。新安装默认 Full；已有安装
-省略参数时保持清单中的配置。WorkflowMode 独立控制启用。Full 拥有七个 Skill
-和现有角色链；Lite 只安装[短规则、模板和只读工具](payload/docs/ai-collaboration/lite/README.zh-CN.md)，
-使用 `.ai/engrelay-lite/`，初版仅支持 SkillTarget none。Lite 使用明确规范读取，
-不自动读取 AGENTS.md 的宿主也须收到明确读取提示。
-Lite 项目可记录可选的工具、模型、推理与评审启动偏好；留空不阻塞工作。既有
-实施／修复独立审查默认附建议性 1–5 分（或 `not scored`），不新增审查或影响验收。
-Lite 在其既有队列与 lite-1 格式内同步成果就绪、受控试用与两次往返整理原则。
-1.10.1 更新 Lite 校验：检查可执行动作额度、实际动作小节内的完整围栏命令，以及围栏外的来源元数据。
+`scripts/manage.ps1` 支持 `-WorkflowProfile v2|full|lite`。
+未安装项目现在默认安装 **v2**（`WorkflowMode=optional`、`SkillTarget=none`）；
+已安装 `full` 或 `lite` 的项目在执行省略 `-WorkflowProfile` 的 `Upgrade`、`SetMode`、`Status` 或 `CheckVersion` 时，继续保留各自既有配置，不隐式转换。
+
+- **v2（新安装默认）**：面向 OpenSpec 与多平台小额度订阅的极简接力协议（`docs/engrelay/RULES.md` + 单一统一 `engrelay` Skill，核心正文硬上限 ≤ 150 行），包含三动作闭环（`plan` / `do` / `review`）、正交的**风险门禁（`S|M|H`）**与**难度×体量评估（`C1–C5` × `XS|S|M|L` × `可断点|建议连续`）**、≤15 行无仪式断点、2 轮硬断路器、按变更隔离的 `.ai/relay/<change-id>/`、项目自有 `docs/engrelay.config.md` 以及可选单一宿主 `SkillTarget` 复制。详见 [EngRelay v2](payload/docs/ai-collaboration/v2/README.zh-CN.md)。
+- **Full 与 Lite（冻结兼容配置）**：若新项目明确需要 v1 角色链（`docs/ai-collaboration/`）或 v1 Lite 顺序队列（`docs/engrelay-lite/`），可在安装时显式传入 `-WorkflowProfile full` 或 `-WorkflowProfile lite`。
 
 ```powershell
+# 新项目默认安装（v2、optional 模式、SkillTarget none）
+& ./scripts/manage.ps1 -Action Install -ProjectRoot $engrelayProject
+# 为 v2 同时部署单一宿主发现副本
+& ./scripts/manage.ps1 -Action Install -ProjectRoot $engrelayProject -WorkflowProfile v2 -SkillTarget cursor
+# 显式安装冻结版 Full 或 Lite
 & ./scripts/manage.ps1 -Action Install -ProjectRoot $engrelayProject -WorkflowProfile lite -SkillTarget none
 ```
 
-检查使用隔离的完整工作树测试包；开发检出不是安装源。新安装采用 v2 清单，可信 v1 Full 只在 Upgrade 转换。原 v1.9.6 管理器
+检查使用隔离的完整工作树测试包；开发检出不是安装源。本机验证已在 Windows PowerShell 5.1
+与 PowerShell 7.6.10 下运行 `test-v2-workflow.ps1`、`test-workflow-profiles.ps1`、
+`test-human-doc-lifecycle.ps1`、`test-public-package.ps1`（及 PS 5.1 下的 `test-lite-state.ps1`），
+并完成一次性虚构 `v2` 演练（含独立第二会话断点 `do` 续跑与独立两轮 `review`）；外部宿主加载仍待实际环境确认。新安装采用 v2 清单，可信 v1 Full 只在 Upgrade 转换。原 v1.9.6 管理器
 拒绝 v2；保留对应完整包、管理器和原恢复材料。Upgrade、重复 Install、SetMode
 不切换配置：明确要求切换时先保存证据、协调项目入口，再受保护卸载／安装。
 Lite 项目配置和运行态在升级／卸载后仍保留；普通包文件继续拒绝漂移。私人 Lite
@@ -124,7 +129,7 @@ Lite 项目配置和运行态在升级／卸载后仍保留；普通包文件继
 使用可信完整包，放在业务项目以外的独立目录。先备份目标项目规则，读取其
 现有 Agent 指令。新项目示例：
 
-从发行页面下载 `engrelay-1.11.3.zip`，解压后进入 `engrelay-1.11.3` 目录执行命令。
+从发行页面下载 `engrelay-2.0.0.zip`，解压后进入 `engrelay-2.0.0` 目录执行命令。
 保留完整包原样；额外工具文件或字节修改会使它与清单不匹配。仓库源码仅在
 实际文件集合和字节与 `snapshot.json` 完全一致时，也可作为安装源。
 
@@ -188,28 +193,53 @@ $engrelayProject = 'E:\Projects\your-project'
 & .\scripts\manage.ps1 -Action SetMode -ProjectRoot $engrelayProject -WorkflowMode optional
 ```
 
-默认安装规范 Skill，不部署本包管理的宿主发现副本（`none`）。直接在目标项目读取，
-例如 `docs/ai-collaboration/skills/ai-collab-start/SKILL.md`。这是成功安装，
-不必为使用流程而重装。
+默认安装规范 Skill，不部署本包管理的宿主发现副本（`none`）。在默认 **v2** 安装中，直接读取
+`docs/engrelay/skills/engrelay/SKILL.md`（配合 `docs/engrelay/RULES.md`）；在显式安装的
+`-WorkflowProfile full` 项目中，直接读取 `docs/ai-collaboration/skills/ai-collab-start/SKILL.md`
+等规范 Skill。两者都是有效安装，不必为使用流程而重装。
 
 仅在**首次** Install 需要发现副本时，显式传入一个 `-SkillTarget`。Codex 新安装
 优先使用 `-SkillTarget agents`（`.agents/skills`）；`-SkillTarget codex` 保留
 `.codex/skills` 兼容路径。其他值：`claude`、`cursor`、`opencode`、`antigravity`、
-`gemini`、`iflow`、`qwen`。重复 Install 与 Upgrade 不会追加或切换目标；确需调整
+`gemini`、`iflow`、`qwen`。`v2` 仅复制统一 `engrelay` Skill，`full` 复制七个
+`full` Skill，`lite` 仅允许 `SkillTarget=none`。重复 Install 与 Upgrade 不会追加或切换目标；确需调整
 须走官方卸载/重装，管理器不会自动迁移或删除你手工维护的副本。不覆盖无关同名
 Skill，不运行继承的全目标安装器。文件放入发现目录不等于宿主已加载。
 
-## 首次交接试用
+## 首次交接试用（Full 配置）
 
 源码仓库在 `examples/handoff-demo/` 提供一个固定的、仅限源码的样例。它不在安装包中，也不在
 GitHub 自动生成的源码 ZIP 中，因此请使用包含它的提交的 Git 检出。按[快速上手](docs/quickstart.zh-CN.md)
-完成三目录划分与会话 A 到会话 B 的步骤。样例源码提交
+显式使用 `-WorkflowProfile full` 完成三目录划分与会话 A 到会话 B 的步骤。样例源码提交
 `304aa95702f106da262bcc741576293dfbeddc8d` 已从 GitHub 取得，八个 fixture 文件已核对；
 这不证明宿主加载或外部十分钟目标。
 
 ## 对 Agent 说什么
 
-人类指南：[快速上手](docs/quickstart.zh-CN.md)
+### 默认 v2 流程（`plan` / `do` / `review`）
+
+v2 指南：[EngRelay v2](payload/docs/ai-collaboration/v2/README.zh-CN.md)
+（[English](payload/docs/ai-collaboration/v2/README.md)）。针对当前 OpenSpec 变更，
+直接要求 Agent 读取 `docs/engrelay/RULES.md` 与 `docs/engrelay/skills/engrelay/SKILL.md`
+（或触发已部署的 `engrelay` 发现副本）：
+
+```text
+本任务采用 EngRelay v2。读取 docs/engrelay/RULES.md 与 docs/engrelay/skills/engrelay/SKILL.md，
+为 openspec/changes/<change-id>/ 执行 plan，使用中文交流。
+```
+
+```text
+本任务采用 EngRelay v2。读取 .ai/relay/<change-id>/board.md 与 wp-01.md，执行 do WP-01。
+```
+
+```text
+本任务采用 EngRelay v2。在独立会话中对照 .ai/relay/<change-id>/board.md 与 wp-01.md，
+执行 review WP-01。
+```
+
+### Full 配置入口（`-WorkflowProfile full`）
+
+Full 人类指南：[快速上手](docs/quickstart.zh-CN.md)
 （[English](docs/quickstart.md)）、
 [操作指南](payload/docs/ai-collaboration/operator-guide.zh-CN.md)
 （[English](payload/docs/ai-collaboration/operator-guide.md)）、
@@ -217,7 +247,7 @@ GitHub 自动生成的源码 ZIP 中，因此请使用包含它的提交的 Git 
 [宿主能力](payload/docs/ai-collaboration/host-capabilities.zh-CN.md)。
 贡献、开发、变更、许可与 OpenSpec 导航在仓库根目录及 `docs/`、`openspec/` 下有配对中文版。Agent 契约仍为英文-only。
 
-**推荐 — 开始任务**（`ai-collab-start`）：
+**推荐（Full）— 开始任务**（`ai-collab-start`）：
 
 ```text
 使用 ai-collab-start：实施已确认的订单导出需求。
@@ -250,13 +280,13 @@ Lite 保留自身批准队列：就绪项继续，否则说明待批准／依赖
 使用 ai-collab-continue：接续最新、已获授权的 handoff。
 ```
 
-宿主未发现 Skill 时，可以要求 Agent 直接读取目标项目内的
+在显式安装的 `-WorkflowProfile full` 项目中，若宿主未发现 Skill，可以要求 Agent 直接读取目标项目内的
 `docs/ai-collaboration/skills/<name>/SKILL.md`。发现 Skill、读取资料或存在 `.ai/`
 本身不会启动协作流程。
 
-七个规范名称保留：上述三个入口，以及 `ce-code-review`、`ce-debug`、
+对 **Full**（`-WorkflowProfile full`），保留七个规范名称：上述三个入口，以及 `ce-code-review`、`ce-debug`、
 `ce-simplify-code`、`ce-compound`。CE Skill 是角色内的具体方法，不增加另一套
-生命周期。
+生命周期（默认 **v2** 仅部署 `docs/engrelay/skills/engrelay/SKILL.md`）。
 
 ## 审查额度与成本
 

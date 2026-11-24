@@ -9,9 +9,12 @@ Windows 最小排错以及离线取包方式。
 EngRelay 安装包不随附样例产品程序或模拟夹具（fixture）。本指引假定你已经准备好
 具有明确目标和说明的试用任务输入。源码仓库另有一份仅限源码的可选样例，见下文第 0 节。
 
-## 配置选择（1.10.0）
+## 配置选择（2.0 默认 `v2`／Full／Lite）
 
-1.10.0 已包含 Lite／Full 配置。下文使用默认 Full 及其七个 Skill。Lite 从同一完整包执行 Install 时增加
+新安装现默认使用 **v2**（`WorkflowProfile=v2`），部署精简 OpenSpec 接力契约
+（`docs/engrelay/RULES.md` 与单一统一 Skill `docs/engrelay/skills/engrelay/SKILL.md`，
+详见 [EngRelay v2 指南](../payload/docs/ai-collaboration/v2/README.zh-CN.md)）。
+下文会话 A／会话 B 教程显式演示 **Full** 配置（`-WorkflowProfile full`）及其七个 Skill。Lite 从同一完整包执行 Install 时增加
 `-WorkflowProfile lite -SkillTarget none`；明确读取提示、隔离运行态、检查和维护
 见[自包含指南](../payload/docs/ai-collaboration/lite/README.zh-CN.md)。后续操作省略
 配置参数就保持原配置。切换前保存项目配置／任务证据并协调旧入口，再受保护卸载／
@@ -152,19 +155,19 @@ git status --short
 
 确认初始提交已生成、`git status --short` 状态干净可解释，且 `.ai/`、`.ai-collaboration-install/` 和宿主缓存目录不在提交或暂存中。
 
-## 5. 安装 EngRelay 到试用项目
+## 5. 安装 EngRelay 到试用项目（Full 配置）
 
-从完整发行包根目录运行安装命令：
+从完整发行包根目录运行安装命令。因新安装现默认使用 `v2`，本教程显式传入 `-WorkflowProfile full`：
 
 ```powershell
 $engrelayProject = 'E:\Projects\trial-project'
 Set-Location 'E:\Packages\engrelay-1.10.2'
-& .\scripts\manage.ps1 -Action Install -ProjectRoot $engrelayProject -WorkflowMode optional
+& .\scripts\manage.ps1 -Action Install -ProjectRoot $engrelayProject -WorkflowProfile full -WorkflowMode optional
 ```
 
 若 Codex 新安装需要宿主发现副本，可根据需要传入 `-SkillTarget agents`。
 
-## 6. 会话 A 与会话 B 交接步骤
+## 6. 会话 A 与会话 B 交接步骤（Full 配置）
 
 试用将职责分为两个会话：会话 A 负责准备交接，会话 B 负责实施。
 
@@ -177,14 +180,14 @@ Set-Location 'E:\Projects\trial-project'
 
 两个 Agent 会话均以该试用项目作为工作目录打开。
 
-### 会话 A：准备交接
+### 会话 A：准备交接（Full 配置）
 
 `optional` 模式的安装不会激活工作流，须显式为当前任务选择 EngRelay。
-默认 `SkillTarget none` 时，要求会话 A 直接读取已安装的规范 Skill，
+默认 `SkillTarget none` 时，要求会话 A 直接读取已安装的 Full 规范 Skill，
 不需要宿主发现副本。以上文准备的 `TASK.md` 为例，发送：
 
 ```text
-本任务使用 EngRelay。读取本试用项目中的
+本任务使用 EngRelay（Full 配置）。读取本试用项目中的
 docs/ai-collaboration/skills/ai-collab-start/SKILL.md，
 使用 ai-collab-start 为 TASK.md 中已准备好的任务建立输入与交接。
 会话 A 只准备 .ai/current-task.md 和给会话 B 的完整 .ai/handoff.md，

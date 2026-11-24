@@ -8,6 +8,8 @@
 
 ## 后续事项
 
+EngRelay v2 已实施并[归档](changes/archive/2026-11-24-introduce-engrelay-v2-workflow/proposal.md)，[独立审查与发行证据](../docs/reviews/introduce-engrelay-v2-workflow/index.md)可供核对。主规范为 [v2 接力](specs/engrelay-v2-relay/spec.md)和[工作流配置](specs/workflow-profiles/spec.md)。现有 Full/Lite 安装保留原配置。
+
 已讨论跟进事项的简要状态。具体实施进度仍在各变更的 `tasks.md`；本表不是第二
 清单，也不授权执行。
 

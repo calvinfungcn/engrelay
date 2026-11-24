@@ -186,6 +186,7 @@ function Invoke-Native([string]$Name, [string]$Script, [string[]]$Arguments) {
 function Invoke-ManagerNative([string]$Name, [string]$Root, [string]$Action, [string]$Target = '') {
     $manager = Join-Path $package 'scripts/manage.ps1'
     $args = @('-Action', $Action, '-ProjectRoot', $Root)
+    if ($Action -eq 'Install') { $args += @('-WorkflowProfile', 'full') }
     if (-not [string]::IsNullOrEmpty($Target)) { $args += @('-SkillTarget', $Target) }
     $args += @('-WorkflowMode', 'optional')
     return Invoke-Native ($Name + ':' + $Action) $manager $args
@@ -195,6 +196,7 @@ function Invoke-ManagerStreams([string]$Root, [string]$Action, [string]$Target =
     $pkgRoot = if ([string]::IsNullOrWhiteSpace($PackageRootForManager)) { $package } else { [IO.Path]::GetFullPath($PackageRootForManager).TrimEnd('\', '/') }
     $manager = if ([string]::IsNullOrWhiteSpace($ManagerPath)) { Join-Path $pkgRoot 'scripts/manage.ps1' } else { $ManagerPath }
     $params = @{ Action = $Action; ProjectRoot = $Root; WorkflowMode = 'optional' }
+    if ($pkgRoot -eq $package -and $Action -eq 'Install') { $params.WorkflowProfile = 'full' }
     if (-not [string]::IsNullOrEmpty($Target)) { $params.SkillTarget = $Target }
     $information = New-Object 'Collections.Generic.List[string]'
     $childExit = 0
@@ -225,6 +227,7 @@ function Invoke-ManagerStreamsAllowFail([string]$Root, [string]$Action, [string]
     $pkgRoot = if ([string]::IsNullOrWhiteSpace($PackageRootForManager)) { $package } else { [IO.Path]::GetFullPath($PackageRootForManager).TrimEnd('\', '/') }
     $manager = if ([string]::IsNullOrWhiteSpace($ManagerPath)) { Join-Path $pkgRoot 'scripts/manage.ps1' } else { $ManagerPath }
     $params = @{ Action = $Action; ProjectRoot = $Root; WorkflowMode = 'optional' }
+    if ($pkgRoot -eq $package -and $Action -eq 'Install') { $params.WorkflowProfile = 'full' }
     if (-not [string]::IsNullOrEmpty($Target)) { $params.SkillTarget = $Target }
     $information = New-Object 'Collections.Generic.List[string]'
     $childExit = 0
@@ -344,6 +347,7 @@ function Assert-NoInstallGuidance([string[]]$Information, [string[]]$Success) {
 function Invoke-ManagerStreamsSuppressInfo([string]$Root, [string]$Action, [string]$Target = '') {
     $manager = Join-Path $package 'scripts/manage.ps1'
     $params = @{ Action = $Action; ProjectRoot = $Root; WorkflowMode = 'optional' }
+    if ($Action -eq 'Install') { $params.WorkflowProfile = 'full' }
     if (-not [string]::IsNullOrEmpty($Target)) { $params.SkillTarget = $Target }
     $success = @(& $manager @params 6>$null)
     return @($success | ForEach-Object { [string]$_ })

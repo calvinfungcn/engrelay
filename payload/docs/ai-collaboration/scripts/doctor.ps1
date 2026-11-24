@@ -164,7 +164,7 @@ function Get-ExpectedLayout([object]$Snapshot, [string]$Target, [string]$TargetD
     foreach ($entry in @(Get-Prop $Snapshot 'files' @())) {
         $relative = [string]$entry.path
         if ($relative -eq 'agent-rules.md') { $layout['AGENTS.md'] = 'agents' }
-        elseif ($relative -like 'payload/docs/ai-collaboration/lite/*') { continue }
+        elseif ($relative -like 'payload/docs/ai-collaboration/lite/*' -or $relative -like 'payload/docs/ai-collaboration/v2/*') { continue }
         elseif ($relative -like 'payload/*') { $layout[$relative.Substring(8)] = 'file' }
     }
     if ($Target -ne 'none') {
@@ -207,6 +207,15 @@ else {
                 exit 1
             }
             & $liteDoctor -WorkspaceRoot $workspace -PackageRoot $PackageRoot -HostTarget $HostTarget
+            exit $LASTEXITCODE
+        }
+        if ($null -ne $profileState -and [string](Get-Prop $profileState 'workflowProfile' '') -ceq 'v2') {
+            $v2Doctor = Join-Path $PSScriptRoot '../v2/scripts/doctor.ps1'
+            if ((Test-ReparseChain $v2Doctor) -or -not (Test-Path -LiteralPath $v2Doctor -PathType Leaf)) {
+                Write-Output 'WorkflowProfile=v2; use its canonical docs/engrelay/scripts/doctor.ps1 from the matching package; Full-only checks skipped.'
+                exit 1
+            }
+            & $v2Doctor -WorkspaceRoot $workspace -PackageRoot $PackageRoot -HostTarget $HostTarget
             exit $LASTEXITCODE
         }
     }

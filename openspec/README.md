@@ -14,6 +14,8 @@ from installation exports by .gitattributes.
 
 ## Follow-up items
 
+EngRelay v2 is implemented and [archived](changes/archive/2026-11-24-introduce-engrelay-v2-workflow/proposal.md), with [independent review and release evidence](../docs/reviews/introduce-engrelay-v2-workflow/index.md). Its main contracts are [v2 relay](specs/engrelay-v2-relay/spec.md) and [workflow profiles](specs/workflow-profiles/spec.md). Existing Full/Lite installations keep their recorded profile.
+
 Concise status for discussed follow-ups. Detailed implementation progress stays
 in each change's `tasks.md`; this table is not a second checklist or execution
 authority.

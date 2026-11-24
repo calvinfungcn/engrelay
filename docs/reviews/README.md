@@ -7,6 +7,7 @@ archive does not reset cumulative counts or add new review conclusions.
 
 | Change | Final status | Review rounds | Archive |
 | --- | --- | --- | --- |
+| introduce-engrelay-v2-workflow | verified / accepted | 1 independent implementation review | [Review and archive record](introduce-engrelay-v2-workflow/index.md) |
 | improve-review-readiness-and-convergence | verified / accepted | original closure: 3; complete pre-release review: 4 | [Archive record](improve-review-readiness-and-convergence/index.md#archive-record) |
 | fix-task-scope-preservation | verified / accepted | original closure: 6; pre-release review recorded separately | [Archive record](fix-task-scope-preservation/index.md#archive-record) |
 | improve-phase0-first-trial | ready to commit (Cursor re-review) | 2 | [Archive record](improve-phase0-first-trial/index.md#archive-record) |

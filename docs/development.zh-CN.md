@@ -2,7 +2,7 @@
 
 [English](development.md)
 
-GitHub 仓库是受维护的公开源码。初始公开基线为 v1.7.0，提交 `9c26c22266625aa04822637baf8f283763362677`，MIT 许可证。当前发行基线为 v1.11.3。本地维护设置不会创建活跃业务批次，也不授权发布。
+GitHub 仓库是受维护的公开源码。初始公开基线为 v1.7.0，提交 `9c26c22266625aa04822637baf8f283763362677`，MIT 许可证。当前发行基线为 v2.0.0。本地维护设置不会创建活跃业务批次，也不授权发布。
 
 ## 从这里开始
 
@@ -45,7 +45,7 @@ GitHub 仓库是受维护的公开源码。初始公开基线为 v1.7.0，提交
 1. 完成连贯变更及相应审查；公开行为变更时同步两种语言 README。选定目标包版本，并在导出发行包前用日期、变更与验证限制更新 CHANGELOG.md。
 2. 用 git archive 将明确审查过的提交导出到新的可丢弃暂存目录。已提交的 .gitattributes 从安装导出中排除 openspec/ 与 docs/reviews/。被忽略的运行态/宿主目录不是 Git 输入。
 3. 在暂存副本运行 scripts/update-snapshot.ps1，参数 `-Version <version>` 与 `-ForRelease`。记录实际导出字节并拒绝私有/工具目录及常见敏感文件名。它不是穷尽的秘密扫描。
-4. 核对精确文件集与哈希，仅运行与变更行为相称的检查。在暂存包上运行生命周期夹具，日志放在包外。发布版本变化时须更新测试版本期望；当前 smoke 脚本期望 v1.11.3；其可选冻结 v1.6.1 夹具仍是独立历史检查。
+4. 核对精确文件集与哈希，仅运行与变更行为相称的检查。在暂存包上运行生命周期夹具，日志放在包外。发布版本变化时须更新测试版本期望；当前 smoke 脚本期望 v2.0.0；其可选冻结 v1.6.1 夹具仍是独立历史检查。
 5. 发行包稳定后，将其 snapshot.json 拷回源码作为发布元数据，并确保新导出一致。保留不可变标签/归档与旧包。发布或推送须单独请求；开发设置不执行发布。
 
 意图变更与属性提交后的导出示例：
@@ -66,21 +66,17 @@ Expand-Archive -LiteralPath "$engrelayBuild/source.zip" -DestinationPath "$engre
 
 `scripts/test-skill-discovery-guidance.ps1` 默认从 git ref `9c26c22266625aa04822637baf8f283763362677` 构建无引导基线（`-BaselineGitRef` 可覆盖）。候选验证使用提供的完整包根。
 
-## Lite／Full 开发检查
+## v2／Lite／Full 开发检查
 
-1.10.0 管理器写入 v2 清单，记录配置、精确部署集合及 LF／UTF-8 指纹。Full
-排除 Lite 子树；Lite 使用固定投影及项目自有配置。开发夹具不刷新根发行 snapshot。
-准备发行时，按上述构建流程在干净暂存中生成快照，仅拷回核验过的元数据。
-有明确清单的隔离工作树测试包仍不同于实际提交导出；合成测试版本只作夹具元数据，
-不能称为经审查的发行包。
+1.10.0+ 管理器写入 v2 清单，记录配置（`v2`、`full` 或 `lite`）、精确部署集合及 LF／UTF-8 指纹。
+未传 `-WorkflowProfile` 的新安装默认使用 `v2`，已有 `full`/`lite` 安装在升级与改模式时保留原配置。
+Full 排除 `v2/` 与 `lite/` 源子树；`v2` 位于 `payload/docs/ai-collaboration/v2/`，且 `RULES.md` +
+`skills/engrelay/SKILL.md` 受 150 行硬预算约束。开发夹具不刷新根发行 snapshot。
 
-`scripts/test-lite-state.ps1` 检查真实校验子进程退出码及零写入。
-`scripts/test-workflow-profiles.ps1 -PackageRoot <完整测试包> -OriginalRoot <已核验v1.9.6导出> -LogPath <外置.json>`
-按当前 PowerShell 宿主检查受影响生命周期；分别在 5.1 和 7 执行。原 v1.9.6 来源
-为本地 tag commit `c12f2646ab2a2369586f2097e34fdb678e16be30`，先核对完整清单，
-再使用原管理器及指纹。只读诊断使用 Status／CheckVersion、既有 Full doctor
-入口或 Lite 自身 doctor；宿主加载可为 unknown。夹具不证明实际 Agent 遵从或
-第三期准备完成。
+`scripts/test-v2-workflow.ps1 -PackageRoot <完整测试包>` 验证 `v2` 生命周期、150 行预算、只读
+`v2` `doctor.ps1`、配置/运行态保留及 `full`/`lite` 不隐式切换。既有 Full 夹具测试已显式传入
+`-WorkflowProfile full`。应在可用的 Windows PowerShell 5.1 与 PowerShell 7 下运行检查（缺少某宿主时如实报告未验证）。
+`scripts/test-lite-state.ps1` 与 `scripts/test-workflow-profiles.ps1` 继续用于 Lite/Full 回归检查。
 
 ## 本地设置与下次对话
 

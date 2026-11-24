@@ -4,7 +4,7 @@ param(
     [Parameter(Mandatory = $true)][string]$ProjectRoot,
     [ValidateSet('none', 'agents', 'codex', 'claude', 'cursor', 'opencode', 'antigravity', 'gemini', 'iflow', 'qwen')]
     [string]$SkillTarget = 'none',
-    [ValidateSet('full', 'lite')][string]$WorkflowProfile,
+    [ValidateSet('v2', 'full', 'lite')][string]$WorkflowProfile,
     [ValidateSet('optional', 'default', 'disabled')][string]$WorkflowMode = 'optional',
     [switch]$Preview
 )
@@ -25,7 +25,7 @@ $begin = '<!-- ai-collaboration:begin -->'
 $end = '<!-- ai-collaboration:end -->'
 $utf8 = New-Object Text.UTF8Encoding($false, $true)
 $sourceCloudTags = @{}
-$script:resolvedProfile = 'full'
+$script:resolvedProfile = 'v2'
 $targets = @{
     agents = '.agents'; codex = '.codex'; claude = '.claude'; cursor = '.cursor'
     opencode = '.opencode'; antigravity = '.agent'; gemini = '.gemini'; iflow = '.iflow'; qwen = '.qwen'
@@ -117,6 +117,12 @@ function Write-Bytes([string]$Path, [byte[]]$Bytes) {
 
 function Get-SkillCopyPath([string]$Relative, [string]$SelectedTarget) {
     if ($SelectedTarget -eq 'none') { return $null }
+    if ($script:resolvedProfile -eq 'v2') {
+        if ($Relative -match '^docs/engrelay/skills/(engrelay)/(.+)$') {
+            return $targets[$SelectedTarget] + '/skills/' + $Matches[1] + '/' + $Matches[2]
+        }
+        return $null
+    }
     if ($Relative -match '^docs/ai-collaboration/skills/(ce-code-review|ce-debug|ce-simplify-code|ce-compound|ai-collab-requirements|ai-collab-start|ai-collab-continue)/(.+)$') {
         return $targets[$SelectedTarget] + '/skills/' + $Matches[1] + '/' + $Matches[2]
     }
@@ -128,6 +134,20 @@ function Get-BasePlan {
     if (-not (Test-Path -LiteralPath $payload -PathType Container)) { throw 'Payload missing' }
     Assert-NoReparse $payload -AllowSourceCloud
     $items = New-Object 'Collections.Generic.List[object]'
+    if ($script:resolvedProfile -eq 'v2') {
+        $v2Root = Join-Path $payload 'docs/ai-collaboration/v2'
+        $files = @('RULES.md','README.md','README.zh-CN.md','LICENSE','skills/engrelay/SKILL.md','templates/board.md','templates/wp.md','templates/project-config.md','scripts/doctor.ps1')
+        foreach ($relative in $files) {
+            $source = Join-Path $v2Root $relative
+            Assert-NoReparse $source -AllowSourceCloud
+            if (-not (Test-Path -LiteralPath $source -PathType Leaf)) { throw "v2 source missing: $relative" }
+            $items.Add([pscustomobject]@{path=('docs/engrelay/' + $relative);kind='file';source=$source})
+        }
+        $items.Add([pscustomobject]@{path='docs/engrelay.config.md';kind='project-document';source=(Join-Path $v2Root 'templates/project-config.md')})
+        $items.Add([pscustomobject]@{path='AGENTS.md';kind='agents';source=(Join-Path $v2Root 'agent-rules.md')})
+        $items.Add([pscustomobject]@{path='.gitignore';kind='gitignore';source=$null})
+        return $items.ToArray()
+    }
     if ($script:resolvedProfile -eq 'lite') {
         $liteRoot = Join-Path $payload 'docs/ai-collaboration/lite'
         $files = @('RULES.md','README.md','README.zh-CN.md','LICENSE','templates/project-config.md','templates/queue.md','templates/task.md','templates/handoff.md','scripts/validate-state.ps1','scripts/doctor.ps1')
@@ -145,7 +165,8 @@ function Get-BasePlan {
     foreach ($file in Get-ChildItem -LiteralPath $payload -Recurse -File) {
         Assert-NoReparse $file.FullName -AllowSourceCloud
         $relative = $file.FullName.Substring($payload.Length + 1).Replace('\', '/')
-        if ($relative.StartsWith('docs/ai-collaboration/lite/', [StringComparison]::Ordinal)) { continue }
+        if ($relative.StartsWith('docs/ai-collaboration/lite/', [StringComparison]::Ordinal) -or
+            $relative.StartsWith('docs/ai-collaboration/v2/', [StringComparison]::Ordinal)) { continue }
         if ($relative -notmatch '^docs/ai-collaboration/' -and $relative -notin @(
             'docs/reviews/README.md', 'docs/solutions/README.md', 'docs/solutions/solution.template.md')) {
             throw "Unexpected payload file: $relative"
@@ -174,6 +195,25 @@ function Get-Plan([string]$SelectedTarget) {
 function Write-InstallDiscoveryGuidance([string]$SelectedTarget) {
     if ($script:resolvedProfile -eq 'lite') {
         Write-Information 'WorkflowProfile: lite; SkillTarget: none; explicitly read docs/engrelay-lite/RULES.md and docs/engrelay-lite.config.md. No dedicated Skill or host discovery copies. Host loading=unknown.' -InformationAction Continue
+        return
+    }
+    if ($script:resolvedProfile -eq 'v2') {
+        $rulesFull = [IO.Path]::GetFullPath((Join-Path $ProjectRoot 'docs\engrelay\RULES.md'))
+        $skillFull = [IO.Path]::GetFullPath((Join-Path $ProjectRoot 'docs\engrelay\skills\engrelay\SKILL.md'))
+        Write-Information 'WorkflowProfile: v2' -InformationAction Continue
+        Write-Information ("SkillTarget: " + $SelectedTarget) -InformationAction Continue
+        Write-Information ("ProjectRoot: " + $ProjectRoot) -InformationAction Continue
+        Write-Information ("Canonical Rules: " + $rulesFull) -InformationAction Continue
+        Write-Information ("Canonical Skill: " + $skillFull) -InformationAction Continue
+        if ($SelectedTarget -eq 'none') {
+            Write-Information 'This install did not deploy package-managed host discovery copies for this target.' -InformationAction Continue
+        }
+        else {
+            $discoveryRelative = ($targets[$SelectedTarget] + '/skills') -replace '/', '\'
+            $discoveryFull = [IO.Path]::GetFullPath((Join-Path $ProjectRoot $discoveryRelative))
+            Write-Information ("Package-managed discovery copies: " + $discoveryFull) -InformationAction Continue
+        }
+        Write-Information 'File placement does not prove host discovery or loading; confirm in an actual host session.' -InformationAction Continue
         return
     }
     $canonicalRelative = 'docs/ai-collaboration/skills/ai-collab-start/SKILL.md'
@@ -585,9 +625,12 @@ function Read-State {
     }
     if ($state.version -eq 2) {
         $profile = [string](Get-StateValue $state 'workflowProfile' '')
-        if ($profile -cnotin @('full','lite') -or [string](Get-StateValue $state 'workflowMode' '') -cnotin @('optional','default','disabled') -or
+        if ($profile -cnotin @('v2','full','lite') -or [string](Get-StateValue $state 'workflowMode' '') -cnotin @('optional','default','disabled') -or
             [string](Get-StateValue $state 'packageVersion' '') -notmatch '^\d+\.\d+\.\d+$' -or $null -eq (Get-StateValue $state 'skillTarget' $null)) { throw 'Invalid v2 workflow profile or metadata' }
         $script:resolvedProfile = $profile
+    }
+    else {
+        $script:resolvedProfile = 'full'
     }
     $script:installedLayout = Get-InstalledLayout $state
     $allowedLayout = $script:installedLayout.Map
@@ -600,7 +643,9 @@ function Read-State {
         $seen[$record.path] = $true
         $null = Resolve-ProjectFile $record.path
           if ($record.kind -eq 'project-document') {
-              if ($state.version -ne 2 -or $script:resolvedProfile -ne 'lite' -or $record.path -cne 'docs/engrelay-lite.config.md' -or
+              $validProjectDoc = ($script:resolvedProfile -eq 'lite' -and $record.path -ceq 'docs/engrelay-lite.config.md') -or
+                  ($script:resolvedProfile -eq 'v2' -and $record.path -ceq 'docs/engrelay.config.md')
+              if ($state.version -ne 2 -or -not $validProjectDoc -or
                   $null -ne (Get-StateValue $record 'adoption' $null) -or $null -ne (Get-StateValue $record 'backup' $null) -or
                   $null -ne (Get-StateValue $record 'insertion' $null) -or $null -ne (Get-StateValue $record 'legacyProfile' $null)) { throw 'Invalid project-document ownership record' }
               continue
@@ -700,7 +745,7 @@ function Get-ManagedInsertion([string]$Kind, [string]$Text, [string]$Mode, [stri
         $prefix = $newline
     }
     if ($Kind -eq 'agents') {
-        $rulesRelative = if ($script:resolvedProfile -eq 'lite') { 'payload/docs/ai-collaboration/lite/agent-rules.md' } else { 'agent-rules.md' }
+        $rulesRelative = if ($script:resolvedProfile -eq 'lite') { 'payload/docs/ai-collaboration/lite/agent-rules.md' } elseif ($script:resolvedProfile -eq 'v2') { 'payload/docs/ai-collaboration/v2/agent-rules.md' } else { 'agent-rules.md' }
         $canonical = (Read-FileInfo (Join-Path $packageRoot $rulesRelative)).Text.TrimEnd([char]13, [char]10) -replace '\r?\n', $newline
         $body = '## ai-collaboration Workflow policy' + $newline +
             '- WorkflowMode: ' + $Mode + $newline +
@@ -730,6 +775,7 @@ $separator = [IO.Path]::DirectorySeparatorChar
 if ($ProjectRoot -eq $packageRoot -or $ProjectRoot.StartsWith($packageRoot + $separator, [StringComparison]::OrdinalIgnoreCase) -or
     $packageRoot.StartsWith($ProjectRoot + $separator, [StringComparison]::OrdinalIgnoreCase)) { throw 'Project/package overlap is not allowed' }
 $state = Read-State
+if ($null -eq $state -and $Action -eq 'Adopt' -and -not $PSBoundParameters.ContainsKey('WorkflowProfile')) { $script:resolvedProfile = 'full' }
 if ($null -eq $state -and $PSBoundParameters.ContainsKey('WorkflowProfile')) { $script:resolvedProfile = $WorkflowProfile }
 $reinstallInactive = $null -ne $state -and $state.phase -eq 'inactive' -and $Action -eq 'Install'
 if ($reinstallInactive -and $PSBoundParameters.ContainsKey('WorkflowProfile')) { $script:resolvedProfile = $WorkflowProfile }
@@ -741,6 +787,7 @@ if ($null -ne $state) {
 }
 if ($script:resolvedProfile -eq 'lite' -and $SkillTarget -ne 'none') { throw 'Lite supports SkillTarget none only; use explicit RULES.md reading' }
 if ($Action -eq 'Adopt' -and $script:resolvedProfile -eq 'lite') { throw 'Private Lite adoption is unsupported; preserve its inputs and coordinate entries before a clean install' }
+if ($Action -eq 'Adopt' -and $script:resolvedProfile -eq 'v2') { throw 'Private v2 adoption is unsupported; preserve its inputs and coordinate entries before a clean install' }
 if ($Preview -and $Action -ne 'Adopt') { throw 'Preview is supported only for Adopt; no files written' }
 
 if ($Action -eq 'CheckVersion') {
@@ -830,6 +877,14 @@ if ($Action -eq 'Install') {
         $entryPath = Resolve-ProjectFile 'AGENTS.md'
         if ($null -eq $state -and (Test-Path -LiteralPath $entryPath -PathType Leaf) -and (Read-Text $entryPath) -match '(?i)EngRelay-Lite|engrelay-lite/|engrelay-lite\.config|\.ai/engrelay-lite') { throw 'Unmanaged Lite entry: preserve and coordinate project-owned instructions before installing' }
     }
+    if ($null -eq $state -or $script:resolvedProfile -eq 'v2') {
+        $v2Directory = Join-Path $ProjectRoot 'docs/engrelay'
+        if (($null -eq $state -or [string](Get-StateValue $state 'workflowProfile' 'full') -ne 'v2') -and (Test-Path -LiteralPath $v2Directory)) { throw 'Unmanaged v2 directory: preserve inputs and coordinate the old entry before a clean install' }
+        $v2Config = Resolve-ProjectFile 'docs/engrelay.config.md'
+        if (($null -eq $state -or [string](Get-StateValue $state 'workflowProfile' 'full') -ne 'v2') -and (Test-Path -LiteralPath $v2Config)) { throw 'Unmanaged v2 config: preserve and coordinate docs/engrelay.config.md before a clean install' }
+        $entryPath = Resolve-ProjectFile 'AGENTS.md'
+        if ($null -eq $state -and (Test-Path -LiteralPath $entryPath -PathType Leaf) -and (Read-Text $entryPath) -match '(?i)docs/engrelay/RULES\.md|docs/engrelay\.config\.md|\.ai/relay/|EngRelay v2') { throw 'Unmanaged v2 entry: preserve and coordinate project-owned instructions before installing' }
+    }
     foreach ($item in Get-Plan $SkillTarget) {
         $path = Resolve-ProjectFile $item.path
         Assert-NoFileAncestor $path
@@ -888,6 +943,9 @@ if ($Action -eq 'Install') {
 
 if ($Action -eq 'Adopt') {
     if ($null -ne $state) { throw 'Cannot adopt a project with an existing installation manifest; use Upgrade or reconcile the retained state' }
+    if ((Test-Path -LiteralPath (Join-Path $ProjectRoot 'docs/engrelay')) -or (Test-Path -LiteralPath (Resolve-ProjectFile 'docs/engrelay.config.md'))) {
+        throw 'Unmanaged v2 layout: preserve private v2 inputs and coordinate project-owned entry text before adopting'
+    }
     $profile = Get-LegacyProfile
     Assert-NoRetiredResidualActivation $profile
     $canonical = @{}
@@ -1072,20 +1130,26 @@ foreach ($record in $state.files) {
         else { Write-Bytes $path (Encode-Text $remainder $info.Bom) }
     }
 }
-if ($script:resolvedProfile -eq 'lite') {
-    # Only consider parents of non-preexisting Lite package files. Never recurse
+if ($script:resolvedProfile -in @('lite', 'v2')) {
+    # Only consider parents of non-preexisting managed package files. Never recurse
     # into unknown directories or remove a directory containing any entry.
-    $liteRoot = Join-Path $ProjectRoot 'docs/engrelay-lite'
-    $liteDirectories = @{}
+    $profileRootName = if ($script:resolvedProfile -eq 'lite') { 'docs/engrelay-lite' } else { 'docs/engrelay' }
+    $profileRoot = Join-Path $ProjectRoot $profileRootName
+    $profileDirectories = @{}
     foreach ($record in $state.files) {
-        if ($record.kind -ne 'file' -or $record.preexisting -or -not $record.path.StartsWith('docs/engrelay-lite/', [StringComparison]::Ordinal)) { continue }
+        if ($record.kind -ne 'file' -or $record.preexisting) { continue }
+        $isProfileSubdir = $record.path.StartsWith($profileRootName + '/', [StringComparison]::Ordinal)
+        $isV2SkillSubdir = $script:resolvedProfile -eq 'v2' -and $state.skillTarget -cne 'none' -and
+            $record.path -ceq ($targets[[string]$state.skillTarget] + '/skills/engrelay/SKILL.md')
+        if (-not $isProfileSubdir -and -not $isV2SkillSubdir) { continue }
+        $stopRoot = if ($isProfileSubdir) { $profileRoot } else { Join-Path $ProjectRoot ($targets[[string]$state.skillTarget] + '/skills/engrelay') }
         $parent = Split-Path -Parent (Resolve-ProjectFile $record.path)
-        while ($parent -eq $liteRoot -or $parent.StartsWith($liteRoot + [IO.Path]::DirectorySeparatorChar, [StringComparison]::OrdinalIgnoreCase)) {
-            $liteDirectories[$parent] = $true
+        while ($parent -eq $stopRoot -or $parent.StartsWith($stopRoot + [IO.Path]::DirectorySeparatorChar, [StringComparison]::OrdinalIgnoreCase)) {
+            $profileDirectories[$parent] = $true
             $parent = Split-Path -Parent $parent
         }
     }
-    foreach ($directory in @($liteDirectories.Keys | Sort-Object Length -Descending)) {
+    foreach ($directory in @($profileDirectories.Keys | Sort-Object Length -Descending)) {
         Assert-NoReparse $directory
         if ((Test-Path -LiteralPath $directory -PathType Container) -and @(Get-ChildItem -LiteralPath $directory -Force).Count -eq 0) {
             Remove-Item -LiteralPath $directory -Force
