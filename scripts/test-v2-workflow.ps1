@@ -90,6 +90,48 @@ try {
     Assert (([IO.File]::ReadAllText((Join-Path $v2 'AGENTS.md'))).Contains('Project custom rule.')) 'Upgrade preserves AGENTS outside text'
     Assert (Test-Path -LiteralPath (Join-Path $v2 '.ai/relay/demo-change/board.md') -PathType Leaf) 'Upgrade preserves .ai/relay runtime'
 
+    # 4b. CURRENT pointer: valid, stale, illegal or traversal; doctor stays zero-write
+    $currentPath=Join-Path $v2 '.ai/relay/CURRENT'
+    Write-Project $v2 '.ai/relay/CURRENT' "  demo-change`n"
+    $validOut=Doctor 'V2-15 CURRENT valid' $v2 'payload/docs/ai-collaboration/v2/scripts/doctor.ps1' $true $PackageRoot 'Active relay change=demo-change (valid)'
+    Assert ($validOut.Contains('no files written')) 'Valid CURRENT doctor reports no files written'
+    Write-Project $v2 '.ai/relay/CURRENT' "archived-change`r`n"
+    $staleBytes=[IO.File]::ReadAllBytes($currentPath)
+    $staleOut=Doctor 'V2-16 CURRENT stale' $v2 'payload/docs/ai-collaboration/v2/scripts/doctor.ps1' $true $PackageRoot 'Active relay pointer stale: archived-change (board.md missing)'
+    Assert ($staleOut.Contains('no files written')) 'Stale CURRENT doctor reports no files written'
+    Assert ([Linq.Enumerable]::SequenceEqual($staleBytes,[IO.File]::ReadAllBytes($currentPath))) 'Stale CURRENT bytes unchanged'
+    $badCases=@(
+        @{ name='space'; text='not valid' },
+        @{ name='slash'; text='foo/bar' },
+        @{ name='traversal'; text='..\..\outside' },
+        @{ name='dotdot'; text='a..b' },
+        @{ name='empty'; text='' }
+    )
+    foreach ($bad in $badCases) {
+        Write-Project $v2 '.ai/relay/CURRENT' $bad.text
+        $beforeHash=(Get-FileHash -LiteralPath $currentPath -Algorithm SHA256).Hash
+        $null=Doctor ('V2-17 CURRENT reject '+$bad.name) $v2 'payload/docs/ai-collaboration/v2/scripts/doctor.ps1' $false $PackageRoot 'Invalid relay CURRENT pointer'
+        Assert ((Get-FileHash -LiteralPath $currentPath -Algorithm SHA256).Hash -ceq $beforeHash) ('Rejected CURRENT is not rewritten ('+$bad.name+')')
+    }
+    Remove-Item -LiteralPath $currentPath
+    $absentOut=Doctor 'V2-17b CURRENT absent' $v2 'payload/docs/ai-collaboration/v2/scripts/doctor.ps1' $true $PackageRoot 'Runtime relay boards found='
+    Assert (-not $absentOut.Contains('Active relay')) 'Absent CURRENT adds no active-pointer diagnostic'
+    Assert (-not (Test-Path -LiteralPath $currentPath)) 'Absent CURRENT is not created'
+    $reparseProj=New-Project 'current-reparse'
+    Write-Project $reparseProj 'AGENTS.md' 'Original project rules.'
+    $null=Call 'V2-18 reparse install' $reparseProj @('-Action','Install')
+    $outside=Join-Path $fixture 'reparse-outside'
+    $null=New-Item -ItemType Directory -Path $outside -Force
+    $null=New-Item -ItemType Directory -Path (Join-Path $reparseProj '.ai') -Force
+    $relayLink=Join-Path $reparseProj '.ai\relay'
+    New-Item -ItemType Junction -Path $relayLink -Target $outside | Out-Null
+    try {
+        [IO.File]::WriteAllText((Join-Path $outside 'CURRENT'),"demo-change`n",$utf8)
+        $null=Doctor 'V2-18 CURRENT reparse' $reparseProj 'payload/docs/ai-collaboration/v2/scripts/doctor.ps1' $false $PackageRoot 'Reparse point in diagnostic input'
+    } finally {
+        if (Test-Path -LiteralPath $relayLink) { [IO.Directory]::Delete($relayLink, $false) }
+    }
+
     # 5. Owned file drift & missing config fail-closed
     $rulesPath=Join-Path $v2 'docs/engrelay/RULES.md'; $rulesBytes=[IO.File]::ReadAllBytes($rulesPath)
     [IO.File]::AppendAllText($rulesPath,"`nDrifted.",$utf8)

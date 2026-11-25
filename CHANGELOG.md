@@ -2,6 +2,17 @@
 
 [Simplified Chinese](CHANGELOG.zh-CN.md)
 
+## 2.0.1 — 2026-11-25
+
+- EngRelay v2 relay ergonomics: a review session may write only the change relay directory, allowed `.ai/relay/CURRENT` metadata, and `tasks.md` when acceptance is fully satisfied. `FIX REQUIRED` and a recorded `(a)` stay in that session as notes; the fixer session runs `do <change-id> <WP-XX>`, so the same review session can verify the next round.
+- `plan`, `do`, and `review` end with a Next Step card. Its body is always five lines (`Primary`, `Command` or `Wait`, `Axes`, `Gate` or recovery, `Alternate` or `none`), so a missing alternate does not shorten it. One action is primary, copied commands keep the change id, and an unauthorized product/ceiling block or an unverified harness block uses `Command: Wait` for that work package.
+- The Rules command field now explicitly permits `none` for a completed route with no next command, alongside executable commands and `Wait`.
+- `doctor.ps1` validates the one-line `CURRENT` pointer without creating, repairing, or deleting it. The test fixture removes its junction with non-recursive `[IO.Directory]::Delete` cleanup.
+- `.ai/relay/CURRENT` is a one-line active-change pointer. Explicit ids lock the call and are echoed as `Change: <change-id>`. Shorthand follows a valid pointer; a missing or stale pointer lists candidates when several boards exist. The file does not activate the workflow. `doctor.ps1` reads it without creating, repairing, or deleting it.
+- Combined `RULES.md` + `engrelay` Skill: 89/150 lines. `agent-rules.md` remains 10/18.
+- Pre-release implementation checks, before the final clean-package run: Windows PowerShell 5.1.26100.9818 and PowerShell 7.6.10 each ran `test-v2-workflow.ps1` (47 calls / 44 checks) and `test-workflow-profiles.ps1` (83 calls / 32 checks) on separate disposable working-tree packages built from the prior archive plus the then-current package files. The packages were not shared, because that profile test temporarily removes one unselected source file. A fictional `%TEMP%` drill covered two-session review reuse, Next Step cards, and `CURRENT` resolution. These were implementation checks, not checks of the final release package.
+- Final clean-package verification and its limits are recorded in the [2.0.1 release preparation](https://github.com/calvinfungcn/engrelay/blob/v2.0.1/docs/reviews/refine-v2-relay-ergonomics/release-preparation.md).
+
 ## 2.0.0 — 2026-11-24
 
 - **EngRelay v2 (`WorkflowProfile=v2`)**: Added a lean OpenSpec cross-platform relay profile (`payload/docs/ai-collaboration/v2/` -> `docs/engrelay/`) designed for small-quota multi-platform subscriptions:

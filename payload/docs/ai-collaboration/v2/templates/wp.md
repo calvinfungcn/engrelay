@@ -19,6 +19,8 @@
 
 ## Review / Verification (<= 50 lines per round; max 2 rounds)
 
+Fixes return to the implement/fix session with `do <change-id> <WP-XX>`. This review lane records verdicts and a bounded `(a)` authorization only; it does not edit product source, config, or tests.
+
 ### Round 1
 - **Reviewer**: `<tool/model (independent of producer/fixer; heterogeneous preferred)>`
 - **Verdict**: `PASS | FIX REQUIRED`
@@ -31,3 +33,11 @@
 - **Verdict**: `PASS | BLOCKED` (checks Round 1 BLOCKERs + fix-scope real regressions; no NOTE escalation)
 - **Outcome / Failure class**: `<if unresolved or 2x same signature -> [~] blocked; failure_class: product|harness; 3 owner options>`
 - **Recovery / Owner disposition**: `<harness resume evidence | bounded extra cycle | deferred | owner-limited acceptance (never marked as technical pass)>`
+
+## Next Step (advisory; always these five lines, even when Alternate is none; not executed here)
+
+- **Primary**: `<one lane: fixer do | independent review | wait for (a)/(b)/(c) | verify harness recovery | close-out>`
+- **Command**: `<do or review <change-id> <WP-XX> | Wait: no executable fix or same-input rerun | none when nothing is ready>`
+- **Axes**: `Risk <S|M|H>; Difficulty <C1–C5>; Size/Rhythm <XS|S|M|L / 可断点|建议连续>`
+- **Gate**: `<none | independent review | independent review + post-repair verification | recovery still unverified: <check>>`
+- **Alternate**: `<conditional do <change-id> <WP-YY> | none>`

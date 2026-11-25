@@ -1,6 +1,6 @@
 # EngRelay v2 Rules
 
-Activate ONLY when the current task explicitly selects `EngRelay` (or `WorkflowMode: default` without another controller). Discovery, `.ai/relay/`, or historical files never activate it. Use one primary controller per task; never load the legacy `full` handbook or `validate-runtime-state.ps1`. OpenSpec (`proposal`, `design`, `specs`, `tasks.md`) is the sole requirement/task authority. Optional `docs/engrelay.config.md` supplies project commands and quota notes; blank entries never block planning and never waive required acceptance.
+Activate ONLY when the current task explicitly selects `EngRelay` (or `WorkflowMode: default` without another controller). Discovery, `.ai/relay/` (including `CURRENT`), or historical files never activate it. Use one primary controller per task; never load the legacy `full` handbook or `validate-runtime-state.ps1`. OpenSpec (`proposal`, `design`, `specs`, `tasks.md`) is the sole requirement/task authority. Optional `docs/engrelay.config.md` supplies project commands and quota notes; blank entries never block planning and never waive required acceptance.
 
 ## 1. Risk, Difficulty, and Sizing Axes (Orthogonal)
 
@@ -19,10 +19,11 @@ Activate ONLY when the current task explicitly selects `EngRelay` (or `WorkflowM
    - `Global Constraints`: cross-WP hard invariants (exact field/column names, feature-flag defaults, forbidden actions).
    - WP table: `WP | Module | OpenSpec | Risk | Difficulty | Size/Rhythm | Review Gate | Deps | Status | Owner/Reviewer`.
    - Per-WP block: `Shape` (`ui|backend|concurrency|integration|docs|ops`), `Repo & Diff Scope` (affected repo paths, base ref/range or file boundary), `Interfaces` (`Consumes`/`Produces`), `References` (0–2 solution paths), `Deferred / Handoff` (explicit downstream WP for cross-boundary checks), and `Done & Verify`.
+4. After `board.md` exists, write one-line `.ai/relay/CURRENT` for the `<change-id>` locked at entry.
 
 ## 3. `do` Mode (Platform-Native Execution)
 
-1. Execute continuously inside the assigned WP: resolve local design details, implement, run required checks, and simplify diff.
+1. Execute continuously inside the assigned WP: resolve local design details, implement, run required checks, and simplify diff. A resumed fix also reads the latest unresolved `BLOCKER` list and any recorded `(a)` authorization in `wp-XX.md`.
 2. If actual risk exceeds the plan (e.g., `S` touches auth/contracts), immediately update WP risk in `board.md`/`wp-XX.md` and refresh the review gate; NEVER self-close via `DONE_WITH_CONCERNS`.
 3. Direct-close (`[x] done`) ONLY when the WP's applicable independent review/verification gate is empty and checks pass.
 4. On quota/session pause: append a ≤15-line `Checkpoint` (done / remaining / traps / next step) to `wp-XX.md` so another platform resumes `do` directly without triggering review.
@@ -33,9 +34,15 @@ Activate ONLY when the current task explicitly selects `EngRelay` (or `WorkflowM
 1. **Minimal entry & scoped reads**: Start from `board.md` WP entry, `wp-XX.md`, and complete WP change scope (covering multi-repo, untracked, staged, and committed changes while isolating shared-worktree sibling edits). Read authoritative OpenSpec, module `AGENTS.md`, callers, and full source whenever needed to verify spec compliance or trace a concrete risk.
 2. **Evidence & triage**: Confirm reused implementer test output matches current reviewed inputs; run targeted checks only for specific doubts or required `H` verification. Output ≤50 lines/round classifying: `BLOCKER` (P0/P1 real bugs, security/money/concurrency/contract/build failures), `NOTE` (non-blocking style/extra-coverage ideas), and `⚠️ Cannot verify from diff`.
 3. **Review PASS vs Acceptance Complete**: `⚠️` allows `review PASS` ONLY when it does not block the WP's required acceptance AND maps explicitly to a named downstream WP in `board.md`. Without a downstream owner or when verification environment is unavailable, affected OpenSpec `tasks.md` items and the parent change MUST stay incomplete while independent WPs proceed. Only tick `tasks.md` when mapped acceptance is fully satisfied.
+4. **Write allowlist**: `review` may write only `.ai/relay/<change-id>/`, `.ai/relay/CURRENT` when this call used an explicit `<change-id>` or a missing/stale pointer with exactly one valid board, and `tasks.md` only when mapped acceptance is fully satisfied. It MUST NOT modify product source, config, or tests, including after `FIX REQUIRED` or an in-session `(a)`. Record the verdict or bounded authorization (keep the cumulative count) and stop. The fixer session runs `do <change-id> <WP-XX>`; the same uncontaminated review session performs the next round.
 
 ## 5. Circuit Breaker & `[~] blocked` Recovery
 
 1. **Hard 2-round cap**: Round 2 checks Round 1 `BLOCKER`s AND any real `BLOCKER` (new P0/P1, safety, contract, or build failure) in the fix's blast radius; only promoting `NOTE`s to `BLOCKER` is forbidden. Unresolved Round 2 or 2 consecutive identical failure signatures MUST halt immediately as `[~] blocked` (`failure_class: product|harness`), blocking only dependents and presenting 3 owner options (human intervene / defer / accept limits).
 2. **Cumulative history**: Verdict count and failure signatures bind to the **unfinished mapped acceptance** in `board.md` `Progress Ledger` — NEVER reset by re-`plan`, splitting, renaming WP ID, or switching platforms.
 3. **Recovery**: `harness` blocks resume once verified environment readiness holds. `product`/ceiling blocks require explicit owner choice: (a) finite bounded extra fix+review cycle (retaining history), (b) explicit deferral keeping `tasks.md` unchecked, or (c) distinct owner-limited acceptance (never recorded as technical verification pass).
+
+## 6. Next Step Card and `.ai/relay/CURRENT`
+
+1. **Next Step**: End `plan`, `do`, and `review` with one advisory card. Do not launch the next session, switch mode, or grant rounds. The card body is always these five lines, including when no alternate exists: `Primary` (exactly one lane), `Command` (one executable `do|review <change-id> <WP-XX>`, `Wait` with no repair or same-input rerun, or `none` when nothing is ready), `Axes` (Risk, Difficulty, Size/Rhythm), `Gate` (review/verification gate or the unmet recovery check), `Alternate` (one conditional ready WP, or `none`). A sixth line may send the fixer back to this review session. In-budget `FIX REQUIRED` and a recorded confirmed `(a)` may put `do <change-id> <WP-XX>` in `Command` without asking again or minting quota. An unauthorized `product`/ceiling `[~] blocked`, and a `harness` `[~] blocked` whose recovery is not yet verified, use `Command: Wait` for that WP.
+2. **CURRENT lock**: `.ai/relay/CURRENT` is one trimmed line matching `^[A-Za-z0-9][A-Za-z0-9._-]*$` and containing no `..`, separator, or `:`. Explicit `<change-id>` always wins, locks for the whole call (later CURRENT edits do not retarget it), and is echoed first as `Change: <change-id>`. A valid CURRENT resolves `do <WP-XX>` / `review <WP-XX>` even when several boards exist. Only a missing or stale CURRENT falls back: one valid `board.md` may be selected and written; two or more, or none, lists candidates and stops. `doctor.ps1` only reads CURRENT.

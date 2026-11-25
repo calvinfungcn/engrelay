@@ -86,6 +86,16 @@ try {
         $boards=@(Get-ChildItem -LiteralPath $relayRoot -Filter 'board.md' -Recurse -File)
         foreach ($b in $boards) { $null=Safe-Path $root ($b.FullName.Substring($root.Length+1).Replace('\','/')) }
         Write-Output "Runtime relay boards found=$($boards.Count); read-only inspected."
+        $currentFull=Join-Path $relayRoot 'CURRENT'
+        if (Test-Path -LiteralPath $currentFull) {
+            $null=Safe-Path $root '.ai/relay/CURRENT'
+            $id=((Read-Text $currentFull) -replace "`r`n","`n" -replace "`r","`n").Trim()
+            if ($id.Contains("`n") -or $id -notmatch '^[A-Za-z0-9][A-Za-z0-9._-]*$' -or $id.Contains('..')) { throw 'Invalid relay CURRENT pointer' }
+            $board=Safe-Path $root ('.ai/relay/'+$id+'/board.md')
+            if (-not $board.StartsWith($relayRoot+[IO.Path]::DirectorySeparatorChar,[StringComparison]::OrdinalIgnoreCase)) { throw 'Invalid relay CURRENT pointer' }
+            if (Test-Path -LiteralPath $board -PathType Leaf) { Write-Output "Active relay change=$id (valid)" }
+            else { Write-Output "Active relay pointer stale: $id (board.md missing)" }
+        }
     } else { Write-Output 'No live v2 relay board; installation does not create one.' }
     Write-Output "WorkflowProfile=v2; packageVersion=$($state.packageVersion); WorkflowMode=$($state.workflowMode); SkillTarget=$($state.skillTarget); coreLines=$totalLines/150; host loading=unknown; no files written."
     exit 0

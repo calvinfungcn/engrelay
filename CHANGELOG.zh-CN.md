@@ -2,6 +2,17 @@
 
 [English](CHANGELOG.md)
 
+## 2.0.1 — 2026-11-25
+
+- EngRelay v2 接力手感：审查会话只能写当前变更的 relay 目录、允许范围内的 `.ai/relay/CURRENT`，以及验收已全部满足时的 `tasks.md`。`FIX REQUIRED` 和已记录的 `(a)` 只留在审查记录里；修复会话执行 `do <change-id> <WP-XX>`，同一审查会话可以继续复核。
+- `plan`、`do`、`review` 结束时输出 `Next Step` 卡。正文固定五行（`Primary`、`Command` 或 `Wait`、`Axes`、`Gate` 或恢复条件、`Alternate` 或 `none`），没有备选时也不缩短。只有一个首选动作，被复制到其他会话的命令带提案名。未获授权的产品或上限阻塞，以及尚未核验恢复条件的环境阻塞，对该 WP 使用 `Command: Wait`。
+- Rules 中的 Command 字段明确允许在完成且无后续命令时填写 `none`，同时保留可执行命令和 `Wait`。
+- `doctor.ps1` 只读校验单行 `CURRENT` 指针，不创建、修复或删除该文件。测试夹具使用非递归 `[IO.Directory]::Delete` 清理 junction。
+- `.ai/relay/CURRENT` 是单行活动提案指针。显式提案名锁定本次调用，并在首行回显 `Change: <change-id>`。有效指针供简写解析；指针缺失或失效且有多块看板时列出候选。该文件不激活流程。`doctor.ps1` 只读检查，不创建、不修复、不删除它。
+- `RULES.md` + `engrelay` Skill 合计 89/150 行。`agent-rules.md` 仍为 10/18 行。
+- 最终干净包检查前的实施验证：Windows PowerShell 5.1.26100.9818 与 PowerShell 7.6.10 各自在独立的一次性工作树包上运行 `test-v2-workflow.ps1`（47 次调用 / 44 项检查）和 `test-workflow-profiles.ps1`（83 次调用 / 32 项检查）。测试包由此前归档叠加当时的包文件生成，两个测试不共用同一包，因为 profile 测试会临时移走一个未选用的源文件。另在 `%TEMP%` 完成双会话复用、`Next Step` 卡和 `CURRENT` 解析的虚构演练。这些是实施阶段检查，不是最终发行包检查。
+- 最终干净发行包的验证范围及限制见[2.0.1 发行准备记录](https://github.com/calvinfungcn/engrelay/blob/v2.0.1/docs/reviews/refine-v2-relay-ergonomics/release-preparation.zh-CN.md)。
+
 ## 2.0.0 — 2026-11-24
 
 - **EngRelay v2（`WorkflowProfile=v2`）**：新增面向 OpenSpec 与多平台小额度订阅的极简跨平台接力配置（`payload/docs/ai-collaboration/v2/` → `docs/engrelay/`）：

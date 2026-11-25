@@ -9,7 +9,7 @@ working in existing repositories. It provides role prompts, task and handoff
 templates, independent reviews based on risk, and tools for checking the evidence
 used to call work complete.
 
-**Version 2.0.0** · [Download the complete package](https://github.com/calvinfungcn/engrelay/releases/tag/v2.0.0) · [MIT License](LICENSE)
+**Version 2.0.1** · [Download the complete package](https://github.com/calvinfungcn/engrelay/releases/tag/v2.0.1) · [MIT License](LICENSE)
 
 ## Workflow profiles (v2 default, 2.0)
 
@@ -18,7 +18,7 @@ Fresh installs now default to **v2** (`WorkflowMode=optional`, `SkillTarget=none
 existing `full` and `lite` installations retain their recorded profile when
 `-WorkflowProfile` is omitted on `Upgrade`, `SetMode`, `Status`, or `CheckVersion`.
 
-- **v2 (default for new installs)**: lean cross-platform OpenSpec relay (`docs/engrelay/RULES.md` + unified `engrelay` Skill, hard budget ≤ 150 lines combined), three modes (`plan` / `do` / `review`), orthogonal **Risk (`S|M|H`)** gates + **Difficulty (`C1–C5`) × Workload (`XS|S|M|L` × `可断点|建议连续`, meaning breakable or preferably continuous)** sizing, ≤15-line cross-platform checkpoints, hard 2-round review circuit breaker, per-change `.ai/relay/<change-id>/` state, project-owned `docs/engrelay.config.md`, and optional single-target Skill discovery copy. See [EngRelay v2](payload/docs/ai-collaboration/v2/README.md).
+- **v2 (default for new installs)**: lean cross-platform OpenSpec relay (`docs/engrelay/RULES.md` + unified `engrelay` Skill, hard budget ≤ 150 lines combined), three modes (`plan` / `do` / `review`), orthogonal **Risk (`S|M|H`)** gates + **Difficulty (`C1–C5`) × Workload (`XS|S|M|L` × `可断点|建议连续`, meaning breakable or preferably continuous)** sizing, ≤15-line cross-platform checkpoints, hard 2-round review circuit breaker, per-change `.ai/relay/<change-id>/` state, a one-line `.ai/relay/CURRENT` shorthand pointer, a five-line Next Step card, a review write allowlist that leaves fixes to the implement session, project-owned `docs/engrelay.config.md`, and optional single-target Skill discovery copy. See [EngRelay v2](payload/docs/ai-collaboration/v2/README.md).
 - **Full & Lite (frozen legacy profiles)**: pass `-WorkflowProfile full` or `-WorkflowProfile lite` explicitly for new installs that want the v1 role chain (`docs/ai-collaboration/`) or v1 Lite sequential queue (`docs/engrelay-lite/`).
 
 ```powershell
@@ -35,7 +35,7 @@ installation source. Verification on this workstation ran across Windows PowerSh
 and PowerShell 7.6.10 (`test-v2-workflow.ps1`, `test-workflow-profiles.ps1`,
 `test-human-doc-lifecycle.ps1`, `test-public-package.ps1`, plus `test-lite-state.ps1` on PS 5.1)
 alongside disposable fictional `v2` drills (independent second-session `do` continuation and
-independent two-round `review`); external Codex/Cursor/Claude host loading remains unverified locally.
+independent two-round `review`). A later v2 ergonomics revision rechecked `test-v2-workflow.ps1` and `test-workflow-profiles.ps1` on Windows PowerShell 5.1.26100.9818 and PowerShell 7.6.10 with disposable working-tree packages, and ran a fictional drill of two-session review reuse, Next Step cards, and `.ai/relay/CURRENT`. The release candidate was then checked from a clean archive; external Codex/Cursor/Claude host loading remains unverified locally.
 New installations use manifest v2; trusted v1 Full converts only through Upgrade.
 The original v1.9.6 manager refuses v2. Keep the matching complete package, manager
 and original recovery material. Upgrade, repeated Install and SetMode never switch
@@ -195,8 +195,8 @@ See the [maintained role contracts](payload/docs/ai-collaboration/README.md).
 Use a trusted complete package in its own directory. Back up the target project's
 rules and read its existing agent instructions. For a new project:
 
-Download `engrelay-2.0.0.zip` from the release and extract it. Run commands from
-the extracted `engrelay-2.0.0` directory. Keep that complete package unchanged;
+Download `engrelay-2.0.1.zip` from the release and extract it. Run commands from
+the extracted `engrelay-2.0.1` directory. Keep that complete package unchanged;
 extra tool files or edited bytes make it differ from its inventory. The repository
 source can also be used when its file set and bytes exactly match `snapshot.json`.
 
@@ -316,6 +316,8 @@ Use EngRelay v2: read .ai/relay/<change-id>/board.md and wp-01.md, then run do W
 Use EngRelay v2: in an independent session, run review WP-01 against
 .ai/relay/<change-id>/board.md and wp-01.md.
 ```
+
+Cross-session cards keep the change id (`do <change-id> WP-01`, `review <change-id> WP-01`). Shorthand `do WP-01` / `review WP-01` uses `.ai/relay/CURRENT` when that one-line pointer is valid.
 
 ### Full profile entries (`-WorkflowProfile full`)
 

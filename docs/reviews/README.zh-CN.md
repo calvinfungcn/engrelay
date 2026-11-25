@@ -6,6 +6,7 @@
 
 | 变更 | 最终状态 | 审查轮次 | 归档 |
 | --- | --- | --- | --- |
+| refine-v2-relay-ergonomics | verified / accepted | 1 次正式审查及定向复审 | [审查与归档记录](refine-v2-relay-ergonomics/index.md) |
 | introduce-engrelay-v2-workflow | verified / accepted | 1 次独立实施审查 | [审查与归档记录](introduce-engrelay-v2-workflow/index.md) |
 | improve-review-readiness-and-convergence | verified / accepted | 原关闭累计 3；完整发行前审查累计 4 | [归档记录](improve-review-readiness-and-convergence/index.md#archive-record) |
 | fix-task-scope-preservation | verified / accepted | 原关闭累计 6；发行前审查另行关联记录 | [归档记录](fix-task-scope-preservation/index.md#archive-record) |

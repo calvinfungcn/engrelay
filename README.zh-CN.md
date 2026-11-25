@@ -8,7 +8,7 @@ EngRelay 取自 Engineering + Relay，意为工程接力。它为已有代码库
 Agent 提供角色提示词、任务和交接模板、按风险引入的独立审查，以及检查交付
 证据的工具。
 
-**版本 2.0.0** · [下载完整发行包](https://github.com/calvinfungcn/engrelay/releases/tag/v2.0.0) · [MIT 许可证](LICENSE)
+**版本 2.0.1** · [下载完整发行包](https://github.com/calvinfungcn/engrelay/releases/tag/v2.0.1) · [MIT 许可证](LICENSE)
 
 ## 工作流配置（默认 v2，2.0）
 
@@ -16,7 +16,7 @@ Agent 提供角色提示词、任务和交接模板、按风险引入的独立�
 未安装项目现在默认安装 **v2**（`WorkflowMode=optional`、`SkillTarget=none`）；
 已安装 `full` 或 `lite` 的项目在执行省略 `-WorkflowProfile` 的 `Upgrade`、`SetMode`、`Status` 或 `CheckVersion` 时，继续保留各自既有配置，不隐式转换。
 
-- **v2（新安装默认）**：面向 OpenSpec 与多平台小额度订阅的极简接力协议（`docs/engrelay/RULES.md` + 单一统一 `engrelay` Skill，核心正文硬上限 ≤ 150 行），包含三动作闭环（`plan` / `do` / `review`）、正交的**风险门禁（`S|M|H`）**与**难度×体量评估（`C1–C5` × `XS|S|M|L` × `可断点|建议连续`）**、≤15 行无仪式断点、2 轮硬断路器、按变更隔离的 `.ai/relay/<change-id>/`、项目自有 `docs/engrelay.config.md` 以及可选单一宿主 `SkillTarget` 复制。详见 [EngRelay v2](payload/docs/ai-collaboration/v2/README.zh-CN.md)。
+- **v2（新安装默认）**：面向 OpenSpec 与多平台小额度订阅的极简接力协议（`docs/engrelay/RULES.md` + 单一统一 `engrelay` Skill，核心正文硬上限 ≤ 150 行），包含三动作闭环（`plan` / `do` / `review`）、正交的**风险门禁（`S|M|H`）**与**难度×体量评估（`C1–C5` × `XS|S|M|L` × `可断点|建议连续`）**、≤15 行无仪式断点、2 轮硬断路器、按变更隔离的 `.ai/relay/<change-id>/`、单行 `.ai/relay/CURRENT` 简写指针、固定五行 `Next Step` 推荐卡、把修复留在实施会话的审查写入白名单、项目自有 `docs/engrelay.config.md` 以及可选单一宿主 `SkillTarget` 复制。详见 [EngRelay v2](payload/docs/ai-collaboration/v2/README.zh-CN.md)。
 - **Full 与 Lite（冻结兼容配置）**：若新项目明确需要 v1 角色链（`docs/ai-collaboration/`）或 v1 Lite 顺序队列（`docs/engrelay-lite/`），可在安装时显式传入 `-WorkflowProfile full` 或 `-WorkflowProfile lite`。
 
 ```powershell
@@ -31,7 +31,7 @@ Agent 提供角色提示词、任务和交接模板、按风险引入的独立�
 检查使用隔离的完整工作树测试包；开发检出不是安装源。本机验证已在 Windows PowerShell 5.1
 与 PowerShell 7.6.10 下运行 `test-v2-workflow.ps1`、`test-workflow-profiles.ps1`、
 `test-human-doc-lifecycle.ps1`、`test-public-package.ps1`（及 PS 5.1 下的 `test-lite-state.ps1`），
-并完成一次性虚构 `v2` 演练（含独立第二会话断点 `do` 续跑与独立两轮 `review`）；外部宿主加载仍待实际环境确认。新安装采用 v2 清单，可信 v1 Full 只在 Upgrade 转换。原 v1.9.6 管理器
+并完成一次性虚构 `v2` 演练（含独立第二会话断点 `do` 续跑与独立两轮 `review`）。后续 v2 手感修订在 Windows PowerShell 5.1.26100.9818 与 PowerShell 7.6.10 上，用一次性工作树包重跑了 `test-v2-workflow.ps1` 与 `test-workflow-profiles.ps1`，并完成双会话复用、`Next Step` 推荐卡与 `.ai/relay/CURRENT` 的虚构演练。外部宿主加载仍待实际环境确认。这次源码修订没有重写根目录 `snapshot.json`。新安装采用 v2 清单，可信 v1 Full 只在 Upgrade 转换。原 v1.9.6 管理器
 拒绝 v2；保留对应完整包、管理器和原恢复材料。Upgrade、重复 Install、SetMode
 不切换配置：明确要求切换时先保存证据、协调项目入口，再受保护卸载／安装。
 Lite 项目配置和运行态在升级／卸载后仍保留；普通包文件继续拒绝漂移。私人 Lite
@@ -129,7 +129,7 @@ Lite 项目配置和运行态在升级／卸载后仍保留；普通包文件继
 使用可信完整包，放在业务项目以外的独立目录。先备份目标项目规则，读取其
 现有 Agent 指令。新项目示例：
 
-从发行页面下载 `engrelay-2.0.0.zip`，解压后进入 `engrelay-2.0.0` 目录执行命令。
+从发行页面下载 `engrelay-2.0.1.zip`，解压后进入 `engrelay-2.0.1` 目录执行命令。
 保留完整包原样；额外工具文件或字节修改会使它与清单不匹配。仓库源码仅在
 实际文件集合和字节与 `snapshot.json` 完全一致时，也可作为安装源。
 
@@ -236,6 +236,8 @@ v2 指南：[EngRelay v2](payload/docs/ai-collaboration/v2/README.zh-CN.md)
 本任务采用 EngRelay v2。在独立会话中对照 .ai/relay/<change-id>/board.md 与 wp-01.md，
 执行 review WP-01。
 ```
+
+跨会话推荐卡始终带提案名（`do <change-id> WP-01`、`review <change-id> WP-01`）。简写 `do WP-01` / `review WP-01` 只在单行 `.ai/relay/CURRENT` 有效时使用。
 
 ### Full 配置入口（`-WorkflowProfile full`）
 
