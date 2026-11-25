@@ -11,3 +11,7 @@
 - 归档变更：`openspec/changes/archive/2026-11-25-refine-v2-relay-ergonomics/`
 - 主规范：`openspec/specs/engrelay-v2-relay/spec.md` 已合并 1 项新增要求及 2 项修改要求。
 - 归档保留 `.openspec.yaml` 与完整任务清单；任务 6/6 完成。
+
+## Release preparation
+
+- [English](release-preparation.md) / [简体中文](release-preparation.zh-CN.md)：2.0.1 双宿主最终候选检查、精确快照、脱敏及验证边界。
