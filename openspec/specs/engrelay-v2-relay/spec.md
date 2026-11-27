@@ -146,7 +146,7 @@ v2 SHALL 明确区分“代码审查通过（`review PASS`）”与“OpenSpec �
 
 ### Requirement: Hard two-round circuit breaker and cumulative acceptance history
 
-每个 WP 的正式审查最多允许 2 轮。第 2 轮复核 SHALL 核验原 `BLOCKER` 修复情况及修复影响范围内新引入的任意实质 `BLOCKER`（含新 P0/P1、安全、资金、并发、契约或必需构建失败），仅禁止将非致命 `NOTE` 升级阻塞。第 2 轮仍存在真缺陷或连续两次出现同一失败签名时，MUST 立即停机标为 `[~] blocked`（区分 `product` 与 `harness`）。累计 verdict 与失败签名 SHALL 绑定未完成映射验收，不得因重新 `plan`、拆分、改名或换平台而清零。
+每个 WP 及变更级审查最多允许 2 轮自治复核。第 2 轮核验原 `BLOCKER` 与修复影响面新引入的实质 `BLOCKER`（禁升 `NOTE`）；未解决或两次同一签名 MUST 立即标为 `[~] blocked`（`product|harness`）。累计计数与失败签名绑定未完成映射验收，SHALL NOT 因重 `plan`、拆分、改名、换平台或在 WP 与 `review change`/`fix change` 间切换而清零，也不将不相关验收或阶段强行合并。
 
 #### Scenario: Round 2 rejects fix-introduced P1 regression
 
@@ -157,6 +157,16 @@ v2 SHALL 明确区分“代码审查通过（`review PASS`）”与“OpenSpec �
 
 - **WHEN** 某 WP 经两轮失败进入 `[~] blocked` 后，用户或代理重新执行 `plan`、改名 WP ID 或拆出子包处理同一未完成验收
 - **THEN** 新条目继承原累计 verdict 与失败签名历史，不自动获得新的 2 轮自治修复预算
+
+#### Scenario: Change-level review inherits exhausted WP limits for the same unfinished acceptance
+
+- **WHEN** 某 WP 已因特定未完成映射验收两轮失败进入 `[~] blocked` 且负责人尚未授权 `(a)`，随后独立会话运行 `review change <change-id>`
+- **THEN** 首次 `review change` 可按当前证据报告问题但须继承该未完成验收的累计历史与阻塞限制；未获 `(a)` 授权的 `fix change` 不得借新报告 `Round 1` 实施修复，仅在负责人明确给出 `(a)` 后才可保留累计计数执行受限修复；与该阻塞项不同的独立验收及先前的提案阶段审查不因 `<change-id>` 相同而误累计
+
+#### Scenario: WP execution cannot bypass a change-level blocked acceptance
+
+- **WHEN** `review change <change-id>` 将某未完成映射验收标为 `[~] blocked` 且未获 `(a)` 授权（或 `harness` 前置未恢复）
+- **THEN** 返回或新开对应 WP 执行 `do <change-id> <WP-XX>` 时 MUST 继承该未完成验收的阻塞与累计历史，未获明确 `(a)` 授权或未核验恢复前不得绕过执行
 
 ### Requirement: Explicit recovery from blocked state
 
@@ -174,7 +184,7 @@ v2 SHALL 明确区分“代码审查通过（`review PASS`）”与“OpenSpec �
 
 ### Requirement: Isolated per-change state and optional diagnostics
 
-EngRelay v2 运行态 SHALL 存放在 `.ai/relay/<change-id>/` 并排除在 Git 之外，SHALL NOT 读写 `full`/`lite` 运行态；项目自有 `docs/engrelay.config.md` 留空不阻塞规划且不跳过验收。v2 SHALL 维护单行活动提案指针 `.ai/relay/CURRENT`，单次调用解析后全程锁定该目标且不被并发改写；仅指针缺失或失效且存在多个看板时列出候选禁止盲猜；指针存在 SHALL NOT 自动激活流程，`doctor.ps1` 只读核验且严格零写入。
+EngRelay v2 运行态（含 `board.md`、`wp-XX.md`、`review-proposal.md` 与 `review-change.md`）SHALL 排除在 Git 外并隔离于 `full`/`lite`；`docs/engrelay.config.md` 留空不阻塞也不跳过验收。v2 SHALL 先按活动变更身份解析并锁定单行 `.ai/relay/CURRENT`（不以报告存在与否过滤目标），仅在命令准入通过后才写 `CURRENT`，缺失/失效且多候选列候选停机，不自动激活流程，`doctor.ps1` 严格零写入。
 
 #### Scenario: Multiple OpenSpec changes stay isolated
 
@@ -206,9 +216,29 @@ EngRelay v2 运行态 SHALL 存放在 `.ai/relay/<change-id>/` 并排除在 Git 
 - **WHEN** 项目存在 `.ai/relay/CURRENT`（包括有效、指向已归档目录的失效指针，或含路径穿越/非法字符的损坏指针）且在 `optional` 模式下执行只读 `doctor.ps1` 或处理未选择 EngRelay 的普通任务
 - **THEN** 非 EngRelay 任务保持不自动激活且不写 `CURRENT`；`doctor.ps1` 严格零写入，对有效指针输出活动提案状态（退出 0），对目标缺失的失效指针给出非致命提示（退出 0），对含路径分隔符、`..`、重解析点或非法字符的损坏指针拒绝（退出 1）
 
+#### Scenario: Change-level commands resolve active change without requiring board.md
+
+- **WHEN** 变更尚处于 `plan` 前仅存在 `openspec/changes/<change-id>/`（或含 `board.md`），用户执行显式 `review|fix proposal|change <change-id>` 或省略提案名简写
+- **THEN** 目标身份解析只核验活动变更身份（`openspec/changes/<id>/` 排除 `archive/`，或 `change` 命令可用的 `board.md`），绝不以 `review-*.md` 是否存在作为筛选门槛；显式 `<change-id>` 仅在变更身份合法且命令准入（对 `fix` 含前置检查）通过后才锁定并写 `CURRENT`；简写优先按有效 `CURRENT` 锁定该变更身份，仅当 `CURRENT` 本身缺失或指向非活动变更时按唯一活动变更回退，多候选或零候选 MUST 列候选停止；并发切走 `CURRENT` 不影响已有单次调用锁
+
+#### Scenario: Valid CURRENT without review report stops instead of falling back to another change
+
+- **WHEN** 存在两个活动变更 A 与 B，`.ai/relay/CURRENT` 指向有效的活动变更 A 且 A 尚无 `review-proposal.md`（或 `review-change.md`），而 B 存在 `FIX REQUIRED` 报告，用户发送简写 `fix proposal`（或 `fix change`）
+- **THEN** Agent MUST 先锁定当前活动变更 A，随后在只读前置检查中因 A 缺失对应报告而严格零写入停止（提示先执行 `review proposal A` / `review change A`），严禁回退或改选 B，也不得修改 A、B 或 `.ai/relay/CURRENT`
+
+#### Scenario: Doctor recognizes active pre-plan change review pointer read-only
+
+- **WHEN** `.ai/relay/CURRENT` 格式安全合法且尚无 `.ai/relay/<id>/board.md`，对比“存在 `openspec/changes/<id>/` 与 `.ai/relay/<id>/review-proposal.md`（或 `review-change.md`）”与“缺少活动变更目录或报告均不存在”以及“路径含重解析点/穿越”执行 `doctor.ps1`
+- **THEN** 前者输出有效的 `plan` 前变更审查指针状态（退出 0，严格零写入）；缺少对应活动锚点仍输出非致命失效提示 `board.md missing`（退出 0，零写入）；若 `.ai/relay/CURRENT`、`openspec/changes/<id>` 或报告路径触发 `Safe-Path` 重解析点/越界检查则立即拒绝（退出 1，零写入）
+
+#### Scenario: Change-level review files never auto-activate workflow
+
+- **WHEN** 项目 `WorkflowMode` 为 `optional`，工作区已存在 `.ai/relay/<change-id>/review-proposal.md`、`review-change.md` 或 `.ai/relay/CURRENT`，用户运行未显式选择 EngRelay 的任务
+- **THEN** Agent 不得自动激活 EngRelay，也不得改写上述文件或 `.ai/relay/CURRENT`
+
 ### Requirement: Actionable next-step recommendation card
 
-每次 `plan`、`do`、`review` 结束时，Agent SHALL 在回复末尾输出 4–6 行 `Next Step` 推荐卡（仅作人工接力建议，SHALL NOT 自动启动下一会话、跨越当前模式或自授额外额度），给出唯一明确首选动作（其余标为条件性或备选），所有跨会话可复制命令 MUST 显式携带固定 `<change-id>`（如 `review <change-id> <WP-XX>` / `do <change-id> <WP-XX>`），并严格区分有授权恢复与待决定/未恢复阻塞。
+每次 `plan`、`do`、`review`、`review proposal|change` 与 `fix proposal|change` 结束时，Agent SHALL 输出固定五行正文（`Primary`、`Command`、`Axes`、`Gate`、`Alternate`）的 `Next Step` 推荐卡（仅作建议，SHALL NOT 自动启动下一会话、越权执行或自授额度），给出唯一首选动作（备选或 `none`），跨会话命令 MUST 携带固定 `<change-id>` 且严格区分已授权恢复与待决定阻塞。
 
 #### Scenario: Next step after do completion with active review gate
 
@@ -234,3 +264,47 @@ EngRelay v2 运行态 SHALL 存放在 `.ai/relay/<change-id>/` 并排除在 Git 
 
 - **WHEN** `plan` 完成初始化，或某 WP 标为 `[x] done` 后需要推进下一项工作
 - **THEN** `Next Step` 推荐卡给出依赖已全部 `[x] done` 的唯一首选 WP（携带显式 `do <change-id> <WP-XX>` 命令与四轴决策字段），其余并行就绪 WP 标为可选备选；若全部 WP 已收口或均因未决阻塞等待裁决，则如实汇报收口或待决定状态
+
+#### Scenario: Next step for proposal review routes between fix proposal, re-review, and plan
+
+- **WHEN** `review proposal <change-id>` 输出预算内 `FIX REQUIRED`、已确认 `(a)` 授权、未授权/未核验 `[~] blocked` 或 `PASS`，或 `fix proposal <change-id>` 完成修订后退出
+- **THEN** `Next Step` 始终保持五行正文且命令固定携带 `<change-id>`：可修复分支推荐 `fix proposal <change-id>`，`fix proposal` 完成推荐切回同一审查会话执行 `review proposal <change-id>`，未授权/未核验 `[~] blocked` 使用 `Command: Wait`（禁止输出可执行 `fix`），`review proposal PASS` 首选推荐 `plan <change-id>`
+
+#### Scenario: Next step for change implementation review routes between fix change, re-review, and owner close-out
+
+- **WHEN** `review change <change-id>` 输出预算内 `FIX REQUIRED`、已确认 `(a)` 授权、未授权/未核验 `[~] blocked` 或 `PASS`，或 `fix change <change-id>` 完成核对修复后退出
+- **THEN** `Next Step` 始终保持五行正文且命令固定携带 `<change-id>`：可修复分支推荐 `fix change <change-id>`，`fix change` 完成推荐切回同一审查会话执行 `review change <change-id>`，未授权/未核验 `[~] blocked` 使用 `Command: Wait`（禁止输出可执行 `fix` 或原样重跑），`review change PASS` 输出 `Command: none` 并交由负责人决定是否执行 OpenSpec 归档/提交/发版
+
+### Requirement: Change-level proposal and implementation review relay
+
+EngRelay v2 SHALL 在统一 `engrelay` Skill 内提供 `review proposal [<change-id>]`、`fix proposal [<change-id>]`、`review change [<change-id>]` 与 `fix change [<change-id>]`，固定读写追加式 `.ai/relay/<change-id>/review-proposal.md` 与 `review-change.md`；`review change`/`fix change` 与既有 `board.md`/`wp-XX.md` 对同一未完成映射验收双向继承累计计数与恢复限制；`fix` 须先锁定变更身份并通过前置准入，任何拒绝均严格零写入（含 `CURRENT`）。
+
+#### Scenario: Cross-platform proposal review and reconcile preserves planning boundary
+
+- **WHEN** 独立审查会话执行 `review proposal <change-id>` 发现提案一致性或边界问题（输出 `FIX REQUIRED` 并写入 `.ai/relay/<change-id>/review-proposal.md`），随后另一规划会话执行 `fix proposal <change-id>`
+- **THEN** `review proposal` 仅写入 `review-proposal.md`（及获准 `CURRENT` 元数据），只读核对相关代码与规范而不改动提案；`fix proposal` 仅修订 `openspec/changes/<change-id>/*` 并在 `review-proposal.md` 末尾追加修订反馈（严禁改产品源码/测试），复审可沿用同一未污染审查会话直接核对新增修订
+
+#### Scenario: Cross-platform implementation review and reconcile uses fixed append-only report
+
+- **WHEN** 独立审查会话执行 `review change <change-id>` 审查整项变更（涵盖完整 diff、OpenSpec 符合性与实测证据）并将发现写入 `.ai/relay/<change-id>/review-change.md`，随后实施会话执行 `fix change <change-id>`
+- **THEN** `fix change` 逐条核对发现、仅修复确认成立的问题、运行针对性验证并在 `review-change.md` 末尾追加核对与验证反馈（保留原审查正文不变，不自动提交、归档或发布）；Round 2 通过后 `review change` 仅在 `review-change.md` 写入 `PASS` 结论并停止
+
+#### Scenario: Change-level reviewer stays read-only after FIX REQUIRED or in-session (a)
+
+- **WHEN** 处于 `review proposal` 或 `review change` 模式的会话判定 `FIX REQUIRED` 或 `[~] blocked`，随后用户在当前审查会话直接要求顺手修改提案或代码（含回复 `(a)` 有限追加授权）
+- **THEN** 该审查会话 SHALL NOT 修改任何 OpenSpec 文件、产品源码、配置或测试文件，仅将结论或保留原累计计数的 `(a)` 授权追加写入对应 `review-*.md` 并停止
+
+#### Scenario: Change-level review enforces two-round cap and refuses unauthorized fix bypass
+
+- **WHEN** `review proposal` 或 `review change` 在第 2 轮仍有未解决实质阻塞或连续两次出现相同失败签名进入 `[~] blocked`（`product|harness`），或 `review change` 处理的未完成映射验收在既有 `board.md`/`wp-XX.md` 中已两轮 `[~] blocked` 且未获 `(a)` 授权
+- **THEN** `review change` 继承该同一未完成验收的累计计数与恢复限制（不得因新建 `review-change.md` 重新获得自治修复预算，也不将无关验收或提案阶段混并）；在未记录明确 `(a)` 授权（或未核验 `harness` 已恢复）前，对应 `fix` 命令 MUST 严格零写入拒绝绕过，切回 WP `do` 同样不得绕过变更级阻塞
+
+#### Scenario: Fix command stops cleanly when review file is missing or already passed
+
+- **WHEN** 锁定目标变更后发现 `.ai/relay/<change-id>/review-proposal.md`（或 `review-change.md`）不存在，或最新已完结轮次状态为 `PASS` 无待修复项，用户执行 `fix proposal`（或 `fix change`）
+- **THEN** Agent MUST 严格零写入停止执行（包括不得新建、改写或回退更新 `.ai/relay/CURRENT` 到另一提案），提示先运行对应的 `review` 命令（或进入下一步规划/归档）
+
+#### Scenario: Rejected fix preserves CURRENT pointer bytes and absent state
+
+- **WHEN** `.ai/relay/CURRENT` 指向提案 A，提案 B 的报告已为 `PASS` 或未授权 `[~] blocked`，用户显式执行 `fix change B`；或 `.ai/relay/CURRENT` 不存在且仅有唯一活动变更 B 但其报告不可修复时用户执行简写 `fix change`
+- **THEN** 上述失败准入均 MUST 严格保持 `.ai/relay/CURRENT` 的原始字节或不存在状态及所有项目文件完全不变；只有通过目标身份解析与全部准入校验的 `fix` 才允许按约定更新 `.ai/relay/CURRENT`

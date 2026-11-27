@@ -2,6 +2,18 @@
 
 [Simplified Chinese](CHANGELOG.zh-CN.md)
 
+## 2.1.0 — 2026-11-27
+
+- EngRelay v2 change-level relay: the unified `engrelay` Skill adds `review proposal [<change-id>]`, `fix proposal [<change-id>]`, `review change [<change-id>]`, and `fix change [<change-id>]`. Reports are append-only at `.ai/relay/<change-id>/review-proposal.md` and `review-change.md`, keeping round history and failure signatures across rounds.
+- Write limits: a change-level review writes only its report and the allowed `.ai/relay/CURRENT` pointer; it never edits `tasks.md`, `board.md`, OpenSpec, or product files. `fix proposal` changes only `openspec/changes/<change-id>/*`. `fix change` fixes confirmed defects, may update `tasks.md` when mapped acceptance is fully satisfied, never writes `board.md`, and never commits, archives, or releases. The next WP session mirrors the latest report verdict into the board ledger and WP status; a PASS whose scope names the same mapped acceptance satisfies its independent gate, and the WP closes that acceptance without another review.
+- Same-acceptance inheritance: a change-level `[~] blocked` on an acceptance carries into WP `do`, and a WP-level block carries into change-level review, with one cumulative count. Unrelated acceptance is not merged.
+- Two-phase target resolution: read-only identity first, then admission (report exists, last round is not `PASS`, no unauthorized or inherited block, harness verified) before any write. A refused call leaves `CURRENT` byte-identical or absent and writes nothing.
+- Each `Next Step` card keeps the five-line body. Fix refusals end with the matching `review ...` command or `Command: Wait`.
+- `doctor.ps1` stays read-only and recognizes a change review pointer before `board.md` exists (`Active relay change=<id> (valid: change review, no board yet)`). Other missing-board pointers report `Active relay pointer stale`. Reparse points and path escapes are rejected.
+- Bilingual README and v2 docs describe the four subcommands, fixed report paths, write limits, and zero-write refusals.
+- Size budget: `RULES.md` 55 lines plus `engrelay/SKILL.md` 58 lines (113 raw, 88 non-blank), within the ≤ 150 limit; `agent-rules.md` 10/18.
+- Pre-release working-tree evidence: `test-v2-workflow.ps1` on Windows PowerShell 5.1.26100.9818 (56 calls / 46 checks; file-symlink case skipped because it needs elevation, directory-junction case ran) and PowerShell 7.6.10 (57 calls / 46 checks). `test-workflow-profiles.ps1` on both hosts (83 calls / 32 checks each). Each host ran on a disposable package built from `git archive` plus working-tree files. A fictional `%TEMP%` drill with independent subagent sessions covered proposal and change loops, anchor resolution, same-acceptance inheritance and isolation, admission refusals, and candidate stops; see [drill evidence](https://github.com/calvinfungcn/engrelay/blob/v2.1.0/docs/reviews/add-v2-change-review-relay/2026-11-27-drill.md). These are pre-release working-tree results, not final clean-package results. Final clean-package verification and limits are recorded in [release preparation](https://github.com/calvinfungcn/engrelay/blob/v2.1.0/docs/reviews/add-v2-change-review-relay/release-preparation.md). External Codex, Cursor, and Claude host loading remain unverified.
+
 ## 2.0.1 — 2026-11-25
 
 - EngRelay v2 relay ergonomics: a review session may write only the change relay directory, allowed `.ai/relay/CURRENT` metadata, and `tasks.md` when acceptance is fully satisfied. `FIX REQUIRED` and a recorded `(a)` stay in that session as notes; the fixer session runs `do <change-id> <WP-XX>`, so the same review session can verify the next round.

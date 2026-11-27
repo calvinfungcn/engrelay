@@ -21,6 +21,7 @@ archive does not reset cumulative counts or add new review conclusions.
 | link-sizing-guidance-and-pilot-lean-rules | verified / accepted | 7 | [Archive record](link-sizing-guidance-and-pilot-lean-rules/index.md#archive-record) |
 | integrate-lite-full-profiles | verified / accepted | 8 | [Archive record](integrate-lite-full-profiles/index.md#archive-record) |
 | streamline-multi-platform-relay | verified / accepted | 9 (related cumulative verdicts: 5) | [Archive record](streamline-multi-platform-relay/index.md#archive-record) |
+| add-v2-change-review-relay | verified / accepted | implementation review: PASS (2026-11-27) | [Review and archive record](add-v2-change-review-relay/index.md) |
 | streamline-multi-platform-relay | verified / accepted | 9 (related cumulative verdicts: 5) | [Archive record](streamline-multi-platform-relay/index.md#archive-record) |
 | streamline-multi-platform-relay | verified / accepted | 9 (related cumulative verdicts: 5) | [Archive record](streamline-multi-platform-relay/index.md#archive-record) |
 | streamline-multi-platform-relay | verified / accepted | 9 (related cumulative verdicts: 5) | [Archive record](streamline-multi-platform-relay/index.md#archive-record) |

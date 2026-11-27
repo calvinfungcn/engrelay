@@ -2,6 +2,18 @@
 
 [English](CHANGELOG.md)
 
+## 2.1.0 — 2026-11-27
+
+- EngRelay v2 变更级接力：统一 `engrelay` Skill 新增 `review proposal [<change-id>]`、`fix proposal [<change-id>]`、`review change [<change-id>]` 与 `fix change [<change-id>]`。报告为追加式，固定位于 `.ai/relay/<change-id>/review-proposal.md` 与 `review-change.md`，跨轮保留历次轮次与失败签名。
+- 写入限制：变更级审查只写入自身报告与允许的 `.ai/relay/CURRENT` 指针，从不修改 `tasks.md`、`board.md`、OpenSpec 或产品文件。`fix proposal` 只改 `openspec/changes/<change-id>/*`。`fix change` 修复已确认缺陷，映射验收全部满足时可更新 `tasks.md`，从不写 `board.md`，也从不自动提交、归档或发版。账本行与 WP 表格状态由下一次 WP 会话按最新报告 verdict 同步；范围覆盖同一映射验收的 PASS 满足其独立门禁，WP 据此收口，无需再次审查。
+- 同一验收的继承：变更级对某验收的 `[~] blocked` 会延续到 WP 的 `do`，WP 级阻塞也会延续到变更级审查，两者共用一个累计计数。无关验收不会被合并。
+- 两阶段目标解析：先只读确定身份，再在任何写入前完成准入（报告存在、最近一轮不是 `PASS`、无未授权或继承的阻塞、harness 已核验）。被拒绝的调用保持 `CURRENT` 字节不变或仍不存在，且不写入任何文件。
+- `Next Step` 卡保持五行正文。修复被拒时，卡片指向对应的 `review ...` 命令，或使用 `Command: Wait`。
+- `doctor.ps1` 保持只读，并在 `board.md` 出现前识别变更审查指针（`Active relay change=<id> (valid: change review, no board yet)`）。其他缺少 `board.md` 的指针报告 `Active relay pointer stale`。重解析点与路径越界会被拒绝。
+- 双语 README 与 v2 文档说明四个子命令、固定报告路径、写入限制及零写入拒绝。
+- 行数预算：`RULES.md` 55 行加 `engrelay/SKILL.md` 58 行（原始 113 行，非空行 88 行），在 ≤ 150 行限制内；`agent-rules.md` 为 10/18 行。
+- 发布前工作树证据：Windows PowerShell 5.1.26100.9818 上 `test-v2-workflow.ps1` 为 56 次调用 / 46 项检查（文件符号链接用例因需提升权限而跳过，目录 junction 用例已执行）；PowerShell 7.6.10 上为 57 次调用 / 46 项检查。两台宿主上的 `test-workflow-profiles.ps1` 各为 83 次调用 / 32 项检查。每台宿主均使用由 `git archive` 加工作树文件构建的一次性测试包。`%TEMP%` 中的虚构演练由独立子代理会话完成，覆盖提案与变更闭环、锚点解析、同验收继承与隔离、准入拒绝及候选停止；见[演练证据](https://github.com/calvinfungcn/engrelay/blob/v2.1.0/docs/reviews/add-v2-change-review-relay/2026-11-27-drill.md)。这些是发布前工作树结果，并非最终干净发行包结果。最终干净包验证及限制见[发行准备记录](https://github.com/calvinfungcn/engrelay/blob/v2.1.0/docs/reviews/add-v2-change-review-relay/release-preparation.zh-CN.md)。外部 Codex、Cursor、Claude 宿主加载仍未经验证。
+
 ## 2.0.1 — 2026-11-25
 
 - EngRelay v2 接力手感：审查会话只能写当前变更的 relay 目录、允许范围内的 `.ai/relay/CURRENT`，以及验收已全部满足时的 `tasks.md`。`FIX REQUIRED` 和已记录的 `(a)` 只留在审查记录里；修复会话执行 `do <change-id> <WP-XX>`，同一审查会话可以继续复核。

@@ -132,6 +132,82 @@ try {
         if (Test-Path -LiteralPath $relayLink) { [IO.Directory]::Delete($relayLink, $false) }
     }
 
+    # 4c. Pre-plan change-review pointer: valid without board.md, stale without anchor, reparse-point rejection
+    $doctorRel='payload/docs/ai-collaboration/v2/scripts/doctor.ps1'
+    $reviewProj=New-Project 'change-review-pointer'
+    Write-Project $reviewProj 'AGENTS.md' 'Original project rules.'
+    $null=Call 'V2-19 change-review install' $reviewProj @('-Action','Install')
+    Write-Project $reviewProj 'openspec/changes/pre-plan/proposal.md' '# Proposal pre-plan'
+    Write-Project $reviewProj '.ai/relay/pre-plan/review-proposal.md' '# Review proposal'
+    Write-Project $reviewProj '.ai/relay/CURRENT' "pre-plan`n"
+    $preOut=Doctor 'V2-19 pre-plan proposal pointer' $reviewProj $doctorRel $true $PackageRoot 'Active relay change=pre-plan (valid: change review, no board yet)'
+    Assert ($preOut.Contains('Change review reports found=1')) 'Doctor counts pre-plan review report read-only'
+    Write-Project $reviewProj 'openspec/changes/pre-review/tasks.md' '# Tasks pre-review'
+    Write-Project $reviewProj '.ai/relay/pre-review/review-change.md' '# Review change'
+    Write-Project $reviewProj '.ai/relay/CURRENT' "pre-review`n"
+    $null=Doctor 'V2-19 pre-review change pointer' $reviewProj $doctorRel $true $PackageRoot 'Active relay change=pre-review (valid: change review, no board yet)'
+    Write-Project $reviewProj '.ai/relay/ghost-change/review-proposal.md' '# Orphan report'
+    Write-Project $reviewProj '.ai/relay/CURRENT' "ghost-change`n"
+    $ghostOut=Doctor 'V2-19 missing anchor is stale' $reviewProj $doctorRel $true $PackageRoot 'Active relay pointer stale: ghost-change (board.md missing)'
+    Assert (-not $ghostOut.Contains('Active relay change=ghost-change')) 'Missing openspec anchor is not reported active'
+    Write-Project $reviewProj 'openspec/changes/no-report/proposal.md' '# No report yet'
+    Write-Project $reviewProj '.ai/relay/CURRENT' "no-report`n"
+    $null=Doctor 'V2-19 anchor without report is stale' $reviewProj $doctorRel $true $PackageRoot 'Active relay pointer stale: no-report (board.md missing)'
+    Write-Project $reviewProj 'openspec/changes/archive/old/proposal.md' '# Archived'
+    Write-Project $reviewProj '.ai/relay/archive/review-change.md' '# Archived review'
+    Write-Project $reviewProj '.ai/relay/CURRENT' "archive`n"
+    $null=Doctor 'V2-19 archive id is never active' $reviewProj $doctorRel $true $PackageRoot 'Active relay pointer stale: archive (board.md missing)'
+    $anchorOutside=Join-Path $fixture 'anchor-outside'
+    $null=New-Item -ItemType Directory -Path $anchorOutside -Force
+    $anchorLink=Join-Path $reviewProj 'openspec\changes\linked-change'
+    New-Item -ItemType Junction -Path $anchorLink -Target $anchorOutside | Out-Null
+    Write-Project $reviewProj '.ai/relay/linked-change/review-change.md' '# Linked review'
+    Write-Project $reviewProj '.ai/relay/CURRENT' "linked-change`n"
+    try {
+        $null=Doctor 'V2-20 openspec anchor junction rejected' $reviewProj $doctorRel $false $PackageRoot 'Reparse point in diagnostic input'
+    } finally {
+        if (Test-Path -LiteralPath $anchorLink) { [IO.Directory]::Delete($anchorLink, $false) }
+    }
+    $reviewOutside=Join-Path $fixture 'review-outside'
+    $null=New-Item -ItemType Directory -Path $reviewOutside -Force
+    [IO.File]::WriteAllText((Join-Path $reviewOutside 'review-proposal.md'),'# Outside review',$utf8)
+    Write-Project $reviewProj 'openspec/changes/file-link/proposal.md' '# File link'
+    $reviewDirLink=Join-Path $reviewProj '.ai\relay\file-link'
+    New-Item -ItemType Junction -Path $reviewDirLink -Target $reviewOutside | Out-Null
+    Write-Project $reviewProj '.ai/relay/CURRENT' "file-link`n"
+    try {
+        $null=Doctor 'V2-20 review report path junction rejected' $reviewProj $doctorRel $false $PackageRoot 'Reparse point in diagnostic input'
+    } finally {
+        if (Test-Path -LiteralPath $reviewDirLink) { [IO.Directory]::Delete($reviewDirLink, $false) }
+    }
+    # V2-21: a junction that is not the CURRENT target must still stop the report scan (no CURRENT-branch masking)
+    $linkedOutside=Join-Path $fixture 'linked-proposal-outside'
+    $null=New-Item -ItemType Directory -Path $linkedOutside -Force
+    [IO.File]::WriteAllText((Join-Path $linkedOutside 'review-proposal.md'),'# Outside linked proposal',$utf8)
+    $linkedReportLink=Join-Path $reviewProj '.ai\relay\linked-proposal'
+    New-Item -ItemType Junction -Path $linkedReportLink -Target $linkedOutside | Out-Null
+    Write-Project $reviewProj '.ai/relay/CURRENT' "pre-plan`n"
+    try {
+        $null=Doctor 'V2-21 unrelated report junction rejected by scan' $reviewProj $doctorRel $false $PackageRoot 'Reparse point in diagnostic input'
+    } finally {
+        if (Test-Path -LiteralPath $linkedReportLink) { [IO.Directory]::Delete($linkedReportLink, $false) }
+    }
+    # File-level symlink: needs symlink privilege (often absent under Windows PowerShell 5.1); skipped with an explicit note otherwise.
+    $reviewFileTarget=Join-Path $reviewOutside 'review-change.md'
+    [IO.File]::WriteAllText($reviewFileTarget,'# Outside change review',$utf8)
+    Write-Project $reviewProj 'openspec/changes/file-symlink/proposal.md' '# File symlink'
+    $null=New-Item -ItemType Directory -Path (Join-Path $reviewProj '.ai/relay/file-symlink') -Force
+    $reviewFileLink=Join-Path $reviewProj '.ai/relay/file-symlink/review-change.md'
+    try { New-Item -ItemType SymbolicLink -Path $reviewFileLink -Target $reviewFileTarget | Out-Null } catch { $reviewFileLink=$null; Write-Output "SKIP V2-20 file symlink case: $($_.Exception.Message)" }
+    if ($reviewFileLink) {
+        Write-Project $reviewProj '.ai/relay/CURRENT' "file-symlink`n"
+        try {
+            $null=Doctor 'V2-20 review report file symlink rejected' $reviewProj $doctorRel $false $PackageRoot 'Reparse point in diagnostic input'
+        } finally {
+            if (Test-Path -LiteralPath $reviewFileLink) { [IO.File]::Delete($reviewFileLink) }
+        }
+    }
+
     # 5. Owned file drift & missing config fail-closed
     $rulesPath=Join-Path $v2 'docs/engrelay/RULES.md'; $rulesBytes=[IO.File]::ReadAllBytes($rulesPath)
     [IO.File]::AppendAllText($rulesPath,"`nDrifted.",$utf8)

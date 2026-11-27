@@ -27,6 +27,7 @@ EngRelay v2 是面向 OpenSpec 变更与多平台小额度订阅的极简跨平�
 - 审查会话只可写 `.ai/relay/<change-id>/`、显式提案名或唯一看板回退时的 `.ai/relay/CURRENT`，以及映射验收已全部满足时的 `tasks.md`。它不修改产品源码、配置或测试。出现 `FIX REQUIRED` 或已记录的 `(a)` 授权后即停止。修复会话执行 `do <change-id> <WP-XX>`，同一审查会话可以接下一次复核。
 - `plan`、`do`、`review` 结束时给出 `Next Step` 卡，正文固定五行：`Primary`、`Command`（或 `Wait`）、`Axes`（风险、难度、体量/节奏）、`Gate` 或恢复条件、`Alternate`（没有则写 `none`）。只有一个首选动作。给其他会话复制的命令始终带上提案名。未获授权的产品或上限阻塞，以及恢复条件尚未核验的环境阻塞，对该 WP 使用 `Command: Wait`。
 - `.ai/relay/CURRENT` 保存一行提案名。显式提案名优先，并在本次调用内锁定。回复首行是 `Change: <change-id>`。有效指针存在时，简写 `do WP-XX` / `review WP-XX` 按该指针解析，即使同时有多块看板。指针缺失或失效且看板多于一块时，列候选并停止。该文件本身不会激活 EngRelay。
+- 变更级接力（`plan` 前与归档前）使用同一 Skill：`review proposal <change-id>` / `fix proposal <change-id>` 追加写入 `.ai/relay/<change-id>/review-proposal.md`，`review change <change-id>` / `fix change <change-id>` 追加写入 `review-change.md`。审查对 OpenSpec 与产品文件保持只读；`fix proposal` 只修订 `openspec/changes/<change-id>/*`，`fix change` 不自动提交、归档或发版。WP 与变更级对同一未完成验收共享累计计数，WP 的阻塞会延续到变更级审查，反向亦然，两者都不会重置两轮上限。缺少报告、已 `PASS` 或未获授权的阻塞都会使修复被拒绝，且零写入（包括 `CURRENT`）。
 
 ## 诊断与归属
 

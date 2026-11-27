@@ -20,6 +20,7 @@
 | link-sizing-guidance-and-pilot-lean-rules | verified / accepted | 7 | [归档记录](link-sizing-guidance-and-pilot-lean-rules/index.md#archive-record) |
 | integrate-lite-full-profiles | verified / accepted | 8 | [归档记录](integrate-lite-full-profiles/index.md#archive-record) |
 | streamline-multi-platform-relay | verified / accepted | 9（关联累计 verdict：5） | [归档记录](streamline-multi-platform-relay/index.md#archive-record) |
+| add-v2-change-review-relay | verified / accepted | 实施审查：PASS（2026-11-27） | [审查与归档记录](add-v2-change-review-relay/index.md) |
 | streamline-multi-platform-relay | verified / accepted | 9（关联累计 verdict：5） | [归档记录](streamline-multi-platform-relay/index.md#archive-record) |
 | streamline-multi-platform-relay | verified / accepted | 9（关联累计 verdict：5） | [归档记录](streamline-multi-platform-relay/index.md#archive-record) |
 | streamline-multi-platform-relay | verified / accepted | 9（关联累计 verdict：5） | [归档记录](streamline-multi-platform-relay/index.md#archive-record) |

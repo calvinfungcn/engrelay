@@ -9,7 +9,7 @@ working in existing repositories. It provides role prompts, task and handoff
 templates, independent reviews based on risk, and tools for checking the evidence
 used to call work complete.
 
-**Version 2.0.1** · [Download the complete package](https://github.com/calvinfungcn/engrelay/releases/tag/v2.0.1) · [MIT License](LICENSE)
+**Version 2.1.0** · [Download the complete package](https://github.com/calvinfungcn/engrelay/releases/tag/v2.1.0) · [MIT License](LICENSE)
 
 ## Workflow profiles (v2 default, 2.0)
 
@@ -18,7 +18,7 @@ Fresh installs now default to **v2** (`WorkflowMode=optional`, `SkillTarget=none
 existing `full` and `lite` installations retain their recorded profile when
 `-WorkflowProfile` is omitted on `Upgrade`, `SetMode`, `Status`, or `CheckVersion`.
 
-- **v2 (default for new installs)**: lean cross-platform OpenSpec relay (`docs/engrelay/RULES.md` + unified `engrelay` Skill, hard budget ≤ 150 lines combined), three modes (`plan` / `do` / `review`), orthogonal **Risk (`S|M|H`)** gates + **Difficulty (`C1–C5`) × Workload (`XS|S|M|L` × `可断点|建议连续`, meaning breakable or preferably continuous)** sizing, ≤15-line cross-platform checkpoints, hard 2-round review circuit breaker, per-change `.ai/relay/<change-id>/` state, a one-line `.ai/relay/CURRENT` shorthand pointer, a five-line Next Step card, a review write allowlist that leaves fixes to the implement session, project-owned `docs/engrelay.config.md`, and optional single-target Skill discovery copy. See [EngRelay v2](payload/docs/ai-collaboration/v2/README.md).
+- **v2 (default for new installs)**: lean cross-platform OpenSpec relay (`docs/engrelay/RULES.md` + unified `engrelay` Skill, hard budget ≤ 150 lines combined), three WP modes (`plan` / `do` / `review`) plus change-level `review|fix proposal|change` with fixed `review-proposal.md` / `review-change.md` reports, orthogonal **Risk (`S|M|H`)** gates + **Difficulty (`C1–C5`) × Workload (`XS|S|M|L` × `可断点|建议连续`, meaning breakable or preferably continuous)** sizing, ≤15-line cross-platform checkpoints, hard 2-round review circuit breaker, per-change `.ai/relay/<change-id>/` state, a one-line `.ai/relay/CURRENT` shorthand pointer, a five-line Next Step card, a review write allowlist that leaves fixes to the implement session, project-owned `docs/engrelay.config.md`, and optional single-target Skill discovery copy. See [EngRelay v2](payload/docs/ai-collaboration/v2/README.md).
 - **Full & Lite (frozen legacy profiles)**: pass `-WorkflowProfile full` or `-WorkflowProfile lite` explicitly for new installs that want the v1 role chain (`docs/ai-collaboration/`) or v1 Lite sequential queue (`docs/engrelay-lite/`).
 
 ```powershell
@@ -195,8 +195,8 @@ See the [maintained role contracts](payload/docs/ai-collaboration/README.md).
 Use a trusted complete package in its own directory. Back up the target project's
 rules and read its existing agent instructions. For a new project:
 
-Download `engrelay-2.0.1.zip` from the release and extract it. Run commands from
-the extracted `engrelay-2.0.1` directory. Keep that complete package unchanged;
+Download `engrelay-2.1.0.zip` from the release and extract it. Run commands from
+the extracted `engrelay-2.1.0` directory. Keep that complete package unchanged;
 extra tool files or edited bytes make it differ from its inventory. The repository
 source can also be used when its file set and bytes exactly match `snapshot.json`.
 
@@ -318,6 +318,16 @@ Use EngRelay v2: in an independent session, run review WP-01 against
 ```
 
 Cross-session cards keep the change id (`do <change-id> WP-01`, `review <change-id> WP-01`). Shorthand `do WP-01` / `review WP-01` uses `.ai/relay/CURRENT` when that one-line pointer is valid.
+
+OpenSpec proposals and whole changes use the same unified Skill with fixed append-only reports:
+
+```text
+Use EngRelay v2: in an independent session, run review proposal <change-id>.
+Fix findings in the planning session with fix proposal <change-id>.
+Before archive or commit, run review change <change-id> in an independent session.
+```
+
+`review proposal` and `review change` write only their `.ai/relay/<change-id>/review-*.md` report (plus the pointer when the call resolves a target); they never edit OpenSpec, product, or test files. `fix proposal` revises only `openspec/changes/<change-id>/*`, and `fix change` fixes confirmed defects, runs targeted checks, and never commits, archives, or releases. A fix is refused with zero writes when the report is missing, already `PASS`, or blocked without recorded authorization.
 
 ### Full profile entries (`-WorkflowProfile full`)
 
